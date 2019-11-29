@@ -28,14 +28,6 @@ import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 
 class HelloWorldControllerSpec extends WordSpec with Matchers with GuiceOneAppPerSuite {
-  private val fakeRequest = FakeRequest("GET", "/")
-
-  private val env           = Environment.simple()
-  private val configuration = Configuration.load(env)
-
-  private val serviceConfig = new ServicesConfig(configuration, new RunMode(configuration, Mode.Dev))
-  private val appConfig     = new AppConfig(configuration, serviceConfig)
-
 
   "GET /" should {
     "return 200" in {
