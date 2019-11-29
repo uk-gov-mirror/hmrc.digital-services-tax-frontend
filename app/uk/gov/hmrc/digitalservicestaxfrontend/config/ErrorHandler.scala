@@ -1,9 +1,3 @@
-<<<<<<< Updated upstream
-package uk.gov.hmrc.digitalservicestaxfrontend.config
-
-import javax.inject.{Inject, Singleton}
-
-=======
 /*
  * Copyright 2019 HM Revenue & Customs
  *

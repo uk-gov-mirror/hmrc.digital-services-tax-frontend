@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream
-=======
 /*
  * Copyright 2019 HM Revenue & Customs
  *
