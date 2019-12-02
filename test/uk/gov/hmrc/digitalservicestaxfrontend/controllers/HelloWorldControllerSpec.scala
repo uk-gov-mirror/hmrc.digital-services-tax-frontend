@@ -32,7 +32,6 @@ class HelloWorldControllerSpec extends WordSpec with Matchers with GuiceOneAppPe
   "GET /" should {
     "return 200" in {
       1 shouldBe 1
-      
     }
   }
 }
