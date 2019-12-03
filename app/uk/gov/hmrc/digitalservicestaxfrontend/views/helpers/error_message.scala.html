@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
+@import ltbs.uniform._
 
-@()(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
+@(key: String, errormessage: play.twirl.api.Html, messages: UniformMessages[Html])
 
-@main_template(title = "Hello from digital-services-tax-frontend", bodyClasses = None) {
-    <h1>Hello from digital-services-tax-frontend !</h1>
-}
+<span id="@key-error" class="error-message">
+  <span class="govuk-visually-hidden">@messages("error"):</span> @errormessage
+</span>

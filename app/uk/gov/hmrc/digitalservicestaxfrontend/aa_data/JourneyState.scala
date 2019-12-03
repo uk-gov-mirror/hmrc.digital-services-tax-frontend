@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2019 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,10 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
+package uk.gov.hmrc.digitalservicestaxfrontend.aa_data
 
-@()(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
-
-@main_template(title = "Hello from digital-services-tax-frontend", bodyClasses = None) {
-    <h1>Hello from digital-services-tax-frontend !</h1>
-}
+case class JourneyState (
+  test: String = "test"
+)
