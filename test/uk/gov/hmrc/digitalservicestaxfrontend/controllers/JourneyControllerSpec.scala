@@ -27,7 +27,9 @@ import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 
-class HelloWorldControllerSpec extends WordSpec with Matchers with GuiceOneAppPerSuite {
+class JourneyControllerSpec extends WordSpec with Matchers {
+
+  //TODO add tests when journey logic is implemented
 
   "GET /" should {
     "return 200" in {
