@@ -19,30 +19,35 @@ package uk.gov.hmrc.digitalservicestaxfrontend.controllers
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JsonConversion._
-import ltbs.uniform.{UniformMessages, ErrorTree}
+import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.Html
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JourneyState
+import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 import uk.gov.hmrc.digitalservicestaxfrontend.repo.JourneyStateStore
 import uk.gov.hmrc.digitalservicestaxfrontend.views
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
-  journeyStateStore: JourneyStateStore
+  journeyStateStore: JourneyStateStore,
+  authorisedAction: AuthorisedAction,
+  val authConnector: AuthConnector
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
   implicit val messagesApi: MessagesApi
 )extends ControllerHelpers
   with FrontendHeaderCarrierProvider
-  with I18nSupport {
+  with I18nSupport
+  with AuthorisedFunctions {
 
   lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
   import interpreter._
@@ -54,7 +59,7 @@ class JourneyController @Inject()(
     journeyStateStore.storeState("test", in)
 
 
-  def index: Action[AnyContent] = Action.async { implicit request =>
+  def index: Action[AnyContent] = authorisedAction.async { implicit request =>
     getState.map { state =>
       implicit val msg: UniformMessages[Html] = interpreter.messages(request)
       Ok(views.html.main_template(
