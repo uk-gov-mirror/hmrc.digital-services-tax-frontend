@@ -33,7 +33,7 @@ class AuthenticationController @Inject()(mcc: MessagesControllerComponents)
   }
 
   def signOut = Action { implicit request =>
-    Redirect(appConfig.signOutDnumUrl).withNewSession
+    Redirect(appConfig.signOutDstUrl).withNewSession
   }
 
 }

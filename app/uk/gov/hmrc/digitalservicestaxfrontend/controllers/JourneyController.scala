@@ -16,21 +16,20 @@
 
 package uk.gov.hmrc.digitalservicestaxfrontend.controllers
 
-import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JsonConversion._
 import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.Html
+
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
+
 import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JourneyState
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
-import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 import uk.gov.hmrc.digitalservicestaxfrontend.repo.JourneyStateStore
 import uk.gov.hmrc.digitalservicestaxfrontend.views
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -50,6 +50,6 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
   val mongoJourneyStoreExpireAfter: Duration    = servicesConfig.getDuration("mongodb.journeyStore.expireAfter")
 
   lazy val dstIndexPage: String = loadConfig("dst-index-page-url")
-  lazy val signOutDnumUrl: String = s"$companyAuthFrontend$companyAuthSignOutPath?continue=$feedbackSurveyUrl"
+  lazy val signOutDstUrl: String = s"$companyAuthFrontend$companyAuthSignOutPath?continue=$feedbackSurveyUrl"
   lazy val feedbackSurveyUrl: String = loadConfig("microservice.services.feedback-survey.url")
 }
