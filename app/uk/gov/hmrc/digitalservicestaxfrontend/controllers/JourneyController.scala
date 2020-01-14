@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,23 @@ import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JsonConversion._
 import ltbs.uniform.{UniformMessages, ErrorTree}
+import ltbs.uniform.interpreters.playframework._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JourneyState
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 import uk.gov.hmrc.digitalservicestaxfrontend.repo.JourneyStateStore
 import uk.gov.hmrc.digitalservicestaxfrontend.views
-
+import ltbs.uniform.common.web.{WebMonad, FutureAdapter}
+import uk.gov.hmrc.digitalservicestaxfrontend.data._
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyController @Inject()(
-  mcc: MessagesControllerComponents,
-  journeyStateStore: JourneyStateStore
+  mcc: MessagesControllerComponents
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
@@ -44,24 +45,60 @@ class JourneyController @Inject()(
   with FrontendHeaderCarrierProvider
   with I18nSupport {
 
+  val hod = DummyBackend().natTransform[WebMonad[?, Html]]{
+    import cats.~>
+    new (Future ~> WebMonad[?, Html]) {
+      def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html].alwaysRerun(in)
+    }
+  }
+
   lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
   import interpreter._
 
-  def getState: Future[JourneyState] =
-    journeyStateStore.getState("test")
+  implicit val persistence: PersistenceEngine[Request[AnyContent]] =
+    UnsafePersistence()
 
-  def setState(in: JourneyState): Future[Unit] =
-    journeyStateStore.storeState("test", in)
+  implicit def crapWebTell[A] = new interpreter.WebTell[A] {
+    def render(in: A, key: String, messages: UniformMessages[Html]): Html =
+      HtmlFormat.escape(in.toString)
+  }
+
+  def registerAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
+    import interpreter._
+
+    val playProgram = registrationJourney[interpreter.WM](
+      create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
+      hod
+    )
+
+    playProgram.run(targetId, purgeStateUponCompletion = true) {
+      i: Registration => Future(Ok(s"$i"))
+    }
+  }
+
+  def returnAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
+    import interpreter._
+
+    val playProgram = returnJourney[interpreter.WM](
+      create[ReturnTellTypes, ReturnAskTypes](interpreter.messages(request))
+    )
+
+    playProgram.run(targetId, purgeStateUponCompletion = true) {
+      i: Return => Future(Ok(s"$i"))
+    }
+  }
 
 
-  def index: Action[AnyContent] = Action.async { implicit request =>
-    getState.map { state =>
-      implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+
+
+  def index: Action[AnyContent] = Action { implicit request =>
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+
       Ok(views.html.main_template(
         title =
           s"${msg("common.title.short")} - ${msg("common.title")}"
       )(views.html.hello_world()))
-    }
+
   }
 
 }

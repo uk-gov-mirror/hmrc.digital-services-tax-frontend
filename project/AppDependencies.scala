@@ -5,7 +5,7 @@ import sbt._
 
 object AppDependencies {
 
-  val uniformVersion = "4.7.0"
+  val uniformVersion = "4.8.0"
 
   val compile = Seq(
 
@@ -27,7 +27,7 @@ object AppDependencies {
     "com.typesafe.play"       %% "play-test"                % current                 % "test",
     "org.scalacheck"          %% "scalacheck"               % "1.14.0"                % "test",
     "uk.gov.hmrc"             %% "stub-data-generator"      % "0.5.3"                 % "test",
-    "org.typelevel"           %% "cats-core"                % "1.1.0"                 % "test",
+    "org.typelevel"           %% "cats-core"                % "2.0.0"                 % "test",
     "org.pegdown"             %  "pegdown"                  % "1.6.0"                 % "test, it",
     "org.scalatestplus.play"  %% "scalatestplus-play"       % "3.1.2"                 % "test, it"
   )

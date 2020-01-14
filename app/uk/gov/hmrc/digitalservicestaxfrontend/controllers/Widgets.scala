@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,16 @@ import cats.data.Validated
 import cats.implicits._
 import enumeratum._
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
-import ltbs.uniform.interpreters.playframework.Path
+import ltbs.uniform.interpreters.playframework.Breadcrumbs
 import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
-import ltbs.uniform.{ErrorMsg, ErrorTree, Input, RichInput, UniformMessages, _}
+import ltbs.uniform.{ErrorMsg, ErrorTree, Input, RichInput, UniformMessages, RichEither => _, _}
 import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestaxfrontend._
+import uk.gov.hmrc.digitalservicestaxfrontend.data._
 
 trait Widgets {
-//TODO fix commented out FormFields
+
   implicit val twirlStringField: FormField[String, Html] = twirlStringFields()
 
   def twirlStringFields(autoFields: Option[String] = None): FormField[String, Html] = new FormField[String, Html] {
@@ -41,7 +42,7 @@ trait Widgets {
 
     def render(
       key: List[String],
-      path: Path,
+      path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
       messages: UniformMessages[Html]
@@ -52,12 +53,29 @@ trait Widgets {
     }
   }
 
-//  implicit val twirlBigDecimalField: FormField[BigDecimal, Html] =
-//    twirlStringField.simap(
-//      nonEmpty[String].apply(_).toEither >>= {x => Either.catchOnly[NumberFormatException]{
-//        BigDecimal.apply(x)
-//      }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("format")))
-//    })(_.toString)
+  implicit def utrField: FormField[UTR, Html] = twirlStringFields().simap(x => 
+    Either.fromOption(UTR.of(x), ErrorMsg("invalid").toTree)
+  )(identity)
+
+  implicit def postcodeField: FormField[Postcode, Html] = twirlStringFields().simap(x => 
+    Either.fromOption(Postcode.of(x), ErrorMsg("invalid").toTree)
+  )(identity)
+
+  implicit val intField: FormField[Int,Html] =
+    twirlStringFields().simap(x => 
+      {
+        Rule.nonEmpty[String].apply(x) andThen
+        Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toInt)
+      }.toEither
+    )(_.toString)
+
+  implicit val longField: FormField[Long,Html] =
+    twirlStringFields().simap(x => 
+      {
+        Rule.nonEmpty[String].apply(x) andThen
+        Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toLong)
+      }.toEither
+    )(_.toString)
 
   implicit val twirlBoolField = new FormField[Boolean, Html] {
     val True = true.toString.toUpperCase
@@ -75,7 +93,7 @@ trait Widgets {
 
     def render(
       key: List[String],
-      path: Path,
+      path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
       messages: UniformMessages[Html]
@@ -90,55 +108,55 @@ trait Widgets {
     }
   }
 
-//  implicit val twirlDateField = new FormField[LocalDate, Html] {
-//
-//    override def stats = FormFieldStats(children = 3)
-//
-//    def decode(out: Input): Either[ErrorTree, LocalDate] = {
-//
-//      def intAtKey(key: String): Validated[List[String], Int] =
-//        Validated.fromOption(
-//          out.valueAt(key).flatMap{_.find(_.trim.nonEmpty)},
-//          List(key)
-//        ).andThen{
-//          x => Validated.catchOnly[NumberFormatException](x.toInt).leftMap(_ => List(key))
-//        }
-//
-//        (
-//          intAtKey("year"),
-//          intAtKey("month"),
-//          intAtKey("day")
-//        ).tupled
-//        .leftMap{x => ErrorMsg(x.reverse.mkString("-and-") + ".empty").toTree}
-//        .toEither
-//        .flatMap{ case (y,m,d) =>
-//          Either.catchOnly[java.time.DateTimeException]{
-//            LocalDate.of(y,m,d)
-//          }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
-//        }
-//    }
-//
-//    def encode(in: LocalDate): Input = Map(
-//      List("year") → in.getYear(),
-//      List("month") → in.getMonthValue(),
-//      List("day") → in.getDayOfMonth()
-//    ).mapValues(_.toString.pure[List])
-//
-//    def render(
-//      key: List[String],
-//      path: Path,
-//      data: Input,
-//      errors: ErrorTree,
-//      messages: UniformMessages[Html]
-//    ): Html = {
-//      views.html.uniform.date(
-//        key,
-//        data,
-//        errors,
-//        messages
-//      )
-//    }
-//  }
+  implicit val twirlDateField: FormField[LocalDate, Html] =
+    new FormField[LocalDate, Html] {
+    override def stats = FormFieldStats(children = 3)
+
+    def decode(out: Input): Either[ErrorTree, LocalDate] = {
+
+      def intAtKey(key: String): Validated[List[String], Int] =
+        Validated.fromOption(
+          out.valueAt(key).flatMap{_.find(_.trim.nonEmpty)},
+          List(key)
+        ).andThen{
+          x => Validated.catchOnly[NumberFormatException](x.toInt).leftMap(_ => List(key))
+        }
+
+      (
+        intAtKey("year"),
+        intAtKey("month"),
+        intAtKey("day")
+      ) .tupled
+        .leftMap{x => ErrorMsg(x.reverse.mkString("-and-") + ".empty").toTree}
+        .toEither
+        .flatMap{ case (y,m,d) =>
+          Either.catchOnly[java.time.DateTimeException]{
+            LocalDate.of(y,m,d)
+          }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
+        }
+  }
+
+  def encode(in: LocalDate): Input = Map(
+    List("year") → in.getYear(),
+    List("month") → in.getMonthValue(),
+    List("day") → in.getDayOfMonth()
+  ).mapValues(_.toString.pure[List])
+
+  def render(
+    key: List[String],
+    path: Breadcrumbs,
+    data: Input,
+    errors: ErrorTree,
+    messages: UniformMessages[Html]
+  ): Html = {
+    views.html.uniform.date(
+      key,
+      data,
+      errors,
+      messages
+    )
+  }
+}
 //
 //  implicit def twirlAddressField[T](
 //    implicit gen: shapeless.LabelledGeneric.Aux[Address,T],
@@ -167,7 +185,7 @@ trait Widgets {
 //
 //    def render(
 //      key: List[String],
-//      path: Path,
+//      path: Breadcrumbs,
 //      data: Input,
 //      errors: ErrorTree,
 //      messages: UniformMessages[Html]
@@ -180,27 +198,93 @@ trait Widgets {
 //      )
 //    }
 //  }
-//
-//  implicit def enumeratumField[A <: EnumEntry](implicit enum: Enum[A]): FormField[A, Html] = new FormField[A, Html] {
-//
-//    override def stats = new FormFieldStats(children = enum.values.length)
-//
-//    def decode(out: Input): Either[ErrorTree,A] = {out.toField[A](x =>
-//      nonEmpty[String].apply(x) andThen
-//        ( y => Validated.catchOnly[NoSuchElementException](enum.withName(y)).leftMap(_ => ErrorTree.oneErr(ErrorMsg("invalid"))))
-//    )}.toEither
-//
-//    def encode(in: A): Input = Input.one(List(in.entryName))
-//    def render(key: List[String],path: Path,data: Input,errors: ErrorTree,messages: UniformMessages[Html]): Html = {
-//      val options = enum.values.map{_.entryName}
-//      val existingValue = decode(data).map{_.entryName}.toOption
-//      views.html.uniform.radios(
-//        key,
-//        options,
-//        existingValue,
-//        errors,
-//        messages
-//      )
-//    }
-//  }
+
+
+  implicit def enumeratumField[A <: EnumEntry](implicit enum: Enum[A]): FormField[A, Html] =
+    new FormField[A, Html] {
+
+      override def stats = new FormFieldStats(children = enum.values.length)
+
+      def decode(out: Input): Either[ErrorTree,A] = {out.toField[A](x =>
+        nonEmpty[String].apply(x) andThen
+          ( y => Validated.catchOnly[NoSuchElementException](enum.withName(y)).leftMap(_ => ErrorTree.oneErr(ErrorMsg("invalid"))))
+      )}.toEither
+
+      def encode(in: A): Input = Input.one(List(in.entryName))
+      def render(key: List[String],path: Breadcrumbs,data: Input,errors: ErrorTree,messages: UniformMessages[Html]): Html = {
+        val options = enum.values.map{_.entryName}
+        val existingValue = decode(data).map{_.entryName}.toOption
+        views.html.uniform.radios(
+          key,
+          options,
+          existingValue,
+          errors,
+          messages
+        )
+      }
+    }
+
+  implicit def enumeratumSetField[A <: EnumEntry](implicit enum: Enum[A]): FormField[Set[A], Html] =
+    new FormField[Set[A], Html] {
+      override def stats = new FormFieldStats(children = enum.values.length)
+
+      def decode(out: Input): Either[ErrorTree,Set[A]] = {
+        val i: List[String] = out.valueAtRoot.getOrElse(Nil)
+        val r: List[Either[ErrorTree, A]] = i.map{x =>
+          Either.catchOnly[NoSuchElementException](enum.withName(x))
+            .leftMap(_ => ErrorTree.oneErr(ErrorMsg("invalid")))
+        }
+        r.sequence.map{_.toSet}
+      }
+
+      // Members declared in ltbs.uniform.common.web.Codec
+      def encode(in: Set[A]): Input =
+        Map(Nil -> in.toList.map{_.entryName})
+
+      // Members declared in ltbs.uniform.common.web.FormField
+      def render(
+        key: List[String],
+        breadcrumbs: Breadcrumbs,
+        data: Input,
+        errors: ErrorTree,
+        messages: UniformMessages[Html]
+      ): Html = {
+        val options = enum.values.map{_.entryName}
+        val existingValues: Set[String] = decode(data).map{_.map{_.entryName}}.getOrElse(Set.empty)
+        views.html.uniform.checkboxes(
+          key,
+          options,
+          existingValues,
+          errors,
+          messages
+        )
+      }
+
+    }
+
+
+  // implicit def oddballField2(
+  //   implicit threeBools: FormField[(
+  //     Boolean,
+  //     Boolean,
+  //     Boolean
+  //   ), Html]
+  // ): FormField[Set[data.Activity],Html] = {
+  //   import data.Activity, Activity.{SocialMedia, SearchEngine, OnlineMarketplace}
+  //   threeBools.imap{case (a,b,c) =>
+  //       Set.apply[Option[Activity]](
+  //         Some(SocialMedia).filter(_ => a),
+  //         Some(SearchEngine).filter(_ => b),
+  //         Some(OnlineMarketplace).filter(_ => c)          
+  //       ).flatten
+  //   }{ theset => 
+  //     (
+  //       theset.contains(SocialMedia),
+  //       theset.contains(SearchEngine),
+  //       theset.contains(OnlineMarketplace)        
+  //     )
+  //   }
+
+  // }
+  
 }

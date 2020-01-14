@@ -14,26 +14,26 @@
  * limitations under the License.
  *@
 
-@(key: List[String], options: Seq[String], existing: Option[String], errors: ErrorTree, messages: UniformMessages[Html], conditional: PartialFunction[String,Html] = PartialFunction.empty )
+@(key: List[String], options: Seq[String], existing: Set[String], errors: ErrorTree, messages: UniformMessages[Html], conditional: PartialFunction[String,Html] = PartialFunction.empty )
 
 @keyNoDots=@{key.mkString("-")}
-@inlineRadioKeys=@{(key.mkString(".") == "loan-amount.estimate")}
+@inlineCheckboxKeys=@{(key.mkString(".") == "loan-amount.estimate")}
 
-@standard_field(key, errors, "radios", messages) {
+@standard_field(key, errors, "checkboxes", messages) {
 
-<div class="radios@if(inlineRadioKeys){--inline}">
+<div class="checkboxes@if(inlineCheckboxKeys){--inline}">
   @for((opt,num) <- if(key.head == "about-loan"){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
-    <div class="radios__item multiple-choice" data-target="@keyNoDots-@opt">
+    <div class="checkboxes__item multiple-choice" data-target="@keyNoDots-@opt">
 
       <input
-        class="radios__input"
+        class="checkboxes__input"
         id="@keyNoDots-@num"
         name="@{key.mkString(".")}"
-        type="radio"
+        type="checkbox"
         value="@opt"
         @if(existing.exists(_.toUpperCase == opt.toUpperCase())){ checked }
       >
-      <label class="label radios__label form-label" for="@keyNoDots-@num">
+      <label class="label checkboxes__label form-label" for="@keyNoDots-@num">
         <span>@messages.decompose({key :+ opt}.mkString("."))</span>
         @messages.get({key :+ opt :+ "hint"}.mkString(".")).map { hint =>
           <span id="@keyNoDots-@opt-item-hint" class="form-hint checkboxes__hint">
@@ -44,7 +44,7 @@
     </div>
 
     @if(conditional.isDefinedAt(opt)) {
-      <div id="@keyNoDots-@opt" class="radios__conditional panel panel-border-narrow js-hidden">
+      <div id="@keyNoDots-@opt" class="checkboxes__conditional panel panel-border-narrow js-hidden">
         @conditional(opt)
       </div>
     }

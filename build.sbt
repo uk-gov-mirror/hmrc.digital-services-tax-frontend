@@ -6,6 +6,8 @@ val appName = "digital-services-tax-frontend"
 
 PlayKeys.playDefaultPort := 8740
 
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3")
+
 lazy val scoverageSettings = {
   import scoverage.ScoverageKeys
   Seq(
@@ -22,7 +24,8 @@ lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .settings(
     majorVersion                     := 0,
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test
+    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
+    scalacOptions += "-Ypartial-unification"
   )
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)

@@ -16,13 +16,12 @@
 
 package uk.gov.hmrc.digitalservicestaxfrontend.data
 
-sealed trait Activity
-object Activity {
-  def values: Set[Activity] = Set(
-    SocialMedia, SearchEngine, OnlineMarketplace
-  )
+import enumeratum._
 
-  case object SocialMedia extends Activity
-  case object SearchEngine extends Activity
+sealed trait Activity extends EnumEntry
+object Activity extends Enum[Activity] {
+  def values = findValues
+  case object SocialMedia       extends Activity
+  case object SearchEngine      extends Activity
   case object OnlineMarketplace extends Activity  
 }

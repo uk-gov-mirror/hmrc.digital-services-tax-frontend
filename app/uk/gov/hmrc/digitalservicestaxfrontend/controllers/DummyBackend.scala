@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,12 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
+package uk.gov.hmrc.digitalservicestaxfrontend.controllers
 
-@()(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
+import uk.gov.hmrc.digitalservicestaxfrontend.data._
+import scala.concurrent._
 
-@main_template(title = "Hello from digital-services-tax-frontend", bodyClasses = None) {
-    <h1>Hello from digital-services-tax-frontend !</h1>
+case class DummyBackend(implicit ec: ExecutionContext) extends BackendService[Future] {
+
+  def matchedCompany(): Future[Option[Company]] =
+    Future.successful(None)          
+
+  def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
+    Future.successful(Some(Company("testco", Address("a","b","c","postcode"))))    
+
 }

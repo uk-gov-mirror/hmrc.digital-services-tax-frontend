@@ -17,6 +17,4 @@
 package uk.gov.hmrc.digitalservicestaxfrontend.data
 
 trait UTRTag
-
 object UTR extends RegexValidatedString[UTRTag]("^[0-9]{10}$")
-

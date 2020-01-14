@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,43 @@ package uk.gov.hmrc.digitalservicestaxfrontend.controllers
 
 import cats.syntax.semigroup._
 import ltbs.uniform.TreeLike.ops._
-import ltbs.uniform.common.web.{FormFieldStats, InferFormField}
-import ltbs.uniform.interpreters.playframework.{Path, PlayInterpreter, RichPlayMessages, mon}
+import ltbs.uniform.common.web._
+import ltbs.uniform.interpreters.playframework.{Breadcrumbs, PlayInterpreter, RichPlayMessages, mon}
 import ltbs.uniform.{ErrorTree, Input, UniformMessages}
 import play.api.mvc.{AnyContent, Request, Results}
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 import uk.gov.hmrc.digitalservicestaxfrontend.views
 
-import scala.concurrent.ExecutionContext.Implicits.global
-
 case class DSTInterpreter(
   appConfig: AppConfig,
   results: Results,
   messagesApi: play.api.i18n.MessagesApi
-) extends PlayInterpreter[Html](results) with InferFormField[Html] with Widgets {
+)(
+  implicit ec: scala.concurrent.ExecutionContext
+) extends PlayInterpreter[Html](results)
+    with InferFormFieldProduct[Html]
+    with InferFormFieldCoProduct[Html]
+    with InferListingPages[Html]
+    with Widgets {
+
+  def renderProduct[A](
+    key: List[String],
+    path: Breadcrumbs,
+    values: Input,
+    errors: ErrorTree,
+    messages: UniformMessages[Html],
+    pfl: ProductFieldList[A, Html]
+  ): Html = Html(
+    pfl.inner.map{ case (subFieldId, f) =>
+      f(key:+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
+    }.mkString
+  )
+
+  def renderCoproduct[A](key: List[String], path: Breadcrumbs, values: Input, errors: ErrorTree, messages: UniformMessages[Html], cfl: CoproductFieldList[A,Html]): Html = ???
+
+
+  def blankTell: Html = Html("")
 
   def messages(
     request: Request[AnyContent]
@@ -46,14 +68,14 @@ case class DSTInterpreter(
     errors: ErrorTree,
     tell: Html,
     ask: Html,
-    breadcrumbs: Path,
+    breadcrumbs: List[String],
     request: Request[AnyContent],
     messages: UniformMessages[Html],
     stats: FormFieldStats): Html = {
     val content = views.html.form_wrapper(keyList,
       errors,
       Html(tell.toString + ask.toString),
-      breadcrumbs.drop(1),
+      List(breadcrumbs.drop(1)),
       stats)(messages, request)
     val errorTitle: String = if(errors.isNonEmpty) s"${messages("common.error")}: " else ""
     views.html.main_template(title =
@@ -61,39 +83,39 @@ case class DSTInterpreter(
       content)(request, messages, appConfig)
   }
 
-  override def selectionOfFields(
-    inner: List[
-      (String,
-        (List[String],
-          Path,
-          Input,
-          ErrorTree,
-          UniformMessages[Html]) ⇒ Html)]
-  )(key: List[String],
-    path: Path,
-    values: Input,
-    errors: ErrorTree,
-    messages: UniformMessages[Html]): Html = {
-    val value: Option[String] =
-      values.valueAtRoot.flatMap{_.headOption}
-    views.html.uniform.radios(
-      key,
-      inner.map { _._1 },
-      value,
-      errors,
-      messages,
-      inner
-        .map {
-          case (subkey, f) ⇒
-            subkey → f(key :+ subkey,
-              path,
-              values / subkey,
-              errors / subkey,
-              messages)
-        }
-        .filter(_._2.toString.trim.nonEmpty)
-        .toMap
-    )
-  }
+  // override def selectionOfFields(
+  //   inner: List[
+  //     (String,
+  //       (List[String],
+  //         Breadcrumbs,
+  //         Input,
+  //         ErrorTree,
+  //         UniformMessages[Html]) ⇒ Html)]
+  // )(key: List[String],
+  //   path: Breadcrumbs,
+  //   values: Input,
+  //   errors: ErrorTree,
+  //   messages: UniformMessages[Html]): Html = {
+  //   val value: Option[String] =
+  //     values.valueAtRoot.flatMap{_.headOption}
+  //   views.html.uniform.radios(
+  //     key,
+  //     inner.map { _._1 },
+  //     value,
+  //     errors,
+  //     messages,
+  //     inner
+  //       .map {
+  //         case (subkey, f) ⇒
+  //           subkey → f(key :+ subkey,
+  //             path,
+  //             values / subkey,
+  //             errors / subkey,
+  //             messages)
+  //       }
+  //       .filter(_._2.toString.trim.nonEmpty)
+  //       .toMap
+  //   )
+  // }
 
 }
