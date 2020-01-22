@@ -5,7 +5,7 @@ import sbt._
 
 object AppDependencies {
 
-  val uniformVersion = "4.8.0"
+  val uniformVersion = "4.8.1"
 
   val compile = Seq(
 

@@ -16,24 +16,27 @@
 
 package uk.gov.hmrc.digitalservicestax.controllers
 
-import org.scalatest.{Matchers, WordSpec}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.Status
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.{Configuration, Environment, _}
-import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
+import javax.inject.Inject
+import ltbs.uniform.UniformMessages
+import play.api.i18n.I18nSupport
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
-class JourneyControllerSpec extends WordSpec with Matchers {
+class AuthenticationController @Inject()(mcc: MessagesControllerComponents)
+  (implicit appConfig: AppConfig)
+  extends FrontendController(mcc) with I18nSupport {
 
-  //TODO add tests when journey logic is implemented
-
-  "GET /" should {
-    "return 200" in {
-      1 shouldBe 1
-    }
+  def signIn = Action { implicit request =>
+//    Redirect(appConfig.ggLoginUrl, Map("continue" -> Seq(appConfig.dnumIndexPage), "origin" -> Seq(appConfig.appName)))
+    ???
   }
+
+  def signOut = Action { implicit request =>
+//    Redirect(appConfig.signOutDnumUrl).withNewSession
+    ???
+  }
+
 }
+

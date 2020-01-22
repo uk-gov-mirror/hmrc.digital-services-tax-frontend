@@ -1,7 +1,7 @@
 # microservice specific routes
 
-GET        /                    uk.gov.hmrc.digitalservicestaxfrontend.controllers.JourneyController.index
+GET        /                    uk.gov.hmrc.digitalservicestax.controllers.JourneyController.index
 
-GET        /sign-in             uk.gov.hmrc.digitalservicestaxfrontend.controllers.AuthenticationController.signIn()
-GET        /sign-out            uk.gov.hmrc.digitalservicestaxfrontend.controllers.AuthenticationController.signOut()
+GET        /sign-in             uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signIn()
+GET        /sign-out            uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signOut()
 
