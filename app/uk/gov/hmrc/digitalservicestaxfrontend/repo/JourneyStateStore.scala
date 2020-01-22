@@ -24,12 +24,19 @@ import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoComponent
 import uk.gov.hmrc.cache.repository.CacheMongoRepository
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
-import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JourneyState
-import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JsonConversion._
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
+
+case class JourneyState (
+  test: String = "test"
+)
+
+object JsonConversion {
+  implicit lazy val journeyStateFormatter: Format[JourneyState] = Json.format[JourneyState]
+}
+
 
 @ImplementedBy(classOf[JourneyStateStoreImpl])
 trait JourneyStateStore {

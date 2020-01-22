@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.controllers
+package uk.gov.hmrc.digitalservicestaxfrontend
+package controllers
 
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JsonConversion._
 import ltbs.uniform.{UniformMessages, ErrorTree}
 import ltbs.uniform.interpreters.playframework._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
-import uk.gov.hmrc.digitalservicestaxfrontend.aa_data.JourneyState
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
 import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
 import uk.gov.hmrc.digitalservicestaxfrontend.repo.JourneyStateStore
@@ -65,7 +64,7 @@ class JourneyController @Inject()(
 
   def registerAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
-
+    import journeys.RegJourney._
     val playProgram = registrationJourney[interpreter.WM](
       create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
       hod
@@ -78,7 +77,7 @@ class JourneyController @Inject()(
 
   def returnAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
-
+    import journeys.ReturnJourney._
     val playProgram = returnJourney[interpreter.WM](
       create[ReturnTellTypes, ReturnAskTypes](interpreter.messages(request))
     )

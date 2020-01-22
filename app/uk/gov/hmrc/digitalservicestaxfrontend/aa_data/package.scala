@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.data
+package uk.gov.hmrc.digitalservicestaxfrontend
 
-sealed trait BankAccount
+import shapeless.{:: => _, _}, tag._
 
-case class ForeignBankAccount(iban: String) extends BankAccount
-case class DomesticBankAccount(sortCode: String, accountNo: String, buildingSocietyNumber: Option[String]) extends BankAccount
+package object data {
 
-case class RepaymentDetails(
-  accountName: String,
-  bankAccount: BankAccount
-)
+  type UTR = String @@ UTRTag
+  type Postcode = String @@ PostcodeTag
+
+}

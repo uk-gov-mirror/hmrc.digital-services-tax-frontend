@@ -15,19 +15,19 @@
  */
 
 package uk.gov.hmrc.digitalservicestaxfrontend
+package journeys
 
-import ltbs.uniform._
+import scala.language.higherKinds
+
+import data._
+
 import cats.Monad
 import cats.implicits._
-import scala.language.higherKinds
-import ltbs.uniform.validation._
 import java.time.LocalDate
-import shapeless.{:: => _, _}, tag._
+import ltbs.uniform._
+import ltbs.uniform.validation._
 
-package object data {
-
-  type UTR = String @@ UTRTag
-  type Postcode = String @@ PostcodeTag
+object ReturnJourney {
 
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
   type ReturnAskTypes = RepaymentDetails :: Set[Activity] :: Long :: Int :: Boolean :: List[GroupCompany] :: NilTypes
@@ -75,66 +75,6 @@ package object data {
       _ <- tell("check-your-answers", CYA(dstReturn))
       _ <- tell("confirmation", Confirmation(dstReturn))
     } yield (dstReturn)
-  }
-
-
-
-
-
-  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: Address :: Boolean :: NilTypes
-
-  def registrationJourney[F[_] : Monad](
-    interpreter: Language[F, RegTellTypes, RegAskTypes],
-    backendService: BackendService[F]
-  ): F[Registration] = {
-    import interpreter._
-
-    for {
-      company <- backendService.matchedCompany() >>= {
-
-        // found a matching company
-        case Some(company) =>
-          for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company", company)
-            _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
-          } yield (company)
-
-        // no matching company found
-        case None => ask[Boolean]("has-utr") >>= {
-          case false =>
-            (
-              ask[String]("new-company-name"),
-              ask[Address]("new-company-address")
-            ).mapN(Company.apply)
-          case true =>
-            for {
-              utr <- ask[UTR]("utr")
-              postcode <- ask[Postcode]("postcode")
-              company <- backendService.lookup(utr, postcode) map {
-                _.getOrElse(throw new IllegalStateException("lookup failed"))
-              }
-              confirmCompany <- interact[Company, Boolean]("confirm-company2", company)
-              _ <- if (!confirmCompany) { tell("logout-prompt2", Kickout("logout-prompt")) } else { (()).pure[F] }
-            } yield (company)
-        }
-      }
-    
-      registration <- (
-        company.pure[F],
-        ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("confirm-address", company.address).map{x => !x},
-        (
-          ask[String]("ultimate-parent-name"),
-          ask[Address]("ultimate-parent-address")
-        ).mapN(Company.apply) when ask[Boolean]("has-ultimate-parent"),
-        ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start") when ask[Boolean]("alternate-start-date")).map{_.getOrElse(LocalDate.of(2020, 4,1))},
-        ask[LocalDate]("end-date")
-      ).mapN(Registration.apply)
-      _ <- tell("check-your-answers", CYA(registration))
-      _ <- tell("confirmation", Confirmation(registration))      
-    } yield (registration)
   }
 
 }
