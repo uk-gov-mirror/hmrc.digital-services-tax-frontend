@@ -17,9 +17,11 @@
 package uk.gov.hmrc.digitalservicestax
 package controllers
 
+import java.util.UUID
+
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.{UniformMessages, ErrorTree}
+import ltbs.uniform.{ErrorTree, Language, NilTypes, UniformMessages}
 import ltbs.uniform.interpreters.playframework._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -29,8 +31,10 @@ import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeader
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.repo.JourneyStateStore
 import uk.gov.hmrc.digitalservicestax.views
-import ltbs.uniform.common.web.{WebMonad, FutureAdapter}
+import ltbs.uniform.common.web.{FutureAdapter, WebMonad}
 import uk.gov.hmrc.digitalservicestax.data._
+import ltbs.uniform._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -99,5 +103,97 @@ class JourneyController @Inject()(
       )(views.html.hello_world()))
 
   }
+
+
+  def testAction(targetId: String): Action[AnyContent] = Action.async {
+    implicit request: Request[AnyContent] =>
+
+      implicit val persistence = ZUnsafePersistence()
+
+      val playProgram = subjourneys.subjourneyProg[interpreter.WM](
+        create[subjourneys.TellTypes, subjourneys.AskTypes](interpreter.messages(request))
+      )
+
+      playProgram.run(targetId) {
+        _ => Future(Ok("Ta!"))
+      }
+
+  }
+
+
+}
+
+abstract class ZUUIDPersistence()(implicit ec: ExecutionContext) extends PersistenceEngine[Request[AnyContent]] {
+  def load(uuid: UUID): Future[DB]
+  def save(uuid: UUID, db: DB): Future[Unit]
+  def apply(request: Request[AnyContent])(f: DB => Future[(DB,Result)]): Future[Result] = {
+
+    val uuid: UUID = request.session.get("uuid").map{UUID.fromString}
+      .getOrElse( UUID.randomUUID )
+
+    for {
+      db              <- load(uuid)
+      (newDb, result) <- f(db)
+      _               <- save(uuid, newDb)
+    } yield result.withSession(
+      request.session + ("uuid" -> uuid.toString)
+    )
+  }
+}
+
+
+final case class ZUnsafePersistence(
+  var state: DB = Map.empty
+)(implicit ec: ExecutionContext) extends ZUUIDPersistence()(ec) {
+
+  def load(uuid: UUID): Future[DB] = {
+    val foo = state
+    println(s"##################################################### UnsafePersistence state: $foo")
+    Future.successful(foo)
+  }
+
+  def save(uuid: UUID,db: DB): Future[Unit] = {
+    state = db
+    Future.successful(())
+  }
+}
+
+object subjourneys {
+
+  import scala.language.higherKinds
+
+  import cats.Monad
+  import cats.implicits._
+
+  type TellTypes = NilTypes
+  type AskTypes = String :: NilTypes
+
+  def subjourneyProg[F[_] : Monad](
+    i: Language[F, TellTypes, AskTypes]
+  ): F[Unit] = for {
+    //    _ <- i.ask[String]("begin", default = Some("x"))
+    _ <- i.ask[String]("begin")
+    _ <- i.subJourney("one") { for {
+      _ <- i.ask[String]("a", default = Some("x"))
+      //      _ <- i.ask[String]("a")
+      _ <- i.ask[String]("b", default = Some("x"))
+      //      _ <- i.ask[String]("b")
+      _ <- i.subJourney("half") { for {
+        _ <- i.ask[String]("a", default = Some("x"))
+        _ <- i.ask[String]("b", default = Some("x"))
+      } yield (()) }
+    } yield (()) }
+    _ <- i.subJourney("twoa","twob") { for {
+      _ <- i.ask[String]("a", default = Some("x"))
+      _ <- i.ask[String]("b", default = Some("x"))
+    } yield (()) }
+    _ <- i.subJourney("threea","threeb", "threec") { for {
+      _ <- i.ask[String]("v", default = Some("x")) // it's the default that hangs it up
+      _ <- i.ask[String]("foo")
+    } yield (()) }
+    _ <- i.subJourney("threez","threeb", "threec") { i.ask[String]("a") }
+    _ <- i.subJourney("solo") { i.ask[String]("a") }
+    _ <- i.ask[String]("end")
+  } yield ()
 
 }

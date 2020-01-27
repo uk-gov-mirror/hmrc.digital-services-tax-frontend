@@ -5,3 +5,7 @@ GET        /                    uk.gov.hmrc.digitalservicestax.controllers.Journ
 GET        /sign-in             uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signIn()
 GET        /sign-out            uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signOut()
 
+GET         /subjourney/        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.testAction(id = "")
+GET         /subjourney/*id     uk.gov.hmrc.digitalservicestax.controllers.JourneyController.testAction(id: String)
+POST        /subjourney/        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.testAction(id = "")
+POST        /subjourney/*id     uk.gov.hmrc.digitalservicestax.controllers.JourneyController.testAction(id: String)
