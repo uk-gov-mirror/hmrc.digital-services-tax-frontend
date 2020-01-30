@@ -16,9 +16,9 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
-trait PostcodeTag
+import java.time.LocalDate
 
-object Postcode extends RegexValidatedString[PostcodeTag](
-  """^([G][I][R] 0[A]{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z]))))\s?[0-9][A-Z]{2}|.{0})$""",
-  _.toUpperCase
-) 
+case class Period(
+  start: LocalDate,
+  end: LocalDate
+)

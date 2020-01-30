@@ -20,6 +20,8 @@ lazy val scoverageSettings = {
   )
 }
 
+scalacOptions in ThisBuild += "-Ypartial-unification"
+
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtAutoBuildPlugin, SbtGitVersioning, SbtDistributablesPlugin, SbtArtifactory)
   .settings(

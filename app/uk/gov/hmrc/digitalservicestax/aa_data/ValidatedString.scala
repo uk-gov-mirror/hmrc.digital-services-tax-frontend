@@ -19,29 +19,34 @@ package uk.gov.hmrc.digitalservicestax.data
 import shapeless._, tag._
 import cats.implicits._
 
-trait ValidatedString[Tag] {
+trait ValidatedType[BaseType] {
 
-  lazy val className = this.getClass.getName
+  trait Tag
 
-  def validateAndTransform(in: String): Option[String]
+  lazy val className = this.getClass.getSimpleName
 
-  def apply(in: String): String @@ Tag =
+  def validateAndTransform(in: BaseType): Option[BaseType]
+
+  def apply(in: BaseType): BaseType @@ Tag =
     of(in).getOrElse{
       throw new IllegalArgumentException(
         s""""$in" is not a valid ${className.init}"""
       )
     }
 
-  def of(in: String): Option[String @@ Tag] =
+  def of(in: BaseType): Option[BaseType @@ Tag] =
     validateAndTransform(in) map {
-      x => tag[Tag][String](x)
+      x => tag[Tag][BaseType](x)
     }
+
+  def mapTC[TC[_]: cats.Functor](implicit monA: TC[BaseType]): TC[BaseType @@ Tag] =
+    monA.map{apply(_)}
 }
 
-class RegexValidatedString[Tag](
-  regex: String,
+class RegexValidatedString(
+  val regex: String,
   transform: String => String = identity
-) extends ValidatedString[Tag] {
+) extends ValidatedType[String] {
 
   val regexCompiled = regex.r
 

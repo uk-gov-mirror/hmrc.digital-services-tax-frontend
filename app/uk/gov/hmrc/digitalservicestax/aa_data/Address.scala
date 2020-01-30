@@ -16,11 +16,35 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
-// subject to change (more than normal)
-case class Address (
-  line1: String,
-  line2: String,
-  line3: String,
-  line4: String,
-  postcode: String
-)
+sealed trait Address {
+  def line1: NonEmptyString
+  def line2: String
+  def line3: String
+  def line4: String
+  def line5: String    
+  def countryCode: CountryCode
+  def postalCode: Postcode
+  def lines: List[String] =
+    line1 :: line2 :: line3 :: line4 :: postalCode :: countryCode :: Nil
+}
+
+case class UkAddress(
+  line1: NonEmptyString,
+  line2: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line3: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line4: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  postalCode: Postcode
+) extends Address {
+  def countryCode = CountryCode("GB")
+  def line5: String = ""
+}
+
+case class ForeignAddress(
+  line1: NonEmptyString,
+  line2: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line3: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line4: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line5: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"  
+  postalCode: Postcode,
+  countryCode: CountryCode
+) extends Address

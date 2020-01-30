@@ -24,18 +24,18 @@ import data._
 import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
-import ltbs.uniform._
+import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
 object RegJourney {
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: Address :: Boolean :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: Boolean :: NilTypes
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: BackendService[F]
-  ): F[Registration] = {
+  )(utr: UTR): F[Registration] = {
     import interpreter._
 
     for {
@@ -52,7 +52,7 @@ object RegJourney {
         case None => ask[Boolean]("has-utr") >>= {
           case false =>
             (
-              ask[String]("new-company-name"),
+              ask[NonEmptyString]("new-company-name"),
               ask[Address]("new-company-address")
             ).mapN(Company.apply)
           case true =>
@@ -69,11 +69,12 @@ object RegJourney {
       }
     
       registration <- (
+        utr.pure[F],
         company.pure[F],
         ask[Address]("alternate-contact") when
           interact[Address, Boolean]("confirm-address", company.address).map{x => !x},
         (
-          ask[String]("ultimate-parent-name"),
+          ask[NonEmptyString]("ultimate-parent-name"),
           ask[Address]("ultimate-parent-address")
         ).mapN(Company.apply) when ask[Boolean]("has-ultimate-parent"),
         ask[ContactDetails]("contact-details"),

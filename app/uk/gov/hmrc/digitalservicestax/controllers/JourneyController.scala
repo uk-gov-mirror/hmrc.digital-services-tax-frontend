@@ -65,10 +65,11 @@ class JourneyController @Inject()(
   def registerAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
+
     val playProgram = registrationJourney[interpreter.WM](
       create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
       hod
-    )
+    )(UTR(""))
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
       i: Registration => Future(Ok(s"$i"))
@@ -78,6 +79,7 @@ class JourneyController @Inject()(
   def returnAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
+
     val playProgram = returnJourney[interpreter.WM](
       create[ReturnTellTypes, ReturnAskTypes](interpreter.messages(request))
     )
@@ -86,9 +88,6 @@ class JourneyController @Inject()(
       i: Return => Future(Ok(s"$i"))
     }
   }
-
-
-
 
   def index: Action[AnyContent] = Action { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)

@@ -23,27 +23,27 @@ import data._
 import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
-import ltbs.uniform._
+import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
 object Journeys {
 
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
-  type ReturnAskTypes = RepaymentDetails :: Set[Activity] :: Long :: Int :: Boolean :: List[GroupCompany] :: NilTypes
+  type ReturnAskTypes = RepaymentDetails :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
   ): F[Return] = {
     import interpreter._
 
-    def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Int]] = {
+    def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
-      def askActivity(actType: Activity): F[Option[Int]] = 
-      { ask[Int](s"${actType}-margin") emptyUnless
+      def askActivity(actType: Activity): F[Option[Percent]] = 
+      { ask[Percent](s"${actType}-margin") emptyUnless
         ask[Boolean](s"${actType}-loss").map{x => !x} } when
       ask[Boolean](s"${actType}-applying")
       
-      val allEntries: List[F[(Activity, Option[Int])]] =
+      val allEntries: List[F[(Activity, Option[Percent])]] =
         applicableActivities.toList.map{ actType =>
           askActivity(actType).map{ (actType, _)}
         }
@@ -53,9 +53,9 @@ object Journeys {
     } emptyUnless ask[Boolean]("alternative-charge")
 
 
-    def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Long]] = {
+    def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Money]] = {
       companies.zipWithIndex.map{ case (co, i) => 
-        interact[GroupCompany, Long](s"amount-for-company-$i", co).map{(co, _)}
+        interact[GroupCompany, Money](s"amount-for-company-$i", co).map{(co, _)}
       }.sequence.map{_.toMap}
     }
 
@@ -65,10 +65,10 @@ object Journeys {
 
       dstReturn <- (
         askAlternativeCharge(activities), 
-        ask[Long]("cross-border-relief-amount") emptyUnless ask[Boolean]("cross-border-relief"), 
+        ask[Money]("cross-border-relief-amount") emptyUnless ask[Boolean]("cross-border-relief"), 
         askAmountForCompanies(groupCos),
-        ask[Long]("allowance-amount"),
-        ask[Long]("total-liability"),
+        ask[Money]("allowance-amount"),
+        ask[Money]("total-liability"),
         ask[RepaymentDetails]("repayment") when ask[Boolean]("repayment-needed")
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
@@ -77,12 +77,12 @@ object Journeys {
   }
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: Address :: Boolean :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: NonEmptyString :: String :: Address :: Boolean :: NilTypes
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: BackendService[F]
-  ): F[Registration] = {
+  )(utr: UTR): F[Registration] = {
     import interpreter._
 
     for {
@@ -99,7 +99,7 @@ object Journeys {
         case None => ask[Boolean]("has-utr") >>= {
           case false =>
             (
-              ask[String]("new-company-name"),
+              ask[NonEmptyString]("new-company-name"),
               ask[Address]("new-company-address")
             ).mapN(Company.apply)
           case true =>
@@ -116,11 +116,12 @@ object Journeys {
       }
     
       registration <- (
+        utr.pure[F], 
         company.pure[F],
         ask[Address]("alternate-contact") when
           interact[Address, Boolean]("confirm-address", company.address).map{x => !x},
         (
-          ask[String]("ultimate-parent-name"),
+          ask[NonEmptyString]("ultimate-parent-name"),
           ask[Address]("ultimate-parent-address")
         ).mapN(Company.apply) when ask[Boolean]("has-ultimate-parent"),
         ask[ContactDetails]("contact-details"),

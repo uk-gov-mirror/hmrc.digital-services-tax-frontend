@@ -25,10 +25,11 @@ import ltbs.uniform.common.web.{FormField, FormFieldStats}
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
 import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
-import ltbs.uniform.{ErrorMsg, ErrorTree, Input, RichInput, UniformMessages, RichEither => _, _}
+import ltbs.uniform.{NonEmptyString => _, RichEither => _, _}
 import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.data._
+import shapeless.tag.{@@}
 
 trait Widgets {
 
@@ -53,19 +54,37 @@ trait Widgets {
     }
   }
 
-  implicit def utrField: FormField[UTR, Html] = twirlStringFields().simap(x => 
-    Either.fromOption(UTR.of(x), ErrorMsg("invalid").toTree)
-  )(identity)
+  def validatedVariant[BaseType](validated: ValidatedType[BaseType])(
+    implicit baseForm: FormField[BaseType, Html]
+  ): FormField[BaseType @@ validated.Tag, Html] =
+    baseForm.simap{x =>
+      Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+    }{x => x: BaseType}
 
-  implicit def postcodeField: FormField[Postcode, Html] = twirlStringFields().simap(x => 
-    Either.fromOption(Postcode.of(x), ErrorMsg("invalid").toTree)
-  )(identity)
+  implicit def postcodeField =    validatedVariant(Postcode)
+  implicit def nesField =         validatedVariant(NonEmptyString)
+  implicit def utrField =         validatedVariant(UTR)
+  implicit def countrycodeField = validatedVariant(CountryCode)
+  implicit def emailField =       validatedVariant(Email)
+  implicit def phoneField =       validatedVariant(PhoneNumber)
+  implicit def percentField =     validatedVariant(Percent)
+  implicit def accountField =     validatedVariant(AccountNumber)
+  implicit def sortCodeField =    validatedVariant(SortCode)
+  implicit def ibanField =        validatedVariant(IBAN)      
 
   implicit val intField: FormField[Int,Html] =
     twirlStringFields().simap(x => 
       {
         Rule.nonEmpty[String].apply(x) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toInt)
+      }.toEither
+    )(_.toString)
+
+  implicit val byteField: FormField[Byte,Html] =
+    twirlStringFields().simap(x => 
+      {
+        Rule.nonEmpty[String].apply(x) andThen
+        Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toByte)
       }.toEither
     )(_.toString)
 
@@ -76,6 +95,15 @@ trait Widgets {
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toLong)
       }.toEither
     )(_.toString)
+
+  implicit val bigdecimalField: FormField[BigDecimal,Html] =
+    twirlStringFields().simap(x => 
+      {
+        Rule.nonEmpty[String].apply(x) andThen
+        Transformation.catchOnly[NumberFormatException]("not-a-number")(BigDecimal.apply)
+      }.toEither
+    )(_.toString)
+
 
   implicit val twirlBoolField = new FormField[Boolean, Html] {
     val True = true.toString.toUpperCase
@@ -134,71 +162,29 @@ trait Widgets {
             LocalDate.of(y,m,d)
           }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
         }
-  }
+    }
 
-  def encode(in: LocalDate): Input = Map(
-    List("year") → in.getYear(),
-    List("month") → in.getMonthValue(),
-    List("day") → in.getDayOfMonth()
-  ).mapValues(_.toString.pure[List])
+      def encode(in: LocalDate): Input = Map(
+        List("year") → in.getYear(),
+        List("month") → in.getMonthValue(),
+        List("day") → in.getDayOfMonth()
+      ).mapValues(_.toString.pure[List])
 
-  def render(
-    key: List[String],
-    path: Breadcrumbs,
-    data: Input,
-    errors: ErrorTree,
+      def render(
+        key: List[String],
+        path: Breadcrumbs,
+        data: Input,
+        errors: ErrorTree,
     messages: UniformMessages[Html]
-  ): Html = {
-    views.html.uniform.date(
-      key,
-      data,
-      errors,
-      messages
-    )
-  }
-}
-//
-//  implicit def twirlAddressField[T](
-//    implicit gen: shapeless.LabelledGeneric.Aux[Address,T],
-//    ffhlist: FormField[T, Html]
-//  )= new FormField[Address, Html] {
-//
-//    def decode(out: Input): Either[ErrorTree, Address] = {
-//      // Not used due to international postcodes
-//      // val postCodeRegex = """([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2}|.{0})"""
-//
-//      def standardValidation: String => Validated[ErrorTree, String] =
-//        maxLength[String](40, "limit") followedBy
-//          matchesRegex("""^[a-zA-Z0-9',-./ ]*$""", "invalid")
-//
-//      (
-//        out.stringSubField("line1", nonEmpty[String] followedBy standardValidation),
-//        out.stringSubField("line2", standardValidation(_)),
-//        out.stringSubField("town", nonEmpty[String] followedBy standardValidation),
-//        out.stringSubField("county", standardValidation(_)),
-//        out.stringSubField("postcode", nonEmpty[String] followedBy maxLength(40, "limit"))
-//      ).mapN(Address).toEither
-//    }
-//
-//    def encode(in: Address): Input =
-//      ffhlist.encode(gen.to(in))
-//
-//    def render(
-//      key: List[String],
-//      path: Breadcrumbs,
-//      data: Input,
-//      errors: ErrorTree,
-//      messages: UniformMessages[Html]
-//    ): Html = {
-//      views.html.uniform.address(
-//        key,
-//        data,
-//        errors,
-//        messages
-//      )
-//    }
-//  }
-
+      ): Html = {
+        views.html.uniform.date(
+          key,
+          data,
+          errors,
+          messages
+        )
+      }
+    }
 
   implicit def enumeratumField[A <: EnumEntry](implicit enum: Enum[A]): FormField[A, Html] =
     new FormField[A, Html] {
