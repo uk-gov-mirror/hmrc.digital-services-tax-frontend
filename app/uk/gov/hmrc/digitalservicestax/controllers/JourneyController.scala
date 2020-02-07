@@ -69,7 +69,7 @@ class JourneyController @Inject()(
     val playProgram = registrationJourney[interpreter.WM](
       create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
       hod
-    )(UTR(""))
+    )(UTR("1234567890"))
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
       i: Registration => Future(Ok(s"$i"))
