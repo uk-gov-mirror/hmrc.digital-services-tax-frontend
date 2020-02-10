@@ -40,17 +40,17 @@ object ReturnJourney {
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
       def askActivity(actType: Activity): F[Option[Percent]] = 
-      { ask[Percent](s"${actType}-margin") emptyUnless
-        ask[Boolean](s"${actType}-loss").map{x => !x} } when
-      ask[Boolean](s"${actType}-applying")
+      { ask[Percent](s"$actType-margin") emptyUnless
+        ask[Boolean](s"$actType-loss").map { x => !x }} when
+      ask[Boolean](s"$actType-applying")
       
       val allEntries: List[F[(Activity, Option[Percent])]] =
         applicableActivities.toList.map{ actType =>
           askActivity(actType).map{ (actType, _)}
         }
-      allEntries.sequence.map{_.collect{
-        case (a, Some(x)) => (a,x)
-      }.toMap}
+      allEntries.sequence.map { _.collect {
+        case (a, Some(x)) => a -> x
+      }.toMap }
     } emptyUnless ask[Boolean]("alternative-charge")
 
 
@@ -74,7 +74,7 @@ object ReturnJourney {
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
       _ <- tell("confirmation", Confirmation(dstReturn))
-    } yield (dstReturn)
+    } yield dstReturn
   }
 
 }
