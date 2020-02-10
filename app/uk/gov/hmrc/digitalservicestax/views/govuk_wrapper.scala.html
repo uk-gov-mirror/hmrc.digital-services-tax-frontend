@@ -89,7 +89,7 @@
 }
 
 @linksElement = {
-    <link rel="stylesheet"  href='@controllers.Assets.versioned("stylesheets/digital-services-tax-frontend.css").url'/>
+    <link rel="stylesheet"  href='@controllers.Assets.versioned("stylesheets/digital-services-tax-frontend.css")'/>
 }
 
 @hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
