@@ -36,8 +36,13 @@ lazy val microservice = Project(appName, file("."))
   .settings(
     resolvers += Resolver.jcenterRepo,
     resolvers += Resolver.bintrayRepo("hmrc", "releases"),
+    scalacOptions -= "-Xfatal-warnings",                  // Fail the compilation if there are any warnings.
     TwirlKeys.templateImports ++= Seq(
       "ltbs.uniform._",
       "ltbs.uniform.interpreters.playframework._"
     )
   )
+
+libraryDependencies ++= Seq(
+  ws
+)
