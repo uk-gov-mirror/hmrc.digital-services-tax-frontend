@@ -33,17 +33,15 @@ package uk.gov.hmrc.digitalservicestaxfrontend.connectors
  */
 
 import java.net.URLEncoder.encode
-import java.time.{Clock, LocalDate, LocalDateTime}
-import cats.implicits._
-import play.api.{Logger, Mode}
-import play.api.libs.json.{Json, OWrites}
+import java.time.{Clock, LocalDate}
 
 import _root_.uk.gov.hmrc.http._
 import _root_.uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import _root_.uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import _root_.uk.gov.hmrc.play.bootstrap.http.HttpClient
+import play.api.libs.json.{Json, OWrites}
+import play.api.{Logger, Mode}
 
-import scala.concurrent.stm.TMap
 import scala.concurrent.{ExecutionContext, Future}
 
 class DesConnector(
@@ -56,7 +54,7 @@ class DesConnector(
 
   val desURL: String = servicesConfig.baseUrl("des")
   val serviceURL: String = "soft-drinks"
-  val cache: TMap[String, (Option[Subscription], LocalDateTime)] = TMap[String, (Option[Subscription], LocalDateTime)]()
+  //val cache: TMap[String, (Option[Subscription], LocalDateTime)] = TMap[String, (Option[Subscription], LocalDateTime)]()
 
   // DES return 503 in the event of no subscription for the UTR, we are expected to treat as 404, hence this override
   implicit override def readOptionOf[P](implicit rds: HttpReads[P]): HttpReads[Option[P]] = new HttpReads[Option[P]] {
@@ -69,58 +67,58 @@ class DesConnector(
     }
   }
 
-  def createSubscription(request: Subscription, idType: String, idNumber: String)(
-    implicit hc: HeaderCarrier): Future[CreateSubscriptionResponse] = {
-    import json.des.create._
-    import uk.gov.hmrc.softdrinksindustrylevy.models.RosmResponseAddress._
-    val formattedLines = request.address.lines.map { line =>
-      line.clean
-    }
-    val formattedAddress = request.address match {
-      case a: UkAddress      => a.copy(lines = formattedLines)
-      case b: ForeignAddress => b.copy(lines = formattedLines)
-    }
-    val submission = request.copy(address = formattedAddress)
-
-    JsonSchemaChecker[Subscription](request, "des-create-subscription")
-    desPost[Subscription, CreateSubscriptionResponse](s"$desURL/$serviceURL/subscription/$idType/$idNumber", submission)
-      .recover {
-        case Upstream4xxResponse(msg, 429, _, _) =>
-          Logger.error("[RATE LIMITED] Received 429 from DES - converting to 503")
-          throw Upstream5xxResponse("429 received from DES - converted to 503", 429, 503)
-      }
-  }
-
-  def retrieveSubscriptionDetails(idType: String, idNumber: String)(
-    implicit hc: HeaderCarrier): Future[Option[Subscription]] = {
-
-    lazy val memoized: String => Future[Option[Subscription]] =
-      Memoized.memoizedCache[Future, String, Option[Subscription]](cache, 60 * 60)(getSubscriptionFromDES)
-
-    def getSubscriptionFromDES(url: String)(implicit hc: HeaderCarrier): Future[Option[Subscription]] = {
-      import json.des.get._
-      http.GET[Option[Subscription]](url)(implicitly, addHeaders, implicitly)
-    }
-
-    for {
-      sub  <- memoized(s"$desURL/$serviceURL/subscription/details/$idType/$idNumber")
-      subs <- sub.fold(Future(List.empty[Subscription]))(s => persistence.subscriptions.list(s.utr))
-      _ <- sub.fold(Future(())) { x =>
-        if (!subs.contains(x)) {
-          persistence.subscriptions.insert(x.utr, x)
-        } else Future(())
-      }
-    } yield sub
-  }
-
-  def submitReturn(sdilRef: String, returnsRequest: ReturnsRequest)(
-    implicit hc: HeaderCarrier,
-    period: ReturnPeriod): Future[HttpResponse] =
-    desPost[ReturnsRequest, HttpResponse](s"$desURL/$serviceURL/$sdilRef/return", returnsRequest).recover {
-      case Upstream4xxResponse(msg, 429, _, _) =>
-        Logger.error("[RATE LIMITED] Received 429 from DES - converting to 503")
-        throw Upstream5xxResponse("429 received from DES - converted to 503", 429, 503)
-    }
+//  def createSubscription(request: Subscription, idType: String, idNumber: String)(
+//    implicit hc: HeaderCarrier): Future[CreateSubscriptionResponse] = {
+//    import json.des.create._
+//    import uk.gov.hmrc.softdrinksindustrylevy.models.RosmResponseAddress._
+//    val formattedLines = request.address.lines.map { line =>
+//      line.clean
+//    }
+//    val formattedAddress = request.address match {
+//      case a: UkAddress      => a.copy(lines = formattedLines)
+//      case b: ForeignAddress => b.copy(lines = formattedLines)
+//    }
+//    val submission = request.copy(address = formattedAddress)
+//
+//    JsonSchemaChecker[Subscription](request, "des-create-subscription")
+//    desPost[Subscription, CreateSubscriptionResponse](s"$desURL/$serviceURL/subscription/$idType/$idNumber", submission)
+//      .recover {
+//        case Upstream4xxResponse(msg, 429, _, _) =>
+//          Logger.error("[RATE LIMITED] Received 429 from DES - converting to 503")
+//          throw Upstream5xxResponse("429 received from DES - converted to 503", 429, 503)
+//      }
+//  }
+//
+//  def retrieveSubscriptionDetails(idType: String, idNumber: String)(
+//    implicit hc: HeaderCarrier): Future[Option[Subscription]] = {
+//
+//    lazy val memoized: String => Future[Option[Subscription]] =
+//      Memoized.memoizedCache[Future, String, Option[Subscription]](cache, 60 * 60)(getSubscriptionFromDES)
+//
+//    def getSubscriptionFromDES(url: String)(implicit hc: HeaderCarrier): Future[Option[Subscription]] = {
+//      import json.des.get._
+//      http.GET[Option[Subscription]](url)(implicitly, addHeaders, implicitly)
+//    }
+//
+//    for {
+//      sub  <- memoized(s"$desURL/$serviceURL/subscription/details/$idType/$idNumber")
+//      subs <- sub.fold(Future(List.empty[Subscription]))(s => persistence.subscriptions.list(s.utr))
+//      _ <- sub.fold(Future(())) { x =>
+//        if (!subs.contains(x)) {
+//          persistence.subscriptions.insert(x.utr, x)
+//        } else Future(())
+//      }
+//    } yield sub
+//  }
+//
+//  def submitReturn(sdilRef: String, returnsRequest: ReturnsRequest)(
+//    implicit hc: HeaderCarrier,
+//    period: ReturnPeriod): Future[HttpResponse] =
+//    desPost[ReturnsRequest, HttpResponse](s"$desURL/$serviceURL/$sdilRef/return", returnsRequest).recover {
+//      case Upstream4xxResponse(msg, 429, _, _) =>
+//        Logger.error("[RATE LIMITED] Received 429 from DES - converting to 503")
+//        throw Upstream5xxResponse("429 received from DES - converted to 503", 429, 503)
+//    }
 
   /** Calls API#1166: Get Financial Data.
    *
@@ -134,7 +132,6 @@ class DesConnector(
                            )(
                              implicit hc: HeaderCarrier
                            ): Future[Option[des.FinancialTransactionResponse]] = {
-    import des.FinancialTransaction._
 
     val args: Map[String, Any] = Map(
       "onlyOpenItems"              -> year.isEmpty,
