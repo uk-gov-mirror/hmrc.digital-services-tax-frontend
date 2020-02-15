@@ -162,15 +162,15 @@ class DesConnector(
       Future(x)
     }
   }
-
-  private def buildAuditEvent(body: FinancialTransactionResponse, path: String, subscriptionId: String)(
-    implicit hc: HeaderCarrier) = {
-    implicit val callbackFormat: OWrites[FinancialTransactionResponse] = Json.writes[FinancialTransactionResponse]
-    val detailJson = Json.obj(
-      "subscriptionId" -> subscriptionId,
-      "url"            -> path,
-      "response"       -> body
-    )
-    new BalanceQueryEvent(path, detailJson)
-  }
+//
+//  private def buildAuditEvent(body: FinancialTransactionResponse, path: String, subscriptionId: String)(
+//    implicit hc: HeaderCarrier) = {
+//    implicit val callbackFormat: OWrites[FinancialTransactionResponse] = Json.writes[FinancialTransactionResponse]
+//    val detailJson = Json.obj(
+//      "subscriptionId" -> subscriptionId,
+//      "url"            -> path,
+//      "response"       -> body
+//    )
+//    new BalanceQueryEvent(path, detailJson)
+//  }
 }
