@@ -20,7 +20,7 @@ package controllers
 import javax.inject.{Inject, Singleton}
 import ltbs.uniform.UniformMessages
 import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
-import ltbs.uniform.interpreters.playframework.{PersistenceEngine, UnsafePersistence, _}
+import ltbs.uniform.interpreters.playframework._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.Html
