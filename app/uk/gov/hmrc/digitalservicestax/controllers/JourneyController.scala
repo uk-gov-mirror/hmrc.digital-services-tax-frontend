@@ -17,20 +17,16 @@
 package uk.gov.hmrc.digitalservicestax
 package controllers
 
-import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.{ErrorTree, UniformMessages}
-import ltbs.uniform.interpreters.playframework._
+import ltbs.uniform.UniformMessages
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
+import ltbs.uniform.interpreters.playframework.{PersistenceEngine, UnsafePersistence, _}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.twirl.api.{Html, HtmlFormat}
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
-import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
+import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
-import uk.gov.hmrc.digitalservicestax.repo.JourneyStateStore
-import uk.gov.hmrc.digitalservicestax.views
-import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
 import uk.gov.hmrc.digitalservicestax.data._
+import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -52,15 +48,12 @@ class JourneyController @Inject()(
     }
   }
 
-  lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+  val interpreter = DSTInterpreter(appConfig, this, messagesApi)
   import interpreter._
 
   implicit val persistence: PersistenceEngine[Request[AnyContent]] =
     UnsafePersistence()
 
-  implicit def unitTell: GenericWebTell[Unit, Html] = new GenericWebTell[Unit, Html] {
-    def render(in: Unit, key: String, messages: UniformMessages[Html]): Html = Html("")
-  }
 
   implicit val addressTell = new GenericWebTell[Address, Html] {
     override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
@@ -112,11 +105,10 @@ class JourneyController @Inject()(
   }
 
   def registerAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
-    import interpreter._
     import journeys.RegJourney._
 
-    val playProgram = registrationJourney[interpreter.WM](
-      create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
+    val playProgram = registrationJourney[WM](
+      create[ RegTellTypes, RegAskTypes](messages(request)),
       hod
     )(UTR("1234567890"))
 
@@ -126,13 +118,12 @@ class JourneyController @Inject()(
   }
 
   def returnAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
-    import interpreter._
     import journeys.ReturnJourney._
 
 
 
-    val playProgram = returnJourney[interpreter.WM](
-      create[ReturnTellTypes, ReturnAskTypes](interpreter.messages(request))
+    val playProgram = returnJourney[WM](
+      create[ReturnTellTypes, ReturnAskTypes](messages(request))
     )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
@@ -141,7 +132,7 @@ class JourneyController @Inject()(
   }
 
   def index: Action[AnyContent] = Action { implicit request =>
-    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+    implicit val msg: UniformMessages[Html] = messages(request)
 
       Ok(views.html.main_template(
         title =

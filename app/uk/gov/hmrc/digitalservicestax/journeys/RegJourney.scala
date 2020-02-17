@@ -29,7 +29,8 @@ import ltbs.uniform.validation._
 
 object RegJourney {
 
-  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: UkAddress :: Kickout :: Company :: Boolean :: NilTypes
+//  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: UkAddress :: Kickout :: Company :: Boolean :: NilTypes
+  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company ::Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
   def registrationJourney[F[_] : Monad](
@@ -37,53 +38,54 @@ object RegJourney {
     backendService: BackendService[F]
   )(utr: UTR): F[Registration] = {
     import interpreter._
+    ???
 
-    for {
-      company <- backendService.matchedCompany() >>= {
-
-        // found a matching company
-        case Some(company) =>
-          for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company", company)
-            _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
-          } yield (company)
-
-        // no matching company found
-        case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
-          case false =>
-            (
-              ask[NonEmptyString]("company-name"),
-              ask[Address]("company-registered-office-address")
-            ).mapN(Company.apply)
-          case true =>
-            for {
-              utr <- ask[UTR]("enter-utr")
-              postcode <- ask[Postcode]("postcode")
-              company <- backendService.lookup(utr, postcode) map {
-                _.getOrElse(throw new IllegalStateException("lookup failed"))
-              }
-              confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
-              _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
-            } yield (company)
-        }
-      }
-    
-      registration <- (
-        utr.pure[F],
-        company.pure[F],
-        ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},
-        (
-          ask[NonEmptyString]("ultimate-parent-company-name"),
-          ask[Address]("ultimate-parent-company-address")
-        ).mapN(Company.apply) when ask[Boolean]("check-if-group"),
-        ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start-date") when ask[Boolean]("check-liability-date")).map{_.getOrElse(LocalDate.of(2020, 4,1))},
-        ask[LocalDate]("accounting-period-end-date")
-      ).mapN(Registration.apply)
-      _ <- tell("check-your-answers", CYA(registration))
-      _ <- tell("accounting-period-end-date", Confirmation(registration))
-    } yield (registration)
+//    for {
+//      company <- backendService.matchedCompany() >>= {
+//
+//        // found a matching company
+//        case Some(company) =>
+//          for {
+//            confirmCompany <- interact[Company, Boolean]("confirm-company", company)
+//            _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
+//          } yield (company)
+//
+//        // no matching company found
+//        case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
+//          case false =>
+//            (
+//              ask[NonEmptyString]("company-name"),
+//              ask[Address]("company-registered-office-address")
+//            ).mapN(Company.apply)
+//          case true =>
+//            for {
+//              utr <- ask[UTR]("enter-utr")
+//              postcode <- ask[Postcode]("postcode")
+//              company <- backendService.lookup(utr, postcode) map {
+//                _.getOrElse(throw new IllegalStateException("lookup failed"))
+//              }
+//              confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
+//              _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
+//            } yield (company)
+//        }
+//      }
+//
+//      registration <- (
+//        utr.pure[F],
+//        company.pure[F],
+//        ask[Address]("alternate-contact") when
+//          interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},
+//        (
+//          ask[NonEmptyString]("ultimate-parent-company-name"),
+//          ask[Address]("ultimate-parent-company-address")
+//        ).mapN(Company.apply) when ask[Boolean]("check-if-group"),
+//        ask[ContactDetails]("contact-details"),
+//        (ask[LocalDate]("liability-start-date") when ask[Boolean]("check-liability-date")).map{_.getOrElse(LocalDate.of(2020, 4,1))},
+//        ask[LocalDate]("accounting-period-end-date")
+//      ).mapN(Registration.apply)
+//      _ <- tell("check-your-answers", CYA(registration))
+//      _ <- tell("accounting-period-end-date", Confirmation(registration))
+//    } yield (registration)
   }
 
 }
