@@ -18,7 +18,10 @@ package uk.gov.hmrc.digitalservicestax.controllers
 
 import java.time.LocalDate
 
-import cats.data.Validated
+import ltbs.uniform
+import ltbs.uniform.common.web.GenericWebTell
+
+//import cats.data.Validated
 import cats.implicits._
 import enumeratum._
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
@@ -30,6 +33,14 @@ import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.data._
 import shapeless.tag.{@@}
+
+
+import cats.implicits._
+import cats.{Monoid, Applicative, Monad, Eq, Semigroup}
+import cats.data.{NonEmptyList, Validated}
+import shapeless.tag, tag.{@@}
+import collection.immutable.ListMap
+import uniform.validation.{Rule, Transformation}
 
 trait Widgets {
 
@@ -48,8 +59,7 @@ trait Widgets {
       errors: ErrorTree,
       messages: UniformMessages[Html]
     ): Html = {
-      val existingValue: String =
-        data.valueAtRoot.flatMap{_.headOption}.getOrElse("")
+      val existingValue: String = data.valueAtRoot.flatMap{_.headOption}.getOrElse("")
       views.html.uniform.string(key, existingValue, errors, messages, autoFields)
     }
   }
@@ -61,16 +71,16 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
-  implicit def postcodeField =    validatedVariant(Postcode)
-  implicit def nesField =         validatedVariant(NonEmptyString)
-  implicit def utrField =         validatedVariant(UTR)
+  implicit def postcodeField    = validatedVariant(Postcode)
+  implicit def nesField         = validatedVariant(NonEmptyString)
+  implicit def utrField         = validatedVariant(UTR)
   implicit def countrycodeField = validatedVariant(CountryCode)
-  implicit def emailField =       validatedVariant(Email)
-  implicit def phoneField =       validatedVariant(PhoneNumber)
-  implicit def percentField =     validatedVariant(Percent)
-  implicit def accountField =     validatedVariant(AccountNumber)
-  implicit def sortCodeField =    validatedVariant(SortCode)
-  implicit def ibanField =        validatedVariant(IBAN)      
+  implicit def emailField       = validatedVariant(Email)
+  implicit def phoneField       = validatedVariant(PhoneNumber)
+  implicit def percentField     = validatedVariant(Percent)
+  implicit def accountField     = validatedVariant(AccountNumber)
+  implicit def sortCodeField    = validatedVariant(SortCode)
+  implicit def ibanField        = validatedVariant(IBAN)
 
   implicit val intField: FormField[Int,Html] =
     twirlStringFields().simap(x => 
@@ -186,6 +196,44 @@ trait Widgets {
       }
     }
 
+  implicit def twirlUKAddressField[T](
+    implicit gen: shapeless.LabelledGeneric.Aux[UkAddress,T],
+    ffhlist: FormField[T, Html]
+  ): FormField[UkAddress, Html] = new FormField[UkAddress, Html] {
+
+    def decode(out: Input): Either[ErrorTree, UkAddress] = {
+      // Not used due to international postcodes
+      // val postCodeRegex = """([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2}|.{0})"""
+
+      //TODO check transformations with ltbs
+      (
+        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("not-a-none-empty-string")(NonEmptyString(_))}),
+        out.stringSubField("line2"),
+        out.stringSubField("town"),
+        out.stringSubField("county"),
+        out.subField[Postcode]("postcode", {Transformation.catchOnly[IllegalArgumentException]("not-a-postcode")(Postcode(_))})
+      ).mapN(UkAddress).toEither
+    }
+
+    def encode(in: UkAddress): Input = ffhlist.encode(gen.to(in))
+
+    def render(
+      key: List[String],
+      path: Breadcrumbs,
+      data: Input,
+      errors: ErrorTree,
+      messages: UniformMessages[Html]
+    ): Html = {
+      // TODO pass thru fieldKey
+      views.html.uniform.address(
+        key,
+        data,
+        errors,
+        messages
+      )
+    }
+  }
+
   implicit def enumeratumField[A <: EnumEntry](implicit enum: Enum[A]): FormField[A, Html] =
     new FormField[A, Html] {
 
@@ -247,6 +295,11 @@ trait Widgets {
       }
 
     }
+
+  implicit def unitTell: GenericWebTell[UkAddress, Html] = new GenericWebTell[UkAddress, Html] {
+    def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html = Html("heyeyeye")
+  }
+
 
 
   // implicit def oddballField2(

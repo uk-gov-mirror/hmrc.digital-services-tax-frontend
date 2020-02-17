@@ -1,0 +1,41 @@
+#Common
+common.back=Back
+common.save-continue=Save and continue
+common.save-back-later=Save and come back later
+common.sign-out=Sign out
+common.sign-in=Sign in
+common.alpha-info.p1=This is a new service – your 
+common.alpha-info.link=feedback
+common.alpha-info.p2= will help us to improve it.
+common.print-save=Print or save this page
+common.warning.title=Warning
+common.error=Error
+common.beta=BETA
+common.title=Digital Services Tax
+common.title.short=Digital Services Tax
+
+#Registration
+
+check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
+  Tax Unique Taxpayer Reference?
+check-unique-taxpayer-reference.TRUE=Yes
+check-unique-taxpayer-reference.FALSE=No
+
+company-name.heading=What is the company’s name?
+
+company-registered-office-address.heading=What is the company’s Registered Office address?
+company-registered-office-address.UkAddress.line1.heading=Building or street
+company-registered-office-address.UkAddress.line2.heading=Building or street line 2 (optional)
+company-registered-office-address.UkAddress.town.heading=Town or city
+company-registered-office-address.UkAddress.county.heading=County (optional)
+company-registered-office-address.UkAddress.postcode.heading=Building or street line 2 (optional)
+
+confirm-company-details.heading=Is this the company you want to register?
+confirm-company-details.TRUE=Yes
+confirm-company-details.FALSE=No
+
+company-contact-address.heading=Can we use this address to contact you about your Digital Services Tax?
+company-contact-address.TRUE=Yes
+company-contact-address.FALSE=No - I want to enter a different address
+
+alternate-contact.heading=What is your contact address?

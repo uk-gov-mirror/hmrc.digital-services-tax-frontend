@@ -29,8 +29,8 @@ import ltbs.uniform.validation._
 
 object RegJourney {
 
-  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: Boolean :: NilTypes
+  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: UkAddress :: Kickout :: Company :: Boolean :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
@@ -49,21 +49,21 @@ object RegJourney {
           } yield (company)
 
         // no matching company found
-        case None => ask[Boolean]("has-utr") >>= {
+        case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
           case false =>
             (
-              ask[NonEmptyString]("new-company-name"),
-              ask[Address]("new-company-address")
+              ask[NonEmptyString]("company-name"),
+              ask[Address]("company-registered-office-address")
             ).mapN(Company.apply)
           case true =>
             for {
-              utr <- ask[UTR]("utr")
+              utr <- ask[UTR]("enter-utr")
               postcode <- ask[Postcode]("postcode")
               company <- backendService.lookup(utr, postcode) map {
                 _.getOrElse(throw new IllegalStateException("lookup failed"))
               }
-              confirmCompany <- interact[Company, Boolean]("confirm-company2", company)
-              _ <- if (!confirmCompany) { tell("logout-prompt2", Kickout("logout-prompt")) } else { (()).pure[F] }
+              confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
+              _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
             } yield (company)
         }
       }
@@ -72,17 +72,17 @@ object RegJourney {
         utr.pure[F],
         company.pure[F],
         ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("confirm-address", company.address).map{x => !x},
+          interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},
         (
-          ask[NonEmptyString]("ultimate-parent-name"),
-          ask[Address]("ultimate-parent-address")
-        ).mapN(Company.apply) when ask[Boolean]("has-ultimate-parent"),
+          ask[NonEmptyString]("ultimate-parent-company-name"),
+          ask[Address]("ultimate-parent-company-address")
+        ).mapN(Company.apply) when ask[Boolean]("check-if-group"),
         ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start") when ask[Boolean]("alternate-start-date")).map{_.getOrElse(LocalDate.of(2020, 4,1))},
-        ask[LocalDate]("end-date")
+        (ask[LocalDate]("liability-start-date") when ask[Boolean]("check-liability-date")).map{_.getOrElse(LocalDate.of(2020, 4,1))},
+        ask[LocalDate]("accounting-period-end-date")
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))
-      _ <- tell("confirmation", Confirmation(registration))      
+      _ <- tell("accounting-period-end-date", Confirmation(registration))
     } yield (registration)
   }
 

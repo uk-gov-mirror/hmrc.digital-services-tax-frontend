@@ -24,7 +24,9 @@ import ltbs.uniform.{ErrorTree, Input, UniformMessages}
 import play.api.mvc.{AnyContent, Request, Results}
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.data._
 import uk.gov.hmrc.digitalservicestax.views
+import uk.gov.hmrc.digitalservicestax.views.html.uniform.radios
 
 case class DSTInterpreter(
   appConfig: AppConfig,
@@ -46,13 +48,31 @@ case class DSTInterpreter(
     messages: UniformMessages[Html],
     pfl: ProductFieldList[A, Html]
   ): Html = Html(
-    pfl.inner.map{ case (subFieldId, f) =>
-      f(key:+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
+    pfl.inner.map {
+      case (subFieldId, f) =>
+        f(key:+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
     }.mkString
   )
 
-  def renderCoproduct[A](key: List[String], path: Breadcrumbs, values: Input, errors: ErrorTree, messages: UniformMessages[Html], cfl: CoproductFieldList[A,Html]): Html = ???
-
+  def renderCoproduct[A](
+    key: List[String],
+    path: Breadcrumbs,
+    values: Input,
+    errors: ErrorTree,
+    messages: UniformMessages[Html],
+    cfl: CoproductFieldList[A,Html]): Html = {
+    val value: Option[String] = values.valueAtRoot.flatMap {_.headOption}
+    radios(
+      key,
+      cfl.inner.map{_._1}.orderYesNoRadio,
+      value,
+      errors,
+      messages,
+      cfl.inner.map{
+        case(subkey,f) => subkey -> f(key :+ subkey, path, {values / subkey}, errors / subkey, messages)
+      }.filter(_._2.toString.trim.nonEmpty).toMap
+    )
+  }
 
   def blankTell: Html = Html("")
 
