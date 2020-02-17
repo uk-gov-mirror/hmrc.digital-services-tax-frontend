@@ -14,48 +14,49 @@
  * limitations under the License.
  */
 
-//package uk.gov.hmrc.digitalservicestax.actions
-//
-//import javax.inject.Inject
-//import play.api.Logger
-//import play.api.mvc.Results.Redirect
-//import play.api.mvc._
-//import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
-//import uk.gov.hmrc.auth.core.{AuthConnector, AuthProviders, AuthorisedFunctions, NoActiveSession}
-//import uk.gov.hmrc.auth.core.retrieve.Retrievals.internalId
-//import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
-//import uk.gov.hmrc.digitalservicestax.config.AppConfig
-//import uk.gov.hmrc.http.HeaderCarrier
-//import uk.gov.hmrc.play.HeaderCarrierConverter
-//
-//import scala.concurrent.{ExecutionContext, Future}
+package uk.gov.hmrc.digitalservicestaxfrontend.actions
 
-//TODO implement auth
+import javax.inject.Inject
+import play.api.Logger
+import play.api.mvc.Results.Redirect
+import play.api.mvc._
 
-//class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConnector: AuthConnector)
-//  (implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
-//  extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions {
-//
-//  override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
-//    implicit val req: Request[A] = request
-//    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
-//
-//    val retrieval = internalId and nino and saUtr and name
-//
-//    authorised(AuthProviders(GovernmentGateway, Verify)).retrieve(retrieval) { case id ~ natInsNo ~ sUtr ~ name =>
-//      val internalId = id.getOrElse(throw new RuntimeException("No internal ID for user"))
-//      Future.successful(Right(AuthorisedRequest(internalId, natInsNo, sUtr, request, name)))
-//    } recover {
-//      case _: NoActiveSession =>
-//        Logger.info(s"Recover - no active session")
-//        Left(
-//          Redirect(uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signIn()))
-//    }
-//  }
-//
-//  override def parser = mcc.parsers.anyContent
-//}
-//
-//case class AuthorisedRequest[A](internalId: String, request: Request[A], name: Name)
-//  extends WrappedRequest(request)
-//
+import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
+
+import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{internalId, nino, saUtr, name}
+import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.HeaderCarrierConverter
+
+import scala.concurrent.{ExecutionContext, Future}
+
+
+class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConnector: AuthConnector)
+  (implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
+  extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions {
+
+  override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
+    implicit val req: Request[A] = request
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+
+    val retrieval = internalId and nino and saUtr and name
+
+    authorised(AuthProviders(GovernmentGateway, Verify)).retrieve(retrieval) { case id ~ natInsNo ~ sUtr ~ fullName =>
+      val internalId = id.getOrElse(throw new RuntimeException("No internal ID for user"))
+      Future.successful(Right(AuthorisedRequest(internalId, natInsNo, sUtr, request, fullName)))
+    } recover {
+      case _: NoActiveSession =>
+        Logger.info(s"Recover - no active session")
+        Left(
+          Redirect(uk.gov.hmrc.digitalservicestaxfrontend.controllers.routes.AuthenticationController.signIn()))
+    }
+  }
+
+  override def parser = mcc.parsers.anyContent
+}
+
+case class AuthorisedRequest[A](internalId: String, nino: Option[String], utr: Option[String], request: Request[A], name: Option[Name])
+  extends WrappedRequest(request)
+

@@ -76,9 +76,9 @@ class JourneyStateStoreImpl @Inject() (
   }
 
   override def storeState(userId: String, journeyState: JourneyState): Future[Unit] =
-    cacheRepository.createOrUpdate(userId, cacheRepositoryKey, Json.toJson(journeyState)).map(_=>(()))
+    cacheRepository.createOrUpdate(userId, cacheRepositoryKey, Json.toJson(journeyState)).map(_=> ())
 
   override def clear(userId: String): Future[Unit] =
-    cacheRepository.removeById(userId).map(_=>(()))
+    cacheRepository.removeById(userId).map(_=> ())
 
 }
