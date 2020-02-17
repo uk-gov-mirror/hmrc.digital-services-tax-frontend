@@ -16,24 +16,15 @@
 
 package uk.gov.hmrc.digitalservicestax.controllers
 
-import org.scalatest.{Matchers, WordSpec}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.Status
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.{Configuration, Environment, _}
-import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
-import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.data._
+import scala.concurrent._
 
-class JourneyControllerSpec extends WordSpec with Matchers {
+case class DummyBackend(implicit ec: ExecutionContext) extends BackendService[Future] {
 
-  //TODO add tests when journey logic is implemented
+  def matchedCompany(): Future[Option[Company]] =
+    Future.successful(None)          
 
-  "GET /" should {
-    "return 200" in {
-      1 shouldBe 1
-    }
-  }
+  def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
+    Future.successful(Some(Company(NonEmptyString("testco"), UkAddress(NonEmptyString("a"),"b","c","d", Postcode("AB12 3CD")))))    
+
 }
