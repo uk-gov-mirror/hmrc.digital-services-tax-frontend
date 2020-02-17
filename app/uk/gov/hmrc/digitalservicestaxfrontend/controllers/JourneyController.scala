@@ -48,7 +48,7 @@ class JourneyController @Inject()(
   with I18nSupport
   with AuthorisedFunctions {
 
-  lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+  lazy val interpreter: DSTInterpreter = DSTInterpreter(appConfig, this, messagesApi)
   import interpreter._
 
   def getState: Future[JourneyState] =

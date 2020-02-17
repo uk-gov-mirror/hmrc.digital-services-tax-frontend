@@ -28,11 +28,11 @@ class AuthenticationController @Inject()(mcc: MessagesControllerComponents)
   (implicit appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  def signIn = Action { implicit request =>
+  def signIn: Action[AnyContent] = Action { implicit request =>
     Redirect(appConfig.ggLoginUrl, Map("continue" -> Seq(appConfig.dstIndexPage), "origin" -> Seq(appConfig.appName)))
   }
 
-  def signOut = Action { implicit request =>
+  def signOut: Action[AnyContent] = Action { implicit request =>
     Redirect(appConfig.signOutDstUrl).withNewSession
   }
 
