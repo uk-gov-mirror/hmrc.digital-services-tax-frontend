@@ -213,6 +213,7 @@ object JsonProtocol {
   implicit val domesticBankAccountFormat: OFormat[DomesticBankAccount] = Json.format[DomesticBankAccount]
   implicit val foreignBankAccountFormat: OFormat[ForeignBankAccount] = Json.format[ForeignBankAccount]
   implicit val bankAccountFormat: OFormat[BankAccount] = Json.format[BankAccount]
+  implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
 
-  //implicit val returnFormat: OFormat[Return] = Json.format[Return]
+  implicit val returnFormat: OFormat[Return] = Json.format[Return]
 }
