@@ -190,6 +190,17 @@ object JsonProtocol {
     override def writes(o: Percent): JsValue = JsNumber(BigDecimal(o))
   }
 
+  implicit val activityMapFormat: Format[Map[Activity, Percent]] = new Format[Map[Activity, Percent]] {
+    override def reads(json: JsValue): JsResult[Map[Activity, Percent]] = {
+      JsSuccess(json.as[Map[String, JsNumber]].map { case (k, v) =>
+        Activity.values.find(_.entryName == k).get -> Percent.apply(v.value.toByte)
+      })
+    }
+
+    override def writes(o: Map[Activity, Percent]): JsValue = ???
+  }
+  implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = Json.format[Map[GroupCompany, Money]]
+
   implicit val ibanFormat: Format[IBAN] = new Format[IBAN] {
     override def reads(json: JsValue): JsResult[IBAN] = {
       json match {
