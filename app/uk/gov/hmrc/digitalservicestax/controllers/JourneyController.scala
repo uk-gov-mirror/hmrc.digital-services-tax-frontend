@@ -44,10 +44,10 @@ class JourneyController @Inject()(
   with FrontendHeaderCarrierProvider
   with I18nSupport {
 
-  val hod = DummyBackend().natTransform[WebMonad[?, Html]]{
+  val hod: BackendService[WebMonad[*, Html]] = DummyBackend().natTransform[WebMonad[?, Html]]{
     import cats.~>
     new (Future ~> WebMonad[?, Html]) {
-      def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html].alwaysRerun(in)
+      def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html]().alwaysRerun(in)
     }
   }
 
@@ -62,7 +62,7 @@ class JourneyController @Inject()(
       HtmlFormat.escape(in.toString)
   }
 
-  def registerAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
+  def registerAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
 
@@ -76,7 +76,7 @@ class JourneyController @Inject()(
     }
   }
 
-  def returnAction(targetId: String) = Action.async { implicit request: Request[AnyContent] =>
+  def returnAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
 
