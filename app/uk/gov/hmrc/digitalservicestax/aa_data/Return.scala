@@ -16,6 +16,8 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
+import enumeratum.EnumFormats
+import play.api.libs.json.{Format, Json, OFormat}
 case class Return (
   alternateCharge: Map[Activity, Percent],
   crossBorderReliefAmount: Money,
