@@ -16,8 +16,10 @@
 
 package uk.gov.hmrc.digitalservicestax
 
-import shapeless.{:: => _, _}, tag._
+import shapeless.{:: => _, _}
+import tag._
 import cats.implicits._
+import cats.kernel.Monoid
 
 package object data {
 
@@ -90,14 +92,14 @@ package object data {
   }
 
   type Percent = Byte @@ Percent.Tag
-  object Percent extends ValidatedType[Byte]{
+  object Percent extends ValidatedType[Byte] {
     def validateAndTransform(in: Byte): Option[Byte] = {
-      Some(in).filter{x => x >= 0 && x <= 100}
+      Some(in).filter { x => x >= 0 && x <= 100 }
     }
 
-    implicit def mon = new cats.Monoid[Percent] {
-      val base = implicitly[cats.Monoid[Byte]]
-      override def combine(a: Percent, b: Percent): Percent = Percent(base.combine(a,b))
+    implicit def mon: Monoid[Percent] = new cats.Monoid[Percent] {
+      val base: Monoid[Byte] = implicitly[cats.Monoid[Byte]]
+      override def combine(a: Percent, b: Percent): Percent = Percent(base.combine(a, b))
       override def empty: Percent = Percent(base.empty)
     }
   }

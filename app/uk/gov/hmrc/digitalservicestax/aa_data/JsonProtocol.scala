@@ -1,8 +1,24 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package uk.gov.hmrc.digitalservicestax.aa_data
 
 import enumeratum.EnumFormats
-import play.api.libs.json.{Format, JsError, JsPath, JsResult, JsString, JsSuccess, JsValue, Json, JsonValidationError, OFormat}
-import uk.gov.hmrc.digitalservicestax.data.{Activity, Address, BankAccount, Company, ContactDetails, CountryCode, Email, ForeignAddress, GroupCompany, Money, NonEmptyString, PhoneNumber, Postcode, Registration, UTR, UkAddress}
+import play.api.libs.json._
+import uk.gov.hmrc.digitalservicestax.data._
 
 object JsonProtocol {
 
@@ -113,9 +129,90 @@ object JsonProtocol {
   implicit val activityFormat: Format[Activity] = EnumFormats.formats(Activity)
   implicit val groupCompanyFormat: Format[GroupCompany] = Json.format[GroupCompany]
 
-  implicit val moneyFormat: Format[Money] = Json.format[BigDecimal]
+  //implicit val moneyFormat: Format[Money] = Json.format[BigDecimal]
 
-  implicit val bankAccountFormat  = Json.format[BankAccount]
 
-  implicit val
+  implicit val sortCodeFormat: Format[SortCode] = new Format[SortCode] {
+    override def reads(json: JsValue): JsResult[SortCode] = {
+      json match {
+        case JsString(value) =>
+          SortCode.validateAndTransform(value) match {
+            case Some(validCode) => JsSuccess(SortCode(validCode))
+            case None => JsError(s"Expected a valid sort code definition, got $value instead.")
+          }
+
+        case xs : JsValue => JsError(
+          JsPath -> JsonValidationError(Seq(s"""Expected a valid sort code string, got $xs instead"""))
+        )
+      }
+    }
+
+    override def writes(o: SortCode): JsValue = {
+      JsString(o)
+    }
+  }
+
+  implicit val accountNumberFormat: Format[AccountNumber] = new Format[AccountNumber] {
+    override def reads(json: JsValue): JsResult[AccountNumber] = {
+      json match {
+        case JsString(value) =>
+          SortCode.validateAndTransform(value) match {
+            case Some(validCode) => JsSuccess(AccountNumber(validCode))
+            case None => JsError(s"Expected a valid sort code definition, got $value instead.")
+          }
+
+        case xs : JsValue => JsError(
+          JsPath -> JsonValidationError(Seq(s"""Expected a valid sort code string, got $xs instead"""))
+        )
+      }
+    }
+
+    override def writes(o: AccountNumber): JsValue = {
+      JsString(o)
+    }
+  }
+
+  implicit val percentFormat: Format[Percent] = new Format[Percent] {
+    override def reads(json: JsValue): JsResult[Percent] = {
+      json match {
+        case JsNumber(value) =>
+          Percent.validateAndTransform(value.toByte) match {
+            case Some(validCode) => JsSuccess(Percent(validCode))
+            case None => JsError(s"Expected a valid percentage, got $value instead.")
+          }
+
+        case xs: JsValue => JsError(
+          JsPath -> JsonValidationError(Seq(s"""Expected a valid percentage, got $xs instead"""))
+        )
+      }
+    }
+
+    override def writes(o: Percent): JsValue = JsNumber(BigDecimal(o))
+  }
+
+  implicit val ibanFormat: Format[IBAN] = new Format[IBAN] {
+    override def reads(json: JsValue): JsResult[IBAN] = {
+      json match {
+        case JsString(value) =>
+          IBAN.validateAndTransform(value) match {
+            case Some(validCode) => JsSuccess(IBAN(validCode))
+            case None => JsError(s"Expected a valid IBAN number definition, got $value instead.")
+          }
+
+        case xs : JsValue => JsError(
+          JsPath -> JsonValidationError(Seq(s"""Expected a string with an IBAN number, got $xs instead"""))
+        )
+      }
+    }
+
+    override def writes(o: IBAN): JsValue = {
+      JsString(o)
+    }
+  }
+
+  implicit val domesticBankAccountFormat: OFormat[DomesticBankAccount] = Json.format[DomesticBankAccount]
+  implicit val foreignBankAccountFormat: OFormat[ForeignBankAccount] = Json.format[ForeignBankAccount]
+  implicit val bankAccountFormat: OFormat[BankAccount] = Json.format[BankAccount]
+
+  //implicit val returnFormat: OFormat[Return] = Json.format[Return]
 }
