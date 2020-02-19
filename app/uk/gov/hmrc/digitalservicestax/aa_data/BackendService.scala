@@ -22,7 +22,7 @@ trait BackendService[F[_]] {
   def matchedCompany(): F[Option[Company]]
   def lookup(utr: UTR, postcode: Postcode): F[Option[Company]]
 
-  def natTransform[G[_]](transform: F ~> G) = {
+  def natTransform[G[_]](transform: F ~> G): BackendService[G] = {
     val old = this
     new BackendService[G] {
       def matchedCompany(): G[Option[Company]] =

@@ -16,12 +16,35 @@
 
 package uk.gov.hmrc.digitalservicestaxfrontend.models
 
+import uk.gov.hmrc.digitalservicestax.data._
 
-/**
- */
+case class IdentificationType(
+  idNumber: String,
+  issuingInstitution: String,
+  issuingCountryCode: CountryCode
+)
 
+case class ContactDetailsType(
+  phoneNumber: PhoneNumber,
+  mobileNumber: PhoneNumber,
+  faxNumber: PhoneNumber,
+  emailAddress: Email
+)
 
+trait AddressDefinition
 
-class RegistrationResponse {
+case class OrgName(
+  organisationName: NonEmptyString
+)
 
-}
+case class OrganisationRegistrant(
+  regime: NonEmptyString,
+  acknowledgementReference: NonEmptyString,
+  isAnAgent: Boolean,
+  isAGroup: Boolean,
+  identification: IdentificationType,
+  organisation: OrgName,
+  address: Address,
+  contactDetails: ContactDetailsType
+
+)
