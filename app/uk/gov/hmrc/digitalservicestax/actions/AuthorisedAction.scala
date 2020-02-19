@@ -20,13 +20,12 @@ import javax.inject.Inject
 import play.api.Logger
 import play.api.mvc.Results.Redirect
 import play.api.mvc._
-
-import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
-
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{internalId, nino, saUtr, name}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{internalId, name, nino, saUtr}
 import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
+import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.controllers.routes
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -50,7 +49,7 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
       case _: NoActiveSession =>
         Logger.info(s"Recover - no active session")
         Left(
-          Redirect(uk.gov.hmrc.digitalservicestaxfrontend.controllers.routes.AuthenticationController.signIn()))
+          Redirect(routes.AuthenticationController.signIn()))
     }
   }
 

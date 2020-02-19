@@ -64,6 +64,55 @@ object Registration {
     }
   }
 
+  implicit val phoneNumberFormat: Format[PhoneNumber] = new Format[PhoneNumber] {
+    override def reads(json: JsValue): JsResult[PhoneNumber] = {
+      json match {
+        case JsString(value) =>
+          PhoneNumber.validateAndTransform(value) match {
+            case Some(validPhoneNumber) => JsSuccess(PhoneNumber(validPhoneNumber))
+            case None => JsError(s"Expected a valid phone number, got $value instead")
+          }
+        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid phone number string, got $xs instead""")))
+      }
+    }
+
+    override def writes(o: PhoneNumber): JsValue = {
+      JsString(o)
+    }
+  }
+
+  implicit val utrFormat: Format[UTR] = new Format[UTR] {
+    override def reads(json: JsValue): JsResult[UTR] = {
+      json match {
+        case JsString(value) =>
+          UTR.validateAndTransform(value) match {
+            case Some(validCode) => JsSuccess(UTR(validCode))
+            case None => JsError(s"Expected a valid UTR number, got $value instead.")
+          }
+
+        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid UTR string, got $xs instead""")))
+      }
+    }
+
+    override def writes(o: UTR): JsValue = JsString(o)
+  }
+
+
+  implicit val emailFormat: Format[Email] = new Format[Email] {
+    override def reads(json: JsValue): JsResult[Email] = {
+      json match {
+        case JsString(value) =>
+          Email.validateAndTransform(value) match {
+            case Some(validEmail) => JsSuccess(Email(validEmail))
+            case None => JsError(s"Expected a valid address number, got $value instead.")
+          }
+
+        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid email address string, got $xs instead""")))
+      }
+    }
+
+    override def writes(o: Email): JsValue = JsString(o)
+  }
 
   implicit val countryCodeFormat: Format[CountryCode] = new Format[CountryCode] {
     override def reads(json: JsValue): JsResult[CountryCode] = {
@@ -73,6 +122,8 @@ object Registration {
             case Some(validCode) => JsSuccess(CountryCode(validCode))
             case None => JsError(s"Expected a valid country code definition, got $value instead.")
           }
+
+        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid country code string, got $xs instead""")))
       }
     }
 
@@ -82,11 +133,12 @@ object Registration {
   }
 
 
-  implicit val foreignAddressFormat = Json.format[ForeignAddress]
-  implicit val ukAddressFormat = Json.format[UkAddress]
+  implicit val foreignAddressFormat: OFormat[ForeignAddress] = Json.format[ForeignAddress]
+  implicit val ukAddressFormat: OFormat[UkAddress] = Json.format[UkAddress]
 
-  implicit val addressFormat = Json.format[Address]
-  implicit val companyFormat = Json.format[Company]
+  implicit val addressFormat: OFormat[Address] = Json.format[Address]
+  implicit val companyFormat: OFormat[Company] = Json.format[Company]
+  implicit val contactDetailsFormat: OFormat[ContactDetails] = Json.format[ContactDetails]
 
   implicit val registrationFormat: OFormat[Registration] = Json.format[Registration]
 }

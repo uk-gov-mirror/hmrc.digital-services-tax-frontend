@@ -119,49 +119,42 @@ class DesConnector(
 //        Logger.error("[RATE LIMITED] Received 429 from DES - converting to 503")
 //        throw Upstream5xxResponse("429 received from DES - converted to 503", 429, 503)
 //    }
-
-  /** Calls API#1166: Get Financial Data.
-   *
-   * Attempts to retrieve a list of financial line items.
-   *
-   * @param year If provided will show all items for that year, if omitted will only show 'open' items
-   */
-  def retrieveFinancialData(
-                             sdilRef: String,
-                             year: Option[Int] = Some(LocalDate.now.getYear)
-                           )(
-                             implicit hc: HeaderCarrier
-                           ): Future[Option[des.FinancialTransactionResponse]] = {
-
-    val args: Map[String, Any] = Map(
-      "onlyOpenItems"              -> year.isEmpty,
-      "includeLocks"               -> false,
-      "calculateAccruedInterest"   -> true,
-      "customerPaymentInformation" -> true
-    ) ++ (
-      year match {
-        case Some(y) =>
-          Map(
-            "dateFrom" -> s"$y-01-01",
-            "dateTo"   -> s"$y-12-31"
-          )
-        case None => Map.empty[String, Any]
-      }
-      )
-
-    def encodePair(in: (String, Any)): String =
-      s"${encode(in._1, "UTF-8")}=${encode(in._2.toString, "UTF-8")}"
-
-    val uri = s"$desURL/enterprise/financial-data/ZSDL/$sdilRef/ZSDL?" ++
-      args.map { encodePair }.mkString("&")
-
-    http.GET[Option[des.FinancialTransactionResponse]](uri)(implicitly, addHeaders, implicitly).flatMap { x =>
-      x.map { y =>
-        auditing.sendExtendedEvent(buildAuditEvent(y, uri, sdilRef))
-      }
-      Future(x)
-    }
-  }
+//  def retrieveFinancialData(
+//                             sdilRef: String,
+//                             year: Option[Int] = Some(LocalDate.now.getYear)
+//                           )(
+//                             implicit hc: HeaderCarrier
+//                           ): Future[Option[des.FinancialTransactionResponse]] = {
+//
+//    val args: Map[String, Any] = Map(
+//      "onlyOpenItems"              -> year.isEmpty,
+//      "includeLocks"               -> false,
+//      "calculateAccruedInterest"   -> true,
+//      "customerPaymentInformation" -> true
+//    ) ++ (
+//      year match {
+//        case Some(y) =>
+//          Map(
+//            "dateFrom" -> s"$y-01-01",
+//            "dateTo"   -> s"$y-12-31"
+//          )
+//        case None => Map.empty[String, Any]
+//      }
+//      )
+//
+//    def encodePair(in: (String, Any)): String =
+//      s"${encode(in._1, "UTF-8")}=${encode(in._2.toString, "UTF-8")}"
+//
+//    val uri = s"$desURL/enterprise/financial-data/ZSDL/$sdilRef/ZSDL?" ++
+//      args.map { encodePair }.mkString("&")
+//
+//    http.GET[Option[des.FinancialTransactionResponse]](uri)(implicitly, addHeaders, implicitly).flatMap { x =>
+//      x.map { y =>
+//        auditing.sendExtendedEvent(buildAuditEvent(y, uri, sdilRef))
+//      }
+//      Future(x)
+//    }
+//  }
 //
 //  private def buildAuditEvent(body: FinancialTransactionResponse, path: String, subscriptionId: String)(
 //    implicit hc: HeaderCarrier) = {
