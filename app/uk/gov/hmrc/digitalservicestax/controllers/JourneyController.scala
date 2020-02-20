@@ -78,12 +78,12 @@ class JourneyController @Inject()(
 
   implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
     override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(s"Registration Complete")
   }
 
   implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
     override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
-      Html(s"${in.toString}")
+      views.html.check_your_answers(key, in.value)(messages)
   }
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {

@@ -80,7 +80,7 @@ object RegJourney {
           parentName <- ask[NonEmptyString]("ultimate-parent-company-name") when ask[Boolean]("check-if-group")
           parentAddress <- ask[Address](
             "ultimate-parent-company-address",
-            customContent = message("ultimate-parent-company-address.heading", parentName.toString)
+            customContent = message("ultimate-parent-company-address.heading", parentName.getOrElse(None).toString)
           )
         } yield Company(parentName.getOrElse(NonEmptyString("")), parentAddress).some,
         ask[ContactDetails]("contact-details"),
@@ -88,7 +88,7 @@ object RegJourney {
         ask[LocalDate]("accounting-period-end-date")
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))
-      _ <- tell("accounting-period-end-date", Confirmation(registration))
+      _ <- tell("registration-sent", Confirmation(registration))
     } yield (registration)
   }
 
