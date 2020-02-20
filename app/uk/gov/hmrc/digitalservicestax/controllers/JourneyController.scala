@@ -30,6 +30,7 @@ import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.repo.JourneyStateStore
 import uk.gov.hmrc.digitalservicestax.views
 import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
+import play.twirl.api.HtmlFormat.escape
 import uk.gov.hmrc.digitalservicestax.data._
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,24 +53,27 @@ class JourneyController @Inject()(
     }
   }
 
-  lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+  val interpreter = DSTInterpreter(appConfig, this, messagesApi)
   import interpreter._
 
   implicit val persistence: PersistenceEngine[Request[AnyContent]] =
     UnsafePersistence()
 
-  implicit def unitTell: GenericWebTell[Unit, Html] = new GenericWebTell[Unit, Html] {
-    def render(in: Unit, key: String, messages: UniformMessages[Html]): Html = Html("")
-  }
-
   implicit val addressTell = new GenericWebTell[Address, Html] {
+
     override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(
+        s"<p>" +
+          s"<span>" +
+            s"${in.lines.mkString("</span></br><span>")}" +
+          s"</span>" +
+        "</p>"
+      )
   }
 
   implicit val ukAddressTell = new GenericWebTell[UkAddress, Html] {
     override def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(s"<span class='govuk-body-m'></br>${in.line1}</br>${in.line2}</br>${in.line3}</br>${in.line4}</br>${in.postalCode}")
   }
 
   implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
@@ -79,7 +83,7 @@ class JourneyController @Inject()(
 
   implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
     override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(s"${in.toString}")
   }
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
@@ -89,7 +93,14 @@ class JourneyController @Inject()(
 
   implicit val companyTell = new GenericWebTell[Company, Html] {
     override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(
+        s"<p>" +
+          s"<span>${in.name.toString}</span></br>" +
+          s"<span>" +
+          s"${in.address.lines.mkString("</span></br><span>")}" +
+          s"</span>" +
+          "</p>"
+      )
   }
   implicit val booleanTell = new GenericWebTell[Boolean, Html] {
     override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
@@ -115,8 +126,8 @@ class JourneyController @Inject()(
     import interpreter._
     import journeys.RegJourney._
 
-    val playProgram = registrationJourney[interpreter.WM](
-      create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
+    val playProgram = registrationJourney[WM](
+      create[RegTellTypes, RegAskTypes](messages(request)),
       hod
     )(UTR("1234567890"))
 
@@ -129,10 +140,8 @@ class JourneyController @Inject()(
     import interpreter._
     import journeys.ReturnJourney._
 
-
-
-    val playProgram = returnJourney[interpreter.WM](
-      create[ReturnTellTypes, ReturnAskTypes](interpreter.messages(request))
+    val playProgram = returnJourney[WM](
+      create[ReturnTellTypes, ReturnAskTypes](messages(request))
     )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {

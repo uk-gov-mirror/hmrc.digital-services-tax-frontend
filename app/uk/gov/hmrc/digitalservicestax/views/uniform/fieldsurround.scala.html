@@ -24,7 +24,6 @@
     case _ => ""
 }){ describedByClass =>
     @* There are more than one fieldset/formgroup on the page *@
-        @stats
     @if(stats.compoundChildren >= 2) {
         <h1 class="heading-xlarge @if(key == "loan-amount"){margin-bottom-20}">
             @messages.get(s"$key.heading.hint").map { headHint =>

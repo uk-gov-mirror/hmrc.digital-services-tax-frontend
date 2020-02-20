@@ -21,14 +21,21 @@ check-unique-taxpayer-reference.heading=Does the company you are registering hav
 check-unique-taxpayer-reference.TRUE=Yes
 check-unique-taxpayer-reference.FALSE=No
 
-company-name.heading=What is the company’s name?
+enter-utr.heading=What is the company's UK Corporation Tax Unique Taxpayer Reference (UTR)?
+enter-utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+enter-postcode.heading=What is the postcode of the company’s Registered Office address?
+
+company-name.heading.large=What is the company’s name?
 
 company-registered-office-address.heading=What is the company’s Registered Office address?
 company-registered-office-address.UkAddress.line1.heading=Building or street
 company-registered-office-address.UkAddress.line2.heading=Building or street line 2 (optional)
 company-registered-office-address.UkAddress.town.heading=Town or city
 company-registered-office-address.UkAddress.county.heading=County (optional)
-company-registered-office-address.UkAddress.postcode.heading=Building or street line 2 (optional)
+company-registered-office-address.UkAddress.postcode.heading=Postcode
 
 confirm-company-details.heading=Is this the company you want to register?
 confirm-company-details.TRUE=Yes
@@ -39,3 +46,50 @@ company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
 alternate-contact.heading=What is your contact address?
+alternate-contact.UkAddress.line1.heading=Building or street
+alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
+alternate-contact.UkAddress.town.heading=Town or city
+alternate-contact.UkAddress.county.heading=County (optional)
+alternate-contact.UkAddress.postcode.heading=Postcode
+
+check-if-group.heading=Is the company you want to register part of a group?
+check-if-group.intro.hint=TODO Details tag: What do we mean by group?
+check-if-group.TRUE=Yes
+check-if-group.FALSE=No
+
+ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
+ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
+
+ultimate-parent-company-address.heading=What is the Registered Office address of {0}?
+ultimate-parent-company-address.UkAddress.line1.heading=Building or street
+ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
+ultimate-parent-company-address.UkAddress.town.heading=Town or city
+ultimate-parent-company-address.UkAddress.county.heading=County (optional)
+ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
+
+contact-details.heading=Contact person’s details
+contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
+contact-details.forename.heading=First name
+contact-details.surname.heading=Surname
+contact-details.phoneNumber.heading= Phone number
+contact-details.phoneNumber.hint=For international numbers include the country code.
+contact-details.email.heading=Email address
+contact-details.email.hint=We will use this email address to send confirmation of your registration.
+
+check-liability-date.heading=Did the company become liable for Digital Services Tax on 1 April 2020?
+check-liability-date.TRUE=Yes
+check-liability-date.FALSE=No
+
+liability-start-date.heading=When did the company become liable for Digital Services Tax?
+liability-start-date.hint=For example, 31 7 2020.
+liability-start-date.Date.day.heading=Day
+liability-start-date.Date.month.heading=Month
+liability-start-date.Date.year.heading=Year
+
+accounting-period-end-date.heading= What is the end date of the company’s first accounting period for Digital Services Tax?
+accounting-period-end-date.hint=For example, 31 7 2020.
+accounting-period-end-date.Date.day.heading=Day
+accounting-period-end-date.Date.month.heading=Month
+accounting-period-end-date.Date.year.heading=Year
+
+cya.title=Check your answers before sending your application
