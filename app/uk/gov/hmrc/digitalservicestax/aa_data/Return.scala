@@ -22,7 +22,7 @@ case class Return (
   alternateCharge: Map[Activity, Percent],
   crossBorderReliefAmount: Money,
   companiesAmount: Map[GroupCompany, Money],
-  allowanceAmount: Money, 
+  allowanceAmount: Money,
   totalLiability: Money,
   repayment: Option[RepaymentDetails]
 )

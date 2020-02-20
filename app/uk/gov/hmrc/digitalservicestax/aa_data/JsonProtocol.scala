@@ -198,12 +198,27 @@ object JsonProtocol {
     }
 
     override def writes(o: Map[Activity, Percent]): JsValue = {
-      JsObject(o.toSeq.map { case (k ,v) =>
-        k.entryName -> JsNumber(v)
+      JsObject(o.toSeq.map { case (k, v) =>
+        k.entryName -> JsNumber(BigDecimal(v))
       })
     }
   }
-  implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = Json.format[Map[GroupCompany, Money]]
+
+  implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = new Format[Map[GroupCompany, Money]] {
+    override def reads(json: JsValue): JsResult[Map[GroupCompany, Money]] = {
+      JsSuccess(json.as[Map[String, JsNumber]].map { case (k, v) =>
+
+        val Array(name, utr) = k.split(":")
+        GroupCompany(NonEmptyString(name), UTR(utr)) -> v.value
+      })
+    }
+
+    override def writes(o: Map[GroupCompany, Money]): JsValue = {
+      JsObject(o.toSeq.map { case (k, v) =>
+        s"${k.name}:${k.utr}" -> JsNumber(v)
+      })
+    }
+  }
 
   implicit val ibanFormat: Format[IBAN] = new Format[IBAN] {
     override def reads(json: JsValue): JsResult[IBAN] = {
