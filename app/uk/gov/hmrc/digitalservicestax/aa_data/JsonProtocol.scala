@@ -197,7 +197,11 @@ object JsonProtocol {
       })
     }
 
-    override def writes(o: Map[Activity, Percent]): JsValue = ???
+    override def writes(o: Map[Activity, Percent]): JsValue = {
+      JsObject(o.toSeq.map { case (k ,v) =>
+        k.entryName -> JsNumber(v)
+      })
+    }
   }
   implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = Json.format[Map[GroupCompany, Money]]
 
