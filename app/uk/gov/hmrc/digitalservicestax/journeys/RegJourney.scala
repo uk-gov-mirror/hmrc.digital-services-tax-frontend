@@ -48,7 +48,8 @@ object RegJourney {
         case Some(company) =>
           for {
             confirmCompany <- interact[Company, Boolean]("confirm-company", company)
-            _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
+            //TODO Check if we should be signing the user out
+            _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
           } yield (company)
 
         // no matching company found
@@ -66,7 +67,8 @@ object RegJourney {
                 _.getOrElse(throw new IllegalStateException("lookup failed"))
               }
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
-              _ <- if (!confirmCompany) { tell("logout-prompt", Kickout("logout-prompt")) } else { (()).pure[F] }
+              //TODO Check if we should be signing the user out
+              _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
             } yield company
         }
       }
@@ -77,14 +79,17 @@ object RegJourney {
         ask[Address]("alternate-contact") when
           interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},
         for {
-          parentName <- ask[NonEmptyString]("ultimate-parent-company-name") when ask[Boolean]("check-if-group")
+          isGroup <- ask[Boolean]("check-if-group")
+          parentName <- ask[NonEmptyString]("ultimate-parent-company-name") when isGroup
           parentAddress <- ask[Address](
             "ultimate-parent-company-address",
             customContent = message("ultimate-parent-company-address.heading", parentName.getOrElse(None).toString)
-          )
-        } yield Company(parentName.getOrElse(NonEmptyString("")), parentAddress).some,
+          ) when isGroup
+          //TODO fix this, we need parentName to display on the parentAddress page, but without returning options from using when isGroup
+          //Below be a dirty hack
+        } yield Company(parentName.getOrElse(NonEmptyString(" ")), parentAddress.getOrElse(UkAddress(NonEmptyString(" "), "", "", "", Postcode("AA111AA")))).some,
         ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start-date") when ask[Boolean]("check-liability-date")).map{_.getOrElse(LocalDate.of(2020, 4,1))},
+        (ask[LocalDate]("liability-start-date") when (ask[Boolean]("check-liability-date") == false)).map{_.getOrElse(LocalDate.of(2020, 4,1))},
         ask[LocalDate]("accounting-period-end-date")
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))

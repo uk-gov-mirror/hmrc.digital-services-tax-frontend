@@ -45,5 +45,9 @@
       </details>
     }
 
-    <button type="submit" class="button">@messages(List(s"$key.save-continue", "common.save-continue"))</button>
+    @if(key == "details-not-correct") {
+        <a class="button" href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signIn()">@messages("common.sign-in")</a>
+    } else {
+        <button type="submit" class="button">@messages(List(s"$key.save-continue", "common.save-continue"))</button>
+    }
   }

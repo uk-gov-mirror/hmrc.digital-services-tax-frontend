@@ -21,7 +21,7 @@
 
 <div class="govuk-grid-column-two-thirds">
     <h1 class="heading-xlarge">@messages("cya.title")</h1>
-
+    <!--TODO Move into a helper-->
     <div class="subsection--wide">
         <h2 class="govuk-heading-m">@messages("cya.company.title")</h2>
 
@@ -52,6 +52,7 @@
             </div>
         </dl>
     </div>
+
 @in.ultimateParent.map { up =>
     <div class="subsection--wide">
         <h2 class="govuk-heading-m">@messages("cya.ultimate-parent-company.title")</h2>
@@ -135,16 +136,12 @@
         </dl>
     </div>
 
-    <div class="subsection">
-        <a href="javascript:window.print()" class="govuk-body">@messages("common.print-save")</a>
-    </div>
-
     <h2 class="govuk-heading-m">@messages("cya.submission.title")</h2>
     <p>@messages("cya.submission-notice")</p>
     <div class="subsection">
         <div class="notice">
             <i class="icon icon-important">
-                <span class="visually-hidden">@messages("common.warning.title")</span>
+                <span class="govuk-visually-hidden">@messages("common.warning.title")</span>
             </i>
             <strong class="bold-small">@messages("cya.warning.body")</strong>
         </div>
