@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.data
+package uk.gov.hmrc.digitalservicestax.frontend
 
-import scala.language.higherKinds
-import cats.~>
-trait BackendService[F[_]] {
-  def matchedCompany(): F[Option[Company]]
-  def lookup(utr: UTR, postcode: Postcode): F[Option[Company]]
-
-  def natTransform[G[_]](transform: F ~> G): BackendService[G] = {
-    val old = this
-    new BackendService[G] {
-      def matchedCompany(): G[Option[Company]] =
-        transform(old.matchedCompany())
-      def lookup(utr: UTR, postcode: Postcode): G[Option[Company]] =
-        transform(old.lookup(utr, postcode))
-    }
-  }
-}
+case class Kickout( name: String )

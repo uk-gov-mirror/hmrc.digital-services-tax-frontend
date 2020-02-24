@@ -17,27 +17,28 @@
 package uk.gov.hmrc.digitalservicestax
 package controllers
 
+import config.AppConfig
+import connectors._
+import data._
+import frontend.Kickout
+import repo.JourneyStateStore
+
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.{ErrorTree, UniformMessages}
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
 import ltbs.uniform.interpreters.playframework._
+import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
-import uk.gov.hmrc.digitalservicestax.config.AppConfig
-import uk.gov.hmrc.digitalservicestax.repo.JourneyStateStore
-import uk.gov.hmrc.digitalservicestax.views
-import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
-import play.twirl.api.HtmlFormat.escape
-import uk.gov.hmrc.digitalservicestax.data._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyController @Inject()(
-  mcc: MessagesControllerComponents
+  mcc: MessagesControllerComponents,
+  backend: BackendConnector
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
@@ -46,7 +47,7 @@ class JourneyController @Inject()(
   with FrontendHeaderCarrierProvider
   with I18nSupport {
 
-  val hod: BackendService[WebMonad[*, Html]] = DummyBackend().natTransform[WebMonad[*, Html]]{
+  val hod: BackendService[WebMonad[*, Html]] = backend.natTransform[WebMonad[*, Html]]{
     import cats.~>
     new (Future ~> WebMonad[*, Html]) {
       def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html]().alwaysRerun(in)
@@ -124,6 +125,10 @@ class JourneyController @Inject()(
       Html(s"Boogaloo")
   }
 
+  def getUTRFromSomewhere: Future[UTR] = Future { // should this be Option[UTR] ???
+    UTR("1234567890")
+  }
+
   def registerAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
@@ -134,7 +139,7 @@ class JourneyController @Inject()(
     )(UTR("1234567890"))
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
-      i: Registration => Future(Ok(s"$i"))
+      backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}      
     }
   }
 
@@ -147,7 +152,7 @@ class JourneyController @Inject()(
     )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
-      i: Return => Future(Ok(s"$i"))
+      backend.submitReturn(_).map{ _ => Redirect(routes.JourneyController.index)}
     }
   }
 

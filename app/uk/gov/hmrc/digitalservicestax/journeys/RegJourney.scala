@@ -19,7 +19,9 @@ package journeys
 
 import scala.language.higherKinds
 
+import connectors.BackendService
 import data._
+import frontend.Kickout
 
 import cats.Monad
 import cats.implicits._

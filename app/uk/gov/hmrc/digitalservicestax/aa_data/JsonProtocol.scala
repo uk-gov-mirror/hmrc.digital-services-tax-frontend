@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.aa_data
+package uk.gov.hmrc.digitalservicestax.data
 
 import enumeratum.EnumFormats
 import play.api.libs.json._
 import uk.gov.hmrc.digitalservicestax.data._
 import shapeless.tag.@@
-object JsonProtocol {
+
+trait JsonProtocol {
 
   def validatedStringFormat(A: ValidatedType[String], name: String) = new Format[String @@ A.Tag] {
     override def reads(json: JsValue): JsResult[String @@ A.Tag] = json match {
