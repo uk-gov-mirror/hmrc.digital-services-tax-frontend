@@ -20,13 +20,13 @@
 @(keyList: List[String], errors: ErrorTree, content: Html, breadcrumbs: Breadcrumbs = Nil, stats: FormFieldStats)(implicit messages: UniformMessages[Html], request: Request[AnyContent])
   
   @key = @{keyList.last}
-      
-  @for(back <- breadcrumbs.headOption) {
-      <a href="@back" class="govuk link-back">@messages(List("back-to-" + back.mkString("-"),"back"))</a>
+
+  @for(back <- breadcrumbs.headOption.flatMap{_.headOption}) {
+      <a href="@{back}" class="govuk link-back">@messages(List("back-to-" + back.mkString("-"),"common.back"))</a>
   }
 
   @if(breadcrumbs.isEmpty){
-    <a href="/disguised-remuneration/" class="govuk link-back">@messages(List(s"back-to-service-page","back"))</a>
+    <a href="/digital-services-tax/" class="govuk link-back">@messages(List(s"back-to-service-page","back"))</a>
   }
 
   @helper.form(action = play.api.mvc.Call("post", key)) {
@@ -45,5 +45,9 @@
       </details>
     }
 
-    <button type="submit" class="button">@messages(List(s"$key.save-continue", "common.save-continue"))</button>
+    @if(key == "details-not-correct") {
+        <a class="button" href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signIn()">@messages("common.sign-in")</a>
+    } else {
+        <button type="submit" class="button">@messages(List(s"$key.save-continue", "common.save-continue"))</button>
+    }
   }

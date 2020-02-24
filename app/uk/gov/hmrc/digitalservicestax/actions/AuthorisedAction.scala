@@ -49,7 +49,8 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
       case _: NoActiveSession =>
         Logger.info(s"Recover - no active session")
         Left(
-          Redirect(routes.AuthenticationController.signIn()))
+          Redirect(routes.AuthenticationController.signIn())
+        )
     }
   }
 

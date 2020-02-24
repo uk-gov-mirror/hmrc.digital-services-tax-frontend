@@ -24,7 +24,7 @@
     case _ => ""
 }){ describedByClass =>
     @* There are more than one fieldset/formgroup on the page *@
-    @if(stats.compoundChildren >= 2 || key == "loan-amount") {
+    @if(stats.compoundChildren >= 2) {
         <h1 class="heading-xlarge @if(key == "loan-amount"){margin-bottom-20}">
             @messages.get(s"$key.heading.hint").map { headHint =>
                 <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
@@ -46,10 +46,7 @@
         *@
         @content
 
-        @*
-        * Todo: Need to look into why tax-settled is not a compound field, fix and strip this out
-        *@
-    } else { @if(isCompoundField || key == "aboutyou-noloancharge"){
+    } else { @if(isCompoundField){
         <div class="form-group@if(hasErrors){ form-group-error}">
             <fieldset
             class="fieldset"

@@ -19,7 +19,7 @@ package controllers
 
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.{UniformMessages, ErrorTree}
+import ltbs.uniform.{ErrorTree, UniformMessages}
 import ltbs.uniform.interpreters.playframework._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
@@ -29,8 +29,10 @@ import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeader
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.repo.JourneyStateStore
 import uk.gov.hmrc.digitalservicestax.views
-import ltbs.uniform.common.web.{WebMonad, FutureAdapter}
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
+import play.twirl.api.HtmlFormat.escape
 import uk.gov.hmrc.digitalservicestax.data._
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -51,23 +53,83 @@ class JourneyController @Inject()(
     }
   }
 
-  lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+  val interpreter = DSTInterpreter(appConfig, this, messagesApi)
   import interpreter._
 
   implicit val persistence: PersistenceEngine[Request[AnyContent]] =
     UnsafePersistence()
 
-  implicit def crapWebTell[A] = new interpreter.WebTell[A] {
-    def render(in: A, key: String, messages: UniformMessages[Html]): Html =
-      HtmlFormat.escape(in.toString)
+  implicit val addressTell = new GenericWebTell[Address, Html] {
+
+    override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p>" +
+          s"<span>" +
+            s"${in.lines.mkString("</span></br><span>")}" +
+          s"</span>" +
+        "</p>"
+      )
+  }
+
+  implicit val ukAddressTell = new GenericWebTell[UkAddress, Html] {
+    override def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html =
+      Html(s"<span class='govuk-body-m'></br>${in.line1}</br>${in.line2}</br>${in.line3}</br>${in.line4}</br>${in.postalCode}")
+  }
+
+  implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
+    override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
+      val reg = in.value
+      views.html.confirmation(key: String, reg.company.name: String, reg.contact.email: Email)(messages)
+    }
+  }
+
+  implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
+    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
+      views.html.check_your_answers(key, in.value)(messages)
+  }
+
+  implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
+    override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
+      views.html.kickout(key)(messages)
+  }
+
+  implicit val companyTell = new GenericWebTell[Company, Html] {
+    override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p>" +
+          s"<span>${in.name.toString}</span></br>" +
+          s"<span>" +
+          s"${in.address.lines.mkString("</span></br><span>")}" +
+          s"</span>" +
+          "</p>"
+      )
+  }
+  implicit val booleanTell = new GenericWebTell[Boolean, Html] {
+    override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
+      Html(s"Boogaloo")
+  }
+
+  implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
+    override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
+      Html(s"Boogaloo")
+  }
+
+  implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
+    override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
+      Html(s"Boogaloo")
+  }
+
+  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html(s"Boogaloo")
   }
 
   def registerAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
 
-    val playProgram = registrationJourney[interpreter.WM](
-      create[RegTellTypes, RegAskTypes](interpreter.messages(request)),
+    val playProgram = registrationJourney[WM](
+      create[RegTellTypes, RegAskTypes](messages(request)),
       hod
     )(UTR("1234567890"))
 
@@ -80,8 +142,8 @@ class JourneyController @Inject()(
     import interpreter._
     import journeys.ReturnJourney._
 
-    val playProgram = returnJourney[interpreter.WM](
-      create[ReturnTellTypes, ReturnAskTypes](interpreter.messages(request))
+    val playProgram = returnJourney[WM](
+      create[ReturnTellTypes, ReturnAskTypes](messages(request))
     )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {

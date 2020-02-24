@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.digitalservicestax.controllers
+@(key: String)(implicit messages: UniformMessages[Html])
 
-import uk.gov.hmrc.digitalservicestax.data._
-import scala.concurrent._
+<div class="govuk-grid-column-two-thirds">
 
-case class DummyBackend(implicit ec: ExecutionContext) extends BackendService[Future] {
+    <h1 class="govuk-heading-xl">@messages(s"$key.kickout.heading")</h1>
+    <h2 class="govuk-heading-m">@messages(s"$key.kickout.subheading")</h2>
 
-  def matchedCompany(): Future[Option[Company]] =
-    Future.successful(None)          
+    <p>@messages(s"$key.kickout.update-details")
+        <a href="https://www.gov.uk/file-changes-to-a-company-with-companies-house">
+            @messages(s"$key.kickout.companies-house")
+        </a>.
+    </p>
 
-  def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    Future.successful(Some(Company(NonEmptyString("Dotcom Bubble ltd."), UkAddress(NonEmptyString("51 MySpace Apartments"),"1 Bebo Street","Aolton","Askjeeveshire", Postcode("AB12 3CD")))))
+    <h2 class="govuk-heading-m">@messages(s"$key.kickout.wrong-id")</h2>
 
-}
+    <p>@messages(s"$key.kickout.sign-in-again")</p>
+</div>

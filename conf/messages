@@ -1,0 +1,154 @@
+#Common
+common.back=Back
+common.save-continue=Save and continue
+common.save-back-later=Save and come back later
+common.sign-out=Sign out
+common.sign-in=Sign in
+common.alpha-info.p1=This is a new service – your 
+common.alpha-info.link=feedback
+common.alpha-info.p2= will help us to improve it.
+common.print-save=Print or save your registered details
+common.warning.title=Warning
+common.error=Error
+common.beta=BETA
+common.title=Digital Services Tax
+common.title.short=Digital Services Tax
+common.True=Yes
+common.False=No
+common.feedback=What do you think fo this service?
+common.thirty-seconds=(30 seconds)
+
+#Registration
+confirm-company-to-register.heading=Is this the company you want to register?
+confirm-company-to-register.TRUE=Yes
+confirm-company-to-register.FALSE=No
+
+check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
+  Tax Unique Taxpayer Reference?
+check-unique-taxpayer-reference.TRUE=Yes
+check-unique-taxpayer-reference.FALSE=No
+
+enter-utr.heading=What is the company's UK Corporation Tax Unique Taxpayer Reference (UTR)?
+enter-utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+enter-postcode.heading=What is the postcode of the company’s Registered Office address?
+
+company-name.heading=What is the company’s name?
+
+company-registered-office-address.heading=What is the company’s Registered Office address?
+company-registered-office-address.UkAddress.line1.heading=Building or street
+company-registered-office-address.UkAddress.line2.heading=Building or street line 2 (optional)
+company-registered-office-address.UkAddress.town.heading=Town or city
+company-registered-office-address.UkAddress.county.heading=County (optional)
+company-registered-office-address.UkAddress.postcode.heading=Postcode
+
+confirm-company-details.heading=Is this the company you want to register?
+confirm-company-details.TRUE=Yes
+confirm-company-details.FALSE=No
+
+company-contact-address.heading=Can we use this address to contact you about your Digital Services Tax?
+company-contact-address.TRUE=Yes
+company-contact-address.FALSE=No - I want to enter a different address
+
+alternate-contact.heading=What is your contact address?
+alternate-contact.UkAddress.line1.heading=Building or street
+alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
+alternate-contact.UkAddress.town.heading=Town or city
+alternate-contact.UkAddress.county.heading=County (optional)
+alternate-contact.UkAddress.postcode.heading=Postcode
+
+check-if-group.heading=Is the company you want to register part of a group?
+check-if-group.details=What we mean by a 'group'
+check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent company and all its consolidated subsidiaries.</p>\
+  <p>A parent company is an entity that is (one of the following):</p>\
+  <ul class="list list-bullet">\
+    <li>a member of a Generally Accepted Accounting Principles (GAAP) group and not a consolidated subsidiary of another entity</li>\
+    <li>not a member of a GAAP group</li>\
+  </ul>\
+  <p>We use the meaniing of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
+check-if-group.TRUE=Yes
+check-if-group.FALSE=No
+
+ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
+ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
+
+ultimate-parent-company-address.heading=What is the Registered Office address of {0}?
+ultimate-parent-company-address.UkAddress.line1.heading=Building or street
+ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
+ultimate-parent-company-address.UkAddress.town.heading=Town or city
+ultimate-parent-company-address.UkAddress.county.heading=County (optional)
+ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
+
+contact-details.heading=Contact person’s details
+contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
+contact-details.forename.heading=First name
+contact-details.surname.heading=Surname
+contact-details.phoneNumber.heading= Phone number
+contact-details.phoneNumber.hint=For international numbers include the country code.
+contact-details.email.heading=Email address
+contact-details.email.hint=We will use this email address to send confirmation of your registration.
+
+check-liability-date.heading=Did the company become liable for Digital Services Tax on 1 April 2020?
+check-liability-date.TRUE=Yes
+check-liability-date.FALSE=No
+
+liability-start-date.heading=When did the company become liable for Digital Services Tax?
+liability-start-date.hint=For example, 31 7 2020.
+liability-start-date.Date.day.heading=Day
+liability-start-date.Date.month.heading=Month
+liability-start-date.Date.year.heading=Year
+
+accounting-period-end-date.heading= What is the end date of the company’s first accounting period for Digital Services Tax?
+accounting-period-end-date.hint=For example, 31 7 2020.
+accounting-period-end-date.Date.day.heading=Day
+accounting-period-end-date.Date.month.heading=Month
+accounting-period-end-date.Date.year.heading=Year
+
+#Reg cya
+cya.title=Check your answers before sending your application
+cya.company.title=Your company details
+cya.check-if-group.question=Is the company you are registering part of a group?
+cya.company-name-and-reg-address.question=Company name Registered Office address
+cya.ultimate-parent-company.title=Ultimate global parent company details
+cya.ultimate-parent-company-name.question=Company name
+cya.ultimate-parent-company-address.question=Registered Office address
+cya.contact-details.title=Contact person’s details
+cya.contact-details-name.question=Full name
+cya.contact-details-phone-number.question=Phone number
+cya.contact-details-email.question=Email address
+cya.liability-date.title=Accounting period details
+cya.liability-start-date.question=Liability start date
+cya.accounting-end-date.question=First accounting period end date
+cya.submission.title=Send your details
+cya.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
+  the details you are providing are correct.
+cya.warning.body=Warning You could be prosecuted if you deliberately submit false or misleading information.
+
+#Reg complete
+registration-sent.heading=Registration sent
+registration-sent.detail=We received your registration for {0} for the Digital Services Tax
+registration-sent.email= We have sent a confirmation email to {0}.
+registration-sent.what-happens-next.title=What happens next
+registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to in \
+  the next 24 hours.
+registration-sent.what-you-do-next.title=What you must do next
+registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
+registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
+registration-sent.help-using-this-service.title=Help using this service
+registration-sent.help-using-this-service.p1=For help with payments and returns, {0}.
+registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
+registration-sent.help-using-this-service.list.1=do not receive your registration number
+registration-sent.help-using-this-service.list.2=need to change your registered details
+registration-sent.ccm-email=If you do not know who your CCM is, or do not have one, {0}.
+
+#reg kickout
+details-not-correct.kickout.heading=What you need to do next
+details-not-correct.kickout.subheading=If you signed in with the correct user ID
+details-not-correct.kickout.update-details=If you need to update your limited company’s registered business details, \
+  you will need to
+details-not-correct.kickout.companies-house=tell Companies House about the change to your company
+details-not-correct.kickout.wrong-id=If you signed in with the wrong user ID
+details-not-correct.kickout.sign-in-again=You will need to sign in again using the Government Gateway user ID for the \
+  company you need to register.

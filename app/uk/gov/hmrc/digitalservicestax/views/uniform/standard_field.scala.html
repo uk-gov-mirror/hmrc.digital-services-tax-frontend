@@ -85,6 +85,19 @@
   <span id="@key-hint" class="hint">@messages.decompose(s"$key.hint")</span>
 }
 
+@messages.get(s"$key.details").map { details =>
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="details__summary-text">
+                @messages(s"$key.details")
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            @messages(s"$key.details.text")
+        </div>
+    </details>
+}
+
 @errors.valueAtRootList.map { error =>
   @error_message(key, error.prefixWith(keyList).render(messages), messages)
 }
