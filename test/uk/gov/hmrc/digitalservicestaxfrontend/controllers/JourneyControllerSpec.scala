@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.controllers
+package uk.gov.hmrc.digitalservicestax.controllers
 
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
@@ -25,7 +25,7 @@ import play.api.{Configuration, Environment, _}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
 import uk.gov.hmrc.play.bootstrap.tools.Stubs.stubMessagesControllerComponents
-import uk.gov.hmrc.digitalservicestaxfrontend.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.config.AppConfig
 
 class JourneyControllerSpec extends WordSpec with Matchers {
 

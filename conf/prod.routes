@@ -1,5 +1,5 @@
 # Add all the application routes to the app.routes file
-->         /digital-services-tax-frontend              app.Routes
+->         /digital-services-tax                       app.Routes
 ->         /                                           health.Routes
 ->         /template                                   template.Routes
 

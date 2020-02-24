@@ -1,0 +1,1092 @@
+.black-border {
+    border: 2px solid #0b0c0c;
+}
+
+.check-your-answers .change-answer,
+.app-check-your-answers__change {
+    text-align: right;
+    padding-right: 0;
+}
+
+.change-link-title {
+    font-weight: 100;
+}
+
+.edit-change-link, .edit-change-link:hover {
+    display: inline;
+    background: none;
+    border: none;
+    color: #005ea5;
+    text-decoration: underline;
+    cursor: pointer;
+    -webkit-box-shadow: none;
+    outline: 0;
+    position: relative;
+    padding:0;
+    margin-right: 0;
+    font-size: 19px;
+}
+
+.edit-change-link:hover {
+    color: #4c2c92;
+}
+
+
+.no-shadow {
+    box-shadow: none;
+}
+
+.less-padding{
+    padding-top: 2px !important;
+    padding-bottom: 3px !important;
+}
+
+.margin-bottom-1{
+    margin-bottom: 1% !important;
+}
+
+@media (min-width: 641px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    .table-row-answer.word-break {
+        word-break: break-word;
+    }
+
+    .table-row-question {
+        width: 62%;
+    }
+
+    .form-postcode .form-control {
+        width: 110px;
+    }
+
+    .check-your-answers td {
+        font-size: 19px;
+        line-height: 1.31579;
+    }
+
+    .content__body {
+        float: left;
+        width: 66.666667%;
+    }
+
+    .form-litres {
+        width: 50%;
+    }
+
+    .form-litres-3-4 {
+        width: 75%;
+    }
+
+    .form-control-1-4 {
+        width: 25%;
+    }
+
+    .form-control-35 {
+        width: 35%;
+    }
+
+    table th, table td {
+        font-size: 19px;
+        font-weight: 400;
+        vertical-align: text-top;
+    }
+
+    table th .bold {
+        font-weight: bold;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .table-row-answer.word-break {
+        word-break: break-all;
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .form-postcode .form-control {
+        width: 100%;
+    }
+
+    table th, table td {
+        font-size: 16px;
+        font-weight: 400;
+        vertical-align: text-top;
+    }
+
+    th h2 {
+        width: 200% !important;
+    }
+}
+
+@media (max-width: 320px) {
+
+    table th, table td {
+        padding-right: 1%;
+        padding-left: 1%;
+    }
+}
+
+html .font-xsmall {
+    font-size: 16px;
+    line-height: 1.25;
+}
+
+/*override the assets-frontend .form-block*/
+.form-block {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+.check-your-answers td {
+    vertical-align: top;
+}
+
+.padding-bottom-10 {
+    padding-bottom: 10px;
+}
+
+.link-button, .link-button:hover, .link-button:focus, .link-button:active {
+    display: inline;
+    background: none;
+    border: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    color: #005ea5;
+    text-decoration: underline;
+    cursor: pointer;
+    outline: 0;
+    position: relative;
+    padding:0;
+    margin-right: 0;
+}
+
+.link-button:hover {
+    color: #4c2c92;
+}
+
+.link-button:focus {
+    outline: 3px solid #ffbf47;
+    background-color: #ffbf47;
+    outline-offset: 0;
+}
+
+.cya-change {
+    text-align: right;
+}
+
+button[name="checkyouranswers"] {
+    margin-top: 30px;
+}
+
+.form-field--error .error-notification {
+    font-weight: bold;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-centre {
+    text-align: center;
+}
+
+.no-minus-wrapping {
+    white-space: nowrap;
+}
+
+details .address.progressive-reveal {
+    padding-left: 25px;
+}
+
+.cya-width {
+    width: 60%;
+}
+
+@media print {
+    .print-link {
+        display: none;
+    }
+}
+
+.caption-xl {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    display: block;
+    margin-bottom: 5px;
+    color: #6f777b;
+}
+
+.no-margin {
+    margin-top: 0.3125em;
+}
+
+.margin-bottom-20 {
+    margin-bottom: 20px;
+}
+
+.margin-bottom-25 {
+    margin-bottom: 25px;
+}
+
+.margin-bottom-30 {
+    margin-bottom: 30px
+}
+
+.margin-bottom-50 {
+    margin-bottom: 50px
+}
+
+.add-to-list {
+    margin-bottom: 0.4em
+}
+
+.return-button-padding {
+    padding-top: 4%
+}
+
+.print-link-padding {
+    padding-top: 3%
+}
+
+.option-box-padding {
+    padding-top: 5%
+}
+
+.change-address-button {
+    margin-top: 4%;
+}
+
+.service-comp-name {
+    margin-top: 6%;
+}
+
+.service-header {
+    margin-top: 0%;
+}
+
+.no-padding-right {
+    padding-right: 0;
+}
+
+.table-header-bold {
+    font-weight: 700;
+}
+
+.no-break-margin {
+    margin-bottom: 5%;
+}
+
+.error-button {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 30px;
+}
+
+.form-label {
+    padding-right: 4px;
+}
+
+.index-element {
+    margin-left: 5%
+}
+
+.govuk-label-wrapper {
+    margin: 0;
+}
+
+.fieldset__heading, .govuk-label--xl {
+    font-size: 32px;
+    margin-bottom: 10px;
+    margin-top : 20px;
+}
+
+@media (min-width: 641px) {
+    .fieldset__heading {
+        font-size: 48px;
+    }
+
+    .govuk-label--xl {
+        font-size: 48px;
+        line-height: 1.11111;
+    }
+}
+
+.fieldset__heading--no-span {
+    margin-top: 0;
+}
+.fieldset__legend--xl {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 1.09375;
+    margin-bottom: 3px;
+}
+
+.govuk-label--xl {
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.govuk-label-wrapper {
+    margin: 0;
+}
+
+fieldset__legend--l {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.09375;
+    margin-bottom: 3px;
+}
+
+fieldset__legend--m {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 1.09375;
+    margin-bottom: 3px;
+}
+
+fieldset__legend--s {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 1.09375;
+    margin-bottom: 3px;
+}
+
+.fieldset__legend {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #0b0c0c;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: table;
+    max-width: 100%;
+    padding: 0;
+    overflow: hidden;
+    white-space: normal;
+}
+
+.radios__item {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    /* font-size: 16px; */
+    font-size: 1rem;
+    line-height: 1.25;
+    display: block;
+    position: relative;
+    min-height: 40px;
+    margin-bottom: 10px;
+    padding: 0 0 0 40px;
+    float: none;
+    clear: left;
+}
+
+.radios--inline .radios__item {
+    margin-right: 20px;
+    float: left;
+    clear: none;
+}
+
+.radios__item_nino {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25;
+    display: block;
+    position: relative;
+    min-height: 40px;
+    margin-bottom: 60px;
+    padding: 0 0 0 40px;
+    float: none;
+    clear: left;
+}
+
+.radios__item_utr {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25;
+    display: block;
+    position: relative;
+    min-height: 40px;
+    margin-bottom: 100px;
+    padding: 0 0 0 40px;
+    float: none;
+    clear: left;
+}
+
+
+.radios__input {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.radios__label {
+    margin-bottom: 0;
+    float: none;
+    padding: 8px 15px 5px;
+    cursor: pointer;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    display: inline-block;
+    margin-bottom: 0;
+}
+
+/* .label {
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    line-height: 1.31579;
+    line-height: 1.25;
+    color: #0b0c0c;
+    display: block;
+    margin-bottom: 5px;
+} */
+
+.radios__conditional {
+    margin-bottom: 15px;
+    margin-left: 18px;
+    padding-left: 33px;
+    margin-top: 0px;
+    border-left: 4px solid #bfc1c3;
+    float: left;
+}
+
+.hint {
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.25;
+    display: block;
+    margin-bottom: 15px;
+    color: #6f777b;
+}
+
+@media (min-width: 641px) {
+    .hint {
+        font-size: 19px;
+    }
+}
+
+.details {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.25;
+    color: #0b0c0c;
+    display: block;
+}
+
+.details__summary {
+    display: inline-block;
+    position: relative;
+    color: #005ea5;
+    cursor: pointer;
+}
+
+.details__summary-text {
+    text-decoration: underline;
+}
+
+.govuk-details {
+    margin-bottom: 30px;
+}
+.govuk-details__text {
+    padding: 15px;
+    padding-left: 20px;
+    border-left: 5px solid #b1b4b6;
+}
+
+.summary-list {
+    display: table;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #0b0c0c;
+    margin: 0;
+    line-height: 1.31579;
+}
+
+.summary-list__row {
+    display: table-row;
+}
+
+.summary-list__key {
+    width: 62%;
+    word-break: normal;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #bfc1c3;
+    display: table-cell;
+    padding-right: 20px;
+    margin: 0;
+}
+
+.summary-list__value {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #bfc1c3;
+    display: table-cell;
+    padding-right: 20px;
+    margin: 0;
+    word-break: normal;
+}
+
+.cya-change-no-word-break {
+    word-break: keep-all;
+    padding-right: 0;
+    text-align: right;
+}
+
+.icon-image {
+    top: 43%
+}
+
+.outline {
+    outline-offset: 0
+}
+
+
+@media (min-width: 40.0625em) {
+    .app-task-list {
+        min-width: 550px;
+    }
+}
+
+
+.app-task-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+ol {
+    display: block;
+    list-style-type: decimal;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.app-task-list__section {
+    display: table;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 30px;
+}
+
+@media (min-width: 40.0625em) {
+    .app-task-list__section {
+        font-size: 24px;
+    }
+}
+
+.app-task-list__section-number {
+    display: table-cell;
+}
+
+@media (min-width: 40.0625em) {
+    .app-task-list__section-number {
+        min-width: 30px;
+        padding-right: 0;
+    }
+}
+
+.app-task-list__items {
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 25px;
+    margin-bottom: 40px;
+    list-style: none;
+    padding-left: 0;
+}
+
+@media (min-width: 641px) {
+    .app-task-list__items {
+        font-size: 19px;
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .app-task-list__items {
+        padding-left: 30px;
+    }
+}
+
+.app-task-list__item {
+    border-bottom: 1px solid #bfc1c3;
+    margin-bottom: 0 !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.app-task-list__item:first-child {
+    border-top: 1px solid #bfc1c3;
+}
+
+.app-task-list__task-name {
+    display: block;
+}
+
+@media (min-width: 28.125em) {
+    .app-task-list__task-name {
+        float: left;
+        width: 75%;
+    }
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+.app-task-list__item:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.app-task-list__task-completed {
+    color : #ffffff;
+    display: inline-block;
+    font-weight:700;
+    font-size : 14px;
+    line-height: 20px;
+    background-color: #005ea5;
+    outline-width:1.53846px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-bottom: 1px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 4px;
+    letter-spacing:1px;
+}
+
+@media (min-width: 28.125em) {
+    .app-task-list__task-completed {
+        float: right;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 40.0625em) {
+    .app-task-list__task-completed {
+        font-size : 16px;
+    }
+}
+
+.add-scheme {
+    padding-bottom: 10px;
+}
+
+.incomplete {
+    color : #000000;
+    background-color: rgba(255, 191, 71, 0.75);
+}
+
+.tag {
+    line-height: 20px;
+}
+
+.tag incomplete {
+    color: #000;
+}
+
+
+.input {
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 1.25;
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    margin-top: 0;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* input outline fix */
+input:focus, textarea:focus, select:focus, button:focus {
+    outline-offset: 0;
+}
+
+.\!-width-two-thirds {
+    width: 66.66% !important;
+}
+
+
+.grid-column-two-thirds {
+    width: 66.6666%;
+    float: left;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 15px;
+}
+
+.heading-xl {
+    font-size: 48px;
+    line-height: 1.04167;
+    display: block;
+    margin-top: 0;
+    color: #0b0c0c;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+}
+
+.heading-m {
+    font-size: 24px;
+    line-height: 1.25;
+    display: block;
+    margin-top: 0;
+    color: #0b0c0c;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+}
+
+.warning-text__icon {
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    min-width: 32px;
+    min-height: 29px;
+    margin-top: -20px;
+    padding-top: 3px;
+    border: 3px solid #0b0c0c;
+    border-radius: 50%;
+    color: #ffffff;
+    background: #0b0c0c;
+    font-size: 1.6em;
+    line-height: 29px;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.warning-text__text {
+    display: block;
+    padding-left: 50px;
+    font-size: 19px;
+    line-height: 1.31579;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.checkboxes__label {
+    display: inline-block;
+    margin-bottom: 0;
+    padding: 8px 15px 5px;
+    cursor: pointer;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+}
+.checkboxes__input {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display:block;
+    opacity: 0;
+    background-color: initial;
+    cursor: default;
+    margin: 3px 0.5ex;
+    padding: initial;
+    border: initial;
+    -webkit-appearance: checkbox;
+    box-sizing: border-box;
+    width:40px;
+}
+
+input[type="checkbox" i] {
+    background-color: initial;
+    cursor: default;
+    margin: 3px 0.5ex;
+    padding: initial;
+    border: initial;
+    -webkit-appearance: checkbox;
+    box-sizing: border-box;
+}
+
+.checkboxes__item:last-child, .checkboxes__item:last-of-type {
+    margin-bottom: 0;
+}
+
+.checkboxes__item {
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.31579;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: block;
+    position: relative;
+    min-height: 40px;
+    clear: left;
+}
+
+.warning-text {
+    margin-bottom: 30px;
+    font-size: 19px;
+    line-height: 25px;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    line-height: 1.25;
+    color: #0b0c0c;
+    position: relative;
+    padding: 10px 0;
+}
+
+
+.warning-text__assistive {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+}
+strong, b {
+    font-weight: bold;
+}
+.radios__conditional--hidden {
+    display: none;
+}
+
+.govuk-caption-xl {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 20px;
+    display: block;
+    margin-bottom: 0px;
+    margin-top: 4%;
+    color: #6f777b;
+}
+
+@media (min-width: 641px) {
+    .govuk-caption-xl {
+        font-size: 27px;
+    }
+}
+
+/* Confirmation Page */
+.govuk-box-highlight {
+    background:#00703c;
+}
+
+.govuk-box-highlight span {
+    display: block;
+    font-weight: normal;
+}
+
+/* Date pattern to mirror Design System to address longer labels (welsh translation) */
+.govuk-date-input__item {
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 0;
+}
+
+.govuk-form-group .govuk-form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.govuk-date-input__label {
+    display: block;
+}
+
+.govuk-label {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: #0b0c0c;
+    display: block;
+    margin-bottom: 5px;
+}
+
+@media (min-width: 641px) {
+    .govuk-label {
+        font-size: 19px;
+        line-height: 25px;
+    }
+}
+
+.govuk-date-input__input {
+    margin-bottom: 0;
+}
+
+.govuk-input--width-2 {
+    max-width: 43px;
+}
+
+.govuk-input {
+    font-family: "nta",Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.25;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    margin-top: 0;
+    padding: 5px;
+    border: 2px solid #0b0c0c;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+@media (min-width: 641px) {
+    .govuk-input {
+        font-size: 19px;
+        line-height: 1.31579;
+    }
+}
+
+.govuk-input--width-4 {
+    max-width: 72px;
+}
+
+.govuk-input--error {
+    border: 4px solid #b10e1e;
+}
+
+.pound-symbol {
+    display: inline-block;
+    font-size: 24px;
+    padding: 0px 6px 0 0;
+}
+
+/* Indent for currency inputs */
+.input-currency .form-control {
+    padding-left: 19px;
+}
+
+.govuk-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    -webkit-clip-path: inset(50%) !important;
+    clip-path: inset(50%) !important;
+    border: 0 !important;
+    white-space: nowrap !important;
+}
+
+.govuk-\!-font-weight-bold {
+    font-weight: 700 !important;
+}
+
+.govuk-body-l {
+    color: #0b0c0c;
+    font-family: "GDS Transport", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 1.11111;
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+.govuk-body-m, .govuk-body {
+    color: #0b0c0c;
+    font-family: "GDS Transport", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 1.25;
+    margin-top: 0;
+    margin-bottom: 20px;
+}

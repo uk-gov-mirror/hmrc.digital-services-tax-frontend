@@ -1,0 +1,99 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import ltbs.uniform.common.web.FormFieldStats
+
+@(key: String, content: Html, isCompoundField: Boolean, hasHint: Boolean, hasErrors: Boolean, stats: FormFieldStats)(implicit messages: UniformMessages[Html])
+@defining((hasHint, hasErrors) match {
+    case (true,true) => s"$key-hint $key-error"
+    case (true,false) => s"$key-hint"
+    case (false,true) => s"$key-error"
+    case _ => ""
+}){ describedByClass =>
+    @* There are more than one fieldset/formgroup on the page *@
+    @if(stats.compoundChildren >= 2) {
+        <h1 class="heading-xlarge @if(key == "loan-amount"){margin-bottom-20}">
+            @messages.get(s"$key.heading.hint").map { headHint =>
+                <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
+                @headHint
+                </span>
+            }
+            @messages(s"$key.heading")
+        </h1>
+
+        @for(msg <- messages.list(s"$key.intro")) {
+            <p class="govuk-body">
+            @msg
+            </p>
+        }
+
+        @*
+        * Will need to query if the content is a compound or standard field
+        * so that we know how to wrap?
+        *@
+        @content
+
+    } else { @if(isCompoundField){
+        <div class="form-group@if(hasErrors){ form-group-error}">
+            <fieldset
+            class="fieldset"
+                @if(describedByClass.nonEmpty){aria-describedby="@describedByClass"}
+            id="@key-input"
+            >
+                <legend class="fieldset__legend fieldset__legend--xl">
+                    @messages.get(s"$key.heading.hint").map { headHint =>
+                        <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
+                        @headHint
+                        </span>
+                    }
+
+                    <h1 class="fieldset__heading@if(hasErrors){ flush--top}@if(messages.get(s"$key.heading.hint").isDefined) { fieldset__heading--no-span}">
+                    @messages(s"$key.heading")
+                    </h1>
+                </legend>
+
+                @for(msg <- messages.list(s"$key.intro")) {
+                    <p class="govuk-body">
+                    @msg
+                    </p>
+                }
+
+                @messages.get(s"$key.intro.hint").map { introHint =>
+                    <p class="govuk-body">
+                        @introHint
+                    </p>
+                }
+
+                @messages.get(s"$key.list").map { list =>
+                    <ul class="list list-bullet">
+                        @for(msg <- messages.list(s"$key.list")) {
+                            <li>@msg</li>
+                        }
+                    </ul>
+                }
+
+                @content
+            </fieldset>
+        </div>
+    } else {
+        @*
+        * Note: Intro messages and message lists should ideally not appear between
+        * labels & their inputs
+        *@
+        @content
+    }}
+
+}
