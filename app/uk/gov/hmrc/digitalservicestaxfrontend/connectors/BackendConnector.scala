@@ -29,7 +29,7 @@ import play.api.{Logger, Mode}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DesConnector(
+class BackendConnector(
   val http: HttpClient,
   servicesConfig: ServicesConfig
 )(implicit executionContext: ExecutionContext) extends OptionHttpReads {

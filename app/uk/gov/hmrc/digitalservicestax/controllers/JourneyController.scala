@@ -38,7 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
-  backend: connectors.DesConnector
+  backend: connectors.BackendConnector
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
