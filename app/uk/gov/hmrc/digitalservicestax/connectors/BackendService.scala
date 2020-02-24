@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.data
+package uk.gov.hmrc.digitalservicestax.connectors
 
+import uk.gov.hmrc.digitalservicestax.data._
 import scala.language.higherKinds
 import cats.~>
+
 trait BackendService[F[_]] {
 
   def submitRegistration(reg: Registration): F[Unit]

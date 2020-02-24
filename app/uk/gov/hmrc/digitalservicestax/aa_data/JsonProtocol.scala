@@ -20,6 +20,7 @@ import enumeratum.EnumFormats
 import play.api.libs.json._
 import uk.gov.hmrc.digitalservicestax.data._
 import shapeless.tag.@@
+
 trait JsonProtocol {
 
   def validatedStringFormat(A: ValidatedType[String], name: String) = new Format[String @@ A.Tag] {

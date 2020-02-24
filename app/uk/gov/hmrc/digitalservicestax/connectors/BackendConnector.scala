@@ -48,6 +48,7 @@ class BackendConnector(
   def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
     http.GET[Option[Company]](s"$backendURL/lookup-company/$utr/$postcode")
 
-  def matchedCompany(): Future[Option[Company]] = ???
+  def matchedCompany(): Future[Option[Company]] =
+    http.GET[Option[Company]](s"$backendURL/lookup-company")    
 
 }

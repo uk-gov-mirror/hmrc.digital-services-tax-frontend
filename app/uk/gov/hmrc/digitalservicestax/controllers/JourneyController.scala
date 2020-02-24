@@ -17,28 +17,28 @@
 package uk.gov.hmrc.digitalservicestax
 package controllers
 
+import config.AppConfig
+import connectors._
+import data._
+import frontend.Kickout
+import repo.JourneyStateStore
+
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.{ErrorTree, UniformMessages}
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
 import ltbs.uniform.interpreters.playframework._
+import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.twirl.api.{Html, HtmlFormat}
+import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
-import uk.gov.hmrc.digitalservicestax.config.AppConfig
-import uk.gov.hmrc.digitalservicestax.repo.JourneyStateStore
-import uk.gov.hmrc.digitalservicestax.views
-import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
-import play.twirl.api.HtmlFormat.escape
-import uk.gov.hmrc.digitalservicestax.data._
-
-import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
-  backend: connectors.BackendConnector
+  backend: BackendConnector
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
