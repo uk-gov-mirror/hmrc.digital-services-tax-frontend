@@ -34,11 +34,15 @@ import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.auth.core.AuthorisedFunctions
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
-  backend: BackendConnector
+  val http: HttpClient,
+  servicesConfig: ServicesConfig  
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
@@ -47,7 +51,9 @@ class JourneyController @Inject()(
   with FrontendHeaderCarrierProvider
   with I18nSupport {
 
-  val hod: BackendService[WebMonad[*, Html]] = backend.natTransform[WebMonad[*, Html]]{
+  def backend(implicit hc: HeaderCarrier) = new BackendConnector(http, servicesConfig)
+
+  def hod(implicit hc: HeaderCarrier): BackendService[WebMonad[*, Html]] = backend.natTransform[WebMonad[*, Html]]{
     import cats.~>
     new (Future ~> WebMonad[*, Html]) {
       def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html]().alwaysRerun(in)
