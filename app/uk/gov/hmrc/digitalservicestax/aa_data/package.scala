@@ -16,8 +16,7 @@
 
 package uk.gov.hmrc.digitalservicestax
 
-import shapeless.{:: => _, _}
-import tag._
+import shapeless.{:: => _, _}, tag._
 import cats.implicits._
 import cats.kernel.Monoid
 
