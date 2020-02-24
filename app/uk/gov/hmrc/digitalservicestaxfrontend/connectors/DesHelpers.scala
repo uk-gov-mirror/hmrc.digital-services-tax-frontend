@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.connectors
+package uk.gov.hmrc.digitalservicestax.connectors
 
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.logging.Authorization
@@ -24,6 +24,7 @@ import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
+// do we need this? we're talking to the BE µs, not DES
 abstract class DesHelpers(servicesConfig: ServicesConfig) {
 
   def http: HttpClient

@@ -37,7 +37,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class JourneyController @Inject()(
-  mcc: MessagesControllerComponents
+  mcc: MessagesControllerComponents,
+  backend: connectors.DesConnector
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
@@ -124,6 +125,10 @@ class JourneyController @Inject()(
       Html(s"Boogaloo")
   }
 
+  def getUTRFromSomewhere: Future[UTR] = Future { // should this be Option[UTR] ???
+    UTR("1234567890")
+  }
+
   def registerAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
@@ -134,7 +139,7 @@ class JourneyController @Inject()(
     )(UTR("1234567890"))
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
-      i: Registration => Future(Ok(s"$i"))
+      backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}      
     }
   }
 
@@ -147,7 +152,7 @@ class JourneyController @Inject()(
     )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
-      i: Return => Future(Ok(s"$i"))
+      backend.submitReturn(_).map{ _ => Redirect(routes.JourneyController.index)}
     }
   }
 

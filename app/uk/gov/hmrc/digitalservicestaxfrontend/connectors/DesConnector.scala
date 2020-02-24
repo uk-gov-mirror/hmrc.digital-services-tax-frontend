@@ -14,40 +14,34 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.connectors
+package uk.gov.hmrc.digitalservicestax.connectors
+
+import uk.gov.hmrc.digitalservicestax.data._
 
 import java.net.URLEncoder.encode
 import java.time.{Clock, LocalDate}
-
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import play.api.libs.json.{Json, OWrites}
+import play.api.libs.json.{Json, OWrites, Reads, JsSuccess}
 import play.api.{Logger, Mode}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class DesConnector(
   val http: HttpClient,
-  val mode: Mode,
-  servicesConfig: ServicesConfig,
-  auditing: AuditConnector
-)(implicit clock: Clock, executionContext: ExecutionContext)
-  extends DesHelpers(servicesConfig) with OptionHttpReads {
+  servicesConfig: ServicesConfig
+)(implicit executionContext: ExecutionContext) extends OptionHttpReads {
 
-  val desURL: String = servicesConfig.baseUrl("des")
-  val serviceURL: String = "soft-drinks"
+  val backendURL: String = servicesConfig.baseUrl("digital-services-tax")
 
-  // DES return 503 in the event of no subscription for the UTR, we are expected to treat as 404, hence this override
-  implicit override def readOptionOf[P](implicit rds: HttpReads[P]): HttpReads[Option[P]] = new HttpReads[Option[P]] {
-    def read(method: String, url: String, response: HttpResponse): Option[P] = response.status match {
-      case 204 | 404 | 503 | 403 => None
-      case 429 =>
-        Logger.error("[RATE LIMITED] Received 429 from DES - converting to 503")
-        throw Upstream5xxResponse("429 received from DES - converted to 503", 429, 503)
-      case _ => Some(rds.read(method, url, response))
-    }
-  }
+  implicit val readsUnit = Reads[Unit] { _ => JsSuccess(()) }
+
+  def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier): Future[Unit] = 
+    http.POST[Registration, Unit](s"$backendURL/register", reg)
+
+  def submitReturn(ret: Return)(implicit hc: HeaderCarrier): Future[Unit] = 
+    http.POST[Return, Unit](s"$backendURL/return", ret)
 
 }

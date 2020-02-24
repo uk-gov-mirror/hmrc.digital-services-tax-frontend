@@ -27,7 +27,7 @@ import com.ibm.icu.text.SimpleDateFormat
 import com.ibm.icu.util.{TimeZone, ULocale}
 import play.api.i18n.Messages
 
-package object data {
+package object data extends JsonProtocol{
 
   type UTR = String @@ UTR.Tag
   object UTR extends RegexValidatedString(
