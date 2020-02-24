@@ -32,16 +32,22 @@ import scala.concurrent.{ExecutionContext, Future}
 class BackendConnector(
   val http: HttpClient,
   servicesConfig: ServicesConfig
-)(implicit executionContext: ExecutionContext) extends OptionHttpReads {
+)(implicit executionContext: ExecutionContext, hc: HeaderCarrier)
+    extends BackendService[Future] with OptionHttpReads {
 
   val backendURL: String = servicesConfig.baseUrl("digital-services-tax")
 
   implicit val readsUnit = Reads[Unit] { _ => JsSuccess(()) }
 
-  def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier): Future[Unit] = 
+  def submitRegistration(reg: Registration): Future[Unit] = 
     http.POST[Registration, Unit](s"$backendURL/register", reg)
 
-  def submitReturn(ret: Return)(implicit hc: HeaderCarrier): Future[Unit] = 
+  def submitReturn(ret: Return): Future[Unit] = 
     http.POST[Return, Unit](s"$backendURL/return", ret)
+
+  def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
+    http.GET[Option[Company]](s"$backendURL/lookup-company/$utr/$postcode")
+
+  def matchedCompany(): Future[Option[Company]] = ???
 
 }
