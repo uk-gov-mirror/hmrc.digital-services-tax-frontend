@@ -97,8 +97,8 @@ package object data {
       Some(in).filter { x => x >= 0 && x <= 100 }
     }
 
-    implicit def mon: Monoid[Percent] = new cats.Monoid[Percent] {
-      val base: Monoid[Byte] = implicitly[cats.Monoid[Byte]]
+    implicit def mon: Monoid[Percent] = new Monoid[Percent] {
+      val base: Monoid[Byte] = implicitly[Monoid[Byte]]
       override def combine(a: Percent, b: Percent): Percent = Percent(base.combine(a, b))
       override def empty: Percent = Percent(base.empty)
     }

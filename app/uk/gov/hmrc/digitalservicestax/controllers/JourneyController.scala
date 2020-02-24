@@ -44,9 +44,9 @@ class JourneyController @Inject()(
   with FrontendHeaderCarrierProvider
   with I18nSupport {
 
-  val hod: BackendService[WebMonad[*, Html]] = DummyBackend().natTransform[WebMonad[?, Html]]{
+  val hod: BackendService[WebMonad[*, Html]] = DummyBackend().natTransform[WebMonad[*, Html]]{
     import cats.~>
-    new (Future ~> WebMonad[?, Html]) {
+    new (Future ~> WebMonad[*, Html]) {
       def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html]().alwaysRerun(in)
     }
   }
