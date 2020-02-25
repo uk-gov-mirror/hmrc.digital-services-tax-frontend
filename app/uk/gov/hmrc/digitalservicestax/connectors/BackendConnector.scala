@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.digitalservicestax.connectors
 
-import uk.gov.hmrc.digitalservicestax.data._
+import uk.gov.hmrc.digitalservicestax.data._, BackendAndFrontendJson._
 
 import java.net.URLEncoder.encode
 import java.time.{Clock, LocalDate}
