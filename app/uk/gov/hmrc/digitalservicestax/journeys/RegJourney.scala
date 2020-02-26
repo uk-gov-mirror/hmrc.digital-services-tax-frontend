@@ -44,7 +44,7 @@ object RegJourney {
     import interpreter._
 
     for {
-      company <- backendService.matchedCompany() >>= {
+      company <- backendService.lookupCompany(utr) >>= {
 
         // found a matching company
         case Some(company) =>
@@ -65,7 +65,7 @@ object RegJourney {
             for {
               utr <- ask[UTR]("enter-utr")
               postcode <- ask[Postcode]("enter-postcode")
-              companyOpt <- backendService.lookup(utr, postcode)
+              companyOpt <- backendService.lookupCompany(utr, postcode)
               _ <- if (companyOpt.isEmpty) end("company-lookup-failed", Kickout("details-not-correct")) else { (()).pure[F] }
               company = companyOpt.get
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)

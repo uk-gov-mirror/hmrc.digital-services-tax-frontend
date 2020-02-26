@@ -45,10 +45,10 @@ class BackendConnector(
   def submitReturn(ret: Return): Future[Unit] =
     http.POST[Return, Unit](s"$backendURL/return", ret)
 
-  def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr/$postcode")
+  def lookupCompany(utr: UTR): Future[Option[Company]] =
+    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr")
 
-  def matchedCompany(): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/lookup-company")
+  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] =
+    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr/$postcode")
 
 }
