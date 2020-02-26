@@ -65,12 +65,12 @@ object RegJourney {
             for {
               utr <- ask[UTR]("enter-utr")
               postcode <- ask[Postcode]("enter-postcode")
-              company <- backendService.lookup(utr, postcode) map {
-                _.getOrElse(throw new IllegalStateException("lookup failed"))
-              }
+              companyOpt <- backendService.lookup(utr, postcode)
+              _ <- if (companyOpt.isEmpty) end("company-lookup-failed", Kickout("details-not-correct")) else { (()).pure[F] }
+              company = companyOpt.get
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
               //TODO Check if we should be signing the user out
-              _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
+              _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
             } yield company
         }
       }
