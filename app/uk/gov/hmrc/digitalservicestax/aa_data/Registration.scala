@@ -31,6 +31,8 @@ case class Registration (
   accountingPeriodEnd: LocalDate
 ) {
 
+  require(!dateLiable.isBefore(Period.firstPeriodStart))
+
   def period(year: Int): Option[Period] = {
     val start = Period.firstPeriodStart
     if (year < dateLiable.getYear) None
