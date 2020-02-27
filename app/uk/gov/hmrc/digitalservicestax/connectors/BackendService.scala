@@ -22,22 +22,29 @@ import cats.~>
 
 trait BackendService[F[_]] {
 
-  def submitRegistration(reg: Registration): F[Unit]
-  def submitReturn(ret: Return): F[Unit]
-  def lookupCompany(utr: UTR): F[Option[Company]]  
+  def lookupCompany(): F[Option[Company]]
   def lookupCompany(utr: UTR, postcode: Postcode): F[Option[Company]]
+  def submitRegistration(reg: Registration): F[Unit]
+  def submitReturn(period: Period, ret: Return): F[Unit]
+  def lookupRegistration(): F[Option[Registration]]
+  def lookupOutstandingReturns(): F[Set[Period]]
 
   def natTransform[G[_]](transform: F ~> G): BackendService[G] = {
     val old = this
     new BackendService[G] {
+
+      def lookupCompany(): G[Option[Company]] =
+        transform(old.lookupCompany())
+      def lookupCompany(utr: UTR, postcode: Postcode): G[Option[Company]] =
+        transform(old.lookupCompany(utr, postcode))        
       def submitRegistration(reg: Registration): G[Unit] =
         transform(old.submitRegistration(reg))        
-      def submitReturn(ret: Return): G[Unit] =
-        transform(old.submitReturn(ret))
-      def lookupCompany(utr: UTR): G[Option[Company]] =
-        transform(old.lookupCompany(utr))
-      def lookupCompany(utr: UTR, postcode: Postcode): G[Option[Company]] =
-        transform(old.lookupCompany(utr, postcode))
+      def submitReturn(period: Period, ret: Return): G[Unit] =
+        transform(old.submitReturn(period, ret))
+      def lookupRegistration(): G[Option[Registration]] =
+        transform(old.lookupRegistration())        
+      def lookupOutstandingReturns(): G[Set[Period]] =
+        transform(old.lookupOutstandingReturns())                
     }
   }
 }

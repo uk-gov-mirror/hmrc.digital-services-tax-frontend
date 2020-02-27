@@ -40,11 +40,10 @@ object RegJourney {
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: BackendService[F]
-  )(utr: UTR): F[Registration] = {
+  ): F[Registration] = {
     import interpreter._
-
     for {
-      company <- backendService.lookupCompany(utr) >>= {
+      company <- backendService.lookupCompany() >>= {
 
         // found a matching company
         case Some(company) =>
@@ -76,7 +75,6 @@ object RegJourney {
       }
 
       registration <- (
-        utr.pure[F],
         company.pure[F],
         ask[Address]("alternate-contact") when
           interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},

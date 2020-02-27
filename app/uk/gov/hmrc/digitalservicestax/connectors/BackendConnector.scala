@@ -40,15 +40,22 @@ class BackendConnector(
   implicit val readsUnit = Reads[Unit] { _ => JsSuccess(()) }
 
   def submitRegistration(reg: Registration): Future[Unit] =
-    http.POST[Registration, Unit](s"$backendURL/register", reg)
+    http.POST[Registration, Unit](s"$backendURL/registration", reg)
 
-  def submitReturn(ret: Return): Future[Unit] =
-    http.POST[Return, Unit](s"$backendURL/return", ret)
+  def submitReturn(period: Period, ret: Return): Future[Unit] =
+    http.POST[Return, Unit](s"$backendURL/returns/${period.start.getYear}", ret)
 
-  def lookupCompany(utr: UTR): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr")
+  def lookupCompany(): Future[Option[Company]] =
+    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup")
 
   def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] =
     http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr/$postcode")
+
+  def lookupRegistration(): Future[Option[Registration]] =
+    http.GET[Option[Registration]](s"$backendURL/registration")
+
+  def lookupOutstandingReturns(): Future[Set[Period]] = ???
+//    http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
+
 
 }

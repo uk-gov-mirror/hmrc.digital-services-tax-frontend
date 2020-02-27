@@ -131,10 +131,6 @@ class JourneyController @Inject()(
       Html(s"Boogaloo")
   }
 
-  def getUTRFromSomewhere: Future[UTR] = Future { // should this be Option[UTR] ???
-    UTR("1234567890")
-  }
-
   def registerAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
@@ -142,33 +138,41 @@ class JourneyController @Inject()(
     val playProgram = registrationJourney[WM](
       create[RegTellTypes, RegAskTypes](messages(request)),
       hod
-    )(UTR("1234567890"))
+    )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
       backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}      
     }
   }
 
-  def returnAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+  def returnAction(year: Int, targetId: String): Action[AnyContent] = Action.async {
+    implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
 
-    val playProgram = returnJourney[WM](
-      create[ReturnTellTypes, ReturnAskTypes](messages(request))
-    )
-
-    playProgram.run(targetId, purgeStateUponCompletion = true) {
-      backend.submitReturn(_).map{ _ => Redirect(routes.JourneyController.index)}
+    backend.lookupRegistration().flatMap{
+      case None      => Future.successful(NotFound)
+      case Some(reg) =>
+        reg.period(year) match {
+          case None => Future.successful(NotFound)
+          case Some(period) => 
+            val playProgram = returnJourney[WM](
+              create[ReturnTellTypes, ReturnAskTypes](messages(request))
+            )
+            playProgram.run(targetId, purgeStateUponCompletion = true) {
+              backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
+            }
+        }
     }
   }
 
   def index: Action[AnyContent] = Action { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-      Ok(views.html.main_template(
-        title =
-          s"${msg("common.title.short")} - ${msg("common.title")}"
-      )(views.html.hello_world()))
+    Ok(views.html.main_template(
+      title =
+        s"${msg("common.title.short")} - ${msg("common.title")}"
+    )(views.html.hello_world()))
 
   }
 

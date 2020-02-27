@@ -16,29 +16,17 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
+import org.scalatest.{Matchers, FlatSpec}
 import java.time.LocalDate
 
-case class Period(
-  start: LocalDate,
-  end: LocalDate
-)
+class PeriodSpec extends FlatSpec with Matchers {
 
-object Period {
+  import SampleData._
 
-  val firstPeriodStart = LocalDate.of(2020,4,5)
-
-  implicit def pathBinder(r: Registration) = new play.api.mvc.PathBindable[Period] {
-
-    import cats.syntax.either._
-
-    override def bind(key: String, value: String): Either[String, Period] =
-      Either.catchOnly[NumberFormatException](r.period(value.toInt)).leftMap(_.getLocalizedMessage).
-        flatMap {
-          case Some(x) => Right(x)
-          case None    => Left(s"${r.company.name} didn't become liable until ${r.dateLiable}")
-        }
-
-    override def unbind(key: String, period: Period): String =
-      period.start.getYear.toString
+  "Period's" should "be calculated from the Registration" in {
+    sampleReg.period(2020) should be (Some(Period(
+      LocalDate.of(2020, 7, 1),
+      LocalDate.of(2021, 4, 4)
+    )))
   }
 }
