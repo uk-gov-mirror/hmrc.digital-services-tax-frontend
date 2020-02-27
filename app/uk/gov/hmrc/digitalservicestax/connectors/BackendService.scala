@@ -24,8 +24,8 @@ trait BackendService[F[_]] {
 
   def submitRegistration(reg: Registration): F[Unit]
   def submitReturn(ret: Return): F[Unit]
-  def matchedCompany(): F[Option[Company]]
-  def lookup(utr: UTR, postcode: Postcode): F[Option[Company]]
+  def lookupCompany(utr: UTR): F[Option[Company]]  
+  def lookupCompany(utr: UTR, postcode: Postcode): F[Option[Company]]
 
   def natTransform[G[_]](transform: F ~> G): BackendService[G] = {
     val old = this
@@ -33,11 +33,11 @@ trait BackendService[F[_]] {
       def submitRegistration(reg: Registration): G[Unit] =
         transform(old.submitRegistration(reg))        
       def submitReturn(ret: Return): G[Unit] =
-        transform(old.submitReturn(ret))                
-      def matchedCompany(): G[Option[Company]] =
-        transform(old.matchedCompany())
-      def lookup(utr: UTR, postcode: Postcode): G[Option[Company]] =
-        transform(old.lookup(utr, postcode))
+        transform(old.submitReturn(ret))
+      def lookupCompany(utr: UTR): G[Option[Company]] =
+        transform(old.lookupCompany(utr))
+      def lookupCompany(utr: UTR, postcode: Postcode): G[Option[Company]] =
+        transform(old.lookupCompany(utr, postcode))
     }
   }
 }
