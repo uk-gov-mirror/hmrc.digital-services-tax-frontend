@@ -1090,3 +1090,8 @@ strong, b {
     margin-top: 0;
     margin-bottom: 20px;
 }
+
+.card {
+    background: #f8f8f8;
+    padding: 20px;
+}
