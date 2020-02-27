@@ -46,10 +46,10 @@ class BackendConnector(
     http.POST[Return, Unit](s"$backendURL/returns/${period.start.getYear}", ret)
 
   def lookupCompany(): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup")
+    http.GET[Option[Company]](s"$backendURL/lookup-company")
 
   def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr/$postcode")
+    http.GET[Option[Company]](s"$backendURL/lookup-company/$utr/$postcode")
 
   def lookupRegistration(): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")
