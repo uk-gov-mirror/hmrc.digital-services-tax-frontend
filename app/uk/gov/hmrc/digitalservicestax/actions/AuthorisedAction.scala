@@ -21,12 +21,11 @@ import play.api.Logger
 import play.api.mvc.Results.{Forbidden, Redirect}
 import play.api.mvc._
 import play.twirl.api.Html
-import uk.gov.hmrc.auth.core.AffinityGroup.Agent
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, credentialRole, internalId}
 import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
-import uk.gov.hmrc.digitalservicestax.actions.ActionHelpers
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.controllers.routes
 import uk.gov.hmrc.http.HeaderCarrier
@@ -37,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConnector: AuthConnector)
   (implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
-  extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions with ActionHelpers {
+  extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions {
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val req: Request[A] = request
@@ -46,18 +45,18 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
     val retrieval =  allEnrolments and credentialRole and internalId and affinityGroup
 
     authorised(AuthProviders(GovernmentGateway, Verify)).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
-      val retrieveUtr = getUtr(enrolments)
+
       val internalId = id.getOrElse(throw new RuntimeException("No internal ID for user"))
 
       val errors: Option[Result] = invalidRole(role)(request).orElse(invalidAffinityGroup(affinity)(request))
 
-      retrieveUtr match {
-        case _ if errors.nonEmpty =>
-          Future.successful(Left(errors.get))
-        case _ =>
-          Future.successful(Right(AuthorisedRequest(retrieveUtr, internalId, enrolments, request)))
+      //TODO DST reference number match
 
-      }
+        errors match {
+          case e if e.nonEmpty => Future.successful (Left (errors.get) )
+          case _ => Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
+        }
+
     } recover {
       case _: NoActiveSession =>
         Logger.info(s"Recover - no active session")
@@ -78,14 +77,14 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
 
   private def invalidAffinityGroup(affinityGroup: Option[AffinityGroup])(implicit request: Request[_]): Option[Result] = {
     affinityGroup match {
-      case Some(Agent) | None => Some(Forbidden(Html("invalidAffinity")))
+      case Some(Agent) | None => Some(Forbidden(Html("invalidAffinity - Agent")))
+      case Some(Individual) | None => Some(Forbidden(Html("invalidAffinity - Individual")))
       case _ => None
     }
   }
 }
 
 case class AuthorisedRequest[A](
-  utr: Option[String],
   internalId: String,
   enrolments: Enrolments,
   request: Request[A]
