@@ -20,7 +20,7 @@ import uk.gov.hmrc.digitalservicestax.data._
 import scala.language.higherKinds
 import cats.~>
 
-trait BackendService[F[_]] {
+trait DSTService[F[_]] {
 
   def lookupCompany(): F[Option[Company]]
   def lookupCompany(utr: UTR, postcode: Postcode): F[Option[Company]]
@@ -29,9 +29,9 @@ trait BackendService[F[_]] {
   def lookupRegistration(): F[Option[Registration]]
   def lookupOutstandingReturns(): F[Set[Period]]
 
-  def natTransform[G[_]](transform: F ~> G): BackendService[G] = {
+  def natTransform[G[_]](transform: F ~> G): DSTService[G] = {
     val old = this
-    new BackendService[G] {
+    new DSTService[G] {
 
       def lookupCompany(): G[Option[Company]] =
         transform(old.lookupCompany())
