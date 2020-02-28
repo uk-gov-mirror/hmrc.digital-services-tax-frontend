@@ -19,7 +19,7 @@ package journeys
 
 import scala.language.higherKinds
 
-import connectors.BackendService
+import connectors.DSTService
 import data._
 import frontend.Kickout
 
@@ -39,7 +39,7 @@ object RegJourney {
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
-    backendService: BackendService[F]
+    backendService: DSTService[F]
   ): F[Registration] = {
     import interpreter._
     for {

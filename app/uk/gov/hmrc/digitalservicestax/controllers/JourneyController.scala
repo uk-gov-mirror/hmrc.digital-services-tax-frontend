@@ -22,7 +22,6 @@ import connectors._
 import data._
 import frontend.Kickout
 import repo.JourneyStateStore
-
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
 import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
@@ -32,7 +31,8 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
 import scala.concurrent.{ExecutionContext, Future}
-import uk.gov.hmrc.auth.core.AuthorisedFunctions
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -40,8 +40,10 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class JourneyController @Inject()(
+  authorisedAction: AuthorisedAction,
   mcc: MessagesControllerComponents,
   val http: HttpClient,
+  val authConnector: AuthConnector,
   servicesConfig: ServicesConfig  
 )(
   implicit val appConfig: AppConfig,
@@ -49,11 +51,12 @@ class JourneyController @Inject()(
   implicit val messagesApi: MessagesApi
 )extends ControllerHelpers
   with FrontendHeaderCarrierProvider
-  with I18nSupport {
+  with I18nSupport
+  with AuthorisedFunctions {
 
-  def backend(implicit hc: HeaderCarrier) = new BackendConnector(http, servicesConfig)
+  def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
-  def hod(implicit hc: HeaderCarrier): BackendService[WebMonad[*, Html]] = backend.natTransform[WebMonad[*, Html]]{
+  def hod(implicit hc: HeaderCarrier): DSTService[WebMonad[*, Html]] = backend.natTransform[WebMonad[*, Html]]{
     import cats.~>
     new (Future ~> WebMonad[*, Html]) {
       def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html]().alwaysRerun(in)
@@ -131,9 +134,10 @@ class JourneyController @Inject()(
       Html(s"Boogaloo")
   }
 
-  def registerAction(targetId: String): Action[AnyContent] = Action.async { implicit request: Request[AnyContent] =>
+  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
+
 
     val playProgram = registrationJourney[WM](
       create[RegTellTypes, RegAskTypes](messages(request)),
@@ -145,7 +149,7 @@ class JourneyController @Inject()(
     }
   }
 
-  def returnAction(year: Int, targetId: String): Action[AnyContent] = Action.async {
+  def returnAction(year: Int, targetId: String): Action[AnyContent] = authorisedAction.async {
     implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._

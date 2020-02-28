@@ -29,11 +29,11 @@ import play.api.{Logger, Mode}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BackendConnector(
+class DSTConnector(
   val http: HttpClient,
   servicesConfig: ServicesConfig
 )(implicit executionContext: ExecutionContext, hc: HeaderCarrier)
-    extends BackendService[Future] with OptionHttpReads {
+    extends DSTService[Future] with OptionHttpReads {
 
   val backendURL: String = servicesConfig.baseUrl("digital-services-tax") + "/digital-services-tax"
 
@@ -46,16 +46,15 @@ class BackendConnector(
     http.POST[Return, Unit](s"$backendURL/returns/${period.start.getYear}", ret)
 
   def lookupCompany(): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup")
+    http.GET[Option[Company]](s"$backendURL/lookup-company")
 
   def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/rosm-registration/lookup/$utr/$postcode")
+    http.GET[Option[Company]](s"$backendURL/lookup-company/$utr/$postcode")
 
   def lookupRegistration(): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")
 
   def lookupOutstandingReturns(): Future[Set[Period]] = ???
 //    http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
-
 
 }
