@@ -48,7 +48,7 @@ object RegJourney {
         // found a matching company
         case Some(company) =>
           for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company", company)
+            confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", company)
             //TODO Check if we should be signing the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
           } yield (company)
