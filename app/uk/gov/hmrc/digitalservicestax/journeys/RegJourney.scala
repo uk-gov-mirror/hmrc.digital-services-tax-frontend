@@ -90,7 +90,13 @@ object RegJourney {
           //Below be a dirty hack
         } yield Company(parentName.getOrElse(NonEmptyString(" ")), parentAddress.getOrElse(UkAddress(NonEmptyString(" "), "", "", "", Postcode("AA111AA")))).some,
         ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start-date") when (ask[Boolean]("check-liability-date") == false)).map{_.getOrElse(LocalDate.of(2020, 4,1))},
+        ask[Boolean]("check-liability-date") flatMap {
+          case true => Period.firstPeriodStart.pure[F]
+          case false =>
+            ask[LocalDate]("liability-start-date",
+              validation = Rule.min(Period.firstPeriodStart)
+            )
+        },
         ask[LocalDate]("accounting-period-end-date"),
         None.pure[F],  //TODO
         false.pure[F], //TODO

@@ -92,50 +92,28 @@ case class DSTInterpreter(
     request: Request[AnyContent],
     messages: UniformMessages[Html],
     stats: FormFieldStats): Html = {
-    val content = views.html.form_wrapper(keyList,
-      errors,
-      Html(tell.toString + ask.toString),
-      List(breadcrumbs.drop(1)),
-      stats)(messages, request)
+
+    // very crude method to determine if a page is a kickout - we
+    // need a more robust/generic technique based upon different
+    // behaviour for 'end' interactions
+    def isKickout: Boolean = tell.toString.contains("""<div class="kickout""")
+
+    val content: Html = if (isKickout) {
+      tell
+    } else {
+      views.html.form_wrapper(
+        keyList,
+        errors,
+        Html(tell.toString + ask.toString),
+        List(breadcrumbs.drop(1)),
+        stats
+      )(messages, request)
+    }
+
     val errorTitle: String = if(errors.isNonEmpty) s"${messages("common.error")}: " else ""
     views.html.main_template(title =
       errorTitle + s"${messages(keyList.mkString("-") + ".heading")} - ${messages("common.title")}")(
       content)(request, messages, appConfig)
   }
-
-  // override def selectionOfFields(
-  //   inner: List[
-  //     (String,
-  //       (List[String],
-  //         Breadcrumbs,
-  //         Input,
-  //         ErrorTree,
-  //         UniformMessages[Html]) ⇒ Html)]
-  // )(key: List[String],
-  //   path: Breadcrumbs,
-  //   values: Input,
-  //   errors: ErrorTree,
-  //   messages: UniformMessages[Html]): Html = {
-  //   val value: Option[String] =
-  //     values.valueAtRoot.flatMap{_.headOption}
-  //   views.html.uniform.radios(
-  //     key,
-  //     inner.map { _._1 },
-  //     value,
-  //     errors,
-  //     messages,
-  //     inner
-  //       .map {
-  //         case (subkey, f) ⇒
-  //           subkey → f(key :+ subkey,
-  //             path,
-  //             values / subkey,
-  //             errors / subkey,
-  //             messages)
-  //       }
-  //       .filter(_._2.toString.trim.nonEmpty)
-  //       .toMap
-  //   )
-  // }
 
 }
