@@ -17,33 +17,35 @@
 package uk.gov.hmrc.digitalservicestax.connectors
 
 import uk.gov.hmrc.digitalservicestax.data._
+
 import scala.language.higherKinds
 import cats.~>
+import uk.gov.hmrc.http.HeaderCarrier
 
 trait DSTService[F[_]] {
 
-  def lookupCompany(): F[Option[Company]]
-  def lookupCompany(utr: UTR, postcode: Postcode): F[Option[Company]]
-  def submitRegistration(reg: Registration): F[Unit]
-  def submitReturn(period: Period, ret: Return): F[Unit]
-  def lookupRegistration(): F[Option[Registration]]
-  def lookupOutstandingReturns(): F[Set[Period]]
+  def lookupCompany()(implicit hc: HeaderCarrier): F[Option[Company]]
+  def lookupCompany(utr: UTR, postcode: Postcode)(implicit hc: HeaderCarrier): F[Option[Company]]
+  def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier): F[Unit]
+  def submitReturn(period: Period, ret: Return)(implicit hc: HeaderCarrier): F[Unit]
+  def lookupRegistration()(implicit hc: HeaderCarrier): F[Option[Registration]]
+  def lookupOutstandingReturns()(implicit hc: HeaderCarrier): F[Set[Period]]
 
   def natTransform[G[_]](transform: F ~> G): DSTService[G] = {
     val old = this
     new DSTService[G] {
 
-      def lookupCompany(): G[Option[Company]] =
+      def lookupCompany()(implicit hc: HeaderCarrier): G[Option[Company]] =
         transform(old.lookupCompany())
-      def lookupCompany(utr: UTR, postcode: Postcode): G[Option[Company]] =
+      def lookupCompany(utr: UTR, postcode: Postcode)(implicit hc: HeaderCarrier): G[Option[Company]] =
         transform(old.lookupCompany(utr, postcode))        
-      def submitRegistration(reg: Registration): G[Unit] =
+      def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier): G[Unit] =
         transform(old.submitRegistration(reg))        
-      def submitReturn(period: Period, ret: Return): G[Unit] =
+      def submitReturn(period: Period, ret: Return)(implicit hc: HeaderCarrier): G[Unit] =
         transform(old.submitReturn(period, ret))
-      def lookupRegistration(): G[Option[Registration]] =
+      def lookupRegistration()(implicit hc: HeaderCarrier): G[Option[Registration]] =
         transform(old.lookupRegistration())        
-      def lookupOutstandingReturns(): G[Set[Period]] =
+      def lookupOutstandingReturns()(implicit hc: HeaderCarrier): G[Set[Period]] =
         transform(old.lookupOutstandingReturns())                
     }
   }

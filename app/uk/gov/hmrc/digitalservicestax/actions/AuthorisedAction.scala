@@ -27,16 +27,29 @@ import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, credentialRole, internalId}
 import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
 import uk.gov.hmrc.digitalservicestax.controllers.routes
+import uk.gov.hmrc.digitalservicestax.data.Registration
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConnector: AuthConnector)
+class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConnector: AuthConnector, dstConnector: DSTConnector)
   (implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
   extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions {
+
+  def getDstEnrolment(enrolments: Enrolments): Option[EnrolmentIdentifier] = {
+    val dst = for {
+      enrolment <- enrolments.enrolments if enrolment.key.equalsIgnoreCase("HMRC-DST-ORG")
+      dst <- enrolment.getIdentifier("EtmpRegistrationNumber") if dst.value.slice(2, 5) == "DST"
+    } yield {
+      dst
+    }
+
+    dst.headOption
+  }
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
     implicit val req: Request[A] = request
@@ -46,16 +59,21 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
 
     authorised(AuthProviders(GovernmentGateway, Verify)).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
 
+      val dstNumber = getDstEnrolment(enrolments)
+
       val internalId = id.getOrElse(throw new RuntimeException("No internal ID for user"))
 
       val errors: Option[Result] = invalidRole(role)(request).orElse(invalidAffinityGroup(affinity)(request))
 
-      //TODO DST reference number match
 
-        errors match {
-          case e if e.nonEmpty => Future.successful (Left (errors.get) )
-          case _ => Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
-        }
+       (dstNumber, errors) match {
+         case (_, e) if e.nonEmpty => Future.successful(Left(errors.get))
+         case (Some(dst), _) => dstConnector.lookupRegistration().map {
+           case Some(reg) => Right(AuthorisedRequest(internalId, enrolments, request, dst.value, Some(reg)))
+           case None => Right(AuthorisedRequest(internalId, enrolments, request))
+         }
+         case _ => Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
+       }
 
     } recover {
       case _: NoActiveSession =>
@@ -87,6 +105,8 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
 case class AuthorisedRequest[A](
   internalId: String,
   enrolments: Enrolments,
-  request: Request[A]
+  request: Request[A],
+  dstReferenceNo: String = "",
+  registration: Option[Registration] = None
 ) extends WrappedRequest(request)
 

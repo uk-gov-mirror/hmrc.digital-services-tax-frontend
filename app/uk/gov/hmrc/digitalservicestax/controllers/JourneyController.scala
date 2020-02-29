@@ -133,11 +133,10 @@ class JourneyController @Inject()(
     override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
       Html(s"Boogaloo")
   }
-
+  
   def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
-
 
     val playProgram = registrationJourney[WM](
       create[RegTellTypes, RegAskTypes](messages(request)),
@@ -145,7 +144,7 @@ class JourneyController @Inject()(
     )
 
     playProgram.run(targetId, purgeStateUponCompletion = true) {
-      backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}      
+      backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}
     }
   }
 
@@ -153,6 +152,7 @@ class JourneyController @Inject()(
     implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
+
 
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
@@ -170,15 +170,17 @@ class JourneyController @Inject()(
     }
   }
 
-  def index: Action[AnyContent] = Action { implicit request =>
+  def index: Action[AnyContent] = authorisedAction.async {
+    implicit request : AuthorisedRequest[AnyContent] =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-
-      Ok(views.html.main_template(
+      Future.successful(
+        Ok(views.html.main_template(
         title =
           s"${msg("common.title.short")} - ${msg("common.title")}"
-      )(views.html.landing()))
-
+      )(views.html.landing(request.registration))
+        )
+      )
   }
 
 }

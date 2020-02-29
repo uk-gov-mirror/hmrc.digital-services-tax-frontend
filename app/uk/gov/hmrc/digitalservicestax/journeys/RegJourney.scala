@@ -18,16 +18,16 @@ package uk.gov.hmrc.digitalservicestax
 package journeys
 
 import scala.language.higherKinds
-
 import connectors.DSTService
 import data._
 import frontend.Kickout
-
 import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
+
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
+import uk.gov.hmrc.http.HeaderCarrier
 
 object RegJourney {
 
@@ -40,7 +40,7 @@ object RegJourney {
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: DSTService[F]
-  ): F[Registration] = {
+  )(implicit hc: HeaderCarrier): F[Registration] = {
     import interpreter._
     for {
       company <- backendService.lookupCompany() >>= {
@@ -89,7 +89,10 @@ object RegJourney {
           //Below be a dirty hack
         } yield Company(parentName.getOrElse(NonEmptyString(" ")), parentAddress.getOrElse(UkAddress(NonEmptyString(" "), "", "", "", Postcode("AA111AA")))).some,
         ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start-date") when (ask[Boolean]("check-liability-date") == false)).map{_.getOrElse(LocalDate.of(2020, 4,1))},
+        ask[Boolean]("check-liability-date") flatMap {
+          case true => LocalDate.of(2020, 4,1).pure[F]
+          case false => ask[LocalDate]("liability-start-date")
+        },
         ask[LocalDate]("accounting-period-end-date")
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))

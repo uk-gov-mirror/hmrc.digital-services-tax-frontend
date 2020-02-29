@@ -16,45 +16,47 @@
 
 package uk.gov.hmrc.digitalservicestax.connectors
 
-import uk.gov.hmrc.digitalservicestax.data._, BackendAndFrontendJson._
-
+import uk.gov.hmrc.digitalservicestax.data._
+import BackendAndFrontendJson._
 import java.net.URLEncoder.encode
 import java.time.{Clock, LocalDate}
+
+import javax.inject.Inject
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import play.api.libs.json.{Json, OWrites, Reads, JsSuccess}
+import play.api.libs.json.{JsSuccess, Json, OWrites, Reads}
 import play.api.{Logger, Mode}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DSTConnector(
+class DSTConnector @Inject()(
   val http: HttpClient,
   servicesConfig: ServicesConfig
-)(implicit executionContext: ExecutionContext, hc: HeaderCarrier)
+)(implicit executionContext: ExecutionContext)
     extends DSTService[Future] with OptionHttpReads {
 
   val backendURL: String = servicesConfig.baseUrl("digital-services-tax") + "/digital-services-tax"
 
   implicit val readsUnit = Reads[Unit] { _ => JsSuccess(()) }
 
-  def submitRegistration(reg: Registration): Future[Unit] =
+  def submitRegistration(reg: Registration)(implicit hc: HeaderCarrier): Future[Unit] =
     http.POST[Registration, Unit](s"$backendURL/registration", reg)
 
-  def submitReturn(period: Period, ret: Return): Future[Unit] =
+  def submitReturn(period: Period, ret: Return)(implicit hc: HeaderCarrier): Future[Unit] =
     http.POST[Return, Unit](s"$backendURL/returns/${period.start.getYear}", ret)
 
-  def lookupCompany(): Future[Option[Company]] =
+  def lookupCompany()(implicit hc: HeaderCarrier): Future[Option[Company]] =
     http.GET[Option[Company]](s"$backendURL/lookup-company")
 
-  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] =
+  def lookupCompany(utr: UTR, postcode: Postcode)(implicit hc: HeaderCarrier): Future[Option[Company]] =
     http.GET[Option[Company]](s"$backendURL/lookup-company/$utr/$postcode")
 
-  def lookupRegistration(): Future[Option[Registration]] =
+  def lookupRegistration()(implicit hc: HeaderCarrier): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")
 
-  def lookupOutstandingReturns(): Future[Set[Period]] = ???
+  def lookupOutstandingReturns()(implicit hc: HeaderCarrier): Future[Set[Period]] = ???
 //    http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
 
 }
