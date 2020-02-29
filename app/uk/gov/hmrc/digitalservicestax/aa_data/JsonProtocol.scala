@@ -18,7 +18,6 @@ package uk.gov.hmrc.digitalservicestax.data
 
 import enumeratum.EnumFormats
 import play.api.libs.json._
-import uk.gov.hmrc.digitalservicestax.data._
 import shapeless.tag.@@
 
 trait SimpleJson {
@@ -53,6 +52,8 @@ trait SimpleJson {
   implicit val sortCodeFormat       = validatedStringFormat(SortCode, "sort code")
   implicit val accountNumberFormat  = validatedStringFormat(AccountNumber, "account number")
   implicit val ibanFormat           = validatedStringFormat(IBAN, "IBAN number")
+  implicit val dstRegNoFormat       =
+    validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
 
     implicit val percentFormat: Format[Percent] = new Format[Percent] {
     override def reads(json: JsValue): JsResult[Percent] = {

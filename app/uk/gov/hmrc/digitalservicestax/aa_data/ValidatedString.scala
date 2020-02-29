@@ -50,7 +50,7 @@ trait ValidatedType[BaseType] {
       import cats.syntax.either._
 
       override def bind(key: String, value: String): Either[String, BaseType @@ Tag] =
-        baseBinder.bind(key, value) >>= {of(_) match {
+        baseBinder.bind(key, value) flatMap {of(_) match {
           case Some(x) => Right(x: BaseType @@ Tag)
           case None    => Left(s""""$value" is not a valid ${className.init}""")
         }}
