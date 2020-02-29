@@ -19,7 +19,7 @@ package journeys
 
 import scala.language.higherKinds
 
-import connectors.BackendService
+import connectors.DSTService
 import data._
 import frontend.Kickout
 
@@ -39,7 +39,7 @@ object RegJourney {
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
-    backendService: BackendService[F]
+    backendService: DSTService[F]
   ): F[Registration] = {
     import interpreter._
 
@@ -49,7 +49,7 @@ object RegJourney {
         // found a matching company
         case Some(company) =>
           for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company", company)
+            confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", company)
             //TODO Check if we should be signing the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
           } yield (company)
