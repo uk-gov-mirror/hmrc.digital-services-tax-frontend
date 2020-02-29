@@ -20,18 +20,23 @@ package data
 //import services._
 
 import java.time.LocalDate
+import cats.syntax.order._
 
 case class Registration (
-//  utr: Option[UTR], 
   company: Company,
   alternativeContact: Option[Address],
   ultimateParent: Option[Company],
   contact: ContactDetails,
   dateLiable: LocalDate,
-  accountingPeriodEnd: LocalDate
+  accountingPeriodEnd: LocalDate,
+  utr: Option[UTR] = None,
+  useSafeId: Boolean = false,
+  registrationNumber: Option[DSTRegNumber] = None  
 ) {
 
-  require(!dateLiable.isBefore(Period.firstPeriodStart))
+  require(dateLiable >= Period.firstPeriodStart,
+    s"cannot be liable before policy start (${Period.firstPeriodStart})"
+  )
 
   def period(year: Int): Option[Period] = {
     val start = Period.firstPeriodStart

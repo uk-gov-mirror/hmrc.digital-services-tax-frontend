@@ -42,6 +42,7 @@ object RegJourney {
     backendService: DSTService[F]
   )(implicit hc: HeaderCarrier): F[Registration] = {
     import interpreter._
+
     for {
       company <- backendService.lookupCompany() >>= {
 
@@ -90,10 +91,16 @@ object RegJourney {
         } yield Company(parentName.getOrElse(NonEmptyString(" ")), parentAddress.getOrElse(UkAddress(NonEmptyString(" "), "", "", "", Postcode("AA111AA")))).some,
         ask[ContactDetails]("contact-details"),
         ask[Boolean]("check-liability-date") flatMap {
-          case true => LocalDate.of(2020, 4,1).pure[F]
-          case false => ask[LocalDate]("liability-start-date")
+          case true => Period.firstPeriodStart.pure[F]
+          case false =>
+            ask[LocalDate]("liability-start-date",
+              validation = Rule.min(Period.firstPeriodStart)
+            )
         },
-        ask[LocalDate]("accounting-period-end-date")
+        ask[LocalDate]("accounting-period-end-date"),
+        None.pure[F],  //TODO
+        false.pure[F], //TODO
+        None.pure[F]
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))
       _ <- tell("registration-sent", Confirmation(registration))

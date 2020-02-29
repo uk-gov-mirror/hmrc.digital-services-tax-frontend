@@ -21,12 +21,18 @@ import tag._
 import cats.implicits._
 import cats.kernel.Monoid
 import play.api.i18n.Messages
+import java.time.LocalDate
 
 package object data extends SimpleJson {
 
   type UTR = String @@ UTR.Tag
   object UTR extends RegexValidatedString(
     "^[0-9]{10}$"
+  )
+
+  type SafeId = String @@ SafeId.Tag
+  object SafeId extends RegexValidatedString(
+    "^[A-Z0-9]{1,15}$"
   )
 
   type Postcode = String @@ Postcode.Tag
@@ -107,4 +113,12 @@ package object data extends SimpleJson {
     }
   }
 
+  type DSTRegNumber = String @@ DSTRegNumber.Tag
+  object DSTRegNumber extends RegexValidatedString(
+    "^([A-Z]{2}DST[0-9]{10})$"
+  )
+
+  implicit val orderDate = new cats.Order[LocalDate] {
+    def compare(x: LocalDate, y: LocalDate):Int = x.compareTo(y)
+  }
 }

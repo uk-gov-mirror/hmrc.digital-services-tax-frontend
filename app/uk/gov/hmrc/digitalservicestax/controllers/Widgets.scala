@@ -295,35 +295,5 @@ trait Widgets {
       }
 
     }
-
-  implicit def unitTell: GenericWebTell[UkAddress, Html] = new GenericWebTell[UkAddress, Html] {
-    def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html = Html("heyeyeye")
-  }
-
-
-
-  // implicit def oddballField2(
-  //   implicit threeBools: FormField[(
-  //     Boolean,
-  //     Boolean,
-  //     Boolean
-  //   ), Html]
-  // ): FormField[Set[data.Activity],Html] = {
-  //   import data.Activity, Activity.{SocialMedia, SearchEngine, OnlineMarketplace}
-  //   threeBools.imap{case (a,b,c) =>
-  //       Set.apply[Option[Activity]](
-  //         Some(SocialMedia).filter(_ => a),
-  //         Some(SearchEngine).filter(_ => b),
-  //         Some(OnlineMarketplace).filter(_ => c)          
-  //       ).flatten
-  //   }{ theset => 
-  //     (
-  //       theset.contains(SocialMedia),
-  //       theset.contains(SearchEngine),
-  //       theset.contains(OnlineMarketplace)        
-  //     )
-  //   }
-
-  // }
   
 }
