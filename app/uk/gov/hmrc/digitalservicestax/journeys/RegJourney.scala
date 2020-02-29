@@ -31,7 +31,7 @@ import ltbs.uniform.validation._
 
 object RegJourney {
 
-  case class CompanyDeets(company: Company, utr: Option[UTR], useSafeId: Boolean)
+  case class CompanyRegWrapper(company: Company, utr: Option[UTR], useSafeId: Boolean)
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
@@ -48,7 +48,7 @@ object RegJourney {
 
     for {
       
-      companyDeets <- backendService.lookupCompany() >>= {
+      companyRegWrapper <- backendService.lookupCompany() >>= {
 
         // found a matching company
         case Some(company) =>
@@ -56,7 +56,7 @@ object RegJourney {
             confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", company)
             //TODO Check if we should be signing the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-          } yield CompanyDeets(company, Option.empty[UTR], false)
+          } yield CompanyRegWrapper(company, Option.empty[UTR], false)
 
         // no matching company found
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
@@ -64,7 +64,7 @@ object RegJourney {
             (
               ask[NonEmptyString]("company-name"),
               ask[Address]("company-registered-office-address")
-            ).mapN(Company.apply) map (x => CompanyDeets(x, Option.empty[UTR], true))
+            ).mapN(Company.apply).map(CompanyRegWrapper(_, Option.empty[UTR], true))
           case true =>
             for {
               utr <- ask[UTR]("enter-utr")
@@ -75,14 +75,14 @@ object RegJourney {
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
               //TODO Check if we should be signing the user out
               _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-            } yield CompanyDeets(company, utr.some, false)
+            } yield CompanyRegWrapper(company, utr.some, false)
         }
       }
 
       registration <- (
-        companyDeets.company.pure[F],
+        companyRegWrapper.company.pure[F],
         ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("company-contact-address", companyDeets.company.address).map{x => !x},
+          interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
         ask[Boolean]("check-if-group") >>= {
           case true =>
             for {
@@ -104,8 +104,8 @@ object RegJourney {
             )
         },
         ask[LocalDate]("accounting-period-end-date"),
-        companyDeets.utr.pure[F],
-        companyDeets.useSafeId.pure[F],
+        companyRegWrapper.utr.pure[F],
+        companyRegWrapper.useSafeId.pure[F],
         None.pure[F]
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))
