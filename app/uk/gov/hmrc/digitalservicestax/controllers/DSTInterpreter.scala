@@ -41,21 +41,22 @@ case class DSTInterpreter(
     with Widgets {
 
   def renderProduct[A](
-    key: List[String],
+    pageKey: List[String],
+    fieldKey: List[String],    
     path: Breadcrumbs,
     values: Input,
     errors: ErrorTree,
     messages: UniformMessages[Html],
     pfl: ProductFieldList[A, Html]
   ): Html = Html(
-    pfl.inner.map {
-      case (subFieldId, f) =>
-        f(key:+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
+    pfl.inner.map { case (subFieldId, f) =>
+      f(pageKey, fieldKey :+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
     }.mkString
   )
 
   def renderCoproduct[A](
-    key: List[String],
+    pageKey: List[String],
+    fieldKey: List[String],    
     path: Breadcrumbs,
     values: Input,
     errors: ErrorTree,
@@ -63,13 +64,13 @@ case class DSTInterpreter(
     cfl: CoproductFieldList[A,Html]): Html = {
     val value: Option[String] = values.valueAtRoot.flatMap {_.headOption}
     radios(
-      key,
+      fieldKey,
       cfl.inner.map{_._1}.orderYesNoRadio,
       value,
       errors,
       messages,
       cfl.inner.map{
-        case(subkey,f) => subkey -> f(key :+ subkey, path, {values / subkey}, errors / subkey, messages)
+        case(subkey,f) => subkey -> f(pageKey, fieldKey :+ subkey, path, {values / subkey}, errors / subkey, messages)
       }.filter(_._2.toString.trim.nonEmpty).toMap
     )
   }

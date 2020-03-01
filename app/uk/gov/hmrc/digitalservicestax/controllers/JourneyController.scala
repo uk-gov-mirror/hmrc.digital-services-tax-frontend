@@ -25,7 +25,7 @@ import frontend.Kickout
 import repo.JourneyStateStore
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad, ListingTell, ListingTellRow}
 import ltbs.uniform.interpreters.playframework._
 import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -65,10 +65,16 @@ class JourneyController @Inject()(
   }
 
   val interpreter = DSTInterpreter(appConfig, this, messagesApi)
-  import interpreter._
 
   implicit val persistence: PersistenceEngine[Request[AnyContent]] =
     UnsafePersistence()
+
+  implicit def autoListingTell[A](implicit tell: GenericWebTell[A, Html]) = new ListingTell[Html, A] {
+    def apply(rows: List[ListingTellRow[A]], messages: UniformMessages[Html]): Html =
+      views.html.uniform.listing(rows.map {
+        case ListingTellRow(value, editLink, deleteLink) => (tell.render(value, "a", messages), editLink, deleteLink)
+      }, messages)
+  }
 
   implicit val addressTell = new GenericWebTell[Address, Html] {
 
@@ -117,22 +123,22 @@ class JourneyController @Inject()(
   }
   implicit val booleanTell = new GenericWebTell[Boolean, Html] {
     override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(in.toString)
   }
 
   implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
     override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(in.toString)
   }
 
   implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
     override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(in.toString)
   }
 
   implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
     override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"Boogaloo")
+      Html(in.toString)
   }
   
   def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>

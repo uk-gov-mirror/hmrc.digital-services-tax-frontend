@@ -53,14 +53,15 @@ trait Widgets {
     def encode(in: String): Input = Input.one(List(in))
 
     def render(
-      key: List[String],
+      pageKey: List[String],
+      fieldKey: List[String],
       path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
       messages: UniformMessages[Html]
     ): Html = {
       val existingValue: String = data.valueAtRoot.flatMap{_.headOption}.getOrElse("")
-      views.html.uniform.string(key, existingValue, errors, messages, autoFields)
+      views.html.uniform.string(fieldKey, existingValue, errors, messages, autoFields)
     }
   }
 
@@ -130,15 +131,16 @@ trait Widgets {
     def encode(in: Boolean): Input = Input.one(List(in.toString))
 
     def render(
-      key: List[String],
+      pageKey: List[String],
+      fieldKey: List[String],
       path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
       messages: UniformMessages[Html]
     ): Html = {
-      val options = if (key.contains("about-you") || key.contains("user-employed")) List(False, True) else List(True, False)
+      val options = if (pageKey.contains("about-you") || pageKey.contains("user-employed")) List(False, True) else List(True, False)
       val existingValue = data.toStringField().toOption
-      views.html.uniform.radios(key,
+      views.html.uniform.radios(fieldKey,
         options,
         existingValue,
         errors,
@@ -181,14 +183,15 @@ trait Widgets {
       ).mapValues(_.toString.pure[List])
 
       def render(
-        key: List[String],
+        pageKey: List[String],        
+        fieldKey: List[String],
         path: Breadcrumbs,
         data: Input,
         errors: ErrorTree,
     messages: UniformMessages[Html]
       ): Html = {
         views.html.uniform.date(
-          key,
+          fieldKey,
           data,
           errors,
           messages
@@ -218,7 +221,8 @@ trait Widgets {
     def encode(in: UkAddress): Input = ffhlist.encode(gen.to(in))
 
     def render(
-      key: List[String],
+      pagekey: List[String],
+      fieldKey: List[String],      
       path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
@@ -226,7 +230,7 @@ trait Widgets {
     ): Html = {
       // TODO pass thru fieldKey
       views.html.uniform.address(
-        key,
+        fieldKey,
         data,
         errors,
         messages
@@ -245,11 +249,18 @@ trait Widgets {
       )}.toEither
 
       def encode(in: A): Input = Input.one(List(in.entryName))
-      def render(key: List[String],path: Breadcrumbs,data: Input,errors: ErrorTree,messages: UniformMessages[Html]): Html = {
+      def render(
+        pageKey: List[String],
+        fieldKey: List[String],        
+        path: Breadcrumbs,
+        data: Input,
+        errors: ErrorTree,
+        messages: UniformMessages[Html]
+      ): Html = {
         val options = enum.values.map{_.entryName}
         val existingValue = decode(data).map{_.entryName}.toOption
         views.html.uniform.radios(
-          key,
+          fieldKey,
           options,
           existingValue,
           errors,
@@ -277,7 +288,8 @@ trait Widgets {
 
       // Members declared in ltbs.uniform.common.web.FormField
       def render(
-        key: List[String],
+        pageKey: List[String],
+        fieldKey: List[String],
         breadcrumbs: Breadcrumbs,
         data: Input,
         errors: ErrorTree,
@@ -286,7 +298,7 @@ trait Widgets {
         val options = enum.values.map{_.entryName}
         val existingValues: Set[String] = decode(data).map{_.map{_.entryName}}.getOrElse(Set.empty)
         views.html.uniform.checkboxes(
-          key,
+          fieldKey,
           options,
           existingValues,
           errors,
