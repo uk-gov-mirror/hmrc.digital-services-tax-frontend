@@ -16,20 +16,24 @@
 
 package uk.gov.hmrc.digitalservicestax.connectors
 
-import uk.gov.hmrc.digitalservicestax.data._, BackendAndFrontendJson._
-
+import uk.gov.hmrc.digitalservicestax.data._
+import BackendAndFrontendJson._
 import java.net.URLEncoder.encode
 import java.time.{Clock, LocalDate}
-import uk.gov.hmrc.http._
+
+import javax.inject.Inject
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import play.api.libs.json.{Json, OWrites, Reads, JsSuccess}
+import play.api.libs.json.{JsSuccess, Json, OWrites, Reads}
+import play.api.mvc.Request
 import play.api.{Logger, Mode}
+import uk.gov.hmrc.http.{HeaderCarrier, OptionHttpReads}
+import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class DSTConnector(
+class DSTConnector (
   val http: HttpClient,
   servicesConfig: ServicesConfig
 )(implicit executionContext: ExecutionContext, hc: HeaderCarrier)

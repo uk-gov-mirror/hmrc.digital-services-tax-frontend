@@ -19,6 +19,7 @@ package controllers
 
 import config.AppConfig
 import connectors._
+import cats.implicits._
 import data._
 import frontend.Kickout
 import repo.JourneyStateStore
@@ -49,7 +50,7 @@ class JourneyController @Inject()(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
   implicit val messagesApi: MessagesApi
-)extends ControllerHelpers
+) extends ControllerHelpers
   with FrontendHeaderCarrierProvider
   with I18nSupport
   with AuthorisedFunctions {
@@ -133,19 +134,22 @@ class JourneyController @Inject()(
     override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
       Html(s"Boogaloo")
   }
-
+  
   def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
 
+    backend.lookupRegistration().flatMap {
+      case None =>
+        val playProgram = registrationJourney[WM](
+          create[RegTellTypes, RegAskTypes](messages(request)),
+          hod
+        )
+        playProgram.run(targetId, purgeStateUponCompletion = true) {
+          backend.submitRegistration(_).map { _ => Redirect(routes.JourneyController.index) }
+      }
 
-    val playProgram = registrationJourney[WM](
-      create[RegTellTypes, RegAskTypes](messages(request)),
-      hod
-    )
-
-    playProgram.run(targetId, purgeStateUponCompletion = true) {
-      backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}      
+      case Some(reg) => index(request)
     }
   }
 
@@ -153,6 +157,7 @@ class JourneyController @Inject()(
     implicit request: Request[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
+
 
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
@@ -173,19 +178,19 @@ class JourneyController @Inject()(
   def index: Action[AnyContent] = Action.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-    backend.lookupRegistration() map {
+    backend.lookupRegistration().map {
       case None =>
           Redirect(routes.JourneyController.registerAction(" "))
-      case Some(r) if r.registrationNumber.isDefined => 
+      case Some(reg) if reg.registrationNumber.isDefined =>
         Ok(views.html.main_template(
           title =
             s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.landing(r)))
-      case Some(r) =>
+        )(views.html.landing(reg.some)))
+      case Some(reg) =>
         Ok(views.html.main_template(
           title =
             s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.holding(r)))
+        )(views.html.confirmation("registration-sent", reg.company.name, reg.contact.email)(msg)))
         
     }
   }
