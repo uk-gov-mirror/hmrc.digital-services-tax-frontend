@@ -23,9 +23,11 @@
     <h1 class="heading-xlarge">
         Digital Services Tax details
         <span class="hint">
-            Registration number: XADST0000010000<br />
-            Group’s ultimate parent company: Social Group Inc<br />
-            Responsible member: Social UK Ltd<br />
+          Registration number: @{r.registrationNumber}<br />
+	  @r.ultimateParent.map { p => 
+            Group’s ultimate parent company: @{p.name}<br />
+	  }
+          Responsible member: @{r.company.name}<br />
         </span>
     </h1>
     
@@ -42,7 +44,7 @@
             <div class="card">
                 <h2 class="heading-medium flush--top">Next return due</h2>
                 <p>31 July 2021</p>
-                <p><a href="#">Submit a return</a></p>
+                <p><a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.returnAction(2020, "")/'>Submit a return</a></p>
             </div>
         </div>
 

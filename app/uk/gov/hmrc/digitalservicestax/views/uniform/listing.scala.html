@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@*
-
 @import cats.implicits._
-
-@(key: String, items: List[(Html, Option[Html], Option[Html])], min: Int, max: Int, messages: UniformMessages[Html])
+@import ltbs.uniform.common.web._
+@(items: List[(Html, String, String)], messages: UniformMessages[Html])
 
 @if(items.nonEmpty) {
 <table class="table">
@@ -39,18 +37,13 @@
             @item
 	  </td>
           <td class="table__cell align-centre">
-	    @if(items.length > min) {
-              @deleteLink
-	    } 
+            <a href="@deleteLink">@messages("tasklist.delete")</a>
           </td>
-
           <td class="table__cell align-right">
-            @editLink
+            <a href="@{editLink}/">@messages("tasklist.edit")</a>
           </td>
-
         </tr>
     }
   </tbody>
 </table>
 }
-*@
