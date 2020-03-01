@@ -31,11 +31,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 object RegJourney {
 
+  case class CompanyRegWrapper(company: Company, utr: Option[UTR], useSafeId: Boolean)
+
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
   private def message(key: String, args: String*) =
     Map(key -> Tuple2(key, args.toList))
+
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
@@ -44,7 +47,8 @@ object RegJourney {
     import interpreter._
 
     for {
-      company <- backendService.lookupCompany() >>= {
+      
+      companyRegWrapper <- backendService.lookupCompany() >>= {
 
         // found a matching company
         case Some(company) =>
@@ -52,7 +56,7 @@ object RegJourney {
             confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", company)
             //TODO Check if we should be signing the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-          } yield (company)
+          } yield CompanyRegWrapper(company, Option.empty[UTR], false)
 
         // no matching company found
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
@@ -60,7 +64,7 @@ object RegJourney {
             (
               ask[NonEmptyString]("company-name"),
               ask[Address]("company-registered-office-address")
-            ).mapN(Company.apply)
+            ).mapN(Company.apply).map(CompanyRegWrapper(_, Option.empty[UTR], true))
           case true =>
             for {
               utr <- ask[UTR]("enter-utr")
@@ -71,24 +75,26 @@ object RegJourney {
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
               //TODO Check if we should be signing the user out
               _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-            } yield company
+            } yield CompanyRegWrapper(company, utr.some, false)
         }
       }
 
       registration <- (
-        company.pure[F],
+        companyRegWrapper.company.pure[F],
         ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},
-        for {
-          isGroup <- ask[Boolean]("check-if-group")
-          parentName <- ask[NonEmptyString]("ultimate-parent-company-name") when isGroup
-          parentAddress <- ask[Address](
-            "ultimate-parent-company-address",
-            customContent = message("ultimate-parent-company-address.heading", parentName.getOrElse(None).toString)
-          ) when isGroup
-          //TODO fix this, we need parentName to display on the parentAddress page, but without returning options from using when isGroup
-          //Below be a dirty hack
-        } yield Company(parentName.getOrElse(NonEmptyString(" ")), parentAddress.getOrElse(UkAddress(NonEmptyString(" "), "", "", "", Postcode("AA111AA")))).some,
+          interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
+        ask[Boolean]("check-if-group") >>= {
+          case true =>
+            for {
+              parentName <- ask[NonEmptyString]("ultimate-parent-company-name")
+              parentAddress <- ask[Address](
+                "ultimate-parent-company-address",
+                customContent = message("ultimate-parent-company-address.heading", parentName)
+              )
+            } yield Company(parentName, parentAddress).some
+          case false =>
+            Option.empty[Company].pure[F]
+        },
         ask[ContactDetails]("contact-details"),
         ask[Boolean]("check-liability-date") flatMap {
           case true => Period.firstPeriodStart.pure[F]
@@ -98,8 +104,8 @@ object RegJourney {
             )
         },
         ask[LocalDate]("accounting-period-end-date"),
-        None.pure[F],  //TODO
-        false.pure[F], //TODO
+        companyRegWrapper.utr.pure[F],
+        companyRegWrapper.useSafeId.pure[F],
         None.pure[F]
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))

@@ -17,9 +17,12 @@
 package uk.gov.hmrc.digitalservicestaxfrontend.actions
 
 import javax.inject.Inject
+import ltbs.uniform.UniformMessages
 import play.api.Logger
-import play.api.mvc.Results.{Forbidden, Redirect}
+import play.api.i18n.MessagesApi
+import play.api.mvc.Results.{Forbidden, Redirect, Ok, Continue}
 import play.api.mvc._
+import play.api.http.Status._
 import play.twirl.api.Html
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
 import uk.gov.hmrc.auth.core._
@@ -28,8 +31,9 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolment
 import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
-import uk.gov.hmrc.digitalservicestax.controllers.routes
+import uk.gov.hmrc.digitalservicestax.controllers.{DSTInterpreter, routes}
 import uk.gov.hmrc.digitalservicestax.data.Registration
+import uk.gov.hmrc.digitalservicestax.views
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -89,12 +93,22 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
 
   private def invalidRole(credentialRole: Option[CredentialRole])(implicit request: Request[_]): Option[Result] = {
     credentialRole collect {
-      case Assistant => Forbidden(Html("invalidRole"))
+      //TODO implement UFMessages and interpeter
+//      case Assistant => Forbidden(views.html.main_template(
+//        title =  "Digital Services Tax")(Html("invalid role")
+//      ))
+      case Assistant =>Forbidden(Html("invalidRole"))
     }
   }
 
   private def invalidAffinityGroup(affinityGroup: Option[AffinityGroup])(implicit request: Request[_]): Option[Result] = {
     affinityGroup match {
+//      case Some(Agent) | None => Some(Forbidden(views.html.main_template(
+//        title =  "Digital Services Tax")(Html("invalidAffinity - Agent")
+//      )))
+//      case Some(Individual) | None => Some(Forbidden(views.html.main_template(
+//        title =  "Digital Services Tax")(Html("invalidAffinity - Individual")
+//      )))
       case Some(Agent) | None => Some(Forbidden(Html("invalidAffinity - Agent")))
       case Some(Individual) | None => Some(Forbidden(Html("invalidAffinity - Individual")))
       case _ => None

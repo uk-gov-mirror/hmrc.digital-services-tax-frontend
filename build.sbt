@@ -48,3 +48,4 @@ libraryDependencies ++= Seq(
 )
 
 routesImport += "uk.gov.hmrc.digitalservicestax.data._"
+TwirlKeys.templateImports += "uk.gov.hmrc.digitalservicestax.data._"

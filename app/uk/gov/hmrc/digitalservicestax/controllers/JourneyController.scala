@@ -19,6 +19,7 @@ package controllers
 
 import config.AppConfig
 import connectors._
+import cats.implicits._
 import data._
 import frontend.Kickout
 import repo.JourneyStateStore
@@ -138,13 +139,17 @@ class JourneyController @Inject()(
     import interpreter._
     import journeys.RegJourney._
 
-    val playProgram = registrationJourney[WM](
-      create[RegTellTypes, RegAskTypes](messages(request)),
-      hod
-    )
+    backend.lookupRegistration().flatMap {
+      case None =>
+        val playProgram = registrationJourney[WM](
+          create[RegTellTypes, RegAskTypes](messages(request)),
+          hod
+        )
+        playProgram.run(targetId, purgeStateUponCompletion = true) {
+          backend.submitRegistration(_).map { _ => Redirect(routes.JourneyController.index) }
+      }
 
-    playProgram.run(targetId, purgeStateUponCompletion = true) {
-      backend.submitRegistration(_).map{ _ => Redirect(routes.JourneyController.index)}
+      case Some(reg) => index(request)
     }
   }
 
@@ -170,17 +175,24 @@ class JourneyController @Inject()(
     }
   }
 
-  def index: Action[AnyContent] = authorisedAction.async {
-    implicit request : AuthorisedRequest[AnyContent] =>
+  def index: Action[AnyContent] = Action.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-      Future.successful(
+    backend.lookupRegistration().map {
+      case None =>
+          Redirect(routes.JourneyController.registerAction(" "))
+      case Some(reg) if reg.registrationNumber.isDefined =>
         Ok(views.html.main_template(
-        title =
-          s"${msg("common.title.short")} - ${msg("common.title")}"
-      )(views.html.landing(request.registration))
-        )
-      )
+          title =
+            s"${msg("common.title.short")} - ${msg("common.title")}"
+        )(views.html.landing(reg.some)))
+      case Some(reg) =>
+        Ok(views.html.main_template(
+          title =
+            s"${msg("common.title.short")} - ${msg("common.title")}"
+        )(views.html.confirmation("registration-sent", reg.company.name, reg.contact.email)(msg)))
+        
+    }
   }
 
 }
