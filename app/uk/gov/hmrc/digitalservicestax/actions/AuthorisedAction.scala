@@ -44,7 +44,7 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
   (implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
   extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions {
 
-  def getDstEnrolment(enrolments: Enrolments): Option[EnrolmentIdentifier] = {
+  private def getDstEnrolment(enrolments: Enrolments): Option[EnrolmentIdentifier] = {
     val dst = for {
       enrolment <- enrolments.enrolments if enrolment.key.equalsIgnoreCase("HMRC-DST-ORG")
       dst <- enrolment.getIdentifier("EtmpRegistrationNumber") if dst.value.slice(2, 5) == "DST"
