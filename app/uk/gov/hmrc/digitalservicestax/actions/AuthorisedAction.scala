@@ -17,25 +17,33 @@
 package uk.gov.hmrc.digitalservicestaxfrontend.actions
 
 import javax.inject.Inject
+import ltbs.uniform.UniformMessages
 import play.api.Logger
-import play.api.mvc.Results.{Forbidden, Redirect}
+import play.api.i18n.MessagesApi
+import play.api.mvc.Results.{Continue, Forbidden, Ok, Redirect}
 import play.api.mvc._
+import play.api.http.Status._
 import play.twirl.api.Html
-import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual}
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, credentialRole, internalId}
 import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
-import uk.gov.hmrc.digitalservicestax.controllers.routes
+import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
+import uk.gov.hmrc.digitalservicestax.controllers.{DSTInterpreter, routes}
+import uk.gov.hmrc.digitalservicestax.data.Registration
+import uk.gov.hmrc.digitalservicestax.views
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
 
-class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConnector: AuthConnector)
-  (implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
+class AuthorisedAction @Inject()(
+  mcc: MessagesControllerComponents,
+  val authConnector: AuthConnector
+)(implicit val appConfig: AppConfig, val executionContext: ExecutionContext)
   extends ActionBuilder[AuthorisedRequest, AnyContent] with ActionRefiner[Request, AuthorisedRequest] with AuthorisedFunctions {
 
   override protected def refine[A](request: Request[A]): Future[Either[Result, AuthorisedRequest[A]]] = {
@@ -44,44 +52,36 @@ class AuthorisedAction @Inject()(mcc: MessagesControllerComponents, val authConn
 
     val retrieval =  allEnrolments and credentialRole and internalId and affinityGroup
 
-    authorised(AuthProviders(GovernmentGateway, Verify)).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
+    authorised(AuthProviders(GovernmentGateway, Verify) and Organisation).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
 
       val internalId = id.getOrElse(throw new RuntimeException("No internal ID for user"))
 
-      val errors: Option[Result] = invalidRole(role)(request).orElse(invalidAffinityGroup(affinity)(request))
-
-      //TODO DST reference number match
-
-        errors match {
-          case e if e.nonEmpty => Future.successful (Left (errors.get) )
-          case _ => Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
-        }
+      Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
 
     } recover {
-      case _: NoActiveSession =>
+      case ex: UnsupportedCredentialRole =>
+        Logger.warn(
+          s"unsupported credential role on account, with message ${ex.msg}, for reason ${ex.reason}",
+          ex)
+        Left(Ok(
+          Html("Incorrect account type")
+        ))
+      case af: UnsupportedAffinityGroup =>
+        Logger.warn(s"invalid account affinity type, with message ${af.msg}, for reason ${af.reason}",
+          af)
+        Left(Ok(
+          Html("Incorrect account type")
+        ))
+      case _ : NoActiveSession =>
         Logger.info(s"Recover - no active session")
         Left(
           Redirect(routes.AuthenticationController.signIn())
         )
-
     }
   }
 
   override def parser = mcc.parsers.anyContent
 
-  private def invalidRole(credentialRole: Option[CredentialRole])(implicit request: Request[_]): Option[Result] = {
-    credentialRole collect {
-      case Assistant => Forbidden(Html("invalidRole"))
-    }
-  }
-
-  private def invalidAffinityGroup(affinityGroup: Option[AffinityGroup])(implicit request: Request[_]): Option[Result] = {
-    affinityGroup match {
-      case Some(Agent) | None => Some(Forbidden(Html("invalidAffinity - Agent")))
-      case Some(Individual) | None => Some(Forbidden(Html("invalidAffinity - Individual")))
-      case _ => None
-    }
-  }
 }
 
 case class AuthorisedRequest[A](

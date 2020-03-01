@@ -18,14 +18,13 @@ package uk.gov.hmrc.digitalservicestax
 package journeys
 
 import scala.language.higherKinds
-
 import connectors.DSTService
 import data._
 import frontend.Kickout
-
 import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
+
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 

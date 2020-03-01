@@ -17,6 +17,7 @@
 package uk.gov.hmrc.digitalservicestax.connectors
 
 import uk.gov.hmrc.digitalservicestax.data._
+
 import scala.language.higherKinds
 import cats.~>
 
