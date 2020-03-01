@@ -50,7 +50,7 @@ class JourneyController @Inject()(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
   implicit val messagesApi: MessagesApi
-)extends ControllerHelpers
+) extends ControllerHelpers
   with FrontendHeaderCarrierProvider
   with I18nSupport
   with AuthorisedFunctions {

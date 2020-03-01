@@ -27,7 +27,6 @@ import java.time.LocalDate
 
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
-import uk.gov.hmrc.http.HeaderCarrier
 
 object RegJourney {
 
@@ -43,7 +42,7 @@ object RegJourney {
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: DSTService[F]
-  )(implicit hc: HeaderCarrier): F[Registration] = {
+  ): F[Registration] = {
     import interpreter._
 
     for {
