@@ -170,15 +170,24 @@ class JourneyController @Inject()(
     }
   }
 
-  def index: Action[AnyContent] = Action { implicit request =>
+  def index: Action[AnyContent] = Action.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-
-      Ok(views.html.main_template(
-        title =
-          s"${msg("common.title.short")} - ${msg("common.title")}"
-      )(views.html.landing()))
-
+    backend.lookupRegistration() map {
+      case None =>
+          Redirect(routes.JourneyController.registerAction(" "))
+      case Some(r) if r.registrationNumber.isDefined => 
+        Ok(views.html.main_template(
+          title =
+            s"${msg("common.title.short")} - ${msg("common.title")}"
+        )(views.html.landing(r)))
+      case Some(r) =>
+        Ok(views.html.main_template(
+          title =
+            s"${msg("common.title.short")} - ${msg("common.title")}"
+        )(views.html.holding(r)))
+        
+    }
   }
 
 }
