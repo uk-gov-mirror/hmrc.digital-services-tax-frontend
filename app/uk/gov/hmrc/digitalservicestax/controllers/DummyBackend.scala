@@ -25,6 +25,6 @@ case class DummyBackend(implicit ec: ExecutionContext) extends BackendService[Fu
     Future.successful(None)          
 
   def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    Future.successful(Some(Company(NonEmptyString("testco"), UkAddress(NonEmptyString("a"),"b","c","d", Postcode("AB12 3CD")))))    
+    Future.successful(Some(Company(NonEmptyString("Dotcom Bubble ltd."), UkAddress(NonEmptyString("51 MySpace Apartments"),"1 Bebo Street","Aolton","Askjeeveshire", Postcode("AB12 3CD")))))
 
 }

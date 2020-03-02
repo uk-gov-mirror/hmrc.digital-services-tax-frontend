@@ -18,6 +18,7 @@ package uk.gov.hmrc.digitalservicestax
 package data
 
 //import services._
+
 import java.time.LocalDate
 
 case class Registration (

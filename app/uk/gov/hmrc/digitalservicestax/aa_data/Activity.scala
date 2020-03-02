@@ -18,13 +18,10 @@ package uk.gov.hmrc.digitalservicestax.data
 
 import enumeratum._
 
-import scala.collection.immutable
-
 sealed trait Activity extends EnumEntry
 object Activity extends Enum[Activity] {
-  def values: immutable.IndexedSeq[Activity] = findValues
+  def values = findValues
   case object SocialMedia       extends Activity
   case object SearchEngine      extends Activity
-  case object OnlineMarketplace extends Activity
+  case object OnlineMarketplace extends Activity  
 }
-

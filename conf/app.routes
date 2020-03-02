@@ -1,17 +1,19 @@
 # microservice specific routes
 
-GET        /                    uk.gov.hmrc.digitalservicestax.controllers.JourneyController.index
+GET        /assets/*file            controllers.Assets.versioned(path="/public", file: Asset)
 
-GET        /register            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
-GET        /register/:id        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
-POST       /register            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
-POST       /register/:id        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
+GET        /                        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.index
 
-GET        /submit-return            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
-GET        /submit-return/:id        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
-POST       /submit-return            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
-POST       /submit-return/:id        uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
+GET        /register                uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
+GET        /register/:id            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
+POST       /register                uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
+POST       /register/:id            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
 
-GET        /sign-in             uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signIn()
-GET        /sign-out            uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signOut()
+GET        /submit-return           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
+GET        /submit-return/:id       uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
+POST       /submit-return           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
+POST       /submit-return/:id       uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
+
+GET        /sign-in                 uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signIn()
+GET        /sign-out                uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signOut()
 

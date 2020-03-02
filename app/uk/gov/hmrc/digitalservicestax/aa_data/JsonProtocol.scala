@@ -19,158 +19,48 @@ package uk.gov.hmrc.digitalservicestax.aa_data
 import enumeratum.EnumFormats
 import play.api.libs.json._
 import uk.gov.hmrc.digitalservicestax.data._
-
+import shapeless.tag.@@
 object JsonProtocol {
+
+  def validatedStringFormat(A: ValidatedType[String], name: String) = new Format[String @@ A.Tag] {
+    override def reads(json: JsValue): JsResult[String @@ A.Tag] = json match {
+      case JsString(value) =>
+        A.validateAndTransform(value) match {
+          case Some(v) => JsSuccess(A(v))
+          case None => JsError(s"Expected a valid $name, got $value instead")
+        }
+      case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid $name, got $xs instead""")))
+    }
+
+    override def writes(o: String @@ A.Tag): JsValue = JsString(o)
+  }
 
   implicit val nonEmptyStringFormat: Format[NonEmptyString] = new Format[NonEmptyString] {
     override def reads(json: JsValue): JsResult[NonEmptyString] = json match {
-      case JsString(value) if value.length > 0 => JsSuccess(NonEmptyString.apply(value))
+      case JsString(value) if value.nonEmpty => JsSuccess(NonEmptyString.apply(value))
       case _ => JsError((JsPath \ "value") -> JsonValidationError(Seq(s"Expected non empty string, got $json")))
     }
 
     override def writes(o: NonEmptyString): JsValue = JsString(o)
   }
 
-  implicit val postcodeFormat: Format[Postcode] = new Format[Postcode] {
-    override def reads(json: JsValue): JsResult[Postcode] = {
-      json match {
-        case JsString(value) =>
-          Postcode.validateAndTransform(value) match {
-            case Some(validPostCode) => JsSuccess(Postcode(validPostCode))
-            case None => JsError(s"Expected a valid postcode regex, got $value instead")
-          }
-        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid postcode string, got $xs instead""")))
-      }
-    }
-
-    override def writes(o: Postcode): JsValue = {
-      JsString(o)
-    }
-  }
-
-  implicit val phoneNumberFormat: Format[PhoneNumber] = new Format[PhoneNumber] {
-    override def reads(json: JsValue): JsResult[PhoneNumber] = {
-      json match {
-        case JsString(value) =>
-          PhoneNumber.validateAndTransform(value) match {
-            case Some(validPhoneNumber) => JsSuccess(PhoneNumber(validPhoneNumber))
-            case None => JsError(s"Expected a valid phone number, got $value instead")
-          }
-        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid phone number string, got $xs instead""")))
-      }
-    }
-
-    override def writes(o: PhoneNumber): JsValue = {
-      JsString(o)
-    }
-  }
-
-  implicit val utrFormat: Format[UTR] = new Format[UTR] {
-    override def reads(json: JsValue): JsResult[UTR] = {
-      json match {
-        case JsString(value) =>
-          UTR.validateAndTransform(value) match {
-            case Some(validCode) => JsSuccess(UTR(validCode))
-            case None => JsError(s"Expected a valid UTR number, got $value instead.")
-          }
-
-        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid UTR string, got $xs instead""")))
-      }
-    }
-
-    override def writes(o: UTR): JsValue = JsString(o)
-  }
-
-
-  implicit val emailFormat: Format[Email] = new Format[Email] {
-    override def reads(json: JsValue): JsResult[Email] = {
-      json match {
-        case JsString(value) =>
-          Email.validateAndTransform(value) match {
-            case Some(validEmail) => JsSuccess(Email(validEmail))
-            case None => JsError(s"Expected a valid address number, got $value instead.")
-          }
-
-        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid email address string, got $xs instead""")))
-      }
-    }
-
-    override def writes(o: Email): JsValue = JsString(o)
-  }
-
-  implicit val countryCodeFormat: Format[CountryCode] = new Format[CountryCode] {
-    override def reads(json: JsValue): JsResult[CountryCode] = {
-      json match {
-        case JsString(value) =>
-          CountryCode.validateAndTransform(value) match {
-            case Some(validCode) => JsSuccess(CountryCode(validCode))
-            case None => JsError(s"Expected a valid country code definition, got $value instead.")
-          }
-
-        case xs : JsValue => JsError(JsPath -> JsonValidationError(Seq(s"""Expected a valid country code string, got $xs instead""")))
-      }
-    }
-
-    override def writes(o: CountryCode): JsValue = {
-      JsString(o)
-    }
-  }
-
+  implicit val postcodeFormat       = validatedStringFormat(Postcode, "postcode")
+  implicit val phoneNumberFormat    = validatedStringFormat(PhoneNumber, "phone number")
+  implicit val utrFormat            = validatedStringFormat(UTR, "UTR")
+  implicit val emailFormat          = validatedStringFormat(Email, "email")
+  implicit val countryCodeFormat    = validatedStringFormat(CountryCode, "country code")
+  implicit val sortCodeFormat       = validatedStringFormat(SortCode, "sort code")
+  implicit val accountNumberFormat  = validatedStringFormat(AccountNumber, "account number")
+  implicit val ibanFormat           = validatedStringFormat(IBAN, "IBAN number")
 
   implicit val foreignAddressFormat: OFormat[ForeignAddress] = Json.format[ForeignAddress]
   implicit val ukAddressFormat: OFormat[UkAddress] = Json.format[UkAddress]
-
   implicit val addressFormat: OFormat[Address] = Json.format[Address]
   implicit val companyFormat: OFormat[Company] = Json.format[Company]
   implicit val contactDetailsFormat: OFormat[ContactDetails] = Json.format[ContactDetails]
-
   implicit val registrationFormat: OFormat[Registration] = Json.format[Registration]
-
   implicit val activityFormat: Format[Activity] = EnumFormats.formats(Activity)
   implicit val groupCompanyFormat: Format[GroupCompany] = Json.format[GroupCompany]
-
-  //implicit val moneyFormat: Format[Money] = Json.format[BigDecimal]
-
-
-  implicit val sortCodeFormat: Format[SortCode] = new Format[SortCode] {
-    override def reads(json: JsValue): JsResult[SortCode] = {
-      json match {
-        case JsString(value) =>
-          SortCode.validateAndTransform(value) match {
-            case Some(validCode) => JsSuccess(SortCode(validCode))
-            case None => JsError(s"Expected a valid sort code definition, got $value instead.")
-          }
-
-        case xs : JsValue => JsError(
-          JsPath -> JsonValidationError(Seq(s"""Expected a valid sort code string, got $xs instead"""))
-        )
-      }
-    }
-
-    override def writes(o: SortCode): JsValue = {
-      JsString(o)
-    }
-  }
-
-  implicit val accountNumberFormat: Format[AccountNumber] = new Format[AccountNumber] {
-    override def reads(json: JsValue): JsResult[AccountNumber] = {
-      json match {
-        case JsString(value) =>
-          SortCode.validateAndTransform(value) match {
-            case Some(validCode) => JsSuccess(AccountNumber(validCode))
-            case None => JsError(s"Expected a valid sort code definition, got $value instead.")
-          }
-
-        case xs : JsValue => JsError(
-          JsPath -> JsonValidationError(Seq(s"""Expected a valid sort code string, got $xs instead"""))
-        )
-      }
-    }
-
-    override def writes(o: AccountNumber): JsValue = {
-      JsString(o)
-    }
-  }
 
   implicit val percentFormat: Format[Percent] = new Format[Percent] {
     override def reads(json: JsValue): JsResult[Percent] = {
@@ -204,7 +94,11 @@ object JsonProtocol {
     }
   }
 
+<<<<<<< HEAD
   implicit val groupCompanyMapFormat: Format[Map[GroupCompany, Money]] = new Format[Map[GroupCompany, Money]] {
+=======
+  implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = new OFormat[Map[GroupCompany, Money]] {
+>>>>>>> 2ba61e30a4d7cb09103a49466084d745b43dc080
     override def reads(json: JsValue): JsResult[Map[GroupCompany, Money]] = {
       JsSuccess(json.as[Map[String, JsNumber]].map { case (k, v) =>
 
@@ -213,30 +107,10 @@ object JsonProtocol {
       })
     }
 
-    override def writes(o: Map[GroupCompany, Money]): JsValue = {
+    override def writes(o: Map[GroupCompany, Money]): JsObject = {
       JsObject(o.toSeq.map { case (k, v) =>
         s"${k.name}:${k.utr}" -> JsNumber(v)
       })
-    }
-  }
-
-  implicit val ibanFormat: Format[IBAN] = new Format[IBAN] {
-    override def reads(json: JsValue): JsResult[IBAN] = {
-      json match {
-        case JsString(value) =>
-          IBAN.validateAndTransform(value) match {
-            case Some(validCode) => JsSuccess(IBAN(validCode))
-            case None => JsError(s"Expected a valid IBAN number definition, got $value instead.")
-          }
-
-        case xs : JsValue => JsError(
-          JsPath -> JsonValidationError(Seq(s"""Expected a string with an IBAN number, got $xs instead"""))
-        )
-      }
-    }
-
-    override def writes(o: IBAN): JsValue = {
-      JsString(o)
     }
   }
 
@@ -244,6 +118,5 @@ object JsonProtocol {
   implicit val foreignBankAccountFormat: OFormat[ForeignBankAccount] = Json.format[ForeignBankAccount]
   implicit val bankAccountFormat: OFormat[BankAccount] = Json.format[BankAccount]
   implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
-
   implicit val returnFormat: OFormat[Return] = Json.format[Return]
 }

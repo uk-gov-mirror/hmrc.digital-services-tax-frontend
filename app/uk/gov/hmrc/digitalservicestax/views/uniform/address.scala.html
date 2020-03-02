@@ -20,20 +20,6 @@
 
 @(key: List[String], values: Input, errors: ErrorTree, messages: UniformMessages[Html])
 
-<fieldset>
-  @key.map { k =>
-      <legend>
-        @if(key.length == 1){ <h1 class="fieldset__heading"> } else { <h2 class="heading-medium"> }
-          @messages(s"$k.heading")
-        @if(key.length == 1){ </h1> } else { </h2> }
-      </legend>
-      @messages.get(s"$k.intro").map { intro =>
-          <p class="govuk-body">
-          @intro
-          </p>
-      }
-  }
-
   @for(field <- List("line1", "line2", "town", "county", "postcode")) {
     @defining(
       field match {
@@ -46,7 +32,9 @@
 
       <div class="form-group@if(errorOpt.nonEmpty) { form-group-error}">
 
-        <label class="form-label" for="@{(key :+field).mkString("_")}-input">@messages((key :+ field :+ "heading").mkString("."))</label>
+        <label class="form-label" for="@{(key :+field).mkString("_")}-input">
+            @messages((key :+ field :+ "heading").mkString("."))
+        </label>
         
         @for(err <- errorOpt.fold(List.empty[ErrorMsg])(_.toList)) {
           @error_message({(key :+field).mkString("-")}, err.prefixWith(key :+ field).render(messages), messages)
@@ -64,5 +52,3 @@
     }
 
   }
-
-</fieldset>
