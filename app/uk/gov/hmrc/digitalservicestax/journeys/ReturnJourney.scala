@@ -24,18 +24,26 @@ import data._
 import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
-import ltbs.uniform._
+import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
 object ReturnJourney {
 
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
-  type ReturnAskTypes = RepaymentDetails :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
+  type ReturnAskTypes = (NonEmptyString, Boolean) :: DomesticBankAccount :: ForeignBankAccount :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
   ): F[Return] = {
     import interpreter._
+
+    def askRepaymentDetails(key: String): F[RepaymentDetails] = for {
+      nameAndType <- ask[(NonEmptyString, Boolean)](s"$key-type")
+      account     <- nameAndType._2 match {
+        case true => ask[DomesticBankAccount](s"$key-domestic")
+        case false => ask[ForeignBankAccount](s"$key-foreign")          
+      }
+    } yield RepaymentDetails(nameAndType._1, account)
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
@@ -70,10 +78,10 @@ object ReturnJourney {
         askAmountForCompanies(groupCos),
         ask[Money]("allowance-amount"),
         ask[Money]("total-liability"),
-        ask[RepaymentDetails]("repayment") when ask[Boolean]("repayment-needed")
+        askRepaymentDetails("repayment") when ask[Boolean]("repayment-needed")
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
-      _ <- tell("confirmation", Confirmation(dstReturn))
+//      _ <- tell("confirmation", Confirmation(dstReturn))
     } yield dstReturn
   }
 
