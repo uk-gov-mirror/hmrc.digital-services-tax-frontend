@@ -204,7 +204,7 @@ object JsonProtocol {
     }
   }
 
-  implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = new Format[Map[GroupCompany, Money]] {
+  implicit val groupCompanyMapFormat: Format[Map[GroupCompany, Money]] = new Format[Map[GroupCompany, Money]] {
     override def reads(json: JsValue): JsResult[Map[GroupCompany, Money]] = {
       JsSuccess(json.as[Map[String, JsNumber]].map { case (k, v) =>
 
