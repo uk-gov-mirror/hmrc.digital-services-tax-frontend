@@ -18,6 +18,10 @@ common.False=No
 common.feedback=What do you think about this service?
 common.thirty-seconds=(30 seconds)
 
+# time out
+time-out.title=For your security, we signed you out
+time-out.save=Your progress will saved for 30 days
+
 #Registration
 confirm-company-to-register.heading=Is this the company you want to register?
 confirm-company-to-register.TRUE=Yes
