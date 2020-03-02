@@ -108,7 +108,6 @@ object RegJourney {
         None.pure[F]
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))
-      _ <- tell("registration-sent", Confirmation(registration))
     } yield (registration)
   }
 
