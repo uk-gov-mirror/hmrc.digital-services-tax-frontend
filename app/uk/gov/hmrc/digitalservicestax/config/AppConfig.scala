@@ -29,27 +29,29 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
 
   private def loadConfig(key: String) = config.get[String](key)
 
-  private val contactBaseUrl = servicesConfig.baseUrl("contact-frontend")
-  private val assetsUrl         = loadConfig("assets.url")
-  private val serviceIdentifier = "MyService"
+  private val contactBaseUrl: String               = servicesConfig.baseUrl("contact-frontend")
+  private val contactHost: String                  = config.get[String](s"contact-frontend.host")
+  private val contactFormServiceIdentifier: String = loadConfig("appName")
+  private val assetsUrl: String                    = loadConfig("assets.url")
 
   lazy val assetsPrefix: String   = assetsUrl + loadConfig("assets.version")
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   lazy val analyticsHost: String  = loadConfig(s"google-analytics.host")
 
-  lazy val appName: String = loadConfig("appName")
-  private lazy val companyAuthFrontend = servicesConfig.getConfString("company-auth.url", "")
-  private lazy val companyAuthSignInPath = servicesConfig.getConfString("company-auth.sign-in-path", "")
-  private lazy val companyAuthSignOutPath = servicesConfig.getConfString("company-auth.sign-out-path", "")
-  lazy val ggLoginUrl: String = s"$companyAuthFrontend$companyAuthSignInPath"
+  lazy val appName: String                        = loadConfig("appName")
+  private lazy val companyAuthFrontend: String    = servicesConfig.getConfString("company-auth.url", "")
+  private lazy val companyAuthSignInPath: String  = servicesConfig.getConfString("company-auth.sign-in-path", "")
+  private lazy val companyAuthSignOutPath: String = servicesConfig.getConfString("company-auth.sign-out-path", "")
+  lazy val ggLoginUrl: String                     = s"$companyAuthFrontend$companyAuthSignInPath"
 
-  val reportAProblemPartialUrl: String = s"$contactBaseUrl/contact/problem_reports_ajax?service=$serviceIdentifier"
-  val reportAProblemNonJSUrl: String   = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$serviceIdentifier"
+  val reportAProblemPartialUrl: String = s"$contactBaseUrl/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  val reportAProblemNonJSUrl: String   = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   val mongoShortLivedStoreExpireAfter: Duration = servicesConfig.getDuration("mongodb.shortLivedCache.expireAfter")
   val mongoJourneyStoreExpireAfter: Duration    = servicesConfig.getDuration("mongodb.journeyStore.expireAfter")
 
-  lazy val dstIndexPage: String = loadConfig("dst-index-page-url")
-  lazy val signOutDstUrl: String = s"$companyAuthFrontend$companyAuthSignOutPath?continue=$feedbackSurveyUrl"
-  lazy val feedbackSurveyUrl: String = loadConfig("microservice.services.feedback-survey.url")
+  lazy val dstIndexPage: String        = loadConfig("dst-index-page-url")
+  lazy val signOutDstUrl: String       = s"$companyAuthFrontend$companyAuthSignOutPath?continue=$feedbackSurveyUrl"
+  lazy val feedbackSurveyUrl: String   = loadConfig("microservice.services.feedback-survey.url")
+  lazy val betaFeedbackUrlAuth: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
 }

@@ -24,8 +24,10 @@ import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 
+import scala.concurrent.ExecutionContext
+
 class AuthenticationController @Inject()(mcc: MessagesControllerComponents)
-  (implicit appConfig: AppConfig)
+  (implicit appConfig: AppConfig, ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport {
 
   def signIn: Action[AnyContent] = Action { implicit request =>
@@ -36,5 +38,15 @@ class AuthenticationController @Inject()(mcc: MessagesControllerComponents)
     Redirect(appConfig.signOutDstUrl).withNewSession
   }
 
+  def timeIn(referrer: String): Action[AnyContent] = Action { implicit request =>
+    Redirect(appConfig.ggLoginUrl, Map("continue" -> Seq(referrer), "origin" -> Seq(appConfig.appName)))
+  }
+
+  def timeOut: Action[AnyContent] = Action { implicit request =>
+    lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+
+    Ok(uk.gov.hmrc.digitalservicestax.views.html.time_out()).withNewSession
+  }
 }
 
