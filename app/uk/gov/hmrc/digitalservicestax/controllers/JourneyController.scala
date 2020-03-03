@@ -34,6 +34,7 @@ import play.twirl.api.{Html, HtmlFormat}
 import HtmlFormat.escape
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
@@ -47,9 +48,10 @@ class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
   val http: HttpClient,
   val authConnector: AuthConnector,
-  servicesConfig: ServicesConfig  
+  servicesConfig: ServicesConfig,
+  val mongo: play.modules.reactivemongo.ReactiveMongoApi  
 )(
-  implicit val appConfig: AppConfig,
+  implicit val config: AppConfig,
   ec: ExecutionContext,
   implicit val messagesApi: MessagesApi
 ) extends ControllerHelpers
@@ -66,10 +68,7 @@ class JourneyController @Inject()(
     }
   }
 
-  val interpreter = DSTInterpreter(appConfig, this, messagesApi)
-
-  implicit val persistence: PersistenceEngine[Request[AnyContent]] =
-    UnsafePersistence()
+  val interpreter = DSTInterpreter(config, this, messagesApi)
 
   implicit def autoGroupListingTell = new ListingTell[Html, GroupCompany] {
     def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
@@ -143,9 +142,16 @@ class JourneyController @Inject()(
       Html(in.toString)
   }
   
-  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>
+  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
+
+    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+      MongoPersistence[AuthorisedRequest[AnyContent]](
+        mongo,
+        collectionName = "uf-registrations",
+        config.mongoJourneyStoreExpireAfter        
+      )(_.internalId)
 
     backend.lookupRegistration().flatMap {
       case None =>
@@ -162,10 +168,16 @@ class JourneyController @Inject()(
   }
 
   def returnAction(year: Int, targetId: String): Action[AnyContent] = authorisedAction.async {
-    implicit request: Request[AnyContent] =>
+    implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
 
+    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+      MongoPersistence[AuthorisedRequest[AnyContent]](
+        mongo,
+        collectionName = "uf-returns",
+        config.mongoJourneyStoreExpireAfter
+      )(_.internalId)
 
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
@@ -193,7 +205,7 @@ class JourneyController @Inject()(
         Ok(views.html.main_template(
           title =
             s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.landing(reg.some)))
+        )(views.html.landing(reg)))
       case Some(reg) =>
         Ok(views.html.main_template(
           title =

@@ -17,30 +17,28 @@
 @import uk.gov.hmrc.digitalservicestax.config.AppConfig
 
 @import uk.gov.hmrc.digitalservicestax.data.Registration
-@(registration: Option[Registration])(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
+@(reg: Registration)(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
 
 <div class="govuk-grid-column-full">
 
     <h1 class="heading-xlarge">
         @messages("landing.heading")
-        @registration.map { reg =>
-            <span class="hint">
-                @messages("landing.dst-no")
-                @reg.ultimateParent.map { parent =>
-                    @messages("landing.ultimate-parent-name", parent.name)<br />
-                }
-                @messages("landing.company-name", reg.company.name)<br />
-            </span>
-        }
+        <span class="hint">
+          @reg.registrationNumber.map { regNo =>
+            @messages("landing.dst-no", regNo)<br />
+          }	  
+          @reg.ultimateParent.map { parent =>
+            @messages("landing.ultimate-parent-name", parent.name)<br />
+          }
+          @messages("landing.company-name", reg.company.name)<br />
+        </span>
     </h1>
     
     <div class="grid-row">
         <div class="column-one-third">
             <div class="card">
                 <h2 class="heading-medium flush--top">@messages("landing.payment-due")</h2>
-                @registration.map { reg =>
                     <p>@reg.dateLiable</p>
-                }
                 <p><a href="#">@messages("landing.pay-tax")</a></p>
             </div>
         </div>

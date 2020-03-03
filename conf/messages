@@ -162,6 +162,7 @@ details-not-correct.kickout.sign-in-again=You will need to sign in again using t
 #service page
 landing.heading=Digital Services Tax details
 landing.ultimate-parent-name=Group’s ultimate parent company: {0}
+landing.dst-no=DST Registation Number: {0}
 landing.company-name=Responsible member: {0}
 landing.payment-due=Next payment due
 landing.pay-tax=Pay your Digital Services Tax
