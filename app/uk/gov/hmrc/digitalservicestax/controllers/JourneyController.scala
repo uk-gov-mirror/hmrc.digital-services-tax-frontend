@@ -25,12 +25,14 @@ import frontend.Kickout
 import repo.JourneyStateStore
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad, ListingTell, ListingTellRow}
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, JourneyConfig, ListingTell, ListingTellRow, WebMonad}
 import ltbs.uniform.interpreters.playframework._
 import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
+import play.twirl.api.{Html, HtmlFormat}
+import HtmlFormat.escape
+
 import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
@@ -74,6 +76,18 @@ class JourneyController @Inject()(
       views.html.uniform.listing(rows.map {
         case ListingTellRow(value, editLink, deleteLink) => (tell.render(value, "a", messages), editLink, deleteLink)
       }, messages)
+  }
+
+//  implicit def autoGroupListingTell(implicit tell: GenericWebTell[GroupCompany, Html]) = new ListingTell[Html, GroupCompany] {
+//    def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
+//      views.html.uniform.listing(rows.map {
+//        case ListingTellRow(value, editLink, deleteLink) => (tell.render(value, "a", messages), editLink, deleteLink)
+//      }, messages)
+//  }
+
+  implicit val groupCompanyTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html(s"${in.name}")
   }
 
   implicit val addressTell = new GenericWebTell[Address, Html] {
@@ -174,7 +188,7 @@ class JourneyController @Inject()(
             val playProgram = returnJourney[WM](
               create[ReturnTellTypes, ReturnAskTypes](messages(request))
             )
-            playProgram.run(targetId, purgeStateUponCompletion = true) {
+            playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) {
               backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
             }
         }

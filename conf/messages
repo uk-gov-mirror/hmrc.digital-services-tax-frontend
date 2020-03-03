@@ -17,6 +17,8 @@ common.True=Yes
 common.False=No
 common.feedback=What do you think about this service?
 common.thirty-seconds=(30 seconds)
+common.delete=Remove
+common.edit=Change
 
 # time out
 time-out.title=For your security, we signed you out
@@ -157,6 +159,7 @@ details-not-correct.kickout.wrong-id=If you signed in with the wrong user ID
 details-not-correct.kickout.sign-in-again=You will need to sign in again using the Government Gateway user ID for the \
   company you need to register.
 
+#service page
 landing.heading=Digital Services Tax details
 landing.ultimate-parent-name=Group’s ultimate parent company: {0}
 landing.company-name=Responsible member: {0}
@@ -166,3 +169,18 @@ landing.return-due=Next return due
 landing.submit-return=Submit a return
 landing.account-history=Account History
 landing.balance=View your balance and transactions history
+
+#returns
+manage-companies.listing.heading=Confirm your group’s companies
+manage-companies.radio.heading=Do you need to add another company to your group?
+manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
+remove-company=Remove company
+change-company=Change company name
+
+add.heading=Company details
+add.name.heading=Company name
+add.name.hint=This is the name registered with an official company register, such as Companies House. 
+add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
+add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.

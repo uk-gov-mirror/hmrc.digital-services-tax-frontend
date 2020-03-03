@@ -556,7 +556,7 @@ fieldset__legend--s {
 }
 
 .summary-list__key {
-    width: 62%;
+    width: 40%;
     word-break: normal;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -564,6 +564,10 @@ fieldset__legend--s {
     display: table-cell;
     padding-right: 20px;
     margin: 0;
+}
+
+.summary-list__actions {
+    margin-bottom: 15px;
 }
 
 .summary-list__value {

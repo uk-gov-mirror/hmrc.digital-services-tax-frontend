@@ -61,7 +61,7 @@ object ReturnJourney {
     }
 
     for {
-      groupCos <- ask[List[GroupCompany]]("group-companies")
+      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1))
       activities <- ask[Set[Activity]]("applicable-activities")
 
       dstReturn <- (
