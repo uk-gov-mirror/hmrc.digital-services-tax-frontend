@@ -174,6 +174,8 @@ landing.balance=View your balance and transactions history
 manage-companies.listing.heading=Confirm your group’s companies
 manage-companies.radio.heading=Do you need to add another company to your group?
 manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
+manage-companies.Add=Yes
+manage-companies.Continue=No
 remove-company=Remove company
 change-company=Change company name
 
@@ -184,3 +186,9 @@ add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
 add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+applicable-activities.heading=Which activities are you reporting in this return?
+applicable-activities.heading.hint=Select all that apply.
+applicable-activities.SocialMedia=Social media
+applicable-activities.SearchEngine=Search engine
+applicable-activities.OnlineMarketplace=Online marketplace

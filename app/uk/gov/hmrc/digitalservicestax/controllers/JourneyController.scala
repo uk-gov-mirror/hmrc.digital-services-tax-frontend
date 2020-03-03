@@ -71,23 +71,11 @@ class JourneyController @Inject()(
   implicit val persistence: PersistenceEngine[Request[AnyContent]] =
     UnsafePersistence()
 
-  implicit def autoListingTell[A](implicit tell: GenericWebTell[A, Html]) = new ListingTell[Html, A] {
-    def apply(rows: List[ListingTellRow[A]], messages: UniformMessages[Html]): Html =
+  implicit def autoGroupListingTell = new ListingTell[Html, GroupCompany] {
+    def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
       views.html.uniform.listing(rows.map {
-        case ListingTellRow(value, editLink, deleteLink) => (tell.render(value, "a", messages), editLink, deleteLink)
+        case ListingTellRow(value, editLink, deleteLink) => (Html(s"${value.name}"), editLink, deleteLink)
       }, messages)
-  }
-
-//  implicit def autoGroupListingTell(implicit tell: GenericWebTell[GroupCompany, Html]) = new ListingTell[Html, GroupCompany] {
-//    def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
-//      views.html.uniform.listing(rows.map {
-//        case ListingTellRow(value, editLink, deleteLink) => (tell.render(value, "a", messages), editLink, deleteLink)
-//      }, messages)
-//  }
-
-  implicit val groupCompanyTell = new GenericWebTell[GroupCompany, Html] {
-    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"${in.name}")
   }
 
   implicit val addressTell = new GenericWebTell[Address, Html] {
