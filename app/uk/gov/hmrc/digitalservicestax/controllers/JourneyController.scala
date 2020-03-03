@@ -66,9 +66,6 @@ class JourneyController @Inject()(
 
   val interpreter = DSTInterpreter(appConfig, this, messagesApi)
 
-  implicit val persistence: PersistenceEngine[Request[AnyContent]] =
-    UnsafePersistence()
-
   implicit def autoListingTell[A](implicit tell: GenericWebTell[A, Html]) = new ListingTell[Html, A] {
     def apply(rows: List[ListingTellRow[A]], messages: UniformMessages[Html]): Html =
       views.html.uniform.listing(rows.map {
@@ -141,9 +138,15 @@ class JourneyController @Inject()(
       Html(in.toString)
   }
   
-  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>
+  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
+
+    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+      MongoPersistence[AuthorisedRequest[AnyContent]](
+        databaseName = "digital-services-tax-frontend",
+        collectionName = "uf-registrations"
+      )(_.internalId)
 
     backend.lookupRegistration().flatMap {
       case None =>
@@ -160,10 +163,15 @@ class JourneyController @Inject()(
   }
 
   def returnAction(year: Int, targetId: String): Action[AnyContent] = authorisedAction.async {
-    implicit request: Request[AnyContent] =>
+    implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
 
+    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+      MongoPersistence[AuthorisedRequest[AnyContent]](
+        databaseName = "digital-services-tax-frontend",
+        collectionName = "uf-returns"
+      )(_.internalId)
 
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
