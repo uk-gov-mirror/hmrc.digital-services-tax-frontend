@@ -65,6 +65,19 @@ trait Widgets {
     }
   }
 
+  def inlineOptionString(
+    validated: ValidatedType[String]
+  ): FormField[Option[String @@ validated.Tag], Html] =
+    twirlStringField.simap{
+      case "" => Right(None)
+      case x  => Either.fromOption(
+        validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
+      )
+    }{
+      case None => ""
+      case Some(x) => x.toString
+    }
+
   def validatedVariant[BaseType](validated: ValidatedType[BaseType])(
     implicit baseForm: FormField[BaseType, Html]
   ): FormField[BaseType @@ validated.Tag, Html] =
@@ -82,6 +95,8 @@ trait Widgets {
   implicit def accountField     = validatedVariant(AccountNumber)
   implicit def sortCodeField    = validatedVariant(SortCode)
   implicit def ibanField        = validatedVariant(IBAN)
+
+  implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
   implicit val intField: FormField[Int,Html] =
     twirlStringFields().simap(x => 
