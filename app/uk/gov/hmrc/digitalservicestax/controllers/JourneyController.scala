@@ -45,7 +45,8 @@ class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
   val http: HttpClient,
   val authConnector: AuthConnector,
-  servicesConfig: ServicesConfig  
+  servicesConfig: ServicesConfig,
+  val mongo: play.modules.reactivemongo.ReactiveMongoApi  
 )(
   implicit val appConfig: AppConfig,
   ec: ExecutionContext,
@@ -144,7 +145,7 @@ class JourneyController @Inject()(
 
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](
-        databaseName = "digital-services-tax-frontend",
+        mongo,
         collectionName = "uf-registrations"
       )(_.internalId)
 
@@ -169,7 +170,7 @@ class JourneyController @Inject()(
 
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](
-        databaseName = "digital-services-tax-frontend",
+        mongo,
         collectionName = "uf-returns"
       )(_.internalId)
 
