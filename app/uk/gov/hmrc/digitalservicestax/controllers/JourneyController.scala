@@ -191,7 +191,7 @@ class JourneyController @Inject()(
         Ok(views.html.main_template(
           title =
             s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.landing(reg.some)))
+        )(views.html.landing(reg)))
       case Some(reg) =>
         Ok(views.html.main_template(
           title =
