@@ -23,15 +23,13 @@ import java.time.LocalDate
 import cats.syntax.order._
 
 case class Registration (
-  company: Company,
+  companyReg: CompanyRegWrapper,
   alternativeContact: Option[Address],
   ultimateParent: Option[Company],
   contact: ContactDetails,
   dateLiable: LocalDate,
   accountingPeriodEnd: LocalDate,
-  utr: Option[UTR] = None,
-  useSafeId: Boolean = false,
-  registrationNumber: Option[DSTRegNumber] = None  
+  registrationNumber: Option[DSTRegNumber] = None
 ) {
 
   require(dateLiable >= Period.firstPeriodStart,

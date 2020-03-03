@@ -16,20 +16,12 @@
 
 package uk.gov.hmrc.digitalservicestax.connectors
 
+import play.api.libs.json._
+import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
 import uk.gov.hmrc.digitalservicestax.data._
-import BackendAndFrontendJson._
-import java.net.URLEncoder.encode
-import java.time.{Clock, LocalDate}
-
-import javax.inject.Inject
-import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.http.{HeaderCarrier, OptionHttpReads}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import play.api.libs.json.{JsSuccess, Json, OWrites, Reads}
-import play.api.mvc.Request
-import play.api.{Logger, Mode}
-import uk.gov.hmrc.http.{HeaderCarrier, OptionHttpReads}
-import uk.gov.hmrc.play.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -49,11 +41,19 @@ class DSTConnector (
   def submitReturn(period: Period, ret: Return): Future[Unit] =
     http.POST[Return, Unit](s"$backendURL/returns/${period.start.getYear}", ret)
 
-  def lookupCompany(): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/lookup-company")
+  def lookupCompany(): Future[Option[Company]] = {
+    implicit val reader = readCompanyReg
+    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company").map { x =>
+      x.map(y => y.company)
+    }
+  }
 
-  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    http.GET[Option[Company]](s"$backendURL/lookup-company/$utr/$postcode")
+  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] = {
+    implicit val reader = readCompanyReg
+    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode").map { x =>
+      x.map( y => y.company)
+    }
+  }
 
   def lookupRegistration(): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")

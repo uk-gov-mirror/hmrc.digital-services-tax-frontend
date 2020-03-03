@@ -96,7 +96,7 @@ class JourneyController @Inject()(
   implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
     override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
       val reg = in.value
-      views.html.confirmation(key: String, reg.company.name: String, reg.contact.email: Email)(messages)
+      views.html.confirmation(key: String, reg.companyReg.company.name: String, reg.contact.email: Email)(messages)
     }
   }
 
@@ -181,7 +181,7 @@ class JourneyController @Inject()(
     }
   }
 
-  def index: Action[AnyContent] = Action.async { implicit request =>
+  def index: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
     backend.lookupRegistration().map {
@@ -196,7 +196,7 @@ class JourneyController @Inject()(
         Ok(views.html.main_template(
           title =
             s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.confirmation("registration-sent", reg.company.name, reg.contact.email)(msg)))
+        )(views.html.confirmation("registration-sent", reg.companyReg.company.name, reg.contact.email)(msg)))
         
     }
   }
