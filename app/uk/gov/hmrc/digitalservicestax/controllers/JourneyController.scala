@@ -32,6 +32,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
@@ -48,7 +49,7 @@ class JourneyController @Inject()(
   servicesConfig: ServicesConfig,
   val mongo: play.modules.reactivemongo.ReactiveMongoApi  
 )(
-  implicit val appConfig: AppConfig,
+  implicit val config: AppConfig,
   ec: ExecutionContext,
   implicit val messagesApi: MessagesApi
 ) extends ControllerHelpers
@@ -65,7 +66,7 @@ class JourneyController @Inject()(
     }
   }
 
-  val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+  val interpreter = DSTInterpreter(config, this, messagesApi)
 
   implicit def autoListingTell[A](implicit tell: GenericWebTell[A, Html]) = new ListingTell[Html, A] {
     def apply(rows: List[ListingTellRow[A]], messages: UniformMessages[Html]): Html =
@@ -146,7 +147,8 @@ class JourneyController @Inject()(
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](
         mongo,
-        collectionName = "uf-registrations"
+        collectionName = "uf-registrations",
+        config.mongoJourneyStoreExpireAfter        
       )(_.internalId)
 
     backend.lookupRegistration().flatMap {
@@ -171,7 +173,8 @@ class JourneyController @Inject()(
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](
         mongo,
-        collectionName = "uf-returns"
+        collectionName = "uf-returns",
+        config.mongoJourneyStoreExpireAfter
       )(_.internalId)
 
     backend.lookupRegistration().flatMap{
