@@ -30,8 +30,6 @@ import ltbs.uniform.validation._
 
 object RegJourney {
 
-  case class CompanyRegWrapper(company: Company, utr: Option[UTR], useSafeId: Boolean)
-
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
