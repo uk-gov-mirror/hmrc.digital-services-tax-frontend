@@ -39,19 +39,36 @@ object ReturnJourney {
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
+      //TODO Refactor
+
+      def askActivityReduced(actType: Activity): F[Percent] =
+        { ask[Percent](s"report-$actType-operating-margin") emptyUnless
+          ask[Boolean](s"report-$actType-loss")}
+
       def askActivity(actType: Activity): F[Option[Percent]] = 
-      { ask[Percent](s"$actType-margin") emptyUnless
-        ask[Boolean](s"$actType-loss").map { x => !x }} when
-      ask[Boolean](s"$actType-applying")
+        { ask[Percent](s"report-$actType-operating-margin") emptyUnless
+          ask[Boolean](s"report-$actType-loss").map { x => !x }} when
+        ask[Boolean](s"report-$actType-alternative-charge")
       
       val allEntries: List[F[(Activity, Option[Percent])]] =
-        applicableActivities.toList.map{ actType =>
-          askActivity(actType).map{ (actType, _)}
+        if(applicableActivities.size == 1) {
+          applicableActivities.toList.map { actType =>
+            askActivityReduced(actType).map { percent =>
+              (actType, percent.some)
+            }
+          }
+        } else {
+          applicableActivities.toList.map { actType =>
+            askActivity(actType).map {
+              (actType, _)
+            }
+          }
         }
+
       allEntries.sequence.map { _.collect {
         case (a, Some(x)) => a -> x
       }.toMap }
-    } emptyUnless ask[Boolean]("alternative-charge")
+    } emptyUnless ask[Boolean]("report-alternative-charge")
 
 
     def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Money]] = {
@@ -62,11 +79,11 @@ object ReturnJourney {
 
     for {
       groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1))
-      activities <- ask[Set[Activity]]("applicable-activities")
+      activities <- ask[Set[Activity]]("select-activities")
 
       dstReturn <- (
         askAlternativeCharge(activities), 
-        ask[Money]("cross-border-relief-amount") emptyUnless ask[Boolean]("cross-border-relief"), 
+        ask[Money]("relief-deducted") emptyUnless ask[Boolean]("report-cross-border-transaction-relief"),
         askAmountForCompanies(groupCos),
         ask[Money]("allowance-amount"),
         ask[Money]("total-liability"),

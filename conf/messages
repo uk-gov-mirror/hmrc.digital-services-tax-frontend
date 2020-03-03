@@ -181,14 +181,65 @@ change-company=Change company name
 
 add.heading=Company details
 add.name.heading=Company name
-add.name.hint=This is the name registered with an official company register, such as Companies House. 
+add.name.hint=This is the name registered with an official company register, such as Companies House.
 add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
 add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
 
-applicable-activities.heading=Which activities are you reporting in this return?
-applicable-activities.heading.hint=Select all that apply.
-applicable-activities.SocialMedia=Social media
-applicable-activities.SearchEngine=Search engine
-applicable-activities.OnlineMarketplace=Online marketplace
+edit.heading=Company details
+edit.name.heading=Company name
+edit.name.hint=This is the name registered with an official company register, such as Companies House.
+edit.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
+edit.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+select-activities.heading=Which activities are you reporting in this return?
+select-activities.heading.hint=Select all that apply.
+select-activities.SocialMedia=Social media
+select-activities.SearchEngine=Search engine
+select-activities.OnlineMarketplace=Online marketplace
+
+report-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins in this return?
+report-alternative-charge.details=What we mean by 'alternative charge'
+report-alternative-charge.details.text=<p>This is an alternative method that businesses can use to work out their Digital Services Tax liability.</p>\
+<p>The alternative charge only benefits groups who make a loss or have a low UK profit margin on a Digital Services activity.</p>
+report-alternative-charge.TRUE=Yes
+report-alternative-charge.FALSE=No
+
+report-SocialMedia-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your social media activity?
+report-SocialMedia-alternative-charge.TRUE=Yes
+report-SocialMedia-alternative-charge.FALSE=No
+report-SocialMedia-loss.heading=Has the group made a loss on its social media activity?
+report-SocialMedia-loss.TRUE=Yes
+report-SocialMedia-loss.FALSE=No
+report-SocialMedia-operating-margin.heading=What was the group’s operating margin on its social media activity?
+
+report-SearchEngine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your search engine activity?
+report-SearchEngine-alternative-charge.TRUE=Yes
+report-SearchEngine-alternative-charge.FALSE=No
+report-SearchEngine-loss.heading=Has the group made a loss on its search engine activity?
+report-SearchEngine-loss.TRUE=Yes
+report-SearchEngine-loss.FALSE=No
+report-SearchEngine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
+
+report-OnlineMarketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your online marketplace activity?
+report-OnlineMarketplace-alternative-charge.TRUE=Yes
+report-OnlineMarketplace-alternative-charge.FALSE=No
+report-OnlineMarketplace-loss.heading=Has the group made a loss on its online marketplace activity?
+report-OnlineMarketplace-loss.TRUE=Yes
+report-OnlineMarketplace-loss.FALSE=No
+report-OnlineMarketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+
+report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
+report-cross-border-transaction-relief.details=What we mean by 'relief on cross-border transactions
+report-cross-border-transaction-relief.details.text=<p> If a transaction involves a UK user and a non-UK user who is in a country \
+  that also operates a Digital Services Tax, only 50% of the revenues from that transaction will be taxable as UK revenues.</p>
+report-cross-border-transaction-relief.TRUE=Yes
+report-cross-border-transaction-relief.FALSE=No
+
+relief-deducted.heading=How much cross-border transactions relief have you deducted from revenues in this return?

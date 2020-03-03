@@ -20,20 +20,23 @@
 
 @headKey=@{key.headOption.getOrElse("")}
 
-@currencyInput=@{
-    headKey === "loan-amount" ||
-    headKey === "loan-repaid" ||
-    headKey.contains("add-settlement") ||
-    headKey.contains("written-off")
+@percentageInput=@{
+    headKey === "report-SocialMedia-operating-margin" ||
+    headKey === "report-SearchEngine-operating-margin" ||
+    headKey === "report-OnlineMarketplace-operating-margin"
 }
+
+@currencyInput=@{headKey === "relief-deducted"}
 
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
     @standard_field(key, errors, "string", messages) {
     
-        @if(currencyInput){
-            <span class="input-currency">
+        @if(percentageInput){
+            <span class="dst-label__currency">%
         }
-
+        @if(currencyInput){
+            <span class="dst-label__currency">
+            }
         @*
         * Todo - refactor this describedby error/hint string value to be a helper
         *@
@@ -52,7 +55,7 @@
         />  
         }
 
-        @if(currencyInput){
+        @if(percentageInput || currencyInput){
             </span>
         }
     }

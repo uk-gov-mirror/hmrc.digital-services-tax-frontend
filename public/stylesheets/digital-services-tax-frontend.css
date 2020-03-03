@@ -1099,3 +1099,16 @@ strong, b {
     background: #f8f8f8;
     padding: 20px;
 }
+
+.dst-label__currency {
+    font-family: "GDS Transport", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    line-height: 1.55;
+    background-color: #f3f2f1;
+    position: absolute;
+    margin: 2px 0 0 2px !important;
+    padding: 5.5px 12px;
+    border-right: 2px solid #0b0c0c;
+}
