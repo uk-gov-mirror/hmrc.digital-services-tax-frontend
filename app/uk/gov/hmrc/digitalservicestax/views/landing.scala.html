@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.digitalservicestax.config.AppConfig
 
 @import uk.gov.hmrc.digitalservicestax.data.Registration
-@(reg: Registration)(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
+@(reg: Registration, outstanding: List[Period])(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
 
 <div class="govuk-grid-column-full">
 
@@ -44,10 +44,13 @@
         </div>
 
         <div class="column-one-third">
-            <div class="card">
-                <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
-                <p>31 July 2021</p>
-                <p><a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.returnAction(2020, "")/'>@messages("landing.submit-return")</a></p>
+          <div class="card">
+
+	    @outstanding.headOption.map { case period => 
+               <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
+               <p>@{period.due}</p>
+               <p><a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.returnAction(period.key, "")/'>@messages("landing.submit-return")</a></p>
+	    }
             </div>
         </div>
 
