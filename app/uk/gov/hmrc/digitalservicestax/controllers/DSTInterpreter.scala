@@ -81,9 +81,9 @@ case class DSTInterpreter(
     request: Request[AnyContent]
   ): UniformMessages[Html] =
     messagesApi.preferred(request).convertMessagesTwirlHtml() |+|
-      UniformMessages.bestGuess.map(HtmlFormat.escape)
+//      UniformMessages.bestGuess.map(HtmlFormat.escape)
 //   N.b. this next line very useful for correcting the keys of missing content, leave for now
-//     UniformMessages.attentionSeeker.map(HtmlFormat.escape)
+     UniformMessages.attentionSeeker.map(HtmlFormat.escape)
   override def pageChrome(
     keyList: List[String],
     errors: ErrorTree,

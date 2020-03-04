@@ -25,7 +25,7 @@ case class Period(
 
 object Period {
 
-  val firstPeriodStart = LocalDate.of(2020,4,5)
+  val firstPeriodStart = LocalDate.of(2020,4,6)
 
   implicit def pathBinder(r: Registration) = new play.api.mvc.PathBindable[Period] {
 

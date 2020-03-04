@@ -26,7 +26,12 @@
     headKey === "report-OnlineMarketplace-operating-margin"
 }
 
-@currencyInput=@{headKey === "relief-deducted"}
+@currencyInput=@{
+    headKey === "relief-deducted"||
+    headKey === "allowance-deducted"||
+    headKey === "group-liability"||
+    headKey.contains("company-liabilities")
+}
 
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
     @standard_field(key, errors, "string", messages) {
@@ -35,7 +40,7 @@
             <span class="dst-label__currency">%
         }
         @if(currencyInput){
-            <span class="dst-label__currency">
+            <span class="dst-label__currency">£
             }
         @*
         * Todo - refactor this describedby error/hint string value to be a helper

@@ -32,6 +32,9 @@ object ReturnJourney {
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
   type ReturnAskTypes = (NonEmptyString, Boolean) :: DomesticBankAccount :: ForeignBankAccount :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
+  private def message(key: String, args: String*) =
+    Map(key -> Tuple2(key, args.toList))
+
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
   ): F[Return] = {
@@ -46,8 +49,6 @@ object ReturnJourney {
     } yield RepaymentDetails(nameAndType._1, account)
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
-
-      //TODO Refactor
 
       def askActivityReduced(actType: Activity): F[Percent] =
         { ask[Percent](s"report-$actType-operating-margin") emptyUnless
@@ -81,7 +82,11 @@ object ReturnJourney {
 
     def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Money]] = {
       companies.zipWithIndex.map{ case (co, i) => 
-        interact[GroupCompany, Money](s"amount-for-company-$i", co).map{(co, _)}
+        interact[GroupCompany, Money](
+          s"company-liabilities-$i",
+          co,
+          customContent = message(s"company-liabilities-$i.heading", co.name)
+        ).map{(co, _)}
       }.sequence.map{_.toMap}
     }
 
@@ -93,9 +98,9 @@ object ReturnJourney {
         askAlternativeCharge(activities), 
         ask[Money]("relief-deducted") emptyUnless ask[Boolean]("report-cross-border-transaction-relief"),
         askAmountForCompanies(groupCos),
-        ask[Money]("allowance-amount"),
-        ask[Money]("total-liability"),
-        askRepaymentDetails("repayment") when ask[Boolean]("repayment-needed")
+        ask[Money]("allowance-deducted"),
+        ask[Money]("group-liability"),
+        askRepaymentDetails("bank-details") when ask[Boolean]("repayment")
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
 //      _ <- tell("confirmation", Confirmation(dstReturn))

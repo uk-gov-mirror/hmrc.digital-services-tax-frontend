@@ -94,21 +94,15 @@ class JourneyController @Inject()(
       Html(s"<span class='govuk-body-m'></br>${in.line1}</br>${in.line2}</br>${in.line3}</br>${in.line4}</br>${in.postalCode}")
   }
 
-  implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
-    override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
-      val reg = in.value
-      views.html.confirmation(key: String, reg.company.name: String, reg.contact.email: Email)(messages)
-    }
-  }
-
-  implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
-    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
-      views.html.check_your_answers(key, in.value)(messages)
-  }
-
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
     override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
       views.html.kickout(key)(messages)
+  }
+
+
+  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html("")
   }
 
   implicit val companyTell = new GenericWebTell[Company, Html] {
@@ -122,9 +116,27 @@ class JourneyController @Inject()(
           "</p>"
       )
   }
+
   implicit val booleanTell = new GenericWebTell[Boolean, Html] {
     override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
       Html(in.toString)
+  }
+
+  implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
+    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
+      views.html.check_your_registration_answers(s"$key.reg", in.value)(messages)
+  }
+
+  implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
+    override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
+      views.html.check_your_return_answers(s"$key.ret", in.value)(messages)
+  }
+
+  implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
+    override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
+      val reg = in.value
+      views.html.confirmation(key: String, reg.company.name: String, reg.contact.email: Email)(messages)
+    }
   }
 
   implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
@@ -132,15 +144,7 @@ class JourneyController @Inject()(
       Html(in.toString)
   }
 
-  implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
-    override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
-      Html(in.toString)
-  }
 
-  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
-    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
-      Html(in.toString)
-  }
   
   def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
