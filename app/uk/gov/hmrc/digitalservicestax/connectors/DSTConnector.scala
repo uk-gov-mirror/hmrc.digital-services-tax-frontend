@@ -41,19 +41,12 @@ class DSTConnector (
   def submitReturn(period: Period, ret: Return): Future[Unit] =
     http.POST[Return, Unit](s"$backendURL/returns/${period.start.getYear}", ret)
 
-  def lookupCompany(): Future[Option[Company]] = {
-    implicit val reader = readCompanyReg
-    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company").map { x =>
-      x.map(y => y.company)
-    }
-  }
+  def lookupCompany(): Future[Option[CompanyRegWrapper]] =
+    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
 
-  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[Company]] = {
-    implicit val reader = readCompanyReg
-    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode").map { x =>
-      x.map( y => y.company)
-    }
-  }
+
+  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] =
+    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode")
 
   def lookupRegistration(): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")

@@ -45,15 +45,15 @@ object RegJourney {
 
     for {
       
-      companyRegWrapper <- backendService.lookupCompany() >>= {
+      companyRegWrapper <- backendService.lookupCompany() >>= { // gets a CompanyRegWrapper but converts to a company
 
         // found a matching company
-        case Some(company) =>
+        case Some(companyRW) =>
           for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", company)
+            confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", companyRW.company)
             //TODO Check if we should be signing the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-          } yield CompanyRegWrapper(company)
+          } yield companyRW // useSafeId is false, no utr or safeId sent
 
         // no matching company found
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
@@ -68,11 +68,12 @@ object RegJourney {
               postcode <- ask[Postcode]("enter-postcode")
               companyOpt <- backendService.lookupCompany(utr, postcode)
               _ <- if (companyOpt.isEmpty) end("company-lookup-failed", Kickout("details-not-correct")) else { (()).pure[F] }
-              company = companyOpt.get
+              company = companyOpt.get.company
+              safeId = companyOpt.get.safeId
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
               //TODO Check if we should be signing the user out
               _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-            } yield CompanyRegWrapper(company, utr.some)
+            } yield CompanyRegWrapper(company, utr.some, safeId)
         }
       }
 

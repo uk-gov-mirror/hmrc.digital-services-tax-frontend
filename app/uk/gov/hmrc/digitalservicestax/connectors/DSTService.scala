@@ -23,8 +23,8 @@ import cats.~>
 
 trait DSTService[F[_]] {
 
-  def lookupCompany(): F[Option[Company]]
-  def lookupCompany(utr: UTR, postcode: Postcode): F[Option[Company]]
+  def lookupCompany(): F[Option[CompanyRegWrapper]]
+  def lookupCompany(utr: UTR, postcode: Postcode): F[Option[CompanyRegWrapper]]
   def submitRegistration(reg: Registration): F[Unit]
   def submitReturn(period: Period, ret: Return): F[Unit]
   def lookupRegistration(): F[Option[Registration]]
@@ -34,9 +34,9 @@ trait DSTService[F[_]] {
     val old = this
     new DSTService[G] {
 
-      def lookupCompany(): G[Option[Company]] =
+      def lookupCompany(): G[Option[CompanyRegWrapper]] =
         transform(old.lookupCompany())
-      def lookupCompany(utr: UTR, postcode: Postcode): G[Option[Company]] =
+      def lookupCompany(utr: UTR, postcode: Postcode): G[Option[CompanyRegWrapper]] =
         transform(old.lookupCompany(utr, postcode))        
       def submitRegistration(reg: Registration): G[Unit] =
         transform(old.submitRegistration(reg))        
