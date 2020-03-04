@@ -195,7 +195,7 @@ class JourneyController @Inject()(
               val playProgram = returnJourney[WM](
                 create[ReturnTellTypes, ReturnAskTypes](messages(request))
               )
-              playProgram.run(targetId, purgeStateUponCompletion = true) {
+              playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) {
                 backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
               }
           }
