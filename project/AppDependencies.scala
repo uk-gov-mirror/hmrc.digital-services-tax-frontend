@@ -14,7 +14,7 @@ object AppDependencies {
     "com.beachape"            %% "enumeratum-play-json"     % "1.5.13",
     "com.luketebbs.uniform"   %% "interpreter-play26"       % uniformVersion,
     "uk.gov.hmrc"             %% "mongo-caching"            % "6.1.0-play-26",
-    "uk.gov.hmrc"             %% "simple-reactivemongo"     % "7.12.0-play-26",
+    "uk.gov.hmrc"             %% "simple-reactivemongo"     % "7.23.0-play-26",
     "org.reactivemongo"       %% "play2-reactivemongo"      % "0.20.3-play26",
     "uk.gov.hmrc"             %% "auth-client"              % "2.20.0-play-26",
     "uk.gov.hmrc"             %% "play-language"            % "3.4.0",
