@@ -64,56 +64,17 @@ case class MongoPersistence[A <: Request[AnyContent]] (
   lazy val collection: Future[JSONCollection] = {
     database.map(_.collection[JSONCollection](collectionName)).flatMap { c =>
 
-      import reactivemongo.api.bson.BSONDocument
-      import reactivemongo.api.bson.collection.BSONSerializationPack
       import reactivemongo.api.indexes._
 
       val sessionIndex = Index(
         key = Seq("session" -> IndexType.Ascending),
-        name = None,
-        unique = true,
-        background = true,
-        sparse = false,
-        expireAfterSeconds= None,
-        storageEngine= None,
-        weights= None,
-        defaultLanguage= None,
-        languageOverride= None,
-        textIndexVersion= None,
-        sphereIndexVersion= None,
-        bits= None,
-        min= None,
-        max= None,
-        bucketSize= None,
-        collation= None,
-        wildcardProjection= None,
-        version= None,
-        partialFilter= None,
-        options= BSONDocument.empty
+        unique = true
       )
 
       val timestamp = Index(
         key = Seq("timestamp" -> IndexType.Ascending),
-        name = None,
-        unique = true,
-        background = true,
-        sparse = false,
-        expireAfterSeconds= Some(expireAfter.toSeconds.toInt),
-        storageEngine= None,
-        weights= None,
-        defaultLanguage= None,
-        languageOverride= None,
-        textIndexVersion= None,
-        sphereIndexVersion= None,
-        bits= None,
-        min= None,
-        max= None,
-        bucketSize= None,
-        collation= None,
-        wildcardProjection= None,
-        version= None,
-        partialFilter= None,
-        options= BSONDocument.empty
+        unique = false //,
+//        expire = Some(expireAfter.toSeconds.toInt)
       )
 
       val im = c.indexesManager
