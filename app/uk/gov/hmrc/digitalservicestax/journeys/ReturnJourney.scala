@@ -32,6 +32,9 @@ object ReturnJourney {
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
   type ReturnAskTypes = (NonEmptyString, Boolean) :: DomesticBankAccount :: ForeignBankAccount :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
+  private def message(key: String, args: String*) =
+    Map(key -> Tuple2(key, args.toList))
+
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
   ): F[Return] = {
@@ -47,41 +50,60 @@ object ReturnJourney {
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
+      def askActivityReduced(actType: Activity): F[Percent] =
+        { ask[Percent](s"report-$actType-operating-margin") emptyUnless
+          ask[Boolean](s"report-$actType-loss")}
+
       def askActivity(actType: Activity): F[Option[Percent]] = 
-      { ask[Percent](s"$actType-margin") emptyUnless
-        ask[Boolean](s"$actType-loss").map { x => !x }} when
-      ask[Boolean](s"$actType-applying")
+        { ask[Percent](s"report-$actType-operating-margin") emptyUnless
+          ask[Boolean](s"report-$actType-loss").map { x => !x }} when
+        ask[Boolean](s"report-$actType-alternative-charge")
       
       val allEntries: List[F[(Activity, Option[Percent])]] =
-        applicableActivities.toList.map{ actType =>
-          askActivity(actType).map{ (actType, _)}
+        if(applicableActivities.size == 1) {
+          applicableActivities.toList.map { actType =>
+            askActivityReduced(actType).map { percent =>
+              (actType, percent.some)
+            }
+          }
+        } else {
+          applicableActivities.toList.map { actType =>
+            askActivity(actType).map {
+              (actType, _)
+            }
+          }
         }
+
       allEntries.sequence.map { _.collect {
         case (a, Some(x)) => a -> x
       }.toMap }
-    } emptyUnless ask[Boolean]("alternative-charge")
+    } emptyUnless ask[Boolean]("report-alternative-charge")
 
 
     def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Money]] = {
       companies.zipWithIndex.map{ case (co, i) => 
-        interact[GroupCompany, Money](s"amount-for-company-$i", co).map{(co, _)}
+        interact[GroupCompany, Money](
+          s"company-liabilities-$i",
+          co,
+          customContent = message(s"company-liabilities-$i.heading", co.name)
+        ).map{(co, _)}
       }.sequence.map{_.toMap}
     }
 
     for {
-      groupCos <- ask[List[GroupCompany]]("group-companies")
-      activities <- ask[Set[Activity]]("applicable-activities")
+      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1))
+      activities <- ask[Set[Activity]]("select-activities")
 
       dstReturn <- (
         askAlternativeCharge(activities), 
-        ask[Money]("cross-border-relief-amount") emptyUnless ask[Boolean]("cross-border-relief"), 
+        ask[Money]("relief-deducted") emptyUnless ask[Boolean]("report-cross-border-transaction-relief"),
         askAmountForCompanies(groupCos),
-        ask[Money]("allowance-amount"),
-        ask[Money]("total-liability"),
-        askRepaymentDetails("repayment") when ask[Boolean]("repayment-needed")
+        ask[Money]("allowance-deducted"),
+        ask[Money]("group-liability"),
+        askRepaymentDetails("bank-details") when ask[Boolean]("repayment")
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
-//      _ <- tell("confirmation", Confirmation(dstReturn))
+      _ <- tell("confirmation", Confirmation(dstReturn))
     } yield dstReturn
   }
 

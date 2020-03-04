@@ -1,0 +1,63 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.digitalservicestax.views.html.helpers._
+
+@(key: String, in: Return)(implicit messages: UniformMessages[Html])
+
+<div class="govuk-grid-column-two-thirds">
+    <h1 class="heading-xlarge">@messages(s"$key.title")</h1>
+    <div class="subsection--wide">
+        <h2 class="govuk-heading-m">@messages(s"$key.company.title")</h2>
+
+        <dl class="govuk-check-your-answers cya-questions-short">
+            @standard_cya_row(key, "group-liability", Html(s"${in.totalLiability}"), "x", Html("£"))(messages)
+            @standard_cya_row(key, "allowance-deducted", Html(s"${in.allowanceAmount}"), "x", Html("£"))(messages)
+            @standard_cya_row(key, "report-cross-border-transaction-relief", Html(s"${in.crossBorderReliefAmount != 0}"), "x")(messages)
+            @standard_cya_row(key, "relief-deducted", Html(s"${in.crossBorderReliefAmount}"), "x", Html("£"))(messages)
+
+            @in.companiesAmount.map { co =>
+            <div>
+                <dt class="cya-question">@messages(s"$key.group-company", co._1.name)</dt>
+                <dd class="cya-answer">£ @co._2</dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="x">@messages("common.edit")
+                        <span class="govuk-visually-hidden">@messages(s"change")</span>
+                    </a>
+                </dd>
+            </div>
+            }
+        </dl>
+
+        @in.alternateCharge.map{ alt =>
+            <h2 class="govuk-heading-m">@messages(s"$key.${alt._1}.title")</h2>
+            <dl class="govuk-check-your-answers cya-questions-short">
+                @standard_cya_row(key, s"report-alternative-charge", messages("common.yes"), "x")(messages)
+                @standard_cya_row(key, s"report-${alt._1}-alternative-charge", messages("common.yes"), "x")(messages)
+                @standard_cya_row(key, s"report-${alt._1}-loss", if(alt._2 == 0){ messages("common.yes")} else { messages("common.no")}, "x")(messages)
+                @standard_cya_row(key, s"report-${alt._1}-operating-margin", Html(s"${alt._2}%"), "x")(messages)
+            </dl>
+        }
+
+        
+    </div>
+
+    <h2 class="govuk-heading-m">@messages(s"$key.submission.title")</h2>
+    <p>@messages(s"$key.submission.notice")</p>
+    <div class="subsection">
+        <a href="javascript:window.print()" class="govuk-body">@messages("common.print-save")</a>
+    </div>
+</div>

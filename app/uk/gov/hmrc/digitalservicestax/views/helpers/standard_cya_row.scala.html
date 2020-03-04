@@ -1,0 +1,27 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(key: String, subKey: String, field: Html, changeLink: String, currency: Html = Html(""))(implicit messages: UniformMessages[Html])
+
+<div>
+    <dt class="cya-question">@messages(s"$key.$subKey.question")</dt>
+    <dd class="cya-answer">@currency @field</dd>
+    <dd class="app-check-your-answers__change">
+        <a href="@changeLink">@messages("common.edit")
+            <span class="govuk-visually-hidden">@messages(s"$key.$subKey.change")</span>
+        </a>
+    </dd>
+</div>

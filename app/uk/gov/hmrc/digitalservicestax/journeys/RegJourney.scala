@@ -96,10 +96,10 @@ object RegJourney {
         },
         ask[ContactDetails]("contact-details"),
         ask[Boolean]("check-liability-date") flatMap {
-          case true => LocalDate.of(2020,4,1).pure[F]
+          case true => LocalDate.of(2020,4,6).pure[F]
           case false =>
             ask[LocalDate]("liability-start-date",
-              validation = Rule.min(LocalDate.of(2020,4,1))
+              validation = Rule.min(LocalDate.of(2020,4,6))
             )
         },
         ask[LocalDate]("accounting-period-end-date"),
