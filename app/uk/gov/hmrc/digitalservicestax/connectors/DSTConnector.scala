@@ -46,8 +46,10 @@ class DSTConnector (
   def submitRegistration(reg: Registration): Future[Unit] =
     http.POST[Registration, Unit](s"$backendURL/registration", reg)
 
-  def submitReturn(period: Period, ret: Return): Future[Unit] =
-    http.POST[Return, Unit](s"$backendURL/returns/${period.key}", ret)
+  def submitReturn(period: Period, ret: Return): Future[Unit] = {
+    val encodedKey = java.net.URLEncoder.encode(period.key, "UTF-8")
+    http.POST[Return, Unit](s"$backendURL/returns/${encodedKey}", ret)
+  }
 
   def lookupCompany(): Future[Option[Company]] =
     http.GET[Option[Company]](s"$backendURL/lookup-company")
