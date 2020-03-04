@@ -323,3 +323,13 @@ check-your-answers.ret.report-OnlineMarketplace-operating-margin.question=Groupâ
 check-your-answers.ret.submission.title=Now submit your return
 check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \
   to the best of your knowledge, the details you are providing are correct.
+
+#ret complete
+confirmation.heading=Return complete
+confirmation.detail=We received your Digital Services Tax return for Social Group Inc for 1 April 2020 to 30 July 2020
+confirmation.email=We have sent a confirmation email to example@company.com.
+
+confirmation.what-you-do-next.title=What you must do next
+confirmation.what-you-do-next.p1=Your next return will be for 1 August 2020 to 31 July 2021.
+confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by 1 April 2022 and submit a return by 31 July 2022.
+confirmation.index=Go to your Digital Services Tax details

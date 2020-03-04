@@ -141,7 +141,7 @@ class JourneyController @Inject()(
 
   implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
     override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
-      Html(in.toString)
+      views.html.confirmation_return(key: String)(messages)
   }
 
 
@@ -171,10 +171,12 @@ class JourneyController @Inject()(
     }
   }
 
-  def returnAction(year: Int, targetId: String): Action[AnyContent] = authorisedAction.async {
+  def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
+
+    val periodKey = Period.Key(periodKeyString)
 
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](
@@ -186,36 +188,43 @@ class JourneyController @Inject()(
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
       case Some(reg) =>
-        reg.period(year) match {
-          case None => Future.successful(NotFound)
-          case Some(period) => 
-            val playProgram = returnJourney[WM](
-              create[ReturnTellTypes, ReturnAskTypes](messages(request))
-            )
-            playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) {
-              backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
-            }
+        backend.lookupOutstandingReturns().flatMap { periods => 
+          periods.find(_.key == periodKey) match {
+            case None => Future.successful(NotFound)
+            case Some(period) =>
+              val playProgram = returnJourney[WM](
+                create[ReturnTellTypes, ReturnAskTypes](messages(request))
+              )
+              playProgram.run(targetId, purgeStateUponCompletion = true) {
+                backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
+              }
+          }
         }
-    }
+    } 
   }
 
   def index: Action[AnyContent] = Action.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-    backend.lookupRegistration().map {
+    backend.lookupRegistration().flatMap {
       case None =>
+        Future.successful(
           Redirect(routes.JourneyController.registerAction(" "))
+        )
       case Some(reg) if reg.registrationNumber.isDefined =>
-        Ok(views.html.main_template(
-          title =
-            s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.landing(reg)))
+        backend.lookupOutstandingReturns().map { periods => 
+          Ok(views.html.main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.landing(reg, periods.toList.sortBy(_.start))))
+        }
       case Some(reg) =>
-        Ok(views.html.main_template(
-          title =
-            s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.confirmation("registration-sent", reg.company.name, reg.contact.email)(msg)))
-        
+        Future.successful(        
+          Ok(views.html.main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.confirmation("registration-sent", reg.company.name, reg.contact.email)(msg)))
+        )
     }
   }
 
