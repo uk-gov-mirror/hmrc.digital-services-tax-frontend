@@ -16,6 +16,7 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
+import cats.implicits._
 import enumeratum.EnumFormats
 import play.api.libs.json._
 import shapeless.tag.@@
@@ -47,6 +48,7 @@ trait SimpleJson {
   implicit val postcodeFormat       = validatedStringFormat(Postcode, "postcode")
   implicit val phoneNumberFormat    = validatedStringFormat(PhoneNumber, "phone number")
   implicit val utrFormat            = validatedStringFormat(UTR, "UTR")
+  implicit val safeIfFormat         = validatedStringFormat(SafeId, "SafeId")
   implicit val emailFormat          = validatedStringFormat(Email, "email")
   implicit val countryCodeFormat    = validatedStringFormat(CountryCode, "country code")
   implicit val sortCodeFormat       = validatedStringFormat(SortCode, "sort code")
@@ -82,6 +84,7 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val addressFormat: OFormat[Address] = Json.format[Address]
   implicit val companyFormat: OFormat[Company] = Json.format[Company]
   implicit val contactDetailsFormat: OFormat[ContactDetails] = Json.format[ContactDetails]
+  implicit val companyRegWrapperFormat: OFormat[CompanyRegWrapper] = Json.format[CompanyRegWrapper]
   implicit val registrationFormat: OFormat[Registration] = Json.format[Registration]
   implicit val activityFormat: Format[Activity] = EnumFormats.formats(Activity)
   implicit val groupCompanyFormat: Format[GroupCompany] = Json.format[GroupCompany]
@@ -125,6 +128,20 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val bankAccountFormat: OFormat[BankAccount] = Json.format[BankAccount]
   implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
   implicit val returnFormat: OFormat[Return] = Json.format[Return]
+  implicit val periodFormat: OFormat[Period] = Json.format[Period]
 
-  implicit val periodFormat: OFormat[Period] = Json.format[Period]  
+  val readCompanyReg = new Reads[CompanyRegWrapper] {
+    override def reads(json: JsValue): JsResult[CompanyRegWrapper] = {
+      println(Json.prettyPrint(json))
+      JsSuccess(CompanyRegWrapper (
+        Company(
+          {json \ "organisation" \ "organisationName"}.as[NonEmptyString],
+          {json \ "address"}.as[Address]
+        ),
+        safeId = SafeId(
+          {json \ "safeId"}.as[String]
+        ).some
+      ))
+    }
+  }
 }

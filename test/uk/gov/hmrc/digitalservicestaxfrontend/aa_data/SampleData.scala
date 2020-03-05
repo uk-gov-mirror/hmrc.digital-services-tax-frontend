@@ -33,6 +33,10 @@ object SampleData {
     sampleAddress
   )
 
+  val sampleCompanyRegWrapper = CompanyRegWrapper(
+    sampleCompany
+  )
+
   val sampleContact = ContactDetails(
     NonEmptyString("John"),
     NonEmptyString("Smith"),
@@ -41,7 +45,7 @@ object SampleData {
   )
 
   val sampleReg = Registration (
-    sampleCompany,
+    sampleCompanyRegWrapper,
     None,
     None,
     sampleContact,

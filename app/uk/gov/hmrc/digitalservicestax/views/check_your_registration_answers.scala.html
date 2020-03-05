@@ -20,6 +20,8 @@
 
 @(key: String, in: Registration)(implicit messages: UniformMessages[Html])
 
+@company = @{in.companyReg.company}
+
 <div class="govuk-grid-column-two-thirds">
     <h1 class="heading-xlarge">@messages("cya.title")</h1>
     <!--TODO Move into a helper-->
@@ -40,8 +42,8 @@
             <div>
                 <dt class="cya-question">@messages("cya.company-name-and-reg-address.question")</dt>
                 <dd class="cya-answer">
-                    <span>@in.company.name</span><br/>
-                    @for(line <- in.company.address.lines) {
+                    <span>@company.name</span><br/>
+                    @for(line <- company.address.lines) {
                        <span>@line</span><br/>
                     }
                 </dd>
