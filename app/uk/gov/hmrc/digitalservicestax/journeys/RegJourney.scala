@@ -33,7 +33,7 @@ object RegJourney {
   case class CompanyRegWrapper(company: Company, utr: Option[UTR], useSafeId: Boolean)
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
+  type RegAskTypes = RepaymentDetails :: UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
   private def message(key: String, args: String*) =
     Map(key -> Tuple2(key, args.toList))
@@ -46,7 +46,7 @@ object RegJourney {
     import interpreter._
 
     for {
-      
+      _ <- ask[RepaymentDetails]("fixme") // Just For Testing - do not commit! 
       companyRegWrapper <- backendService.lookupCompany() >>= {
 
         // found a matching company
