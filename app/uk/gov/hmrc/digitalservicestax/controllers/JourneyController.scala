@@ -25,13 +25,16 @@ import frontend.Kickout
 import repo.JourneyStateStore
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
-import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad, ListingTell, ListingTellRow}
+import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, JourneyConfig, ListingTell, ListingTellRow, WebMonad}
 import ltbs.uniform.interpreters.playframework._
 import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
-import play.twirl.api.{Html, HtmlFormat}, HtmlFormat.escape
+import play.twirl.api.{Html, HtmlFormat}
+import HtmlFormat.escape
+
 import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.duration._
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
@@ -45,9 +48,10 @@ class JourneyController @Inject()(
   mcc: MessagesControllerComponents,
   val http: HttpClient,
   val authConnector: AuthConnector,
-  servicesConfig: ServicesConfig  
+  servicesConfig: ServicesConfig,
+  val mongo: play.modules.reactivemongo.ReactiveMongoApi  
 )(
-  implicit val appConfig: AppConfig,
+  implicit val config: AppConfig,
   ec: ExecutionContext,
   implicit val messagesApi: MessagesApi
 ) extends ControllerHelpers
@@ -64,15 +68,12 @@ class JourneyController @Inject()(
     }
   }
 
-  val interpreter = DSTInterpreter(appConfig, this, messagesApi)
+  val interpreter = DSTInterpreter(config, this, messagesApi)
 
-  implicit val persistence: PersistenceEngine[Request[AnyContent]] =
-    UnsafePersistence()
-
-  implicit def autoListingTell[A](implicit tell: GenericWebTell[A, Html]) = new ListingTell[Html, A] {
-    def apply(rows: List[ListingTellRow[A]], messages: UniformMessages[Html]): Html =
+  implicit def autoGroupListingTell = new ListingTell[Html, GroupCompany] {
+    def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
       views.html.uniform.listing(rows.map {
-        case ListingTellRow(value, editLink, deleteLink) => (tell.render(value, "a", messages), editLink, deleteLink)
+        case ListingTellRow(value, editLink, deleteLink) => (Html(s"${value.name}"), editLink, deleteLink)
       }, messages)
   }
 
@@ -93,21 +94,15 @@ class JourneyController @Inject()(
       Html(s"<span class='govuk-body-m'></br>${in.line1}</br>${in.line2}</br>${in.line3}</br>${in.line4}</br>${in.postalCode}")
   }
 
-  implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
-    override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
-      val reg = in.value
-      views.html.confirmation(key: String, reg.companyReg.company.name: String, reg.contact.email: Email)(messages)
-    }
-  }
-
-  implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
-    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
-      views.html.check_your_answers(key, in.value)(messages)
-  }
-
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
     override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
       views.html.kickout(key)(messages)
+  }
+
+
+  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html("")
   }
 
   implicit val companyTell = new GenericWebTell[Company, Html] {
@@ -121,29 +116,46 @@ class JourneyController @Inject()(
           "</p>"
       )
   }
+
   implicit val booleanTell = new GenericWebTell[Boolean, Html] {
     override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
       Html(in.toString)
   }
 
-  implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
-    override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
-      Html(in.toString)
+  implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
+    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
+      views.html.check_your_registration_answers(s"$key.reg", in.value)(messages)
   }
 
   implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
     override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
-      Html(in.toString)
+      views.html.check_your_return_answers(s"$key.ret", in.value)(messages)
   }
 
-  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
-    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
-      Html(in.toString)
+  implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
+    override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
+      val reg = in.value
+      views.html.confirmation(key: String, reg.companyReg.company.name: String, reg.contact.email: Email)(messages)
+    }
   }
+
+  implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
+    override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
+      views.html.confirmation_return(key: String)(messages)
+  }
+
+
   
-  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: Request[AnyContent] =>
+  def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.RegJourney._
+
+    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+      MongoPersistence[AuthorisedRequest[AnyContent]](
+        mongo,
+        collectionName = "uf-registrations",
+        config.mongoJourneyStoreExpireAfter        
+      )(_.internalId)
 
     backend.lookupRegistration().flatMap {
       case None =>
@@ -159,45 +171,60 @@ class JourneyController @Inject()(
     }
   }
 
-  def returnAction(year: Int, targetId: String): Action[AnyContent] = authorisedAction.async {
-    implicit request: Request[AnyContent] =>
+  def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {
+    implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
     import journeys.ReturnJourney._
 
+    val periodKey = Period.Key(periodKeyString)
+
+    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+      MongoPersistence[AuthorisedRequest[AnyContent]](
+        mongo,
+        collectionName = "uf-returns",
+        config.mongoJourneyStoreExpireAfter
+      )(_.internalId)
 
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
       case Some(reg) =>
-        reg.period(year) match {
-          case None => Future.successful(NotFound)
-          case Some(period) => 
-            val playProgram = returnJourney[WM](
-              create[ReturnTellTypes, ReturnAskTypes](messages(request))
-            )
-            playProgram.run(targetId, purgeStateUponCompletion = true) {
-              backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
-            }
+        backend.lookupOutstandingReturns().flatMap { periods => 
+          periods.find(_.key == periodKey) match {
+            case None => Future.successful(NotFound)
+            case Some(period) =>
+              val playProgram = returnJourney[WM](
+                create[ReturnTellTypes, ReturnAskTypes](messages(request))
+              )
+              playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) {
+                backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
+              }
+          }
         }
-    }
+    } 
   }
 
   def index: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-    backend.lookupRegistration().map {
+    backend.lookupRegistration().flatMap {
       case None =>
+        Future.successful(
           Redirect(routes.JourneyController.registerAction(" "))
+        )
       case Some(reg) if reg.registrationNumber.isDefined =>
-        Ok(views.html.main_template(
-          title =
-            s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.landing(reg)))
+        backend.lookupOutstandingReturns().map { periods => 
+          Ok(views.html.main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.landing(reg, periods.toList.sortBy(_.start))))
+        }
       case Some(reg) =>
-        Ok(views.html.main_template(
-          title =
-            s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.confirmation("registration-sent", reg.companyReg.company.name, reg.contact.email)(msg)))
-        
+        Future.successful(
+          Ok(views.html.main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.confirmation("registration-sent", reg.companyReg.company.name, reg.contact.email)(msg)))
+        )
     }
   }
 

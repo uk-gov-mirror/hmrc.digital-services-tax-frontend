@@ -19,31 +19,29 @@
 @(items: List[(Html, String, String)], messages: UniformMessages[Html])
 
 @if(items.nonEmpty) {
-<table class="table">
-  <caption class="table__caption">@messages("tasklist.caption")</caption>
 
-  <thead class="table__head">
-    <tr class="table__row">
-      <th class="table__header" scope="col">@messages("tasklist.item")</th>
-      <th class="table__header" scope="col">@messages("tasklist.delete")</th>
-      <th class="table__header" scope="col">@messages("tasklist.edit")</th>
-    </tr>
-  </thead>
+<div class="subsection--wide">
+    <dl class="summary-list">
 
-  <tbody class="table__body">
-    @for(((item, editLink, deleteLink), id) <- items.zipWithIndex) {
-        <tr class="table__row">
-	  <td class="table__cell">
-            @item
-	  </td>
-          <td class="table__cell align-centre">
-            <a href="@deleteLink">@messages("tasklist.delete")</a>
-          </td>
-          <td class="table__cell align-right">
-            <a href="@{editLink}/">@messages("tasklist.edit")</a>
-          </td>
-        </tr>
-    }
-  </tbody>
-</table>
+        @for(((item, editLink, deleteLink), id) <- items.zipWithIndex) {
+            <div class="summary-list__row">
+                <dt class="summary-list__key">
+                    @item
+                </dt>
+                <dd class="summary-list__value">
+                    <a class="govuk-link" href="@{editLink}/">
+                        <span aria-hidden="true">@messages("common.edit")</span>
+                        <span class="visually-hidden">@messages("edit-company")</span>
+                    </a>
+                </dd>
+                <dd class="summary-list__value">
+                    <a href="@deleteLink">
+                        <span aria-hidden="true">@messages("common.delete")</span>
+                        <span class="visually-hidden">@messages("remove-company")</span>
+                    </a>
+                </dd>
+            </div>
+        }
+    </dl>
+</div>
 }

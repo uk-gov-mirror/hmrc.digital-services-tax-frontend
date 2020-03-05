@@ -17,6 +17,10 @@ common.True=Yes
 common.False=No
 common.feedback=What do you think about this service?
 common.thirty-seconds=(30 seconds)
+common.delete=Remove
+common.edit=Change
+common.yes=Yes
+common.no=No
 
 # time out
 time-out.title=For your security, we signed you out
@@ -94,7 +98,7 @@ contact-details.phoneNumber.hint=For international numbers include the country c
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
 
-check-liability-date.heading=Did the company become liable for Digital Services Tax on 1 April 2020?
+check-liability-date.heading=Did the company become liable for Digital Services Tax on 6 April 2020?
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
@@ -157,6 +161,7 @@ details-not-correct.kickout.wrong-id=If you signed in with the wrong user ID
 details-not-correct.kickout.sign-in-again=You will need to sign in again using the Government Gateway user ID for the \
   company you need to register.
 
+#service page
 landing.heading=Digital Services Tax details
 landing.ultimate-parent-name=Group’s ultimate parent company: {0}
 landing.dst-no=DST Registation Number: {0}
@@ -167,3 +172,164 @@ landing.return-due=Next return due
 landing.submit-return=Submit a return
 landing.account-history=Account History
 landing.balance=View your balance and transactions history
+
+#returns
+manage-companies.listing.heading=Confirm your group’s companies
+manage-companies.radio.heading=Do you need to add another company to your group?
+manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
+manage-companies.Add=Yes
+manage-companies.Continue=No
+remove-company=Remove company
+change-company=Change company name
+
+add.heading=Company details
+add.name.heading=Company name
+add.name.hint=This is the name registered with an official company register, such as Companies House.
+add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
+add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+edit.heading=Company details
+edit.name.heading=Company name
+edit.name.hint=This is the name registered with an official company register, such as Companies House.
+edit.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
+edit.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+select-activities.heading=Which activities are you reporting in this return?
+select-activities.heading.hint=Select all that apply.
+select-activities.SocialMedia=Social media
+select-activities.SearchEngine=Search engine
+select-activities.OnlineMarketplace=Online marketplace
+
+report-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins in this return?
+report-alternative-charge.details=What we mean by ‘alternative charge’
+report-alternative-charge.details.text=<p>This is an alternative method that businesses can use to work out their Digital Services Tax liability.</p>\
+<p>The alternative charge only benefits groups who make a loss or have a low UK profit margin on a Digital Services activity.</p>
+report-alternative-charge.TRUE=Yes
+report-alternative-charge.FALSE=No
+
+report-SocialMedia-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your social media activity?
+report-SocialMedia-alternative-charge.TRUE=Yes
+report-SocialMedia-alternative-charge.FALSE=No
+report-SocialMedia-loss.heading=Has the group made a loss on its social media activity?
+report-SocialMedia-loss.TRUE=Yes
+report-SocialMedia-loss.FALSE=No
+report-SocialMedia-operating-margin.heading=What was the group’s operating margin on its social media activity?
+
+report-SearchEngine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your search engine activity?
+report-SearchEngine-alternative-charge.TRUE=Yes
+report-SearchEngine-alternative-charge.FALSE=No
+report-SearchEngine-loss.heading=Has the group made a loss on its search engine activity?
+report-SearchEngine-loss.TRUE=Yes
+report-SearchEngine-loss.FALSE=No
+report-SearchEngine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
+
+report-OnlineMarketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your online marketplace activity?
+report-OnlineMarketplace-alternative-charge.TRUE=Yes
+report-OnlineMarketplace-alternative-charge.FALSE=No
+report-OnlineMarketplace-loss.heading=Has the group made a loss on its online marketplace activity?
+report-OnlineMarketplace-loss.TRUE=Yes
+report-OnlineMarketplace-loss.FALSE=No
+report-OnlineMarketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+
+report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
+report-cross-border-transaction-relief.details=What we mean by ‘relief on cross-border transactions’
+report-cross-border-transaction-relief.details.text=<p> If a transaction involves a UK user and a non-UK user who is in a country \
+  that also operates a Digital Services Tax, only 50% of the revenues from that transaction will be taxable as UK revenues.</p>
+report-cross-border-transaction-relief.TRUE=Yes
+report-cross-border-transaction-relief.FALSE=No
+
+relief-deducted.heading=How much cross-border transactions relief have you deducted from revenues in this return?
+
+company-liabilities-0.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-4.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-5.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-6.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-7.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-8.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-9.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-10.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-11.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-12.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-13.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-14.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-15.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-16.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-17.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-18.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-19.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-20.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+
+allowance-deducted.heading=How much of the £25m annual allowance have you deducted from revenues in this return?
+allowance-deducted.details=What we mean by ‘£25m annual allowance’
+allowance-deducted.details.text=<p>The £25m annual allowance means the first £25m of revenues derived \
+  from UK users will not be subject to Digital Services Tax.</p><p>The allowance is pro-rated for accounting \
+  periods less than 12 months.</p>
+
+group-liability.heading=What is the group’s total UK Digital Services Tax liability for 1 April 2020 to 31 July 2020? 
+group-liability.hint=This is the total amount of liability after applying any deductions and allowances.
+
+repayment.heading=Do you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020?
+repayment.TRUE=Yes
+repayment.FALSE=No
+
+bank-details-type.heading=Your bank details for repayment
+bank-details-type._1.heading=Account Name
+bank-details-type._2.TRUE=Yes
+bank-details-type._2.FALSE=No
+bank-details-type._2.heading.large=Is this a UK bank account?
+
+bank-details-type-domestic.heading=What are your UK bank account details?
+bank-details-domestic.sortCode.heading.large.label=Sort code
+bank-details-domestic.accountNo.heading.large.label=Account number
+bank-details-domestic.buildingSocietyNumber.heading.large.label=Building society roll number (if you have one)
+
+bank-details-foreign.listing.heading=What are your bank account details?
+bank-details-foreign.iban.heading.large.label=International Bank Account Number (IBAN)
+
+#Returns cya
+check-your-answers.ret.title=Check your answers before sending you return for 1 April 2020 to July 2020
+check-your-answers.ret.company.title=Digital Services Tax return details
+check-your-answers.ret.group-liability.question=Group’s total Digital Services Tax liability
+check-your-answers.ret.allowance-deducted.question=Amount of £25m annual allowance claimed
+check-your-answers.ret.report-cross-border-transaction-relief.question=Are you claiming any relief on cross-border \
+  transactions for this period?
+check-your-answers.ret.relief-deducted.question=Amount of relief claimed on cross-border transactions
+check-your-answers.ret.group-company={0}’s Digital Services Tax liability
+
+check-your-answers.ret.report-alternative-charge.question=Activity reported in this return
+check-your-answers.ret.SocialMedia.title=Social media activity
+check-your-answers.ret.report-SocialMedia-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-SocialMedia-loss.question=Loss made
+check-your-answers.ret.report-SocialMedia-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.SearchEngine.title=Search Engine Activity
+check-your-answers.ret.report-SearchEngine-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-SearchEngine-loss.question=Loss made
+check-your-answers.ret.report-SearchEngine-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.OnlineMarketplace.title=Online Marketplace Activity
+check-your-answers.ret.report-OnlineMarketplace-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-OnlineMarketplace-loss.question=Loss made
+check-your-answers.ret.report-OnlineMarketplace-operating-margin.question=Group’s profit margin on activity
+
+check-your-answers.ret.submission.title=Now submit your return
+check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \
+  to the best of your knowledge, the details you are providing are correct.
+
+#ret complete
+confirmation.heading=Return complete
+confirmation.detail=We received your Digital Services Tax return for Social Group Inc for 1 April 2020 to 30 July 2020
+confirmation.email=We have sent a confirmation email to example@company.com.
+
+confirmation.what-you-do-next.title=What you must do next
+confirmation.what-you-do-next.p1=Your next return will be for 1 August 2020 to 31 July 2021.
+confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by 1 April 2022 and submit a return by 31 July 2022.
+confirmation.index=Go to your Digital Services Tax details

@@ -17,9 +17,17 @@
 @(key: List[String], options: Seq[String], existing: Option[String], errors: ErrorTree, messages: UniformMessages[Html], conditional: PartialFunction[String,Html] = PartialFunction.empty )
 
 @keyNoDots=@{key.mkString("-")}
-@inlineRadioKeys=@{(key.mkString(".") == "loan-amount.estimate")}
-
+@inlineRadioKeys=@{key.mkString(".") == "manage-companies"}
 @standard_field(key, errors, "radios", messages) {
+@if(inlineRadioKeys) {
+    <fieldset class="govuk-fieldset" id="add-company-to-group" aria-describedby="add-to-list-hint">
+        <legend class="fieldset__legend govuk-fieldset__legend--m">
+            <h2>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
+        </legend>
+        <span id="add-to-list-hint" class="hint">
+            @messages.get(s"${key.mkString(".")}.radio.hint")
+        </span>
+    }
 
 <div class="radios@if(inlineRadioKeys){--inline}">
   @for((opt,num) <- if(key.head == "about-loan"){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
@@ -49,5 +57,9 @@
       </div>
     }
   }
-  </div>
+</div>
+
+@if(inlineRadioKeys){
+    </fieldset>
+}
 }

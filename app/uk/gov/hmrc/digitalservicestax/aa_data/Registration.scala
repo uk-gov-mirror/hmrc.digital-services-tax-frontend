@@ -20,7 +20,6 @@ package data
 //import services._
 
 import java.time.LocalDate
-import cats.syntax.order._
 
 case class Registration (
   companyReg: CompanyRegWrapper,
@@ -30,26 +29,4 @@ case class Registration (
   dateLiable: LocalDate,
   accountingPeriodEnd: LocalDate,
   registrationNumber: Option[DSTRegNumber] = None
-) {
-
-  require(dateLiable >= Period.firstPeriodStart,
-    s"cannot be liable before policy start (${Period.firstPeriodStart})"
-  )
-
-  def period(year: Int): Option[Period] = {
-    val start = Period.firstPeriodStart
-    if (year < dateLiable.getYear) None
-    else {
-      Some(Period(
-        if (year == start.getYear) {
-          dateLiable
-        } else {
-          start.plusYears(year - start.getYear)
-        },
-        start.plusYears(1 + year - start.getYear).minusDays(1)
-      ))
-    }
-  }
-
-
-}
+)
