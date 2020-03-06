@@ -36,7 +36,7 @@ object RegJourney {
   private def message(key: String, args: String*) =
     Map(key -> Tuple2(key, args.toList))
 
-
+private val utrRegex = """^[0-9]{10}"""
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: DSTService[F]
@@ -64,7 +64,7 @@ object RegJourney {
             ).mapN(Company.apply).map(CompanyRegWrapper(_, useSafeId = true))
           case true =>
             for {
-              utr <- ask[UTR]("enter-utr")
+              utr <- ask[UTR]("enter-utr", validation = Rule.cond[UTR](_.matches(utrRegex), "format"))
               postcode <- ask[Postcode]("enter-postcode")
               companyOpt <- backendService.lookupCompany(utr, postcode)
               _ <- if (companyOpt.isEmpty) end("company-lookup-failed", Kickout("details-not-correct")) else { (()).pure[F] }
@@ -84,7 +84,17 @@ object RegJourney {
         ask[Boolean]("check-if-group") >>= {
           case true =>
             for {
-              parentName <- ask[NonEmptyString]("ultimate-parent-company-name")
+              parentName <- ask[NonEmptyString]("ultimate-parent-company-name",
+              validation =
+                Rule.cond[NonEmptyString](
+                _.length < 60,
+                  "length"
+              ) followedBy
+                Rule.cond[NonEmptyString](
+                  _.matches(""""""),
+                  "format"
+                )
+              )
               parentAddress <- ask[Address](
                 "ultimate-parent-company-address",
                 customContent = message("ultimate-parent-company-address.heading", parentName)
@@ -95,7 +105,7 @@ object RegJourney {
         },
         ask[ContactDetails]("contact-details"),
         ask[Boolean]("check-liability-date") flatMap {
-          case true => LocalDate.of(2020,4,6).pure[F]
+          case true => LocalDate.of(2020,4,1).pure[F]
           case false =>
             ask[LocalDate]("liability-start-date",
               validation = Rule.min(LocalDate.of(2020,4,6))

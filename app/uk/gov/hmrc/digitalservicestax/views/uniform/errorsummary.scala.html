@@ -19,6 +19,7 @@
 
 @(keyList: List[String], errors: ErrorTree, messages: UniformMessages[Html])
 
+    @errors
 @if(keyList.length == 1 && errors.nonEmpty) {
 
     <div class="error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary" id="error-summary-heading">

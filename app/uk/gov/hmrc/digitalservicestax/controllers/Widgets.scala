@@ -85,6 +85,15 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
+  def validatedNonEmptyString(validated: ValidatedType[String])(
+    implicit baseForm: FormField[String, Html]
+  ): FormField[String @@ validated.Tag, Html] =
+    baseForm.simap{
+      case "" => Left(ErrorMsg("required").toTree)
+      case x =>
+        Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+    }{x => x: String}
+
   implicit def postcodeField    = validatedVariant(Postcode)
   implicit def nesField         = validatedVariant(NonEmptyString)
   implicit def utrField         = validatedVariant(UTR)
@@ -94,6 +103,7 @@ trait Widgets {
   implicit def percentField     = validatedVariant(Percent)
   implicit def accountField     = validatedVariant(AccountNumber)
   implicit def sortCodeField    = validatedVariant(SortCode)
+  implicit def companyNameField = validatedNonEmptyString(CompanyName)
   implicit def ibanField        = validatedVariant(IBAN)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)

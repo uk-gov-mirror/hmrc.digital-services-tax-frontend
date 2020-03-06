@@ -98,7 +98,7 @@ contact-details.phoneNumber.hint=For international numbers include the country c
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
 
-check-liability-date.heading=Did the company become liable for Digital Services Tax on 6 April 2020?
+check-liability-date.heading=Did the company become liable for Digital Services Tax on 1 April 2020?
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
@@ -182,6 +182,8 @@ manage-companies.Continue=No
 remove-company=Remove company
 change-company=Change company name
 
+manage-companies.invalid=Select yes if you want to add another company to your group
+
 add.heading=Company details
 add.name.heading=Company name
 add.name.hint=This is the name registered with an official company register, such as Companies House.
@@ -190,6 +192,12 @@ add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and 
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
 
+add.name.required=Enter the company’s name
+add.name.limit=Company name must be 160 characters or fewer
+add.name.invalid=Business name must only include letters a to z, numbers, commas, full stops, apostrophes, hyphens, \
+  ampersands (&), round brackets, forward slashes and spaces
+add.utr.invalid=Enter the company's Corporation Tax Unique Taxpayer Reference in the correct format
+
 edit.heading=Company details
 edit.name.heading=Company name
 edit.name.hint=This is the name registered with an official company register, such as Companies House.
@@ -197,6 +205,12 @@ edit.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
 edit.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+edit.name.required=Enter the company’s name
+edit.name.limit=Company name must be 160 characters or fewer
+edit.name.invalid=Business name must only include letters a to z, numbers, commas, full stops, apostrophes, hyphens, \
+  ampersands (&), round brackets, forward slashes and spaces
+edit.utr.invalid=Enter the company's Corporation Tax Unique Taxpayer Reference in the correct format
 
 select-activities.heading=Which activities are you reporting in this return?
 select-activities.heading.hint=Select all that apply.

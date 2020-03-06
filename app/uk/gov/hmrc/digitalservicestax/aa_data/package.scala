@@ -35,6 +35,11 @@ package object data extends SimpleJson {
     "^[A-Z0-9]{1,15}$"
   )
 
+  type CompanyName = String @@ CompanyName.Tag
+  object CompanyName extends RegexValidatedString(
+    """^[A-Za-z 0-9,.()'&\-\/]{1,160}$"""
+  )
+
   type Postcode = String @@ Postcode.Tag
   object Postcode extends RegexValidatedString(
     """^(GIR 0A{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z]))))[ ]?[0-9][A-Z]{2})$""",

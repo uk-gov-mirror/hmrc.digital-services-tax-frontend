@@ -52,11 +52,11 @@ trait SimpleJson {
   implicit val emailFormat          = validatedStringFormat(Email, "email")
   implicit val countryCodeFormat    = validatedStringFormat(CountryCode, "country code")
   implicit val sortCodeFormat       = validatedStringFormat(SortCode, "sort code")
+  implicit val companyNameFormat    = validatedStringFormat(CompanyName, "name")
   implicit val accountNumberFormat  = validatedStringFormat(AccountNumber, "account number")
   implicit val ibanFormat           = validatedStringFormat(IBAN, "IBAN number")
   implicit val periodKeyFormat      = validatedStringFormat(Period.Key, "Period Key")  
-  implicit val dstRegNoFormat       =
-    validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
+  implicit val dstRegNoFormat       = validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
 
     implicit val percentFormat: Format[Percent] = new Format[Percent] {
     override def reads(json: JsValue): JsResult[Percent] = {
@@ -112,7 +112,7 @@ object BackendAndFrontendJson extends SimpleJson {
           case "" => None
           case x => Some(UTR(x))
         }
-        GroupCompany(NonEmptyString(name), utr) -> v.value
+        GroupCompany(CompanyName(name), utr) -> v.value
       })
     }
 

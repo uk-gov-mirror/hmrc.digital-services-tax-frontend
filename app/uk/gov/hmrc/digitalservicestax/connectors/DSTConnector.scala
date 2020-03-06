@@ -46,7 +46,6 @@ class DSTConnector (
   def lookupCompany(): Future[Option[CompanyRegWrapper]] =
     http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
 
-
   def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] =
     http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode")
 
