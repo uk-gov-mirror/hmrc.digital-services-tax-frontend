@@ -33,15 +33,18 @@ object RegJourney {
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
-  private def message(key: String, args: String*) =
-    Map(key -> Tuple2(key, args.toList))
-
+  private def message(key: String, args: String*) = {
+    import play.twirl.api.HtmlFormat.escape
+    Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
+  }
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: DSTService[F]
   ): F[Registration] = {
     import interpreter._
+
+
 
     for {
       

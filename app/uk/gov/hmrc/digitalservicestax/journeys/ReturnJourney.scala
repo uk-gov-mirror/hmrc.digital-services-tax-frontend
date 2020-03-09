@@ -32,8 +32,10 @@ object ReturnJourney {
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
   type ReturnAskTypes = (NonEmptyString, Boolean) :: DomesticBankAccount :: ForeignBankAccount :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
-  private def message(key: String, args: String*) =
-    Map(key -> Tuple2(key, args.toList))
+  private def message(key: String, args: String*) = {
+    import play.twirl.api.HtmlFormat.escape
+    Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
+  }
 
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
