@@ -41,6 +41,7 @@ import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeader
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HeaderCarrier
+import play.twirl.api.HtmlFormat
 
 @Singleton
 class JourneyController @Inject()(
@@ -73,7 +74,7 @@ class JourneyController @Inject()(
   implicit def autoGroupListingTell = new ListingTell[Html, GroupCompany] {
     def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
       views.html.uniform.listing(rows.map {
-        case ListingTellRow(value, editLink, deleteLink) => (Html(s"${value.name}"), editLink, deleteLink)
+        case ListingTellRow(value, editLink, deleteLink) => (HtmlFormat.escape(value.name), editLink, deleteLink)
       }, messages)
   }
 
@@ -83,7 +84,7 @@ class JourneyController @Inject()(
       Html(
         s"<p>" +
           s"<span>" +
-            s"${in.lines.mkString("</span></br><span>")}" +
+            s"${in.lines.map{_.escapeHtml}.mkString("</span></br><span>")}" +
           s"</span>" +
         "</p>"
       )
@@ -91,7 +92,7 @@ class JourneyController @Inject()(
 
   implicit val ukAddressTell = new GenericWebTell[UkAddress, Html] {
     override def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"<span class='govuk-body-m'></br>${in.line1}</br>${in.line2}</br>${in.line3}</br>${in.line4}</br>${in.postalCode}")
+      Html(s"<span class='govuk-body-m'></br>${in.line1.escapeHtml}</br>${in.line2.escapeHtml}</br>${in.line3.escapeHtml}</br>${in.line4.escapeHtml}</br>${in.postalCode.escapeHtml}")
   }
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
@@ -109,9 +110,9 @@ class JourneyController @Inject()(
     override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
       Html(
         s"<p>" +
-          s"<span>${in.name.toString}</span></br>" +
+          s"<span>${in.name.toString.escapeHtml}</span></br>" +
           s"<span>" +
-          s"${in.address.lines.mkString("</span></br><span>")}" +
+          s"${in.address.lines.map{_.escapeHtml}.mkString("</span></br><span>")}" +
           s"</span>" +
           "</p>"
       )
