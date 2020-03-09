@@ -80,7 +80,7 @@ case class DSTInterpreter(
   def messages(
     request: Request[AnyContent]
   ): UniformMessages[Html] =
-    messagesApi.preferred(request).convertMessagesTwirlHtml() |+|
+    messagesApi.preferred(request).convertMessagesTwirlHtml(escapeHtml = true) |+|
       UniformMessages.bestGuess.map(HtmlFormat.escape)
   // N.b. this next line very useful for correcting the keys of missing content, leave for now
 //     UniformMessages.attentionSeeker.map(HtmlFormat.escape)
