@@ -29,12 +29,10 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
 
   private def loadConfig(key: String) = config.get[String](key)
 
-  private val contactBaseUrl: String               = servicesConfig.baseUrl("contact-frontend")
-  private val contactHost: String                  = config.get[String](s"contact-frontend.host")
-  private val contactFormServiceIdentifier: String = loadConfig("appName")
-  private val assetsUrl: String                    = loadConfig("assets.url")
 
-  lazy val assetsPrefix: String   = assetsUrl + loadConfig("assets.version")
+  private val assetsUrl: String = loadConfig("assets.url")
+  lazy val assetsPrefix: String = assetsUrl + loadConfig("assets.version")
+
   lazy val analyticsToken: String = loadConfig(s"google-analytics.token")
   lazy val analyticsHost: String  = loadConfig(s"google-analytics.host")
 
@@ -43,9 +41,12 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
   private lazy val companyAuthSignInPath: String  = servicesConfig.getConfString("company-auth.sign-in-path", "")
   private lazy val companyAuthSignOutPath: String = servicesConfig.getConfString("company-auth.sign-out-path", "")
   lazy val ggLoginUrl: String                     = s"$companyAuthFrontend$companyAuthSignInPath"
+  
+  private val contactHost: String                  = loadConfig("contact-frontend.host")
+  private val contactFormServiceIdentifier: String = loadConfig("appName")
 
-  val reportAProblemPartialUrl: String = s"$contactBaseUrl/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl: String   = s"$contactBaseUrl/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemNonJSUrl: String   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
 
   val mongoShortLivedStoreExpireAfter: Duration = servicesConfig.getDuration("mongodb.shortLivedCache.expireAfter")
   val mongoJourneyStoreExpireAfter: Duration    = servicesConfig.getDuration("mongodb.journeyStore.expireAfter")
