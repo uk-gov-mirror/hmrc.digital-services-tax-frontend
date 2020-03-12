@@ -2,7 +2,7 @@ import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.SbtArtifactory
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
-val appName = "digital-services-tax-frontend"
+val appName = "digital-services-tax"
 
 PlayKeys.playDefaultPort := 8740
 
