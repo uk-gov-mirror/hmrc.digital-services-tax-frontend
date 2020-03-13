@@ -62,9 +62,9 @@ class JourneyController @Inject()(
 
   def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
-  val hodCache = SimpleCaching[(String /* TODO: InternalId */, String)]()
+  val hodCache = SimpleCaching[(InternalId, String)]()
 
-  def hod(internalId: String)(implicit hc: HeaderCarrier) = new DSTService[WebMonad[*, Html]] {
+  def hod(internalId: InternalId)(implicit hc: HeaderCarrier) = new DSTService[WebMonad[*, Html]] {
     val fa = FutureAdapter[Html]()
     import fa._
     import concurrent.duration._
