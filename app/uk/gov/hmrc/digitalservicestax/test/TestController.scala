@@ -28,8 +28,8 @@ class TestController @Inject()(
   mcc: MessagesControllerComponents
 )(implicit ec: ExecutionContext) extends FrontendController(mcc) {
 
-  def triggerTaxEnrolmentCallback(seed: String): Action[AnyContent] = Action.async { implicit request =>
-    connector.trigger("test-only/trigger-te-callback", seed) flatMap (_ =>
+  def triggerTaxEnrolmentCallback: Action[AnyContent] = Action.async { implicit request =>
+    connector.trigger("test-only/trigger-te-callback") flatMap (_ =>
       Future.successful(Ok("tax enrolment callback triggered")))
   }
 

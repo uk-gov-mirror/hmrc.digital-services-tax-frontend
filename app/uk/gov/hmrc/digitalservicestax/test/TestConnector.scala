@@ -34,8 +34,8 @@ class TestConnector @Inject()(
 
   private val beUrl: String = servicesConfig.baseUrl("digital-services-tax")
 
-  def trigger(url: String, param: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
-    http.GET[HttpResponse](s"$beUrl/$url/$param")
+  def trigger(url: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+    http.GET[HttpResponse](s"$beUrl/$url")
 
 
 }
