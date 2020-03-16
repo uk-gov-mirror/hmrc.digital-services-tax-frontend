@@ -32,7 +32,7 @@ import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
 import uk.gov.hmrc.digitalservicestax.controllers.{DSTInterpreter, routes}
-import uk.gov.hmrc.digitalservicestax.data.Registration
+import uk.gov.hmrc.digitalservicestax.data.{Registration, InternalId}
 import uk.gov.hmrc.digitalservicestax.views
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
@@ -54,7 +54,10 @@ class AuthorisedAction @Inject()(
 
     authorised(AuthProviders(GovernmentGateway, Verify) and Organisation).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
 
-      val internalId = id.getOrElse(throw new RuntimeException("No internal ID for user"))
+      val internalIdString = id.getOrElse(throw new RuntimeException("No internal ID for user"))
+      val internalId = InternalId.of(internalIdString).getOrElse(
+        throw new IllegalStateException("Invalid internal ID")
+      )
 
       Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
 
@@ -85,7 +88,7 @@ class AuthorisedAction @Inject()(
 }
 
 case class AuthorisedRequest[A](
-  internalId: String,
+  internalId: InternalId,
   enrolments: Enrolments,
   request: Request[A]
 ) extends WrappedRequest(request)

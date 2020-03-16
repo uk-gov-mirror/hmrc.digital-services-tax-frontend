@@ -62,11 +62,40 @@ class JourneyController @Inject()(
 
   def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
-  def hod(implicit hc: HeaderCarrier): DSTService[WebMonad[*, Html]] = backend.natTransform[WebMonad[*, Html]]{
-    import cats.~>
-    new (Future ~> WebMonad[*, Html]) {
-      def apply[A](in: Future[A]): WebMonad[A, Html] = FutureAdapter[Html]().alwaysRerun(in)
-    }
+  val hodCache = SimpleCaching[(InternalId, String)]()
+
+  def hod(internalId: InternalId)(implicit hc: HeaderCarrier) = new DSTService[WebMonad[*, Html]] {
+    val fa = FutureAdapter[Html]()
+    import fa._
+    import concurrent.duration._
+    import interpreter._
+
+    def lookupCompany(utr: UTR, postcode: Postcode): WebMonad[Option[CompanyRegWrapper],Html] =
+      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company-args"), utr, postcode)(
+        backend.lookupCompany(utr, postcode)
+      ))
+
+    def lookupCompany(): WebMonad[Option[CompanyRegWrapper],Html] =
+      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company"))(
+        backend.lookupCompany()
+      ))
+
+    def lookupOutstandingReturns(): WebMonad[Set[Period],Html] = 
+      alwaysRerun(hodCache[Set[Period]]((internalId, "lookup-outstanding-returns"))(
+        backend.lookupOutstandingReturns()
+      ))
+
+    def lookupRegistration(): WebMonad[Option[Registration],Html] = 
+      alwaysRerun(hodCache[Option[Registration]]((internalId, "lookup-reg"))(
+        backend.lookupRegistration()
+      ))
+
+    def submitRegistration(reg: Registration): WebMonad[Unit,Html] =
+      alwaysRerun(backend.submitRegistration(reg))
+
+    def submitReturn(period: Period,ret: Return): WebMonad[Unit,Html] = 
+      alwaysRerun(backend.submitReturn(period, ret))
+
   }
 
   val interpreter = DSTInterpreter(config, this, messagesApi)
@@ -144,8 +173,6 @@ class JourneyController @Inject()(
     override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
       views.html.confirmation_return(key: String)(messages)
   }
-
-
   
   def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: AuthorisedRequest[AnyContent] =>
     import interpreter._
@@ -162,7 +189,7 @@ class JourneyController @Inject()(
       case None =>
         val playProgram = registrationJourney[WM](
           create[RegTellTypes, RegAskTypes](messages(request)),
-          hod
+          hod(request.internalId)
         )
         playProgram.run(targetId, purgeStateUponCompletion = true) {
           backend.submitRegistration(_).map { _ => Redirect(routes.JourneyController.index) }
