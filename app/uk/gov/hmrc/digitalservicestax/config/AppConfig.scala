@@ -43,7 +43,7 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
   lazy val ggLoginUrl: String                     = s"$companyAuthFrontend$companyAuthSignInPath"
   
   private val contactHost: String                  = loadConfig("contact-frontend.host")
-  private val contactFormServiceIdentifier: String = loadConfig("appName")
+  private val contactFormServiceIdentifier: String = loadConfig("serviceName")
 
   lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   lazy val reportAProblemNonJSUrl: String   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
