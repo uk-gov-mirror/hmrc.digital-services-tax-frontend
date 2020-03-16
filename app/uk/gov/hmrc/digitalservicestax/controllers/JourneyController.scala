@@ -201,6 +201,7 @@ class JourneyController @Inject()(
 
   def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
+      implicit val msg: UniformMessages[Html] = interpreter.messages(request)
     import interpreter._
     import journeys.ReturnJourney._
 
@@ -223,8 +224,15 @@ class JourneyController @Inject()(
               val playProgram = returnJourney[WM](
                 create[ReturnTellTypes, ReturnAskTypes](messages(request))
               )
-              playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) {
-                backend.submitReturn(period, _).map{ _ => Redirect(routes.JourneyController.index)}
+              playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) { x =>
+                backend.submitReturn(period, x).map{ _ =>
+
+                  Redirect(routes.JourneyController.index)
+                  Ok(views.html.main_template(
+                    title =
+                      s"${msg("common.title.short")} - ${msg("common.title")}"
+                  )(views.html.confirmation_return("confirmation")(msg)))
+                }
               }
           }
         }
