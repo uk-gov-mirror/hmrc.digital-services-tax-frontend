@@ -50,7 +50,7 @@
 
 	    @outstanding.headOption.map { case period => 
                <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
-               <p>@{period.returnDue}</p>
+               <p>@{period.paymentDue}</p>
                <p><a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.returnAction(period.key, "")/'>@messages("landing.submit-return")</a></p>
 	    }
             </div>

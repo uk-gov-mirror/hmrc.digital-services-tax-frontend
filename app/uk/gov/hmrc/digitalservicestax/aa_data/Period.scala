@@ -28,6 +28,7 @@ case class Period(
   }
 
 
+
 object Period {
 
   type Key = String @@ Key.Tag
