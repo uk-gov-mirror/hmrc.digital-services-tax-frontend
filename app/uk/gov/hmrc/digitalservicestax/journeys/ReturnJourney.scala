@@ -105,7 +105,6 @@ object ReturnJourney {
         askRepaymentDetails("bank-details") when ask[Boolean]("repayment")
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
-      _ <- tell("confirmation", Confirmation(dstReturn))
     } yield dstReturn
   }
 
