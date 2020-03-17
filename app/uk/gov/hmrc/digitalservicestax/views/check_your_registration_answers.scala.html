@@ -17,28 +17,28 @@
 @import uk.gov.hmrc.digitalservicestax.data.Registration
 @import uk.gov.hmrc.digitalservicestax.data._
 @import uk.gov.hmrc.digitalservicestax.frontend._
+@import uk.gov.hmrc.digitalservicestax.views.html.helpers._
+
 
 @(key: String, in: Registration)(implicit messages: UniformMessages[Html])
 
 @company = @{in.companyReg.company}
 
+@serviceUrl = @{"/digital-services-tax/register"}
+
 <div class="govuk-grid-column-two-thirds">
     <h1 class="heading-xlarge">@messages("cya.title")</h1>
-    <!--TODO Move into a helper-->
     <div class="subsection--wide">
         <h2 class="govuk-heading-m">@messages("cya.company.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
+            @standard_cya_row(
+                "cya",
+                "check-if-group",
+                Html(s"${messages(s"common.${in.ultimateParent.fold("no")(_ => "yes")}")}"),
+                s"$serviceUrl/check-if-group"
+            )
 
-            <div>
-                <dt class="cya-question">@messages("cya.check-if-group.question")</dt>
-                <dd class="cya-answer">@{messages(s"common.${in.ultimateParent.fold(false)(_ => true)}")}</dd>
-                <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                    <span class="govuk-visually-hidden">@messages("cya.check-if-group.change")</span>
-                    </a>
-                </dd>
-            </div>
             <div>
                 <dt class="cya-question">@messages("cya.company-name-and-reg-address.question")</dt>
                 <dd class="cya-answer">
@@ -48,8 +48,8 @@
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.company.change")</span>
+                    <a href="@serviceUrl/company-contact-address">@messages("tasklist.change")
+                        <span class="govuk-visually-hidden">@messages("cya.company-name-and-reg-address.change")</span>
                     </a>
                 </dd>
             </div>
@@ -62,15 +62,13 @@
 
         <dl class="govuk-check-your-answers cya-questions-short">
 
-            <div>
-                <dt class="cya-question">@messages("cya.ultimate-parent-company-name.question")</dt>
-                <dd class="cya-answer">@up.name.toString</dd>
-                <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.check-if-group.change")</span>
-                    </a>
-                </dd>
-            </div>
+            @standard_cya_row(
+                "cya",
+                "ultimate-parent-company-name",
+                Html(s"${up.name}"),
+                s"$serviceUrl/ultimate-parent-company-name"
+            )
+
             <div>
                 <dt class="cya-question">@messages("cya.ultimate-parent-company-address.question")</dt>
                 <dd class="cya-answer">
@@ -80,8 +78,8 @@
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.company.change")</span>
+                    <a href="@serviceUrl/ultimate-parent-company-address">@messages("tasklist.change")
+                        <span class="govuk-visually-hidden">@messages("cya.ultimate-parent-company-address.change")</span>
                     </a>
                 </dd>
             </div>
@@ -106,8 +104,8 @@
                     @in.contact.email<br/>
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.check-if-group.change")</span>
+                    <a href="@serviceUrl/contact-details">@messages("tasklist.change")
+                        <span class="govuk-visually-hidden">@messages("cya.contact-details.change")</span>
                     </a>
                 </dd>
             </div>
@@ -118,24 +116,18 @@
         <h2 class="govuk-heading-m">@messages("cya.liability-date.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
-            <div>
-                <dt class="cya-question">@messages("cya.liability-start-date.question")</dt>
-                <dd class="cya-answer">@{formatDate(in.dateLiable)}</dd>
-                <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.check-if-group.change")</span>
-                    </a>
-                </dd>
-            </div>
-            <div>
-                <dt class="cya-question">@messages("cya.accounting-end-date.question")</dt>
-                <dd class="cya-answer">@formatDate(in.accountingPeriodEnd)</dd>
-                <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.company.change")</span>
-                    </a>
-                </dd>
-            </div>
+            @standard_cya_row(
+                "cya",
+                "liability-start-date",
+                Html(s"${formatDate(in.dateLiable)}"),
+                s"$serviceUrl/check-liability-date"
+            )
+            @standard_cya_row(
+                "cya",
+                "accounting-end-date",
+                Html(s"${formatDate(in.accountingPeriodEnd)}"),
+                s"$serviceUrl/accounting-period-end-date"
+            )
         </dl>
     </div>
 
