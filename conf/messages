@@ -400,6 +400,11 @@ confirmation.what-you-do-next.p1=Your next return will be for 1 August 2020 to 3
 confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by 1 April 2022 and submit a return by 31 July 2022.
 confirmation.index=Go to your Digital Services Tax details
 
+#error pages
+wrong-account.heading=You cannot use this service
+wrong-account.sign-out.reason=You signed in with a Government Gateway user ID for an individual or agent. We have signed you out.
+wrong-account.sign-in.reason=To use this service, sign in with the Government Gateway user ID for the company that is registering for the Digital Services Tax.
+
 # Please see example messages below, from most specific to most general.
 # I suggest creating the most general ones first then overriding with more
 # specific ones on a case-by-case basis.
