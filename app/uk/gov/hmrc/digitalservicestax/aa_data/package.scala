@@ -59,6 +59,11 @@ package object data extends SimpleJson {
       Some(in).filter(_.nonEmpty)
   }
 
+  type RestrictiveString = String @@ RestrictiveString.Tag
+  object RestrictiveString extends RegexValidatedString(
+    """^[a-zA-Z &`\\-\\'^]{1,35}$"""
+  )
+
   type CountryCode = String @@ CountryCode.Tag
   object CountryCode extends RegexValidatedString(
     """^[A-Z][A-Z]$""", 

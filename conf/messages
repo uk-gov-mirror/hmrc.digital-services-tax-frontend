@@ -22,6 +22,9 @@ common.edit=Change
 common.yes=Yes
 common.no=No
 
+# Errors
+there.is.a.problem=There is a problem
+
 # time out
 time-out.title=For your security, we signed you out
 time-out.save=Your progress will saved for 30 days
@@ -35,15 +38,22 @@ check-unique-taxpayer-reference.heading=Does the company you are registering hav
   Tax Unique Taxpayer Reference?
 check-unique-taxpayer-reference.TRUE=Yes
 check-unique-taxpayer-reference.FALSE=No
+check-unique-taxpayer-reference.required=Select yes if the company you are registering has a UK Corporation Tax Unique Taxpayer Reference
 
-enter-utr.heading=What is the company's UK Corporation Tax Unique Taxpayer Reference (UTR)?
+enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
+enter-utr.required=Enter the company’s Corporation Tax Unique Taxpayer Reference
+enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
 enter-utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
 
 enter-postcode.heading=What is the postcode of the company’s Registered Office address?
+enter-postcode.required=Enter the postcode of the company’s registered office address
+enter-postcode.invalid=Enter a real postcode
 
-company-name.heading=What is the company’s name?
+company-name.heading=What is the name of the company you want to register?
+company-name.hint=This is the name registered with an official company register, such as Companies House.
+company-name.invalid=Enter the name of the company you want to register
 
 company-registered-office-address.heading=What is the company’s Registered Office address?
 company-registered-office-address.UkAddress.line1.heading=Building or street
@@ -53,10 +63,12 @@ company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
 confirm-company-details.heading=Is this the company you want to register?
+confirm-company-details.required=Select yes if this is the company you want to register
 confirm-company-details.TRUE=Yes
 confirm-company-details.FALSE=No
 
 company-contact-address.heading=Can we use this address to contact you about your Digital Services Tax?
+company-contact-address.required=Select yes if we can use this address to contact you about your Digital Services Tax
 company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
@@ -77,6 +89,7 @@ alternate-contact.UkAddress.county.heading=County (optional)
 alternate-contact.UkAddress.postcode.heading=Postcode
 
 check-if-group.heading=Is the company you want to register part of a group?
+check-if-group.required=Select yes if the company you want to register is part of a group
 check-if-group.details=What we mean by a 'group'
 check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent company and all its consolidated subsidiaries.</p>\
   <p>A parent company is an entity that is (one of the following):</p>\
@@ -89,6 +102,9 @@ check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
+ultimate-parent-company-name.invalid=Enter the name of the group’s ultimate parent company
+ultimate-parent-company-name.error.length=Name of group’s ultimate global parent company must be 160 characters or fewer
+ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, amperstands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
 ultimate-parent-company-address.heading=What is the Registered Office address of {0}?
@@ -101,11 +117,15 @@ ultimate-parent-company-address.ForeignAddress.line5.heading=Address line 5 (opt
 ultimate-parent-company-address.ForeignAddress.postalCode.heading=Postcode
 ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country code
 
+ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
+
 ultimate-parent-company-address.UkAddress.line1.heading=Building or street
 ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
 ultimate-parent-company-address.UkAddress.town.heading=Town or city
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
+ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
+ultimate-parent-company-address.ForeignAddress.countryCode.invalid=COUNTRY CODE INVALID
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
@@ -115,8 +135,14 @@ contact-details.phoneNumber.heading= Phone number
 contact-details.phoneNumber.hint=For international numbers include the country code.
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
+contact-details.forename.invalid=Forename
+contact-details.forename.name=Forename name
+contact-details.surname.invalid=Surname
+contact-details.phoneNumber.invalid=Phone number
+contact-details.email.invalid=Email
 
-check-liability-date.heading=Did the company become liable for Digital Services Tax on 6 April 2020?
+check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
+check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020 
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
@@ -131,6 +157,13 @@ accounting-period-end-date.hint=For example, 31 7 2020.
 accounting-period-end-date.Date.day.heading=Day
 accounting-period-end-date.Date.month.heading=Month
 accounting-period-end-date.Date.year.heading=Year
+accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the group’s first accounting period for Digital Services Tax
+accounting-period-end-date.day.empty=The end date of the group’s first accounting period for Digital Services Tax must include a day
+accounting-period-end-date.month.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month
+accounting-period-end-date.year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a year
+accounting-period-end-date.day-and-month.empty=The end date of the group’s  first accounting period for Digital Services Tax must include a day and month
+accounting-period-end-date.day-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a day and year
+accounting-period-end-date.month-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month and year
 
 #Reg cya
 cya.title=Check your answers before sending your application
@@ -366,3 +399,44 @@ confirmation.what-you-do-next.title=What you must do next
 confirmation.what-you-do-next.p1=Your next return will be for 1 August 2020 to 31 July 2021.
 confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by 1 April 2022 and submit a return by 31 July 2022.
 confirmation.index=Go to your Digital Services Tax details
+
+# Please see example messages below, from most specific to most general.
+# I suggest creating the most general ones first then overriding with more
+# specific ones on a case-by-case basis.
+#
+# For example, if the error message key is 'contact-details.email.required' uniform will
+# look first for 'contact-details.email.required', then 'email.required' and finally if it
+# can't find either of these it will use a message for 'required'.
+#
+# If you want to see the keys being used, open up DSTInterpreter.scala, find where the messages
+# are provided (around line 83 at present) and comment out the preferred and best-guess lines. Then
+# uncomment the 'attentionSeeker' line. Finally reload the pages and it will show the message keys.
+#
+# The content below is made up for demo purposes. Please also check above as in some
+# cases these keys already exist above.
+
+contact-details.forename.required=Enter the contact person’s first name
+forename.required=Enter the first name
+
+contact-details.forename.invalid=First name must only include letters a to z, hyphens, apostrophes and spaces
+forename.invalid=First name must only include letters a to z, hyphens, apostrophes and spaces
+
+contact-details.surname.required=Enter the contact person’s last name
+surname.required=Enter the last name
+
+contact-details.surname.invalid=Last name must only include letters a to z, hyphens, apostrophes and spaces
+surname.invalid=Last name must only include letters a to z, hyphens, apostrophes and spaces
+
+contact-details.phoneNumber.required=Enter a phone number
+phoneNumber.required=Enter a phone number
+
+contact-details.phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+
+contact-details.email.required=Please enter a contact email
+email.required=Please enter an email address
+required=This is a required field
+
+contact-details.email.invalid=Please enter a valid contact email
+email.invalid=Please enter a valid email address
+invalid=Please enter a valid string

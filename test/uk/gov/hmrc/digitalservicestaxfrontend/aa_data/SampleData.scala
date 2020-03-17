@@ -38,8 +38,8 @@ object SampleData {
   )
 
   val sampleContact = ContactDetails(
-    NonEmptyString("John"),
-    NonEmptyString("Smith"),
+    RestrictiveString("John"),
+    RestrictiveString("Smith"),
     PhoneNumber("01234 567890"),
     Email("john.smith@mailprovider.co.uk")
   )

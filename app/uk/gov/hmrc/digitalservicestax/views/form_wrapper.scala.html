@@ -29,7 +29,7 @@
     <a href="/digital-services-tax/" class="govuk link-back">@messages(List(s"back-to-service-page","back"))</a>
   }
 
-  @helper.form(action = play.api.mvc.Call("post", key)) {
+  @helper.form(action = play.api.mvc.Call("post", key), 'novalidate -> "novalidate") {
     @helper.CSRF.formField
     @errorsummary(keyList, errors, messages)
     @defining((messages.get(s"$key.hint").isDefined, errors.definedAtRoot)){ case (hasHint, hasErrors) =>

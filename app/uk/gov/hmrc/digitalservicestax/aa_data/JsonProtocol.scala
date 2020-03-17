@@ -56,7 +56,8 @@ trait SimpleJson {
   implicit val sortCodeFormat       = validatedStringFormat(SortCode, "sort code")
   implicit val accountNumberFormat  = validatedStringFormat(AccountNumber, "account number")
   implicit val ibanFormat           = validatedStringFormat(IBAN, "IBAN number")
-  implicit val periodKeyFormat      = validatedStringFormat(Period.Key, "Period Key")  
+  implicit val periodKeyFormat      = validatedStringFormat(Period.Key, "Period Key")
+  implicit val restrictiveFormat    = validatedStringFormat(RestrictiveString, "name")
   implicit val dstRegNoFormat       =
     validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
 
@@ -130,6 +131,7 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val bankAccountFormat: OFormat[BankAccount] = Json.format[BankAccount]
   implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
   implicit val returnFormat: OFormat[Return] = Json.format[Return]
+
   implicit val periodFormat: OFormat[Period] = Json.format[Period]
 
   val readCompanyReg = new Reads[CompanyRegWrapper] {
@@ -146,4 +148,5 @@ object BackendAndFrontendJson extends SimpleJson {
       ))
     }
   }
+
 }

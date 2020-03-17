@@ -85,9 +85,18 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
-  implicit def postcodeField    = validatedVariant(Postcode)
+  def validatedNonEmptyString(validated: ValidatedType[String])(
+    implicit baseForm: FormField[String, Html]
+  ): FormField[String @@ validated.Tag, Html] =
+    baseForm.simap{
+      case "" => Left(ErrorMsg("required").toTree)
+      case x =>
+        Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+    }{x => x: String}
+
+  implicit def postcodeField    = validatedNonEmptyString(Postcode)
   implicit def nesField         = validatedVariant(NonEmptyString)
-  implicit def utrField         = validatedVariant(UTR)
+  implicit def utrField         = validatedNonEmptyString(UTR)
   implicit def countrycodeField = validatedVariant(CountryCode)
   implicit def emailField       = validatedVariant(Email)
   implicit def phoneField       = validatedVariant(PhoneNumber)
@@ -95,6 +104,7 @@ trait Widgets {
   implicit def accountField     = validatedVariant(AccountNumber)
   implicit def sortCodeField    = validatedVariant(SortCode)
   implicit def ibanField        = validatedVariant(IBAN)
+  implicit def restrictField    = validatedVariant(RestrictiveString)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
@@ -169,26 +179,32 @@ trait Widgets {
 
     def decode(out: Input): Either[ErrorTree, LocalDate] = {
 
-      def intAtKey(key: String): Validated[List[String], Int] =
+      def stringAtKey(key: String): Validated[List[String], String] =
         Validated.fromOption(
           out.valueAt(key).flatMap{_.find(_.trim.nonEmpty)},
           List(key)
-        ).andThen{
-          x => Validated.catchOnly[NumberFormatException](x.toInt).leftMap(_ => List(key))
-        }
+        )
 
       (
-        intAtKey("year"),
-        intAtKey("month"),
-        intAtKey("day")
-      ) .tupled
-        .leftMap{x => ErrorMsg(x.reverse.mkString("-and-") + ".empty").toTree}
-        .toEither
-        .flatMap{ case (y,m,d) =>
-          Either.catchOnly[java.time.DateTimeException]{
-            LocalDate.of(y,m,d)
-          }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
-        }
+        stringAtKey("year"),
+        stringAtKey("month"),
+        stringAtKey("day")
+      ).tupled
+       .leftMap{x => ErrorMsg(x.reverse.mkString("-and-") + ".empty").toTree}
+       .toEither
+       .flatMap{ case (ys,ms,ds) =>
+
+         val asNumbers: Either[Exception, (Int,Int,Int)] =
+           Either.catchOnly[NumberFormatException]{
+             (ys.toInt, ms.toInt, ds.toInt)
+           }
+
+         asNumbers.flatMap { case (y,m,d) =>
+           Either.catchOnly[java.time.DateTimeException]{
+             LocalDate.of(y,m,d)
+           }
+         }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
+       }
     }
 
       def encode(in: LocalDate): Input = Map(
@@ -203,7 +219,7 @@ trait Widgets {
         path: Breadcrumbs,
         data: Input,
         errors: ErrorTree,
-    messages: UniformMessages[Html]
+        messages: UniformMessages[Html]
       ): Html = {
         views.html.uniform.date(
           fieldKey,
