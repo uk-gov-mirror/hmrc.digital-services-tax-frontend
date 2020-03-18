@@ -405,6 +405,10 @@ wrong-account.heading=You cannot use this service
 wrong-account.sign-out.reason=You signed in with a Government Gateway user ID for an individual or agent. We have signed you out.
 wrong-account.sign-in.reason=To use this service, sign in with the Government Gateway user ID for the company that is registering for the Digital Services Tax.
 
+wrong-creds.heading=You cannot use this service
+wrong-creds.sign-out.reason=You need to be an administrator user to register for the Digital Services Tax.
+wrong-creds.contact-admin=Contact your company's administrator if you need to use this service.
+
 # Please see example messages below, from most specific to most general.
 # I suggest creating the most general ones first then overriding with more
 # specific ones on a case-by-case basis.

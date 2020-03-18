@@ -58,37 +58,34 @@ class AuthorisedAction @Inject()(
 
     val retrieval =  allEnrolments and credentialRole and internalId and affinityGroup
 
-    authorised(AuthProviders(GovernmentGateway, Verify) and Organisation).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
+    authorised(AuthProviders(GovernmentGateway, Verify) and Organisation and User).retrieve(retrieval) { case enrolments ~ role ~ id ~ affinity  =>
 
       val internalIdString = id.getOrElse(throw new RuntimeException("No internal ID for user"))
       val internalId = InternalId.of(internalIdString).getOrElse(
         throw new IllegalStateException("Invalid internal ID")
       )
 
-
       Future.successful(Right(AuthorisedRequest(internalId, enrolments, request)))
 
     } recover {
-      case ex: UnsupportedCredentialRole =>
-
-
-        Logger.warn(
-          s"unsupported credential role on account, with message ${ex.msg}, for reason ${ex.reason}",
-          ex)
-        Left(Ok(main_template(
-          title =
-            s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.errors.incorrect_account_affinity()(msg))
-
-        ))
       case af: UnsupportedAffinityGroup =>
         Logger.warn(s"invalid account affinity type, with message ${af.msg}, for reason ${af.reason}",
           af)
-        Left(Ok(main_template(
-          title =
-            s"${msg("common.title.short")} - ${msg("common.title")}"
-        )(views.html.errors.incorrect_account_affinity()(msg))
-
+        Left(Ok(
+          main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.errors.incorrect_account_cred_role()(msg))
+        ))
+      case ex: UnsupportedCredentialRole =>
+        Logger.warn(
+          s"unsupported credential role on account, with message ${ex.msg}, for reason ${ex.reason}",
+          ex)
+        Left(Ok(
+          main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.errors.incorrect_account_affinity()(msg))
         ))
       case _ : NoActiveSession =>
         Logger.info(s"Recover - no active session")
