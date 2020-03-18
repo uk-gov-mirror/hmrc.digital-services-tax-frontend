@@ -1,5 +1,6 @@
 #Common
 common.back=Back
+common.continue=Continue
 common.save-continue=Save and continue
 common.save-back-later=Save and come back later
 common.sign-out=Sign out
@@ -27,6 +28,7 @@ common.no=No
 
 # Errors
 there.is.a.problem=There is a problem
+not-a-date=Enter a real date
 
 # time out
 time-out.title=For your security, we signed you out
@@ -42,13 +44,18 @@ check-unique-taxpayer-reference.required=Select yes if the company you are regis
 enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
 enter-utr.required=Enter the company’s Corporation Tax Unique Taxpayer Reference
 enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
-enter-utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+enter-utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
-  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+  You can <a target=_blank href="https://www.gov.uk/find-lost-utr-number">find a lost UTR (opens in a new window or tab)</a>.
 
 company-registered-office-postcode.heading=What is the postcode of the company’s Registered Office address?
 company-registered-office-postcode.required=Enter the postcode of the company’s registered office address
 company-registered-office-postcode.invalid=Enter a real postcode
+
+enter-postcode.heading=What is the postcode of the company’s registered office address?
+enter-postcode.required=Enter the postcode of the company’s registered office address
+enter-postcode.invalid=Enter a real postcode
+
 
 company-name.heading=What is the name of the company you want to register?
 company-name.hint=This is the name registered with an official company register, such as Companies House.
@@ -72,6 +79,7 @@ company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a cou
 
 
 confirm-company-details.heading=Is this the company you want to register?
+confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
 confirm-company-details.required=Select yes if this is the company you want to register
 confirm-company-details.TRUE=Yes
 confirm-company-details.FALSE=No
@@ -83,7 +91,9 @@ company-contact-address.FALSE=No - I want to enter a different address
 
 alternate-contact.heading=What is your contact address?
 
+alternate-contact.ForeignAddress=Foreign Address
 alternate-contact.ForeignAddress.line1.heading=Address line 1
+alternate-contact.ForeignAddress.line1.invalid=Enter Address Line 1
 alternate-contact.ForeignAddress.line2.heading=Address line 2 (optional)
 alternate-contact.ForeignAddress.line3.heading=Address line 3 (optional)
 alternate-contact.ForeignAddress.line4.heading=Address line 4 (optional)
@@ -91,7 +101,8 @@ alternate-contact.ForeignAddress.line5.heading=Address line 5 (optional)
 alternate-contact.ForeignAddress.postalCode.heading=Postcode
 alternate-contact.ForeignAddress.countryCode.heading=Country
 alternate-contact.ForeignAddress.countryCode.invalid=Enter a country from the list
-
+alternate-contact.ForeignAddress.postalCode.required=Enter the postcode of your contact address
+alternate-contact.ForeignAddress.postalCode.invalid=Enter a real postcode
 alternate-contact.UkAddress.line1.heading=Building or street
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
 alternate-contact.UkAddress.town.heading=Town or city

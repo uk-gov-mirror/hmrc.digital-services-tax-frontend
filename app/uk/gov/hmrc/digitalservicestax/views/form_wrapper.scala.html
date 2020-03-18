@@ -32,8 +32,8 @@
   @helper.form(action = play.api.mvc.Call("post", key), 'novalidate -> "novalidate") {
     @helper.CSRF.formField
     @errorsummary(keyList, errors, messages)
-    @defining((messages.get(s"$key.hint").isDefined, errors.definedAtRoot)){ case (hasHint, hasErrors) =>
-      @fieldsurround(key, content, stats.isCompound, hasHint, hasErrors, stats)
+    @defining((messages.get(s"$key.hint").isDefined, errors.definedAtRoot, messages.get(s"$key.intro").isDefined)){ case (hasHint, hasErrors, hasIntro) =>
+      @fieldsurround(key, content, stats.isCompound, hasHint, hasErrors, hasIntro, stats)
     }
 
     @for((k :: v :: _) <- messages.list(s"$key.details").collect { case x if x.toString.contains("|") => x.toString.split("[|]").toList }) {
@@ -45,5 +45,5 @@
       </details>
     }
 
-    <button type="submit" class="button">@messages(List(s"$key.save-continue", "common.save-continue"))</button>
+    <button type="submit" class="button">@messages(List(s"$key.save-continue", "common.continue"))</button>
   }

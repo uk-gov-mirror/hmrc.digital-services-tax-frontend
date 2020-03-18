@@ -137,10 +137,10 @@ class JourneyController @Inject()(
   implicit val companyTell = new GenericWebTell[Company, Html] {
     override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
       Html(
-        s"<p>" +
-          s"<span>${in.name.toString.escapeHtml}</span></br>" +
-          s"<span>" +
-          s"${in.address.lines.map{_.escapeHtml}.mkString("</span></br><span>")}" +
+        s"<p class='govuk-body-l' id='${key}-content'>" +
+          s"${in.name.toString.escapeHtml}</br>" +
+          s"<span class='govuk-body-m'>" +
+          s"${in.address.lines.map{_.escapeHtml}.mkString("</br>")}" +
           s"</span>" +
           "</p>"
       )

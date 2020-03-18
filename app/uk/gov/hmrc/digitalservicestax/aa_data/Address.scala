@@ -46,6 +46,6 @@ case class ForeignAddress(
   line3: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
   line4: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
   line5: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"  
-  postalCode: String,
+  postalCode: Postcode,
   countryCode: CountryCode
 ) extends Address
