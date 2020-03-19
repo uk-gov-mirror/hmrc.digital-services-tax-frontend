@@ -69,7 +69,7 @@ object RegJourney {
           case true =>
             for {
               utr <- ask[UTR]("enter-utr")
-              postcode <- ask[Postcode]("enter-postcode")
+              postcode <- ask[Postcode]("company-registered-office-postcode")
               companyOpt <- backendService.lookupCompany(utr, postcode)
               _ <- if (companyOpt.isEmpty) end("company-lookup-failed", Kickout("details-not-correct")) else { (()).pure[F] }
               company = companyOpt.get.company
