@@ -47,9 +47,9 @@ enter-utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns an
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
 
-enter-postcode.heading=What is the postcode of the company’s Registered Office address?
-enter-postcode.required=Enter the postcode of the company’s registered office address
-enter-postcode.invalid=Enter a real postcode
+company-registered-office-postcode.heading=What is the postcode of the company’s Registered Office address?
+company-registered-office-postcode.required=Enter the postcode of the company’s registered office address
+company-registered-office-postcode.invalid=Enter a real postcode
 
 company-name.heading=What is the name of the company you want to register?
 company-name.hint=This is the name registered with an official company register, such as Companies House.

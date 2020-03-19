@@ -75,7 +75,7 @@ class AuthorisedAction @Inject()(
           main_template(
             title =
               s"${msg("common.title.short")} - ${msg("common.title")}"
-          )(views.html.errors.incorrect_account_cred_role()(msg))
+          )(views.html.errors.incorrect_account_affinity()(msg))
         ))
       case ex: UnsupportedCredentialRole =>
         Logger.warn(
@@ -85,7 +85,7 @@ class AuthorisedAction @Inject()(
           main_template(
             title =
               s"${msg("common.title.short")} - ${msg("common.title")}"
-          )(views.html.errors.incorrect_account_affinity()(msg))
+          )(views.html.errors.incorrect_account_cred_role()(msg))
         ))
       case _ : NoActiveSession =>
         Logger.info(s"Recover - no active session")
