@@ -46,57 +46,59 @@
         *@
         @content
 
-    } else { @if(isCompoundField){
-        <div class="form-group@if(hasErrors){ form-group-error}">
-            <fieldset
-            class="fieldset"
-                @if(describedByClass.nonEmpty){aria-describedby="@describedByClass"}
-            id="@key-input"
-            >
-                <legend class="fieldset__legend fieldset__legend--xl">
-                    @messages.get(s"$key.heading.hint").map { headHint =>
-                        <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
-                        @headHint
-                        </span>
+    } else {
+        @if(isCompoundField){
+            <div class="form-group@if(hasErrors){ form-group-error}">
+                <fieldset
+                class="fieldset"
+                    @if(describedByClass.nonEmpty){aria-describedby="@describedByClass"}
+                id="@key-input"
+                >
+                    <legend class="fieldset__legend fieldset__legend--xl">
+                        @messages.get(s"$key.heading.hint").map { headHint =>
+                            <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
+                            @headHint
+                            </span>
+                        }
+
+                        <h1 class="fieldset__heading@if(hasErrors){ flush--top}@if(messages.get(s"$key.heading.hint").isDefined) { fieldset__heading--no-span}">
+                        @messages(s"$key.heading")
+                        </h1>
+                    </legend>
+
+                    @for(msg <- messages.list(s"$key.intro")) {
+                        <p class="govuk-body">
+                        @msg
+                        </p>
                     }
 
-                    <h1 class="fieldset__heading@if(hasErrors){ flush--top}@if(messages.get(s"$key.heading.hint").isDefined) { fieldset__heading--no-span}">
-                    @messages(s"$key.heading")
-                    </h1>
-                </legend>
+                    @messages.get(s"$key.intro.hint").map { introHint =>
+                        <p class="govuk-body">
+                            @introHint
+                        </p>
+                    }
 
-                @for(msg <- messages.list(s"$key.intro")) {
-                    <p class="govuk-body">
-                    @msg
-                    </p>
-                }
+                    @messages.get(s"$key.list").map { list =>
+                        <ul class="list list-bullet">
+                            @for(msg <- messages.list(s"$key.list")) {
+                                <li>@msg</li>
+                            }
+                        </ul>
+                    }
 
-                @messages.get(s"$key.intro.hint").map { introHint =>
-                    <p class="govuk-body">
-                        @introHint
-                    </p>
-                }
-
-                @messages.get(s"$key.list").map { list =>
-                    <ul class="list list-bullet">
-                        @for(msg <- messages.list(s"$key.list")) {
-                            <li>@msg</li>
-                        }
-                    </ul>
-                }
-
-                @content
-            </fieldset>
-        </div>
-    } else { @if(stats.children > 0){
-        <h1 class="heading-xlarge">@messages.get(s"$key.listing.heading")</h1>
-        @content
-    } else {
-        @*
-        * Note: Intro messages and message lists should ideally not appear between
-        * labels & their inputs
-        *@
-        @content
-    }}}
+                    @content
+                </fieldset>
+            </div>
+        } else {
+            @*
+            * Note: Intro messages and message lists should ideally not appear between
+            * labels & their inputs
+            *@
+            @if(messages.get(s"$key.listing.heading").isDefined) {
+                <h1 class="heading-xlarge">@messages.get(s"$key.listing.heading")</h1>
+            }
+            @content
+        }
+    }
 
 }

@@ -126,7 +126,7 @@ class JourneyController @Inject()(
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
     override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
-      views.html.kickout(key)(messages)
+      views.html.kickout(key)(messages, config)
   }
 
 

@@ -14,20 +14,29 @@
  * limitations under the License.
  *@
 
-@(key: String)(implicit messages: UniformMessages[Html])
+@import uk.gov.hmrc.digitalservicestax.config.AppConfig
+@import cats.implicits._
+
+@(key: String)(implicit messages: UniformMessages[Html], appConfig: AppConfig)
 
 <div class="kickout govuk-grid-column-two-thirds">
 
-    <h1 class="govuk-heading-xl">@messages(s"$key.kickout.heading")</h1>
-    <h2 class="govuk-heading-m">@messages(s"$key.kickout.subheading")</h2>
+    <h1 class="heading-xlarge">@messages.get(s"$key.kickout.heading")</h1>
 
-    <p>@messages(s"$key.kickout.update-details")
-        <a href="https://www.gov.uk/file-changes-to-a-company-with-companies-house">
-            @messages(s"$key.kickout.companies-house")
-        </a>.
-    </p>
+    <p>@messages.get(s"$key.kickout.update-details.p1")</p>
+    <p>@messages.get(s"$key.kickout.update-details.p2")</p>
 
-    <h2 class="govuk-heading-m">@messages(s"$key.kickout.wrong-id")</h2>
+    @*TODO sign user out and provide a sign in link*@
+    @*<p>@messages.get(s"$key.kickout.update-details.p3")</p>*@
 
-    <p>@messages(s"$key.kickout.sign-in-again")</p>
+    @if(key === "details-not-correct") {
+        <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signOut()" class="button">
+            @messages("common.sign-out")
+        </a>
+    } else {
+        <a href="/@appConfig.serviceName/" class="button">
+            @messages("common.try-again")
+        </a>
+    }
+
 </div>

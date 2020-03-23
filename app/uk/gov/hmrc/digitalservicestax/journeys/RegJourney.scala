@@ -54,8 +54,8 @@ object RegJourney {
         // found a matching company
         case Some(companyRW) =>
           for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company-to-register", companyRW.company)
-            //TODO Check if we should be signing the user out
+            confirmCompany <- interact[Company, Boolean]("confirm-company-details", companyRW.company)
+            //TODO Here we need to sign the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
           } yield companyRW // useSafeId is false, no utr or safeId sent
 
@@ -71,7 +71,8 @@ object RegJourney {
               utr <- ask[UTR]("enter-utr")
               postcode <- ask[Postcode]("company-registered-office-postcode")
               companyOpt <- backendService.lookupCompany(utr, postcode)
-              _ <- if (companyOpt.isEmpty) end("company-lookup-failed", Kickout("details-not-correct")) else { (()).pure[F] }
+              //The user shouln't be signed out here
+              _ <- if (companyOpt.isEmpty) end("cannot-find-company", Kickout("details-not-correct")) else { (()).pure[F] }
               company = companyOpt.get.company
               safeId = companyOpt.get.safeId
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
