@@ -126,7 +126,7 @@ class JourneyController @Inject()(
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
     override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
-      views.html.kickout(key)(messages)
+      views.html.end.kickout(key)(messages)
   }
 
 
@@ -154,24 +154,24 @@ class JourneyController @Inject()(
 
   implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
     override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
-      views.html.check_your_registration_answers(s"$key.reg", in.value)(messages)
+      views.html.cya.check_your_registration_answers(s"$key.reg", in.value)(messages)
   }
 
   implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
     override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
-      views.html.check_your_return_answers(s"$key.ret", in.value)(messages)
+      views.html.cya.check_your_return_answers(s"$key.ret", in.value)(messages)
   }
 
   implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
     override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
       val reg = in.value
-      views.html.confirmation(key: String, reg.companyReg.company.name: String, reg.contact.email: Email)(messages)
+      views.html.end.confirmation(key: String, reg.companyReg.company.name: String, reg.contact.email: Email)(messages)
     }
   }
 
   implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
     override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
-      views.html.confirmation_return(key: String)(messages)
+      views.html.end.confirmation_return(key: String)(messages)
   }
   
   def registerAction(targetId: String): Action[AnyContent] = authorisedAction.async { implicit request: AuthorisedRequest[AnyContent] =>
@@ -192,7 +192,7 @@ class JourneyController @Inject()(
           hod(request.internalId)
         )
         playProgram.run(targetId, purgeStateUponCompletion = true) {
-          backend.submitRegistration(_).map { _ => Redirect(routes.JourneyController.index) }
+          backend.submitRegistration(_).map { _ => Redirect(routes.JourneyController.registrationComplete) }
       }
 
       case Some(reg) => index(request)
@@ -231,12 +231,30 @@ class JourneyController @Inject()(
                   Ok(views.html.main_template(
                     title =
                       s"${msg("common.title.short")} - ${msg("common.title")}"
-                  )(views.html.confirmation_return("confirmation")(msg)))
+                  )(views.html.end.confirmation_return("confirmation")(msg)))
                 }
               }
           }
         }
     } 
+  }
+
+  def registrationComplete: Action[AnyContent] = authorisedAction.async { implicit request =>
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+
+    backend.lookupRegistration().flatMap {
+      case None =>
+        Future.successful(
+          Redirect(routes.JourneyController.registerAction(" "))
+        )
+      case Some(reg) =>
+        Future.successful(
+          Ok(views.html.main_template(
+            title =
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.end.confirmation("registration-sent", reg.companyReg.company.name, reg.contact.email)(msg)))
+        )
+    }
   }
 
   def index: Action[AnyContent] = authorisedAction.async { implicit request =>
@@ -259,7 +277,7 @@ class JourneyController @Inject()(
           Ok(views.html.main_template(
             title =
               s"${msg("common.title.short")} - ${msg("common.title")}"
-          )(views.html.confirmation("registration-sent", reg.companyReg.company.name, reg.contact.email)(msg)))
+          )(views.html.end.pending()(msg)))
         )
     }
   }
