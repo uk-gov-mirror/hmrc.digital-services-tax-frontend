@@ -59,6 +59,14 @@ company-registered-office-address.UkAddress.town.heading=Town or city
 company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
+company-registered-office-address.ForeignAddress.line1.heading=Address line 1
+company-registered-office-address.ForeignAddress.line2.heading=Address line 2 (optional)
+company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (optional)
+company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
+company-registered-office-address.ForeignAddress.line5.heading=Address line 5 (optional)
+company-registered-office-address.ForeignAddress.postalCode.heading=Postcode
+company-registered-office-address.ForeignAddress.countryCode.heading=Country code
+
 confirm-company-details.heading=Is this the company you want to register?
 confirm-company-details.required=Select yes if this is the company you want to register
 confirm-company-details.TRUE=Yes
