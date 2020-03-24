@@ -42,11 +42,11 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
   private lazy val companyAuthSignOutPath: String = servicesConfig.getConfString("company-auth.sign-out-path", "")
   lazy val ggLoginUrl: String                     = s"$companyAuthFrontend$companyAuthSignInPath"
   
-  private val contactHost: String                  = loadConfig("contact-frontend.host")
-  private val contactFormServiceIdentifier: String = loadConfig("serviceName")
+  private val contactHost: String = loadConfig("contact-frontend.host")
+  lazy val serviceName: String    = loadConfig("serviceName")
 
-  lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  lazy val reportAProblemNonJSUrl: String   = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
+  lazy val reportAProblemPartialUrl: String = s"$contactHost/contact/problem_reports_ajax?service=$serviceName"
+  lazy val reportAProblemNonJSUrl: String   = s"$contactHost/contact/problem_reports_nonjs?service=$serviceName"
 
   val mongoShortLivedStoreExpireAfter: Duration = servicesConfig.getDuration("mongodb.shortLivedCache.expireAfter")
   val mongoJourneyStoreExpireAfter: Duration    = servicesConfig.getDuration("mongodb.journeyStore.expireAfter")
@@ -54,5 +54,5 @@ class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesCon
   lazy val dstIndexPage: String        = loadConfig("dst-index-page-url")
   lazy val signOutDstUrl: String       = s"$companyAuthFrontend$companyAuthSignOutPath?continue=$feedbackSurveyUrl"
   lazy val feedbackSurveyUrl: String   = loadConfig("microservice.services.feedback-survey.url")
-  lazy val betaFeedbackUrlAuth: String = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
+  lazy val betaFeedbackUrlAuth: String = s"$contactHost/contact/beta-feedback?service=$serviceName"
 }

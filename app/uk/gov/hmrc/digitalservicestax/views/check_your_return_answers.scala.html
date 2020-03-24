@@ -43,12 +43,12 @@
         </dl>
 
         @in.alternateCharge.map{ alt =>
-            <h2 class="govuk-heading-m">@messages(s"$key.${alt._1}.title")</h2>
+            <h2 class="govuk-heading-m">@messages(s"$key.${Activity.toUrl(alt._1)}.title")</h2>
             <dl class="govuk-check-your-answers cya-questions-short">
                 @standard_cya_row(key, s"report-alternative-charge", messages("common.yes"), "x")(messages)
-                @standard_cya_row(key, s"report-${alt._1}-alternative-charge", messages("common.yes"), "x")(messages)
-                @standard_cya_row(key, s"report-${alt._1}-loss", if(alt._2 == 0){ messages("common.yes")} else { messages("common.no")}, "x")(messages)
-                @standard_cya_row(key, s"report-${alt._1}-operating-margin", Html(s"${alt._2}%"), "x")(messages)
+                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-alternative-charge", messages("common.yes"), "x")(messages)
+                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-loss", if(alt._2 == 0){ messages("common.yes")} else { messages("common.no")}, "x")(messages)
+                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-operating-margin", Html(s"${alt._2}%"), "x")(messages)
             </dl>
         }
 
