@@ -46,7 +46,7 @@ class AuthenticationController @Inject()(mcc: MessagesControllerComponents)
     lazy val interpreter = DSTInterpreter(appConfig, this, messagesApi)
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-    Ok(uk.gov.hmrc.digitalservicestax.views.html.time_out()).withNewSession
+    Ok(uk.gov.hmrc.digitalservicestax.views.html.end.time_out()).withNewSession
   }
 }
 

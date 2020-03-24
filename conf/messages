@@ -229,6 +229,14 @@ details-not-correct.kickout.update-details.p2=If you still need to update your c
 details-not-correct.kickout.update-details.p3=You have been signed out of the service.
 
 
+#reg pending page
+registration.pending.title=We have received your registration for the Digital Services Tax
+registration.pending.send-email=We will send your Digital Services Tax registration number to your contact email address within 5 working days.
+registration.pending.not-received=If you do not receive this registration number, contact your HMRC Customer Compliance Manager (CCM).
+registration.pending.ccm-content=If you do not know who your CCM is, or do not have one, email
+registration.pending.ccm-link=ccgdstmailbox@hmrc.gov.uk
+registration.pending.ccm-email=mailto:ccgdstmailbox@hmrc.gov.uk
+
 #service page
 landing.heading=Digital Services Tax details
 landing.ultimate-parent-name=Group’s ultimate parent company: {0}
