@@ -4,6 +4,7 @@ common.save-continue=Save and continue
 common.save-back-later=Save and come back later
 common.sign-out=Sign out
 common.sign-in=Sign in
+common.try-again=Try again
 common.alpha-info.p1=This is a new service – your 
 common.alpha-info.link=feedback
 common.alpha-info.p2= will help us to improve it.
@@ -30,10 +31,6 @@ time-out.title=For your security, we signed you out
 time-out.save=Your progress will saved for 30 days
 
 #Registration
-confirm-company-to-register.heading=Is this the company you want to register?
-confirm-company-to-register.TRUE=Yes
-confirm-company-to-register.FALSE=No
-
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
   Tax Unique Taxpayer Reference?
 check-unique-taxpayer-reference.TRUE=Yes
@@ -218,14 +215,19 @@ registration-sent.help-using-this-service.list.2=need to change your registered 
 registration-sent.ccm-email=If you do not know who your CCM is, or do not have one, {0}.
 
 #reg kickout
-details-not-correct.kickout.heading=What you need to do next
-details-not-correct.kickout.subheading=If you signed in with the correct user ID
-details-not-correct.kickout.update-details=If you need to update your limited company’s registered business details, \
-  you will need to
-details-not-correct.kickout.companies-house=tell Companies House about the change to your company
-details-not-correct.kickout.wrong-id=If you signed in with the wrong user ID
-details-not-correct.kickout.sign-in-again=You will need to sign in again using the Government Gateway user ID for the \
-  company you need to register.
+cannot-find-company.kickout.heading=We could not find your company
+cannot-find-company.kickout.update-details.p1=We could not find a company in our records using the details you gave us.
+cannot-find-company.kickout.update-details.p2=We need to do this before you can continue registering.
+
+details-not-correct.kickout.heading=What you need to do if your company details are incorrect
+details-not-correct.kickout.update-details.p1=Make sure the user ID you entered is correct and try signing in again.
+details-not-correct.kickout.update-details.p2=If you still need to update your company details, \
+  you need to \
+  <a href="https://www.gov.uk/file-changes-to-a-company-with-companies-house"> \
+    tell Companies House about the change to your company.\
+  </a>
+details-not-correct.kickout.update-details.p3=You have been signed out of the service.
+
 
 #reg pending page
 registration.pending.title=We have received your registration for the Digital Services Tax
@@ -285,32 +287,32 @@ report-alternative-charge.details.text=<p>This is an alternative method that bus
 report-alternative-charge.TRUE=Yes
 report-alternative-charge.FALSE=No
 
-report-SocialMedia-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+report-social-media-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your social media activity?
-report-SocialMedia-alternative-charge.TRUE=Yes
-report-SocialMedia-alternative-charge.FALSE=No
-report-SocialMedia-loss.heading=Has the group made a loss on its social media activity?
-report-SocialMedia-loss.TRUE=Yes
-report-SocialMedia-loss.FALSE=No
-report-SocialMedia-operating-margin.heading=What was the group’s operating margin on its social media activity?
+report-social-media-alternative-charge.TRUE=Yes
+report-social-media-alternative-charge.FALSE=No
+report-social-media-loss.heading=Has the group made a loss on its social media activity?
+report-social-media-loss.TRUE=Yes
+report-social-media-loss.FALSE=No
+report-social-media-operating-margin.heading=What was the group’s operating margin on its social media activity?
 
-report-SearchEngine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+report-search-engine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your search engine activity?
-report-SearchEngine-alternative-charge.TRUE=Yes
-report-SearchEngine-alternative-charge.FALSE=No
-report-SearchEngine-loss.heading=Has the group made a loss on its search engine activity?
-report-SearchEngine-loss.TRUE=Yes
-report-SearchEngine-loss.FALSE=No
-report-SearchEngine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
+report-search-engine-alternative-charge.TRUE=Yes
+report-search-engine-alternative-charge.FALSE=No
+report-search-engine-loss.heading=Has the group made a loss on its search engine activity?
+report-search-engine-loss.TRUE=Yes
+report-search-engine-loss.FALSE=No
+report-search-engine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
 
-report-OnlineMarketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+report-online-marketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your online marketplace activity?
-report-OnlineMarketplace-alternative-charge.TRUE=Yes
-report-OnlineMarketplace-alternative-charge.FALSE=No
-report-OnlineMarketplace-loss.heading=Has the group made a loss on its online marketplace activity?
-report-OnlineMarketplace-loss.TRUE=Yes
-report-OnlineMarketplace-loss.FALSE=No
-report-OnlineMarketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+report-online-marketplace-alternative-charge.TRUE=Yes
+report-online-marketplace-alternative-charge.FALSE=No
+report-online-marketplace-loss.heading=Has the group made a loss on its online marketplace activity?
+report-online-marketplace-loss.TRUE=Yes
+report-online-marketplace-loss.FALSE=No
+report-online-marketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
 
 report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
 report-cross-border-transaction-relief.details=What we mean by ‘relief on cross-border transactions’
@@ -381,18 +383,18 @@ check-your-answers.ret.relief-deducted.question=Amount of relief claimed on cros
 check-your-answers.ret.group-company={0}’s Digital Services Tax liability
 
 check-your-answers.ret.report-alternative-charge.question=Activity reported in this return
-check-your-answers.ret.SocialMedia.title=Social media activity
-check-your-answers.ret.report-SocialMedia-alternative-charge.question=Alternative charge applied
-check-your-answers.ret.report-SocialMedia-loss.question=Loss made
-check-your-answers.ret.report-SocialMedia-operating-margin.question=Group’s profit margin on activity
-check-your-answers.ret.SearchEngine.title=Search Engine Activity
-check-your-answers.ret.report-SearchEngine-alternative-charge.question=Alternative charge applied
-check-your-answers.ret.report-SearchEngine-loss.question=Loss made
-check-your-answers.ret.report-SearchEngine-operating-margin.question=Group’s profit margin on activity
-check-your-answers.ret.OnlineMarketplace.title=Online Marketplace Activity
-check-your-answers.ret.report-OnlineMarketplace-alternative-charge.question=Alternative charge applied
-check-your-answers.ret.report-OnlineMarketplace-loss.question=Loss made
-check-your-answers.ret.report-OnlineMarketplace-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.social-media.title=Social media activity
+check-your-answers.ret.report-social-media-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-social-media-loss.question=Loss made
+check-your-answers.ret.report-social-media-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.search-engine.title=Search Engine Activity
+check-your-answers.ret.report-search-engine-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-search-engine-loss.question=Loss made
+check-your-answers.ret.report-search-engine-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.online-marketplace.title=Online Marketplace Activity
+check-your-answers.ret.report-online-marketplace-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-online-marketplace-loss.question=Loss made
+check-your-answers.ret.report-online-marketplace-operating-margin.question=Group’s profit margin on activity
 
 check-your-answers.ret.submission.title=Now submit your return
 check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \

@@ -53,13 +53,13 @@ object ReturnJourney {
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
       def askActivityReduced(actType: Activity): F[Percent] =
-        { ask[Percent](s"report-$actType-operating-margin") emptyUnless
-          ask[Boolean](s"report-$actType-loss")}
+        { ask[Percent](s"report-${Activity.toUrl(actType)}-operating-margin") emptyUnless
+          ask[Boolean](s"report-${Activity.toUrl(actType)}-loss")}
 
       def askActivity(actType: Activity): F[Option[Percent]] = 
-        { ask[Percent](s"report-$actType-operating-margin") emptyUnless
-          ask[Boolean](s"report-$actType-loss").map { x => !x }} when
-        ask[Boolean](s"report-$actType-alternative-charge")
+        { ask[Percent](s"report-${Activity.toUrl(actType)}-operating-margin") emptyUnless
+          ask[Boolean](s"report-${Activity.toUrl(actType)}-loss").map { x => !x }} when
+        ask[Boolean](s"report-${Activity.toUrl(actType)}-alternative-charge")
       
       val allEntries: List[F[(Activity, Option[Percent])]] =
         if(applicableActivities.size == 1) {

@@ -129,7 +129,6 @@ class JourneyController @Inject()(
       views.html.end.kickout(key)(messages)
   }
 
-
   implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
     override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
       Html("")
