@@ -19,7 +19,9 @@ common.False=No
 common.feedback=What do you think about this service?
 common.thirty-seconds=(30 seconds)
 common.delete=Remove
-common.edit=Change
+common.change=Change
+common.edit=Edit
+common.remove=Remove
 common.yes=Yes
 common.no=No
 
