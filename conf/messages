@@ -175,29 +175,31 @@ cya.title=Check your answers before sending your application
 cya.company.title=Your company details
 
 cya.check-if-group.question=Is the company you are registering part of a group?
-cya.check-if-group.change=Change if the company you are registering is part of a group
+cya.check-if-group.change=if the company you are registering is part of a group
 
 cya.company-name-and-reg-address.question=Company name Registered Office address
-cya.company-name-and-reg-address.change=Change the Company name and Registered Office address
+cya.company-name-and-reg-address.change=Company name and Registered Office address
 
 cya.ultimate-parent-company.title=Ultimate global parent company details
 cya.ultimate-parent-company-name.question=Company name
-cya.ultimate-parent-company-name.change=Change the name of the group’s ultimate global parent company
+cya.ultimate-parent-company-name.change=company name
 
 cya.ultimate-parent-company-address.question=Registered Office address
-cya.ultimate-parent-company-address.change=Change the Registered Office address of global name
+cya.ultimate-parent-company-address.change=Registered Office address
 
 cya.contact-details.title=Contact person’s details
 cya.contact-details-name.question=Full name
 cya.contact-details-phone-number.question=Phone number
 cya.contact-details-email.question=Email address
-cya.contact-details.change=Change the contact person’s details
+cya.contact-details.change=contact person’s details
 
 cya.liability-date.title=Accounting period details
 cya.liability-start-date.question=Liability start date
 cya.check-liability-date.change=Change the date the company become liable for Digital Services Tax
+cya.liability-start-date.change=liability start date
 
 cya.accounting-end-date.question=First accounting period end date
+cya.accounting-end-date.change=first accounting period end date
 cya.accounting-period-end-date.change=Change the end date of the company’s first accounting period for Digital Services Tax
 
 cya.submission.title=Send your details
@@ -384,25 +386,44 @@ bank-details-foreign.iban.heading.large.label=International Bank Account Number 
 check-your-answers.ret.title=Check your answers before sending you return for 1 April 2020 to July 2020
 check-your-answers.ret.company.title=Digital Services Tax return details
 check-your-answers.ret.group-liability.question=Group’s total Digital Services Tax liability
+check-your-answers.ret.group-liability.change=group’s total Digital Services Tax liability
 check-your-answers.ret.allowance-deducted.question=Amount of £25m annual allowance claimed
+check-your-answers.ret.allowance-deducted.change=amount of £25m annual allowance claimed
 check-your-answers.ret.report-cross-border-transaction-relief.question=Are you claiming any relief on cross-border \
   transactions for this period?
+check-your-answers.ret.report-cross-border-transaction-relief.change=are you claiming any relief on cross-border \
+  transactions for this period
 check-your-answers.ret.relief-deducted.question=Amount of relief claimed on cross-border transactions
+check-your-answers.ret.relief-deducted.change=amount of relief claimed on cross-border transactions
 check-your-answers.ret.group-company={0}’s Digital Services Tax liability
+check-your-answers.ret.group-company.change={0}’s Digital Services Tax liability
 
 check-your-answers.ret.report-alternative-charge.question=Activity reported in this return
+check-your-answers.ret.report-alternative-charge.change=activity reported in this return
+
 check-your-answers.ret.social-media.title=Social media activity
 check-your-answers.ret.report-social-media-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-social-media-alternative-charge.change=alternative charge applied
 check-your-answers.ret.report-social-media-loss.question=Loss made
+check-your-answers.ret.report-social-media-loss.change=loss made
 check-your-answers.ret.report-social-media-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.report-social-media-operating-margin.change=group’s profit margin on activity
+
 check-your-answers.ret.search-engine.title=Search Engine Activity
 check-your-answers.ret.report-search-engine-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-search-engine-alternative-charge.change=alternative charge applied
 check-your-answers.ret.report-search-engine-loss.question=Loss made
+check-your-answers.ret.report-search-engine-loss.change=loss made
 check-your-answers.ret.report-search-engine-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.report-search-engine-operating-margin.change=group’s profit margin on activity
+
 check-your-answers.ret.online-marketplace.title=Online Marketplace Activity
 check-your-answers.ret.report-online-marketplace-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-online-marketplace-alternative-charge.change=alternative charge applied
 check-your-answers.ret.report-online-marketplace-loss.question=Loss made
+check-your-answers.ret.report-online-marketplace-loss.change=loss made
 check-your-answers.ret.report-online-marketplace-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.report-online-marketplace-operating-margin.change=group’s profit margin on activity
 
 check-your-answers.ret.submission.title=Now submit your return
 check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \
