@@ -1,0 +1,35 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.digitalservicestax.data.Country
+@import uk.gov.hmrc.digitalservicestax.views.html.helpers.error_message
+
+@(path: String, selectedCode: Option[String], hasErrors: Boolean, messages: UniformMessages[Html])
+
+<div class="country-code-wrapper form-group@if(hasErrors){ form-group-error}">
+    <label class="label" for="location-autocomplete">@messages(s"$path.heading")</label>
+    @{if(hasErrors) {error_message(path, messages(s"$path.invalid"), messages)}}
+    <select
+      id="location-autocomplete"
+      name="@path"
+      >
+      <option value="" disabled selected>@messages("countryCode.placeholder")</option>
+  @for(country <- Country.countries) {
+      <option value="@{country.code}" @{if(selectedCode.contains(country.code))"selected"}>@{country.name}</option>
+  }
+  </select>
+
+</div>

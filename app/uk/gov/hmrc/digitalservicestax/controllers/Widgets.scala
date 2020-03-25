@@ -97,7 +97,6 @@ trait Widgets {
   implicit def postcodeField    = validatedNonEmptyString(Postcode)
   implicit def nesField         = validatedVariant(NonEmptyString)
   implicit def utrField         = validatedNonEmptyString(UTR)
-  implicit def countrycodeField = validatedVariant(CountryCode)
   implicit def emailField       = validatedVariant(Email)
   implicit def phoneField       = validatedVariant(PhoneNumber)
   implicit def percentField     = validatedVariant(Percent)
@@ -171,6 +170,30 @@ trait Widgets {
         errors,
         messages)
     }
+  }
+
+  implicit val twirlCountryCodeField = new FormField[CountryCode, Html] {
+
+    override def render(
+      pageKey: List[String],
+      fieldKey: List[String],
+      breadcrumbs: Breadcrumbs,
+      data: Input,
+      errors: ErrorTree,
+      messages: UniformMessages[Html]): Html =
+      views.html.helpers.country_select(
+        fieldKey.mkString("."),
+        data.values.flatten.headOption,
+        errors.nonEmpty,
+        messages
+      )
+
+    override def encode(in: CountryCode): Input =
+      validatedVariant(CountryCode).encode(in)
+
+    override def decode(out: Input): Either[ErrorTree, CountryCode] =
+      validatedVariant(CountryCode).decode(out)
+
   }
 
   implicit val twirlDateField: FormField[LocalDate, Html] =

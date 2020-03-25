@@ -65,7 +65,9 @@ company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (o
 company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
 company-registered-office-address.ForeignAddress.line5.heading=Address line 5 (optional)
 company-registered-office-address.ForeignAddress.postalCode.heading=Postcode
-company-registered-office-address.ForeignAddress.countryCode.heading=Country code
+company-registered-office-address.ForeignAddress.countryCode.heading=Country
+company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a country from the list
+
 
 confirm-company-details.heading=Is this the company you want to register?
 confirm-company-details.required=Select yes if this is the company you want to register
@@ -85,7 +87,8 @@ alternate-contact.ForeignAddress.line3.heading=Address line 3 (optional)
 alternate-contact.ForeignAddress.line4.heading=Address line 4 (optional)
 alternate-contact.ForeignAddress.line5.heading=Address line 5 (optional)
 alternate-contact.ForeignAddress.postalCode.heading=Postcode
-alternate-contact.ForeignAddress.countryCode.heading=Country code
+alternate-contact.ForeignAddress.countryCode.heading=Country
+alternate-contact.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 alternate-contact.UkAddress.line1.heading=Building or street
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
@@ -120,7 +123,7 @@ ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (opt
 ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
 ultimate-parent-company-address.ForeignAddress.line5.heading=Address line 5 (optional)
 ultimate-parent-company-address.ForeignAddress.postalCode.heading=Postcode
-ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country code
+ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
 
 ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
 
@@ -130,7 +133,7 @@ ultimate-parent-company-address.UkAddress.town.heading=Town or city
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
 ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.countryCode.invalid=COUNTRY CODE INVALID
+ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.

@@ -39,7 +39,6 @@
         @for(err <- errorOpt.fold(List.empty[ErrorMsg])(_.toList)) {
           @error_message({(key :+field).mkString("-")}, err.prefixWith(key :+ field).render(messages), messages)
         }
-        
         <input
           class="@{"form-control " + formControlClass} @if(errorOpt.nonEmpty){ form-control-error }"
           id="@{(key :+field).mkString("_")}-input"
