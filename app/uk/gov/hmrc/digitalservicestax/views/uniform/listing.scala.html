@@ -30,14 +30,14 @@
                 </dt>
                 <dd class="summary-list__value">
                     <a class="govuk-link" href="@{editLink}/">
-                        <span aria-hidden="true">@messages("common.edit")</span>
-                        <span class="visually-hidden">@messages("edit-company")</span>
+                        <span aria-hidden="true">@messages("common.change")</span>
+                        <span class="visually-hidden">@messages("common.edit") @item</span>
                     </a>
                 </dd>
                 <dd class="summary-list__value">
                     <a href="@deleteLink">
                         <span aria-hidden="true">@messages("common.delete")</span>
-                        <span class="visually-hidden">@messages("remove-company")</span>
+                        <span class="visually-hidden">@messages("common.remove") @item</span>
                     </a>
                 </dd>
             </div>
