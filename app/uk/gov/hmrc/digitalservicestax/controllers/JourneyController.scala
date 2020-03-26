@@ -268,7 +268,8 @@ class JourneyController @Inject()(
         backend.lookupOutstandingReturns().map { periods => 
           Ok(views.html.main_template(
             title =
-              s"${msg("common.title.short")} - ${msg("common.title")}"
+              s"${msg("common.title.short")} - ${msg("common.title")}",
+              mainClass = Some("full-width")
           )(views.html.landing(reg, periods.toList.sortBy(_.start))))
         }
       case Some(reg) =>
