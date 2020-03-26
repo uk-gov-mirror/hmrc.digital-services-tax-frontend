@@ -16,11 +16,16 @@
 
 @import ltbs.uniform.common.web.FormFieldStats
 
-@(key: String, content: Html, isCompoundField: Boolean, hasHint: Boolean, hasErrors: Boolean, stats: FormFieldStats)(implicit messages: UniformMessages[Html])
-@defining((hasHint, hasErrors) match {
-    case (true,true) => s"$key-hint $key-error"
-    case (true,false) => s"$key-hint"
-    case (false,true) => s"$key-error"
+@(key: String, content: Html, isCompoundField: Boolean, hasHint: Boolean, hasErrors: Boolean, hasIntro: Boolean, stats: FormFieldStats)(implicit messages: UniformMessages[Html])
+
+@defining((hasHint, hasErrors, hasIntro) match {
+    case (true,true,true) => s"$key-hint $key-error $key-intro"
+    case (true,false,true) => s"$key-hint $key-intro"
+    case (false,true,true) => s"$key-error $key-intro"
+    case (true,true,false) => s"$key-error $key-hint"
+    case (false,false,true) => s"$key-intro"
+    case (true,false,false) => s"$key-hint"
+    case (false,true,false) => s"$key-error"
     case _ => ""
 }){ describedByClass =>
     @* There are more than one fieldset/formgroup on the page *@
@@ -45,38 +50,36 @@
         * so that we know how to wrap?
         *@
         @content
-
-    } else {
-        @if(isCompoundField){
-            <div class="form-group@if(hasErrors){ form-group-error}">
-                <fieldset
+    } else { @if(isCompoundField){
+        <div class="form-group@if(hasErrors){ form-group-error}">
+            <fieldset
                 class="fieldset"
-                    @if(describedByClass.nonEmpty){aria-describedby="@describedByClass"}
+                @if(describedByClass.nonEmpty){aria-describedby="@describedByClass"}
                 id="@key-input"
-                >
-                    <legend class="fieldset__legend fieldset__legend--xl">
-                        @messages.get(s"$key.heading.hint").map { headHint =>
-                            <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
-                            @headHint
-                            </span>
-                        }
+            >
+                <legend class="fieldset__legend fieldset__legend--xl">
+                    @messages.get(s"$key.heading.hint").map { headHint =>
+                        <span class="govuk-caption-xl@if(hasErrors){ flush--top}">
+                        @headHint
+                        </span>
+                    }
 
-                        <h1 class="fieldset__heading@if(hasErrors){ flush--top}@if(messages.get(s"$key.heading.hint").isDefined) { fieldset__heading--no-span}">
+                    <h1 class="fieldset__heading@if(hasErrors){ flush--top}@if(messages.get(s"$key.heading.hint").isDefined) { fieldset__heading--no-span}">
                         @messages(s"$key.heading")
-                        </h1>
-                    </legend>
+                    </h1>
+                </legend>
 
-                    @for(msg <- messages.list(s"$key.intro")) {
-                        <p class="govuk-body">
+                @for(msg <- messages.list(s"$key.intro")) {
+                    <p class="govuk-body" id="@key-intro">
                         @msg
-                        </p>
-                    }
-
-                    @messages.get(s"$key.intro.hint").map { introHint =>
-                        <p class="govuk-body">
-                            @introHint
-                        </p>
-                    }
+                    </p>
+                }
+                
+                @messages.get(s"$key.intro.hint").map { introHint =>
+                    <p class="govuk-body">
+                        @introHint
+                    </p>
+                }
 
                     @messages.get(s"$key.list").map { list =>
                         <ul class="list list-bullet">
