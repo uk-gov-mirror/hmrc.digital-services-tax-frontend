@@ -93,7 +93,13 @@ object ReturnJourney {
     }
 
     for {
-      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1))
+      groupCos <- ask[List[GroupCompany]]("manage-companies",
+        validation = List(Rule.minLength(1) followedBy Rule.cond[NonEmptyString](
+          _.length <= 160,
+          "error.length"
+        )
+      )
+      )
       activities <- ask[Set[Activity]]("select-activities")
 
       dstReturn <- (

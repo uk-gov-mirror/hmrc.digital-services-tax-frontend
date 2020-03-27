@@ -434,6 +434,11 @@ wrong-creds.contact-admin=Contact your company's administrator if you need to us
 # The content below is made up for demo purposes. Please also check above as in some
 # cases these keys already exist above.
 
+#Common error messages
+invalid=Please enter a valid string
+required=This is a required field
+
+#Registration error messages
 contact-details.forename.required=Enter the contact person’s first name
 forename.required=Enter the first name
 
@@ -454,8 +459,9 @@ phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +
 
 contact-details.email.required=Please enter a contact email
 email.required=Please enter an email address
-required=This is a required field
 
 contact-details.email.invalid=Please enter a valid contact email
 email.invalid=Please enter a valid email address
-invalid=Please enter a valid string
+
+#Returns error messages
+name.invalid=Enter the company’s name

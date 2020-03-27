@@ -92,7 +92,7 @@ object RegJourney {
               parentName <- ask[NonEmptyString]("ultimate-parent-company-name",
                 validation =
                   Rule.cond[NonEmptyString](
-                    _.length < 160,
+                    _.length <= 160,
                     "error.length"
                   ) followedBy
                     Rule.cond[NonEmptyString](
