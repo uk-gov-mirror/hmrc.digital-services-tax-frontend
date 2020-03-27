@@ -61,22 +61,21 @@ company-name.heading=What is the name of the company you want to register?
 company-name.hint=This is the name registered with an official company register, such as Companies House.
 company-name.invalid=Enter the name of the company you want to register
 
-company-registered-office-address.heading=What is the company’s Registered Office address?
+company-registered-office-address=Where is the company’s Registered Office address?
+company-registered-office-address.UkAddress.heading=UK
 company-registered-office-address.UkAddress.line1.heading=Building or street
 company-registered-office-address.UkAddress.line2.heading=Building or street line 2 (optional)
 company-registered-office-address.UkAddress.town.heading=Town or city
 company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
+company-registered-office-address.ForeignAddress=Outside the UK
 company-registered-office-address.ForeignAddress.line1.heading=Address line 1
 company-registered-office-address.ForeignAddress.line2.heading=Address line 2 (optional)
 company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (optional)
 company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
-company-registered-office-address.ForeignAddress.line5.heading=Address line 5 (optional)
-company-registered-office-address.ForeignAddress.postalCode.heading=Postcode
 company-registered-office-address.ForeignAddress.countryCode.heading=Country
 company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a country from the list
-
 
 confirm-company-details.heading=Is this the company you want to register?
 confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
@@ -89,20 +88,17 @@ company-contact-address.required=Select yes if we can use this address to contac
 company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
-alternate-contact.heading=What is your contact address?
-
-alternate-contact.ForeignAddress=Foreign Address
+alternate-contact.heading=Where is your contact address?
+alternate-contact.ForeignAddress=Outside the UK
 alternate-contact.ForeignAddress.line1.heading=Address line 1
 alternate-contact.ForeignAddress.line1.invalid=Enter Address Line 1
 alternate-contact.ForeignAddress.line2.heading=Address line 2 (optional)
 alternate-contact.ForeignAddress.line3.heading=Address line 3 (optional)
 alternate-contact.ForeignAddress.line4.heading=Address line 4 (optional)
-alternate-contact.ForeignAddress.line5.heading=Address line 5 (optional)
-alternate-contact.ForeignAddress.postalCode.heading=Postcode
 alternate-contact.ForeignAddress.countryCode.heading=Country
 alternate-contact.ForeignAddress.countryCode.invalid=Enter a country from the list
-alternate-contact.ForeignAddress.postalCode.required=Enter the postcode of your contact address
-alternate-contact.ForeignAddress.postalCode.invalid=Enter a real postcode
+
+alternate-contact.UkAddress=UK
 alternate-contact.UkAddress.line1.heading=Building or street
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
 alternate-contact.UkAddress.town.heading=Town or city
@@ -128,25 +124,25 @@ ultimate-parent-company-name.error.length=Name of group’s ultimate global pare
 ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, amperstands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
-ultimate-parent-company-address.heading=What is the Registered Office address of {0}?
+ultimate-parent-company-address.heading=Where is the Registered Office address of {0}?
 
+ultimate-parent-company-address.ForeignAddress=Outside the UK
 ultimate-parent-company-address.ForeignAddress.line1.heading=Address line 1
 ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (optional)
 ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
 ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
-ultimate-parent-company-address.ForeignAddress.line5.heading=Address line 5 (optional)
-ultimate-parent-company-address.ForeignAddress.postalCode.heading=Postcode
 ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
+ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
+ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
 
+ultimate-parent-company-address.UkAddress=UK
 ultimate-parent-company-address.UkAddress.line1.heading=Building or street
 ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
 ultimate-parent-company-address.UkAddress.town.heading=Town or city
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
-ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.

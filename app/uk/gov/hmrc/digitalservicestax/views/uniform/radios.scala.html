@@ -18,6 +18,12 @@
 
 @keyNoDots=@{key.mkString("-")}
 @inlineRadioKeys=@{key.mkString(".") == "manage-companies"}
+@reverseRadios=@{
+    key.head == "alternate-contact" ||
+    key.head == "company-registered-office-address" ||
+    key.head == "ultimate-parent-company-address"
+}
+
 @standard_field(key, errors, "radios", messages) {
 @if(inlineRadioKeys) {
     <fieldset class="govuk-fieldset" id="add-company-to-group" aria-describedby="add-to-list-hint">
@@ -30,7 +36,7 @@
     }
 
 <div class="radios@if(inlineRadioKeys){--inline}">
-  @for((opt,num) <- if(key.head == "about-loan"){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
+  @for((opt,num) <- if(reverseRadios){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
     <div class="radios__item multiple-choice" data-target="@keyNoDots-@opt">
 
       <input
