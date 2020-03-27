@@ -17,8 +17,24 @@
 package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
+import shapeless.tag.@@
 
 case class Period(
   start: LocalDate,
-  end: LocalDate
-)
+  end: LocalDate,
+  returnDue: LocalDate,
+  key: Period.Key) {
+    def paymentDue: LocalDate = end.minusMonths(3)
+  }
+
+
+
+object Period {
+
+  type Key = String @@ Key.Tag
+  object Key extends ValidatedType[String]{
+    def validateAndTransform(in: String): Option[String] = 
+      Some(in).filter{x => x.nonEmpty && x.size <= 4}
+  }
+
+}

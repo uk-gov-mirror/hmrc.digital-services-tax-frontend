@@ -14,10 +14,14 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.digitalservicestax.config.AppConfig
+@(key: String, subKey: String, field: Html, changeLink: String, currency: Html = Html(""))(implicit messages: UniformMessages[Html])
 
-@()(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
-
-@main_template(title = "Hello from digital-services-tax-frontend", bodyClasses = None) {
-    <h1>Hello from digital-services-tax-frontend !</h1>
-}
+<div>
+    <dt class="cya-question">@messages(s"$key.$subKey.question")</dt>
+    <dd class="cya-answer">@currency @field</dd>
+    <dd class="app-check-your-answers__change">
+        <a href="@changeLink">@messages("common.change")
+            <span class="govuk-visually-hidden">@messages(s"$key.$subKey.change")</span>
+        </a>
+    </dd>
+</div>

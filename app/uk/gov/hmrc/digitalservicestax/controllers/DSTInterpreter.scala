@@ -41,21 +41,22 @@ case class DSTInterpreter(
     with Widgets {
 
   def renderProduct[A](
-    key: List[String],
+    pageKey: List[String],
+    fieldKey: List[String],    
     path: Breadcrumbs,
     values: Input,
     errors: ErrorTree,
     messages: UniformMessages[Html],
     pfl: ProductFieldList[A, Html]
   ): Html = Html(
-    pfl.inner.map {
-      case (subFieldId, f) =>
-        f(key:+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
+    pfl.inner.map { case (subFieldId, f) =>
+      f(pageKey, fieldKey :+ subFieldId, path, values / subFieldId, errors / subFieldId, messages).toString
     }.mkString
   )
 
   def renderCoproduct[A](
-    key: List[String],
+    pageKey: List[String],
+    fieldKey: List[String],    
     path: Breadcrumbs,
     values: Input,
     errors: ErrorTree,
@@ -63,13 +64,13 @@ case class DSTInterpreter(
     cfl: CoproductFieldList[A,Html]): Html = {
     val value: Option[String] = values.valueAtRoot.flatMap {_.headOption}
     radios(
-      key,
+      fieldKey,
       cfl.inner.map{_._1}.orderYesNoRadio,
       value,
       errors,
       messages,
       cfl.inner.map{
-        case(subkey,f) => subkey -> f(key :+ subkey, path, {values / subkey}, errors / subkey, messages)
+        case(subkey,f) => subkey -> f(pageKey, fieldKey :+ subkey, path, {values / subkey}, errors / subkey, messages)
       }.filter(_._2.toString.trim.nonEmpty).toMap
     )
   }
@@ -79,10 +80,10 @@ case class DSTInterpreter(
   def messages(
     request: Request[AnyContent]
   ): UniformMessages[Html] =
-    messagesApi.preferred(request).convertMessagesTwirlHtml() |+|
+    messagesApi.preferred(request).convertMessagesTwirlHtml(escapeHtml = false) |+|
       UniformMessages.bestGuess.map(HtmlFormat.escape)
   // N.b. this next line very useful for correcting the keys of missing content, leave for now
-//     UniformMessages.attentionSeeker.map(HtmlFormat.escape)
+    // UniformMessages.attentionSeeker.map(HtmlFormat.escape)
   override def pageChrome(
     keyList: List[String],
     errors: ErrorTree,
@@ -92,50 +93,28 @@ case class DSTInterpreter(
     request: Request[AnyContent],
     messages: UniformMessages[Html],
     stats: FormFieldStats): Html = {
-    val content = views.html.form_wrapper(keyList,
-      errors,
-      Html(tell.toString + ask.toString),
-      List(breadcrumbs.drop(1)),
-      stats)(messages, request)
+
+    // very crude method to determine if a page is a kickout - we
+    // need a more robust/generic technique based upon different
+    // behaviour for 'end' interactions
+    def isKickout: Boolean = tell.toString.contains("""<div class="kickout""")
+
+    val content: Html = if (isKickout) {
+      tell
+    } else {
+      views.html.form_wrapper(
+        keyList,
+        errors,
+        Html(tell.toString + ask.toString),
+        List(breadcrumbs.drop(1)),
+        stats
+      )(messages, request)
+    }
+
     val errorTitle: String = if(errors.isNonEmpty) s"${messages("common.error")}: " else ""
     views.html.main_template(title =
       errorTitle + s"${messages(keyList.mkString("-") + ".heading")} - ${messages("common.title")}")(
       content)(request, messages, appConfig)
   }
-
-  // override def selectionOfFields(
-  //   inner: List[
-  //     (String,
-  //       (List[String],
-  //         Breadcrumbs,
-  //         Input,
-  //         ErrorTree,
-  //         UniformMessages[Html]) ⇒ Html)]
-  // )(key: List[String],
-  //   path: Breadcrumbs,
-  //   values: Input,
-  //   errors: ErrorTree,
-  //   messages: UniformMessages[Html]): Html = {
-  //   val value: Option[String] =
-  //     values.valueAtRoot.flatMap{_.headOption}
-  //   views.html.uniform.radios(
-  //     key,
-  //     inner.map { _._1 },
-  //     value,
-  //     errors,
-  //     messages,
-  //     inner
-  //       .map {
-  //         case (subkey, f) ⇒
-  //           subkey → f(key :+ subkey,
-  //             path,
-  //             values / subkey,
-  //             errors / subkey,
-  //             messages)
-  //       }
-  //       .filter(_._2.toString.trim.nonEmpty)
-  //       .toMap
-  //   )
-  // }
 
 }

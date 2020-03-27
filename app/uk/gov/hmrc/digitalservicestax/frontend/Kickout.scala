@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.controllers
+package uk.gov.hmrc.digitalservicestax.frontend
 
-import uk.gov.hmrc.digitalservicestax.data._
-import scala.concurrent._
-
-case class DummyBackend(implicit ec: ExecutionContext) extends BackendService[Future] {
-
-  def matchedCompany(): Future[Option[Company]] =
-    Future.successful(None)          
-
-  def lookup(utr: UTR, postcode: Postcode): Future[Option[Company]] =
-    Future.successful(Some(Company(NonEmptyString("Dotcom Bubble ltd."), UkAddress(NonEmptyString("51 MySpace Apartments"),"1 Bebo Street","Aolton","Askjeeveshire", Postcode("AB12 3CD")))))
-
-}
+case class Kickout( name: String )

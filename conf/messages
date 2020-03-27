@@ -1,9 +1,11 @@
 #Common
 common.back=Back
+common.continue=Continue
 common.save-continue=Save and continue
 common.save-back-later=Save and come back later
 common.sign-out=Sign out
 common.sign-in=Sign in
+common.try-again=Try again
 common.alpha-info.p1=This is a new service – your 
 common.alpha-info.link=feedback
 common.alpha-info.p2= will help us to improve it.
@@ -15,27 +17,49 @@ common.title=Digital Services Tax
 common.title.short=Digital Services Tax
 common.True=Yes
 common.False=No
-common.feedback=What do you think fo this service?
+common.feedback=What do you think about this service?
 common.thirty-seconds=(30 seconds)
+common.delete=Remove
+common.change=Change
+common.edit=Edit
+common.remove=Remove
+common.yes=Yes
+common.no=No
+
+# Errors
+there.is.a.problem=There is a problem
+not-a-date=Enter a real date
+
+# time out
+time-out.title=For your security, we signed you out
+time-out.save=Your progress will saved for 30 days
 
 #Registration
-confirm-company-to-register.heading=Is this the company you want to register?
-confirm-company-to-register.TRUE=Yes
-confirm-company-to-register.FALSE=No
-
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
   Tax Unique Taxpayer Reference?
 check-unique-taxpayer-reference.TRUE=Yes
 check-unique-taxpayer-reference.FALSE=No
+check-unique-taxpayer-reference.required=Select yes if the company you are registering has a UK Corporation Tax Unique Taxpayer Reference
 
-enter-utr.heading=What is the company's UK Corporation Tax Unique Taxpayer Reference (UTR)?
-enter-utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
+enter-utr.required=Enter the company’s Corporation Tax Unique Taxpayer Reference
+enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
+enter-utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
-  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+  You can <a target=_blank href="https://www.gov.uk/find-lost-utr-number">find a lost UTR (opens in a new window or tab)</a>.
 
-enter-postcode.heading=What is the postcode of the company’s Registered Office address?
+company-registered-office-postcode.heading=What is the postcode of the company’s Registered Office address?
+company-registered-office-postcode.required=Enter the postcode of the company’s registered office address
+company-registered-office-postcode.invalid=Enter a real postcode
 
-company-name.heading=What is the company’s name?
+enter-postcode.heading=What is the postcode of the company’s registered office address?
+enter-postcode.required=Enter the postcode of the company’s registered office address
+enter-postcode.invalid=Enter a real postcode
+
+
+company-name.heading=What is the name of the company you want to register?
+company-name.hint=This is the name registered with an official company register, such as Companies House.
+company-name.invalid=Enter the name of the company you want to register
 
 company-registered-office-address.heading=What is the company’s Registered Office address?
 company-registered-office-address.UkAddress.line1.heading=Building or street
@@ -44,15 +68,41 @@ company-registered-office-address.UkAddress.town.heading=Town or city
 company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
+company-registered-office-address.ForeignAddress.line1.heading=Address line 1
+company-registered-office-address.ForeignAddress.line2.heading=Address line 2 (optional)
+company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (optional)
+company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
+company-registered-office-address.ForeignAddress.line5.heading=Address line 5 (optional)
+company-registered-office-address.ForeignAddress.postalCode.heading=Postcode
+company-registered-office-address.ForeignAddress.countryCode.heading=Country
+company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a country from the list
+
+
 confirm-company-details.heading=Is this the company you want to register?
+confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
+confirm-company-details.required=Select yes if this is the company you want to register
 confirm-company-details.TRUE=Yes
 confirm-company-details.FALSE=No
 
 company-contact-address.heading=Can we use this address to contact you about your Digital Services Tax?
+company-contact-address.required=Select yes if we can use this address to contact you about your Digital Services Tax
 company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
 alternate-contact.heading=What is your contact address?
+
+alternate-contact.ForeignAddress=Foreign Address
+alternate-contact.ForeignAddress.line1.heading=Address line 1
+alternate-contact.ForeignAddress.line1.invalid=Enter Address Line 1
+alternate-contact.ForeignAddress.line2.heading=Address line 2 (optional)
+alternate-contact.ForeignAddress.line3.heading=Address line 3 (optional)
+alternate-contact.ForeignAddress.line4.heading=Address line 4 (optional)
+alternate-contact.ForeignAddress.line5.heading=Address line 5 (optional)
+alternate-contact.ForeignAddress.postalCode.heading=Postcode
+alternate-contact.ForeignAddress.countryCode.heading=Country
+alternate-contact.ForeignAddress.countryCode.invalid=Enter a country from the list
+alternate-contact.ForeignAddress.postalCode.required=Enter the postcode of your contact address
+alternate-contact.ForeignAddress.postalCode.invalid=Enter a real postcode
 alternate-contact.UkAddress.line1.heading=Building or street
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
 alternate-contact.UkAddress.town.heading=Town or city
@@ -60,6 +110,7 @@ alternate-contact.UkAddress.county.heading=County (optional)
 alternate-contact.UkAddress.postcode.heading=Postcode
 
 check-if-group.heading=Is the company you want to register part of a group?
+check-if-group.required=Select yes if the company you want to register is part of a group
 check-if-group.details=What we mean by a 'group'
 check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent company and all its consolidated subsidiaries.</p>\
   <p>A parent company is an entity that is (one of the following):</p>\
@@ -72,14 +123,30 @@ check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
+ultimate-parent-company-name.invalid=Enter the name of the group’s ultimate parent company
+ultimate-parent-company-name.error.length=Name of group’s ultimate global parent company must be 160 characters or fewer
+ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, amperstands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
 ultimate-parent-company-address.heading=What is the Registered Office address of {0}?
+
+ultimate-parent-company-address.ForeignAddress.line1.heading=Address line 1
+ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (optional)
+ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
+ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
+ultimate-parent-company-address.ForeignAddress.line5.heading=Address line 5 (optional)
+ultimate-parent-company-address.ForeignAddress.postalCode.heading=Postcode
+ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
+
+ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
+
 ultimate-parent-company-address.UkAddress.line1.heading=Building or street
 ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
 ultimate-parent-company-address.UkAddress.town.heading=Town or city
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
+ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
+ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
@@ -89,8 +156,14 @@ contact-details.phoneNumber.heading= Phone number
 contact-details.phoneNumber.hint=For international numbers include the country code.
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
+contact-details.forename.invalid=Forename
+contact-details.forename.name=Forename name
+contact-details.surname.invalid=Surname
+contact-details.phoneNumber.invalid=Phone number
+contact-details.email.invalid=Email
 
-check-liability-date.heading=Did the company become liable for Digital Services Tax on 1 April 2020?
+check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
+check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020 
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
@@ -105,22 +178,46 @@ accounting-period-end-date.hint=For example, 31 7 2020.
 accounting-period-end-date.Date.day.heading=Day
 accounting-period-end-date.Date.month.heading=Month
 accounting-period-end-date.Date.year.heading=Year
+accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the group’s first accounting period for Digital Services Tax
+accounting-period-end-date.day.empty=The end date of the group’s first accounting period for Digital Services Tax must include a day
+accounting-period-end-date.month.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month
+accounting-period-end-date.year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a year
+accounting-period-end-date.day-and-month.empty=The end date of the group’s  first accounting period for Digital Services Tax must include a day and month
+accounting-period-end-date.day-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a day and year
+accounting-period-end-date.month-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month and year
 
 #Reg cya
 cya.title=Check your answers before sending your application
 cya.company.title=Your company details
+
 cya.check-if-group.question=Is the company you are registering part of a group?
+cya.check-if-group.change=if the company you are registering is part of a group
+
 cya.company-name-and-reg-address.question=Company name Registered Office address
+cya.company-name-and-reg-address.change=Company name and Registered Office address
+
 cya.ultimate-parent-company.title=Ultimate global parent company details
 cya.ultimate-parent-company-name.question=Company name
+cya.ultimate-parent-company-name.change=company name
+
 cya.ultimate-parent-company-address.question=Registered Office address
+cya.ultimate-parent-company-address.change=Registered Office address
+
 cya.contact-details.title=Contact person’s details
 cya.contact-details-name.question=Full name
 cya.contact-details-phone-number.question=Phone number
 cya.contact-details-email.question=Email address
+cya.contact-details.change=contact person’s details
+
 cya.liability-date.title=Accounting period details
 cya.liability-start-date.question=Liability start date
+cya.check-liability-date.change=Change the date the company become liable for Digital Services Tax
+cya.liability-start-date.change=liability start date
+
 cya.accounting-end-date.question=First accounting period end date
+cya.accounting-end-date.change=first accounting period end date
+cya.accounting-period-end-date.change=Change the end date of the company’s first accounting period for Digital Services Tax
+
 cya.submission.title=Send your details
 cya.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
   the details you are providing are correct.
@@ -144,11 +241,266 @@ registration-sent.help-using-this-service.list.2=need to change your registered 
 registration-sent.ccm-email=If you do not know who your CCM is, or do not have one, {0}.
 
 #reg kickout
-details-not-correct.kickout.heading=What you need to do next
-details-not-correct.kickout.subheading=If you signed in with the correct user ID
-details-not-correct.kickout.update-details=If you need to update your limited company’s registered business details, \
-  you will need to
-details-not-correct.kickout.companies-house=tell Companies House about the change to your company
-details-not-correct.kickout.wrong-id=If you signed in with the wrong user ID
-details-not-correct.kickout.sign-in-again=You will need to sign in again using the Government Gateway user ID for the \
-  company you need to register.
+cannot-find-company.kickout.heading=We could not find your company
+cannot-find-company.kickout.update-details.p1=We could not find a company in our records using the details you gave us.
+cannot-find-company.kickout.update-details.p2=We need to do this before you can continue registering.
+
+details-not-correct.kickout.heading=What you need to do if your company details are incorrect
+details-not-correct.kickout.update-details.p1=Make sure the user ID you entered is correct and try signing in again.
+details-not-correct.kickout.update-details.p2=If you still need to update your company details, \
+  you need to \
+  <a href="https://www.gov.uk/file-changes-to-a-company-with-companies-house"> \
+    tell Companies House about the change to your company.\
+  </a>
+details-not-correct.kickout.update-details.p3=You have been signed out of the service.
+
+
+#reg pending page
+registration.pending.title=We have received your registration for the Digital Services Tax
+registration.pending.send-email=We will send your Digital Services Tax registration number to your contact email address within 5 working days.
+registration.pending.not-received=If you do not receive this registration number, contact your HMRC Customer Compliance Manager (CCM).
+registration.pending.ccm-content=If you do not know who your CCM is, or do not have one, email
+registration.pending.ccm-link=ccgdstmailbox@hmrc.gov.uk
+registration.pending.ccm-email=mailto:ccgdstmailbox@hmrc.gov.uk
+
+#service page
+landing.heading=Digital Services Tax details
+landing.ultimate-parent-name=Group’s ultimate parent company: {0}
+landing.dst-no=DST Registation Number: {0}
+landing.company-name=Responsible member: {0}
+landing.payment-due=Next payment due
+landing.pay-tax=Pay your Digital Services Tax
+landing.return-due=Next return due
+landing.submit-return=Submit a return
+landing.account-history=Account History
+landing.balance=View your balance and transactions history
+
+#returns
+manage-companies.listing.heading=Confirm your group’s companies
+manage-companies.radio.heading=Do you need to add another company to your group?
+manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
+manage-companies.Add=Yes
+manage-companies.Continue=No
+remove-company=Remove company
+change-company=Change company name
+
+add.heading=Company details
+add.name.heading=Company name
+add.name.hint=This is the name registered with an official company register, such as Companies House.
+add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
+add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+edit.heading=Company details
+edit.name.heading=Company name
+edit.name.hint=This is the name registered with an official company register, such as Companies House.
+edit.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
+edit.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
+  It may be called ‘reference’, ‘UTR’ or ‘official use’. \
+  <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
+
+select-activities.heading=Which activities are you reporting in this return?
+select-activities.heading.hint=Select all that apply.
+select-activities.SocialMedia=Social media
+select-activities.SearchEngine=Search engine
+select-activities.OnlineMarketplace=Online marketplace
+
+report-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins in this return?
+report-alternative-charge.details=What we mean by ‘alternative charge’
+report-alternative-charge.details.text=<p>This is an alternative method that businesses can use to work out their Digital Services Tax liability.</p>\
+<p>The alternative charge only benefits groups who make a loss or have a low UK profit margin on a Digital Services activity.</p>
+report-alternative-charge.TRUE=Yes
+report-alternative-charge.FALSE=No
+
+report-social-media-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your social media activity?
+report-social-media-alternative-charge.TRUE=Yes
+report-social-media-alternative-charge.FALSE=No
+report-social-media-loss.heading=Has the group made a loss on its social media activity?
+report-social-media-loss.TRUE=Yes
+report-social-media-loss.FALSE=No
+report-social-media-operating-margin.heading=What was the group’s operating margin on its social media activity?
+
+report-search-engine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your search engine activity?
+report-search-engine-alternative-charge.TRUE=Yes
+report-search-engine-alternative-charge.FALSE=No
+report-search-engine-loss.heading=Has the group made a loss on its search engine activity?
+report-search-engine-loss.TRUE=Yes
+report-search-engine-loss.FALSE=No
+report-search-engine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
+
+report-online-marketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
+  to your online marketplace activity?
+report-online-marketplace-alternative-charge.TRUE=Yes
+report-online-marketplace-alternative-charge.FALSE=No
+report-online-marketplace-loss.heading=Has the group made a loss on its online marketplace activity?
+report-online-marketplace-loss.TRUE=Yes
+report-online-marketplace-loss.FALSE=No
+report-online-marketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+
+report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
+report-cross-border-transaction-relief.details=What we mean by ‘relief on cross-border transactions’
+report-cross-border-transaction-relief.details.text=<p> If a transaction involves a UK user and a non-UK user who is in a country \
+  that also operates a Digital Services Tax, only 50% of the revenues from that transaction will be taxable as UK revenues.</p>
+report-cross-border-transaction-relief.TRUE=Yes
+report-cross-border-transaction-relief.FALSE=No
+
+relief-deducted.heading=How much cross-border transactions relief have you deducted from revenues in this return?
+
+company-liabilities-0.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-4.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-5.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-6.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-7.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-8.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-9.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-10.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-11.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-12.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-13.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-14.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-15.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-16.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-17.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-18.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-19.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-20.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+
+allowance-deducted.heading=How much of the £25m annual allowance have you deducted from revenues in this return?
+allowance-deducted.details=What we mean by ‘£25m annual allowance’
+allowance-deducted.details.text=<p>The £25m annual allowance means the first £25m of revenues derived \
+  from UK users will not be subject to Digital Services Tax.</p><p>The allowance is pro-rated for accounting \
+  periods less than 12 months.</p>
+
+group-liability.heading=What is the group’s total UK Digital Services Tax liability for 1 April 2020 to 31 July 2020? 
+group-liability.hint=This is the total amount of liability after applying any deductions and allowances.
+
+repayment.heading=Do you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020?
+repayment.TRUE=Yes
+repayment.FALSE=No
+
+bank-details-type.heading=Your bank details for repayment
+bank-details-type._1.heading=Account Name
+bank-details-type._2.TRUE=Yes
+bank-details-type._2.FALSE=No
+bank-details-type._2.heading.large=Is this a UK bank account?
+
+bank-details-type-domestic.heading=What are your UK bank account details?
+bank-details-domestic.sortCode.heading.large.label=Sort code
+bank-details-domestic.accountNo.heading.large.label=Account number
+bank-details-domestic.buildingSocietyNumber.heading.large.label=Building society roll number (if you have one)
+
+bank-details-foreign.listing.heading=What are your bank account details?
+bank-details-foreign.iban.heading.large.label=International Bank Account Number (IBAN)
+
+#Returns cya
+check-your-answers.ret.title=Check your answers before sending you return for 1 April 2020 to July 2020
+check-your-answers.ret.company.title=Digital Services Tax return details
+check-your-answers.ret.group-liability.question=Group’s total Digital Services Tax liability
+check-your-answers.ret.group-liability.change=group’s total Digital Services Tax liability
+check-your-answers.ret.allowance-deducted.question=Amount of £25m annual allowance claimed
+check-your-answers.ret.allowance-deducted.change=amount of £25m annual allowance claimed
+check-your-answers.ret.report-cross-border-transaction-relief.question=Are you claiming any relief on cross-border \
+  transactions for this period?
+check-your-answers.ret.report-cross-border-transaction-relief.change=are you claiming any relief on cross-border \
+  transactions for this period
+check-your-answers.ret.relief-deducted.question=Amount of relief claimed on cross-border transactions
+check-your-answers.ret.relief-deducted.change=amount of relief claimed on cross-border transactions
+check-your-answers.ret.group-company={0}’s Digital Services Tax liability
+check-your-answers.ret.group-company.change={0}’s Digital Services Tax liability
+
+check-your-answers.ret.report-alternative-charge.question=Activity reported in this return
+check-your-answers.ret.report-alternative-charge.change=activity reported in this return
+
+check-your-answers.ret.social-media.title=Social media activity
+check-your-answers.ret.report-social-media-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-social-media-alternative-charge.change=alternative charge applied
+check-your-answers.ret.report-social-media-loss.question=Loss made
+check-your-answers.ret.report-social-media-loss.change=loss made
+check-your-answers.ret.report-social-media-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.report-social-media-operating-margin.change=group’s profit margin on activity
+
+check-your-answers.ret.search-engine.title=Search Engine Activity
+check-your-answers.ret.report-search-engine-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-search-engine-alternative-charge.change=alternative charge applied
+check-your-answers.ret.report-search-engine-loss.question=Loss made
+check-your-answers.ret.report-search-engine-loss.change=loss made
+check-your-answers.ret.report-search-engine-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.report-search-engine-operating-margin.change=group’s profit margin on activity
+
+check-your-answers.ret.online-marketplace.title=Online Marketplace Activity
+check-your-answers.ret.report-online-marketplace-alternative-charge.question=Alternative charge applied
+check-your-answers.ret.report-online-marketplace-alternative-charge.change=alternative charge applied
+check-your-answers.ret.report-online-marketplace-loss.question=Loss made
+check-your-answers.ret.report-online-marketplace-loss.change=loss made
+check-your-answers.ret.report-online-marketplace-operating-margin.question=Group’s profit margin on activity
+check-your-answers.ret.report-online-marketplace-operating-margin.change=group’s profit margin on activity
+
+check-your-answers.ret.submission.title=Now submit your return
+check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \
+  to the best of your knowledge, the details you are providing are correct.
+
+#ret complete
+confirmation.heading=Return complete
+confirmation.detail=We received your Digital Services Tax return for Social Group Inc for 1 April 2020 to 30 July 2020
+confirmation.email=We have sent a confirmation email to example@company.com.
+
+confirmation.what-you-do-next.title=What you must do next
+confirmation.what-you-do-next.p1=Your next return will be for 1 August 2020 to 31 July 2021.
+confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by 1 April 2022 and submit a return by 31 July 2022.
+confirmation.index=Go to your Digital Services Tax details
+
+#error pages
+wrong-account.heading=You cannot use this service
+wrong-account.sign-out.reason=You signed in with a Government Gateway user ID for an individual or agent. We have signed you out.
+wrong-account.sign-in.reason=To use this service, sign in with the Government Gateway user ID for the company that is registering for the Digital Services Tax.
+
+wrong-creds.heading=You cannot use this service
+wrong-creds.sign-out.reason=You need to be an administrator user to register for the Digital Services Tax.
+wrong-creds.contact-admin=Contact your company's administrator if you need to use this service.
+
+# Please see example messages below, from most specific to most general.
+# I suggest creating the most general ones first then overriding with more
+# specific ones on a case-by-case basis.
+#
+# For example, if the error message key is 'contact-details.email.required' uniform will
+# look first for 'contact-details.email.required', then 'email.required' and finally if it
+# can't find either of these it will use a message for 'required'.
+#
+# If you want to see the keys being used, open up DSTInterpreter.scala, find where the messages
+# are provided (around line 83 at present) and comment out the preferred and best-guess lines. Then
+# uncomment the 'attentionSeeker' line. Finally reload the pages and it will show the message keys.
+#
+# The content below is made up for demo purposes. Please also check above as in some
+# cases these keys already exist above.
+
+contact-details.forename.required=Enter the contact person’s first name
+forename.required=Enter the first name
+
+contact-details.forename.invalid=First name must only include letters a to z, hyphens, apostrophes and spaces
+forename.invalid=First name must only include letters a to z, hyphens, apostrophes and spaces
+
+contact-details.surname.required=Enter the contact person’s last name
+surname.required=Enter the last name
+
+contact-details.surname.invalid=Last name must only include letters a to z, hyphens, apostrophes and spaces
+surname.invalid=Last name must only include letters a to z, hyphens, apostrophes and spaces
+
+contact-details.phoneNumber.required=Enter a phone number
+phoneNumber.required=Enter a phone number
+
+contact-details.phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+
+contact-details.email.required=Please enter a contact email
+email.required=Please enter an email address
+required=This is a required field
+
+contact-details.email.invalid=Please enter a valid contact email
+email.invalid=Please enter a valid email address
+invalid=Please enter a valid string

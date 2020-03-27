@@ -14,20 +14,12 @@
  * limitations under the License.
  *@
 
-@(key: String)(implicit messages: UniformMessages[Html])
+@()(implicit messages: UniformMessages[Html])
 
-<div class="govuk-grid-column-two-thirds">
+<h1 class="govuk-heading-xl">@messages("wrong-creds.heading")</h1>
+<p class="govuk-body">@messages("wrong-creds.sign-out.reason")</p>
+<p class="govuk-body">@messages("wrong-creds.contact-admin")</p>
 
-    <h1 class="govuk-heading-xl">@messages(s"$key.kickout.heading")</h1>
-    <h2 class="govuk-heading-m">@messages(s"$key.kickout.subheading")</h2>
-
-    <p>@messages(s"$key.kickout.update-details")
-        <a href="https://www.gov.uk/file-changes-to-a-company-with-companies-house">
-            @messages(s"$key.kickout.companies-house")
-        </a>.
-    </p>
-
-    <h2 class="govuk-heading-m">@messages(s"$key.kickout.wrong-id")</h2>
-
-    <p>@messages(s"$key.kickout.sign-in-again")</p>
-</div>
+<a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signIn()" class="button">
+    @messages("common.sign-in")
+</a>

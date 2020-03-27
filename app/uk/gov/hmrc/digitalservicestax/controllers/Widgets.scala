@@ -53,16 +53,30 @@ trait Widgets {
     def encode(in: String): Input = Input.one(List(in))
 
     def render(
-      key: List[String],
+      pageKey: List[String],
+      fieldKey: List[String],
       path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
       messages: UniformMessages[Html]
     ): Html = {
       val existingValue: String = data.valueAtRoot.flatMap{_.headOption}.getOrElse("")
-      views.html.uniform.string(key, existingValue, errors, messages, autoFields)
+      views.html.uniform.string(fieldKey, existingValue, errors, messages, autoFields)
     }
   }
+
+  def inlineOptionString(
+    validated: ValidatedType[String]
+  ): FormField[Option[String @@ validated.Tag], Html] =
+    twirlStringField.simap{
+      case "" => Right(None)
+      case x  => Either.fromOption(
+        validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
+      )
+    }{
+      case None => ""
+      case Some(x) => x.toString
+    }
 
   def validatedVariant[BaseType](validated: ValidatedType[BaseType])(
     implicit baseForm: FormField[BaseType, Html]
@@ -71,16 +85,27 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
-  implicit def postcodeField    = validatedVariant(Postcode)
+  def validatedNonEmptyString(validated: ValidatedType[String])(
+    implicit baseForm: FormField[String, Html]
+  ): FormField[String @@ validated.Tag, Html] =
+    baseForm.simap{
+      case "" => Left(ErrorMsg("required").toTree)
+      case x =>
+        Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+    }{x => x: String}
+
+  implicit def postcodeField    = validatedNonEmptyString(Postcode)
   implicit def nesField         = validatedVariant(NonEmptyString)
-  implicit def utrField         = validatedVariant(UTR)
-  implicit def countrycodeField = validatedVariant(CountryCode)
+  implicit def utrField         = validatedNonEmptyString(UTR)
   implicit def emailField       = validatedVariant(Email)
   implicit def phoneField       = validatedVariant(PhoneNumber)
   implicit def percentField     = validatedVariant(Percent)
   implicit def accountField     = validatedVariant(AccountNumber)
   implicit def sortCodeField    = validatedVariant(SortCode)
   implicit def ibanField        = validatedVariant(IBAN)
+  implicit def restrictField    = validatedVariant(RestrictiveString)
+
+  implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
   implicit val intField: FormField[Int,Html] =
     twirlStringFields().simap(x => 
@@ -130,20 +155,45 @@ trait Widgets {
     def encode(in: Boolean): Input = Input.one(List(in.toString))
 
     def render(
-      key: List[String],
+      pageKey: List[String],
+      fieldKey: List[String],
       path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
       messages: UniformMessages[Html]
     ): Html = {
-      val options = if (key.contains("about-you") || key.contains("user-employed")) List(False, True) else List(True, False)
+      val options = if (pageKey.contains("about-you") || pageKey.contains("user-employed")) List(False, True) else List(True, False)
       val existingValue = data.toStringField().toOption
-      views.html.uniform.radios(key,
+      views.html.uniform.radios(fieldKey,
         options,
         existingValue,
         errors,
         messages)
     }
+  }
+
+  implicit val twirlCountryCodeField = new FormField[CountryCode, Html] {
+
+    override def render(
+      pageKey: List[String],
+      fieldKey: List[String],
+      breadcrumbs: Breadcrumbs,
+      data: Input,
+      errors: ErrorTree,
+      messages: UniformMessages[Html]): Html =
+      views.html.helpers.country_select(
+        fieldKey.mkString("."),
+        data.values.flatten.headOption,
+        errors.nonEmpty,
+        messages
+      )
+
+    override def encode(in: CountryCode): Input =
+      validatedVariant(CountryCode).encode(in)
+
+    override def decode(out: Input): Either[ErrorTree, CountryCode] =
+      validatedVariant(CountryCode).decode(out)
+
   }
 
   implicit val twirlDateField: FormField[LocalDate, Html] =
@@ -152,26 +202,32 @@ trait Widgets {
 
     def decode(out: Input): Either[ErrorTree, LocalDate] = {
 
-      def intAtKey(key: String): Validated[List[String], Int] =
+      def stringAtKey(key: String): Validated[List[String], String] =
         Validated.fromOption(
           out.valueAt(key).flatMap{_.find(_.trim.nonEmpty)},
           List(key)
-        ).andThen{
-          x => Validated.catchOnly[NumberFormatException](x.toInt).leftMap(_ => List(key))
-        }
+        )
 
       (
-        intAtKey("year"),
-        intAtKey("month"),
-        intAtKey("day")
-      ) .tupled
-        .leftMap{x => ErrorMsg(x.reverse.mkString("-and-") + ".empty").toTree}
-        .toEither
-        .flatMap{ case (y,m,d) =>
-          Either.catchOnly[java.time.DateTimeException]{
-            LocalDate.of(y,m,d)
-          }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
-        }
+        stringAtKey("year"),
+        stringAtKey("month"),
+        stringAtKey("day")
+      ).tupled
+       .leftMap{x => ErrorMsg(x.reverse.mkString("-and-") + ".empty").toTree}
+       .toEither
+       .flatMap{ case (ys,ms,ds) =>
+
+         val asNumbers: Either[Exception, (Int,Int,Int)] =
+           Either.catchOnly[NumberFormatException]{
+             (ys.toInt, ms.toInt, ds.toInt)
+           }
+
+         asNumbers.flatMap { case (y,m,d) =>
+           Either.catchOnly[java.time.DateTimeException]{
+             LocalDate.of(y,m,d)
+           }
+         }.leftMap(_ => ErrorTree.oneErr(ErrorMsg("not-a-date")))
+       }
     }
 
       def encode(in: LocalDate): Input = Map(
@@ -181,14 +237,15 @@ trait Widgets {
       ).mapValues(_.toString.pure[List])
 
       def render(
-        key: List[String],
+        pageKey: List[String],        
+        fieldKey: List[String],
         path: Breadcrumbs,
         data: Input,
         errors: ErrorTree,
-    messages: UniformMessages[Html]
+        messages: UniformMessages[Html]
       ): Html = {
         views.html.uniform.date(
-          key,
+          fieldKey,
           data,
           errors,
           messages
@@ -218,7 +275,8 @@ trait Widgets {
     def encode(in: UkAddress): Input = ffhlist.encode(gen.to(in))
 
     def render(
-      key: List[String],
+      pagekey: List[String],
+      fieldKey: List[String],      
       path: Breadcrumbs,
       data: Input,
       errors: ErrorTree,
@@ -226,7 +284,7 @@ trait Widgets {
     ): Html = {
       // TODO pass thru fieldKey
       views.html.uniform.address(
-        key,
+        fieldKey,
         data,
         errors,
         messages
@@ -245,11 +303,18 @@ trait Widgets {
       )}.toEither
 
       def encode(in: A): Input = Input.one(List(in.entryName))
-      def render(key: List[String],path: Breadcrumbs,data: Input,errors: ErrorTree,messages: UniformMessages[Html]): Html = {
+      def render(
+        pageKey: List[String],
+        fieldKey: List[String],        
+        path: Breadcrumbs,
+        data: Input,
+        errors: ErrorTree,
+        messages: UniformMessages[Html]
+      ): Html = {
         val options = enum.values.map{_.entryName}
         val existingValue = decode(data).map{_.entryName}.toOption
         views.html.uniform.radios(
-          key,
+          fieldKey,
           options,
           existingValue,
           errors,
@@ -277,7 +342,8 @@ trait Widgets {
 
       // Members declared in ltbs.uniform.common.web.FormField
       def render(
-        key: List[String],
+        pageKey: List[String],
+        fieldKey: List[String],
         breadcrumbs: Breadcrumbs,
         data: Input,
         errors: ErrorTree,
@@ -286,7 +352,7 @@ trait Widgets {
         val options = enum.values.map{_.entryName}
         val existingValues: Set[String] = decode(data).map{_.map{_.entryName}}.getOrElse(Set.empty)
         views.html.uniform.checkboxes(
-          key,
+          fieldKey,
           options,
           existingValues,
           errors,
@@ -295,35 +361,5 @@ trait Widgets {
       }
 
     }
-
-  implicit def unitTell: GenericWebTell[UkAddress, Html] = new GenericWebTell[UkAddress, Html] {
-    def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html = Html("heyeyeye")
-  }
-
-
-
-  // implicit def oddballField2(
-  //   implicit threeBools: FormField[(
-  //     Boolean,
-  //     Boolean,
-  //     Boolean
-  //   ), Html]
-  // ): FormField[Set[data.Activity],Html] = {
-  //   import data.Activity, Activity.{SocialMedia, SearchEngine, OnlineMarketplace}
-  //   threeBools.imap{case (a,b,c) =>
-  //       Set.apply[Option[Activity]](
-  //         Some(SocialMedia).filter(_ => a),
-  //         Some(SearchEngine).filter(_ => b),
-  //         Some(OnlineMarketplace).filter(_ => c)          
-  //       ).flatten
-  //   }{ theset => 
-  //     (
-  //       theset.contains(SocialMedia),
-  //       theset.contains(SearchEngine),
-  //       theset.contains(OnlineMarketplace)        
-  //     )
-  //   }
-
-  // }
   
 }

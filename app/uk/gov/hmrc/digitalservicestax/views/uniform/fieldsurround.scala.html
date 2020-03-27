@@ -16,11 +16,16 @@
 
 @import ltbs.uniform.common.web.FormFieldStats
 
-@(key: String, content: Html, isCompoundField: Boolean, hasHint: Boolean, hasErrors: Boolean, stats: FormFieldStats)(implicit messages: UniformMessages[Html])
-@defining((hasHint, hasErrors) match {
-    case (true,true) => s"$key-hint $key-error"
-    case (true,false) => s"$key-hint"
-    case (false,true) => s"$key-error"
+@(key: String, content: Html, isCompoundField: Boolean, hasHint: Boolean, hasErrors: Boolean, hasIntro: Boolean, stats: FormFieldStats)(implicit messages: UniformMessages[Html])
+
+@defining((hasHint, hasErrors, hasIntro) match {
+    case (true,true,true) => s"$key-hint $key-error $key-intro"
+    case (true,false,true) => s"$key-hint $key-intro"
+    case (false,true,true) => s"$key-error $key-intro"
+    case (true,true,false) => s"$key-error $key-hint"
+    case (false,false,true) => s"$key-intro"
+    case (true,false,false) => s"$key-hint"
+    case (false,true,false) => s"$key-error"
     case _ => ""
 }){ describedByClass =>
     @* There are more than one fieldset/formgroup on the page *@
@@ -45,13 +50,12 @@
         * so that we know how to wrap?
         *@
         @content
-
     } else { @if(isCompoundField){
         <div class="form-group@if(hasErrors){ form-group-error}">
             <fieldset
-            class="fieldset"
+                class="fieldset"
                 @if(describedByClass.nonEmpty){aria-describedby="@describedByClass"}
-            id="@key-input"
+                id="@key-input"
             >
                 <legend class="fieldset__legend fieldset__legend--xl">
                     @messages.get(s"$key.heading.hint").map { headHint =>
@@ -61,39 +65,43 @@
                     }
 
                     <h1 class="fieldset__heading@if(hasErrors){ flush--top}@if(messages.get(s"$key.heading.hint").isDefined) { fieldset__heading--no-span}">
-                    @messages(s"$key.heading")
+                        @messages(s"$key.heading")
                     </h1>
                 </legend>
 
                 @for(msg <- messages.list(s"$key.intro")) {
-                    <p class="govuk-body">
-                    @msg
+                    <p class="govuk-body" id="@key-intro">
+                        @msg
                     </p>
                 }
-
+                
                 @messages.get(s"$key.intro.hint").map { introHint =>
                     <p class="govuk-body">
                         @introHint
                     </p>
                 }
 
-                @messages.get(s"$key.list").map { list =>
-                    <ul class="list list-bullet">
-                        @for(msg <- messages.list(s"$key.list")) {
-                            <li>@msg</li>
-                        }
-                    </ul>
-                }
+                    @messages.get(s"$key.list").map { list =>
+                        <ul class="list list-bullet">
+                            @for(msg <- messages.list(s"$key.list")) {
+                                <li>@msg</li>
+                            }
+                        </ul>
+                    }
 
-                @content
-            </fieldset>
-        </div>
-    } else {
-        @*
-        * Note: Intro messages and message lists should ideally not appear between
-        * labels & their inputs
-        *@
-        @content
-    }}
+                    @content
+                </fieldset>
+            </div>
+        } else {
+            @*
+            * Note: Intro messages and message lists should ideally not appear between
+            * labels & their inputs
+            *@
+            @if(messages.get(s"$key.listing.heading").isDefined) {
+                <h1 class="heading-xlarge">@messages.get(s"$key.listing.heading")</h1>
+            }
+            @content
+        }
+    }
 
 }

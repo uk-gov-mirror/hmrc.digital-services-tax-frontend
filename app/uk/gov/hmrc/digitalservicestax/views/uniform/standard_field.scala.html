@@ -22,7 +22,7 @@
 @key=@{keyList.mkString(".")}
 @errorKey=@{s"${keyList.mkString(".")}-error"}
 
-@if(key == "loan-amount.estimate") {
+@if(key == "manage-companies") {
     <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
         <fieldset
         class="fieldset"
@@ -73,7 +73,7 @@
   }
 
   @messages.get(s"$key.heading").map { hint =>
-    <label class="label@if(keyList.length == 1) { govuk-label--xl fieldset__heading--no-span}" for="@{keyList.mkString("_")}-input">@messages.decompose(s"$key.heading")</label>
+    <label class="label@if(keyList.length == 1) { govuk-label--xl}" for="@{keyList.mkString("_")}-input">@messages.decompose(s"$key.heading")</label>
   }
   
   @if(keyList.length == 1) {

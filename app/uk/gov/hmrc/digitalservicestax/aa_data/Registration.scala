@@ -22,11 +22,11 @@ package data
 import java.time.LocalDate
 
 case class Registration (
-  identification: UTR, 
-  company: Company,
+  companyReg: CompanyRegWrapper,
   alternativeContact: Option[Address],
   ultimateParent: Option[Company],
   contact: ContactDetails,
   dateLiable: LocalDate,
-  accountingPeriodEnd: LocalDate
+  accountingPeriodEnd: LocalDate,
+  registrationNumber: Option[DSTRegNumber] = None
 )

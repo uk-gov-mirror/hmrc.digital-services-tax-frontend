@@ -16,22 +16,33 @@
 
 package uk.gov.hmrc.digitalservicestax
 
-import java.time.format.DateTimeFormatter
-import java.time.{LocalDate, LocalDateTime, ZoneId}
-
 import shapeless.{:: => _, _}
 import tag._
 import cats.implicits._
 import cats.kernel.Monoid
-import com.ibm.icu.text.SimpleDateFormat
-import com.ibm.icu.util.{TimeZone, ULocale}
 import play.api.i18n.Messages
+import java.time.LocalDate
 
-package object data {
+package object data extends SimpleJson {
 
   type UTR = String @@ UTR.Tag
   object UTR extends RegexValidatedString(
     "^[0-9]{10}$"
+  )
+
+  type SafeId = String @@ SafeId.Tag
+  object SafeId extends RegexValidatedString(
+    "^[A-Z0-9]{1,15}$"
+  )
+
+  type FormBundleNumber = String @@ FormBundleNumber.Tag
+  object FormBundleNumber extends RegexValidatedString(
+    regex = "^[0-9]{12}$"
+  )
+
+  type InternalId = String @@ InternalId.Tag
+  object InternalId extends RegexValidatedString(
+    regex = "^Int-[a-f0-9-]*$"
   )
 
   type Postcode = String @@ Postcode.Tag
@@ -48,6 +59,11 @@ package object data {
       Some(in).filter(_.nonEmpty)
   }
 
+  type RestrictiveString = String @@ RestrictiveString.Tag
+  object RestrictiveString extends RegexValidatedString(
+    """^[a-zA-Z &`\\-\\'^]{1,35}$"""
+  )
+
   type CountryCode = String @@ CountryCode.Tag
   object CountryCode extends RegexValidatedString(
     """^[A-Z][A-Z]$""", 
@@ -56,8 +72,6 @@ package object data {
       case other => other
     }
   )
-
-//  implicit def mon[A, TC[_]: cats.Invariant, T <: ValidatedType[A]](implicit monA: TC[A]): TC[A @@ T#Tag] = ???
 
   type SortCode = String @@ SortCode.Tag
   object SortCode extends RegexValidatedString(
@@ -79,16 +93,18 @@ package object data {
 
   type IBAN = String @@ IBAN.Tag
   object IBAN extends RegexValidatedString(
-    """^[0-9]{8}$""", // TODO
+    """^[0-9]"{4,50}""", // TODO
     _.filter(_.isDigit)
   )
 
   type PhoneNumber = String @@ PhoneNumber.Tag
   object PhoneNumber extends RegexValidatedString(
-    """^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]
-      |?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|
-      |(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$""".stripMargin, // TODO check phone number regex
-    _.filter(_.isDigit)
+    "^[0-9 ]{6,30}$"
+    // TODO: check phone number regex
+//    """^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]
+//      |?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|
+//      |(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$""".stripMargin.replace("\n","") 
+//    _.filter(_.isDigit)
   )
 
   type Email = String @@ Email.Tag
@@ -112,22 +128,12 @@ package object data {
     }
   }
 
-  private val zone = "Europe/London"
-  private val zoneId: ZoneId = ZoneId.of(zone)
-  private val timeFomat = "h:mma"
-  def formattedTimeNow: String = LocalDateTime.now(zoneId).format(DateTimeFormatter.ofPattern(timeFomat)).toLowerCase
+  type DSTRegNumber = String @@ DSTRegNumber.Tag
+  object DSTRegNumber extends RegexValidatedString(
+    "^([A-Z]{2}DST[0-9]{10})$"
+  )
 
-  def formatDate(localDate: LocalDate, dateFormatPattern: String = "d MMMM yyyy"):String = {
-    val date = java.util.Date.from(localDate.atStartOfDay(zoneId).toInstant)
-    createDateFormatForPattern(dateFormatPattern).format(date)
-  }
-
-  private def createDateFormatForPattern(pattern: String): SimpleDateFormat = {
-//    val uLocale = new ULocale(messages.lang.code)
-//    val validLang: Boolean = ULocale.getAvailableLocales.contains(uLocale)
-    val locale: ULocale = ULocale.getDefault
-    val sdf = new SimpleDateFormat(pattern, locale)
-    sdf.setTimeZone(TimeZone.getTimeZone(zone))
-    sdf
+  implicit val orderDate = new cats.Order[LocalDate] {
+    def compare(x: LocalDate, y: LocalDate):Int = x.compareTo(y)
   }
 }

@@ -18,12 +18,13 @@ package uk.gov.hmrc.digitalservicestax
 package journeys
 
 import scala.language.higherKinds
-
+import connectors.DSTService
 import data._
-
+import frontend.Kickout
 import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
+
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
@@ -32,25 +33,31 @@ object RegJourney {
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
 
-  private def message(key: String, args: String*) =
-    Map(key -> Tuple2(key, args.toList))
+
+  private def message(key: String, args: String*) = {
+    import play.twirl.api.HtmlFormat.escape
+    Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
+  }
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
-    backendService: BackendService[F]
-  )(utr: UTR): F[Registration] = {
+    backendService: DSTService[F]
+  ): F[Registration] = {
     import interpreter._
 
+
+
     for {
-      company <- backendService.matchedCompany() >>= {
+      
+      companyRegWrapper <- backendService.lookupCompany() >>= { // gets a CompanyRegWrapper but converts to a company
 
         // found a matching company
-        case Some(company) =>
+        case Some(companyRW) =>
           for {
-            confirmCompany <- interact[Company, Boolean]("confirm-company", company)
-            //TODO Check if we should be signing the user out
+            confirmCompany <- interact[Company, Boolean]("confirm-company-details", companyRW.company)
+            //TODO Here we need to sign the user out
             _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-          } yield (company)
+          } yield companyRW // useSafeId is false, no utr or safeId sent
 
         // no matching company found
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
@@ -58,42 +65,61 @@ object RegJourney {
             (
               ask[NonEmptyString]("company-name"),
               ask[Address]("company-registered-office-address")
-            ).mapN(Company.apply)
+            ).mapN(Company.apply).map(CompanyRegWrapper(_, useSafeId = true))
           case true =>
             for {
               utr <- ask[UTR]("enter-utr")
-              postcode <- ask[Postcode]("enter-postcode")
-              company <- backendService.lookup(utr, postcode) map {
-                _.getOrElse(throw new IllegalStateException("lookup failed"))
-              }
+              postcode <- ask[Postcode]("company-registered-office-postcode")
+              companyOpt <- backendService.lookupCompany(utr, postcode)
+              //The user shouln't be signed out here
+              _ <- if (companyOpt.isEmpty) end("cannot-find-company", Kickout("details-not-correct")) else { (()).pure[F] }
+              company = companyOpt.get.company
+              safeId = companyOpt.get.safeId
               confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
               //TODO Check if we should be signing the user out
-              _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-            } yield company
+              _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
+            } yield CompanyRegWrapper(company, utr.some, safeId)
         }
       }
 
       registration <- (
-        utr.pure[F],
-        company.pure[F],
+        companyRegWrapper.pure[F],
         ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("company-contact-address", company.address).map{x => !x},
-        for {
-          isGroup <- ask[Boolean]("check-if-group")
-          parentName <- ask[NonEmptyString]("ultimate-parent-company-name") when isGroup
-          parentAddress <- ask[Address](
-            "ultimate-parent-company-address",
-            customContent = message("ultimate-parent-company-address.heading", parentName.getOrElse(None).toString)
-          ) when isGroup
-          //TODO fix this, we need parentName to display on the parentAddress page, but without returning options from using when isGroup
-          //Below be a dirty hack
-        } yield Company(parentName.getOrElse(NonEmptyString(" ")), parentAddress.getOrElse(UkAddress(NonEmptyString(" "), "", "", "", Postcode("AA111AA")))).some,
+          interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
+        ask[Boolean]("check-if-group") >>= {
+          case true =>
+            for {
+              parentName <- ask[NonEmptyString]("ultimate-parent-company-name",
+                validation =
+                  Rule.cond[NonEmptyString](
+                    _.length < 160,
+                    "error.length"
+                  ) followedBy
+                    Rule.cond[NonEmptyString](
+                      _.matches("""^[a-zA-Z0-9- '&\\/]{1,105}$"""),
+                      "format"
+                    )
+              )
+              parentAddress <- ask[Address](
+                "ultimate-parent-company-address",
+                customContent = message("ultimate-parent-company-address.heading", parentName)
+              )
+            } yield Company(parentName, parentAddress).some
+          case false =>
+            Option.empty[Company].pure[F]
+        },
         ask[ContactDetails]("contact-details"),
-        (ask[LocalDate]("liability-start-date") when (ask[Boolean]("check-liability-date") == false)).map{_.getOrElse(LocalDate.of(2020, 4,1))},
-        ask[LocalDate]("accounting-period-end-date")
+        ask[Boolean]("check-liability-date") flatMap {
+          case true => LocalDate.of(2020,4,6).pure[F]
+          case false =>
+            ask[LocalDate]("liability-start-date",
+              validation = Rule.min(LocalDate.of(2020,4,6))
+            )
+        },
+        ask[LocalDate]("accounting-period-end-date"),
+        None.pure[F]
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))
-      _ <- tell("registration-sent", Confirmation(registration))
     } yield (registration)
   }
 

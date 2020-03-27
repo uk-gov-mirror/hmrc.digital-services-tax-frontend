@@ -18,6 +18,11 @@ package uk.gov.hmrc.digitalservicestax
 
 package object controllers {
 
+  implicit class HtmlEscapingString(val in: String) extends AnyVal {
+    import play.twirl.api.HtmlFormat
+    def escapeHtml: String = HtmlFormat.escape(in).toString
+  }
+
   implicit class OrderedYesNo(l: List[String]) {
     def orderYesNoRadio: List[String] = l match {
       case "None" :: "Some" :: _ if l.length == 2 => l.reverse

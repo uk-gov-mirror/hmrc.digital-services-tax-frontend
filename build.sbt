@@ -46,3 +46,6 @@ lazy val microservice = Project(appName, file("."))
 libraryDependencies ++= Seq(
   ws
 )
+
+routesImport += "uk.gov.hmrc.digitalservicestax.data._"
+TwirlKeys.templateImports += "uk.gov.hmrc.digitalservicestax.data._"

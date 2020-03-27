@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package uk.gov.hmrc.digitalservicestax.data
+@import uk.gov.hmrc.digitalservicestax.config.AppConfig
 
-case class Kickout( name: String )
+@()(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
+
+@uk.gov.hmrc.digitalservicestax.views.html.main_template(title = messages("time-out.title").toString()) {
+    <h1>@messages("time-out.title")</h1>
+    <p>@messages("time-out.save")</p>
+
+    <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.timeIn(
+        request.headers.get("Referer").getOrElse(appConfig.dstIndexPage))" class="button">
+        @messages("common.sign-in")
+    </a>
+}
