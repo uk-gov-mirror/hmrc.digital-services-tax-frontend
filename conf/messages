@@ -121,19 +121,24 @@ check-if-group.FALSE=No
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
 ultimate-parent-company-name.invalid=Enter the name of the group’s ultimate parent company
 ultimate-parent-company-name.error.length=Name of group’s ultimate global parent company must be 160 characters or fewer
-ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, amperstands (&), and spaces
+ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
 ultimate-parent-company-address.heading=Where is the Registered Office address of {0}?
 
 ultimate-parent-company-address.ForeignAddress=Outside the UK
 ultimate-parent-company-address.ForeignAddress.line1.heading=Address line 1
+ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
 ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (optional)
 ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
 ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
 ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
+<<<<<<< HEAD
 ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
 ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
+=======
+ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing and enter a country from the list
+>>>>>>> dst-222 error border on type ahead input & error messages for foreign addresses
 
 ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
 
@@ -143,6 +148,10 @@ ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 
 ultimate-parent-company-address.UkAddress.town.heading=Town or city
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
+<<<<<<< HEAD
+=======
+
+>>>>>>> dst-222 error border on type ahead input & error messages for foreign addresses
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
