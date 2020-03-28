@@ -69,10 +69,16 @@ company-registered-office-address.UkAddress.town.heading=Town or city (optional)
 company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
+#UkAddress errors
 UkAddress.line1.required=Enter a building or street
 UkAddress.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
-UkAddress.town.invalid= Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+UkAddress.town.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 UkAddress.county.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+UkAddress.line1.limit=Building or street must be 40 characters or fewer
+UkAddress.line2.limit=Building or street line 2 must be 40 characters or fewer
+UkAddress.town.limit=Town or city must be 40 characters or fewer
+UkAddress.county.limit=County must be 40 characters or fewer
+not-a-postcode=Enter a real postcode
 
 company-registered-office-address.ForeignAddress=Outside the UK
 company-registered-office-address.ForeignAddress.line1.heading=Address line 1
@@ -81,10 +87,15 @@ company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (o
 company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
 company-registered-office-address.ForeignAddress.countryCode.heading=Country
 
+#ForeignAddress errors
 ForeignAddress.line1.invalid=Enter Address Line 1
 ForeignAddress.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 ForeignAddress.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 ForeignAddress.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+ForeignAddress.line1.limit=Address Line 1 must be 40 characters or fewer
+ForeignAddress.line2.limit=Address Line 2 must be 40 characters or fewer
+ForeignAddress.line3.limit=Address Line 3 must be 40 characters or fewer
+ForeignAddress.line4.limit=Address Line 4 must be 40 characters or fewer
 company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 confirm-company-details.heading=Is this the company you want to register as the responsible member?
