@@ -44,10 +44,10 @@ check-unique-taxpayer-reference.required=Select yes if the company you are regis
 
 enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
 enter-utr.required=Enter the company’s Corporation Tax Unique Taxpayer Reference
-enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
 enter-utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   You can <a target=_blank href="https://www.gov.uk/find-lost-utr-number">find a lost UTR (opens in a new window or tab)</a>.
+enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
 
 company-registered-office-postcode.heading=What is the postcode of the company’s Registered Office address?
 company-registered-office-postcode.required=Enter the postcode of the company’s registered office address
@@ -56,7 +56,6 @@ company-registered-office-postcode.invalid=Enter a real postcode
 enter-postcode.heading=What is the postcode of the company’s registered office address?
 enter-postcode.required=Enter the postcode of the company’s registered office address
 enter-postcode.invalid=Enter a real postcode
-
 
 company-name.heading=What is the name of the company you want to register?
 company-name.hint=This is the name registered with an official company register, such as Companies House.
@@ -70,12 +69,22 @@ company-registered-office-address.UkAddress.town.heading=Town or city (optional)
 company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
+UkAddress.line1.required=Enter a building or street
+UkAddress.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+UkAddress.town.invalid= Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+UkAddress.county.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+
 company-registered-office-address.ForeignAddress=Outside the UK
 company-registered-office-address.ForeignAddress.line1.heading=Address line 1
 company-registered-office-address.ForeignAddress.line2.heading=Address line 2 (optional)
 company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (optional)
 company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
 company-registered-office-address.ForeignAddress.countryCode.heading=Country
+
+ForeignAddress.line1.invalid=Enter Address Line 1
+ForeignAddress.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+ForeignAddress.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
+ForeignAddress.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a country from the list
 
 confirm-company-details.heading=Is this the company you want to register as the responsible member?
@@ -93,7 +102,6 @@ alternate-contact.heading=Where is your contact address?
 alternate-contact.required=Select if your contact address is in the UK or outside the UK
 alternate-contact.ForeignAddress=Outside the UK
 alternate-contact.ForeignAddress.line1.heading=Address line 1
-alternate-contact.ForeignAddress.line1.invalid=Enter Address Line 1
 alternate-contact.ForeignAddress.line2.heading=Address line 2 (optional)
 alternate-contact.ForeignAddress.line3.heading=Address line 3 (optional)
 alternate-contact.ForeignAddress.line4.heading=Address line 4 (optional)
