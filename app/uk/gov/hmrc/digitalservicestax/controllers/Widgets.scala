@@ -103,6 +103,7 @@ trait Widgets {
   implicit def accountField     = validatedVariant(AccountNumber)
   implicit def sortCodeField    = validatedVariant(SortCode)
   implicit def ibanField        = validatedVariant(IBAN)
+  implicit def optAddressField  = validatedVariant(OptAddressLine)
   implicit def restrictField    = validatedVariant(RestrictiveString)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
@@ -264,10 +265,10 @@ trait Widgets {
 
       //TODO check transformations with ltbs
       (
-        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("not-a-none-empty-string")(NonEmptyString(_))}),
-        out.subField[OptAddressLine]("line2"),
-        out.stringSubField("town"),
-        out.stringSubField("county"),
+        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
+        out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
+        out.subField[OptAddressLine]("town", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
+        out.subField[OptAddressLine]("county", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[Postcode]("postcode", {Transformation.catchOnly[IllegalArgumentException]("not-a-postcode")(Postcode(_))})
       ).mapN(UkAddress).toEither
     }

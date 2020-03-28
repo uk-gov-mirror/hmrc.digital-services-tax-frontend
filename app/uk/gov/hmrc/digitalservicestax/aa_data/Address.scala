@@ -19,8 +19,8 @@ package uk.gov.hmrc.digitalservicestax.data
 sealed trait Address {
   def line1: NonEmptyString
   def line2: OptAddressLine
-  def line3: String
-  def line4: String
+  def line3: OptAddressLine
+  def line4: OptAddressLine
   def countryCode: CountryCode
   def postalCode: String
   def lines: List[String] =
@@ -29,9 +29,9 @@ sealed trait Address {
 
 case class UkAddress(
   line1: NonEmptyString,
-  line2: OptAddressLine, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
-  line3: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
-  line4: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line2: OptAddressLine,
+  line3: OptAddressLine,
+  line4: OptAddressLine,
   postalCode: Postcode
 ) extends Address {
   def countryCode = CountryCode("GB")
@@ -40,9 +40,9 @@ case class UkAddress(
 
 case class ForeignAddress(
   line1: NonEmptyString,
-  line2: OptAddressLine, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
-  line3: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
-  line4: String, // "^[A-Za-z0-9 \\-,.&']{1,35}$"
+  line2: OptAddressLine,
+  line3: OptAddressLine,
+  line4: OptAddressLine,
   countryCode: CountryCode
 ) extends Address {
   def postalCode = ""
