@@ -267,7 +267,7 @@ trait Widgets {
       //TODO check transformations with ltbs
       (
         out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("not-a-none-empty-string")(NonEmptyString(_))}),
-        out.stringSubField("line2"),
+        out.subField[OptAddressLine]("line2"),
         out.stringSubField("town"),
         out.stringSubField("county"),
         out.subField[Postcode]("postcode", {Transformation.catchOnly[IllegalArgumentException]("not-a-postcode")(Postcode(_))})

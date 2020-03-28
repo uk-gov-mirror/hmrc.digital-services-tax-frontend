@@ -31,7 +31,7 @@ import ltbs.uniform.validation._
 object RegJourney {
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: OptAddressLine :: NilTypes
 
 
   private def message(key: String, args: String*) = {
@@ -84,7 +84,15 @@ object RegJourney {
 
       registration <- (
         companyRegWrapper.pure[F],
-        ask[Address]("alternate-contact") when
+        ask[Address](
+          "alternate-contact",
+          validation = Rule.condAtPath[Address]("UkAddress", "line1")(
+          {
+            case add: Address => add.line1.length <= 40
+            case _ => true
+          },
+          "limit"
+        )) when
           interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
         ask[Boolean]("check-if-group") >>= {
           case true =>
