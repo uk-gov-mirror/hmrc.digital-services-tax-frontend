@@ -39,6 +39,21 @@ object RegJourney {
     Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
   }
 
+  def addressLineLimit(addressType: String, addressKey: String): Rule[Address] = {
+    Rule.condAtPath[Address](s"$addressType", addressKey)(
+      {
+        case add: Address if addressKey == "line1"  => add.line1.length <= 40
+        case add: Address if addressKey == "line2"  => add.line2.length <= 40
+        case add: Address if addressKey == "line3"  => add.line3.length <= 40
+        case add: Address if addressKey == "town"   => add.line3.length <= 40
+        case add: Address if addressKey == "line4"  => add.line4.length <= 40
+        case add: Address if addressKey == "county" => add.line4.length <= 40
+        case _ => true
+      },
+      "limit"
+    )
+  }
+
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: DSTService[F]
@@ -86,14 +101,16 @@ object RegJourney {
         companyRegWrapper.pure[F],
         ask[Address](
           "alternate-contact",
-          validation = Rule.condAtPath[Address]("UkAddress", "line1")(
-          {
-            case add: Address => add.line1.length <= 40
-            case _ => true
-          },
-          "limit"
-        )) when
-          interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
+          validation =
+            addressLineLimit("UkAddress", "line1") alongWith
+            addressLineLimit("UkAddress", "line2") alongWith
+            addressLineLimit("UkAddress", "town") alongWith
+            addressLineLimit("UkAddress", "county") alongWith
+            addressLineLimit("ForeignAddress", "line1") alongWith
+            addressLineLimit("ForeignAddress", "line2") alongWith
+            addressLineLimit("ForeignAddress", "line3") alongWith
+            addressLineLimit("ForeignAddress", "line4")
+        ) when interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
         ask[Boolean]("check-if-group") >>= {
           case true =>
             for {
@@ -103,10 +120,10 @@ object RegJourney {
                     _.length < 160,
                     "error.length"
                   ) followedBy
-                    Rule.cond[NonEmptyString](
-                      _.matches("""^[a-zA-Z0-9- '&\\/]{1,105}$"""),
-                      "format"
-                    )
+                  Rule.cond[NonEmptyString](
+                    _.matches("""^[a-zA-Z0-9- '&\\/]{1,105}$"""),
+                    "format"
+                  )
               )
               parentAddress <- ask[Address](
                 "ultimate-parent-company-address",
