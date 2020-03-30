@@ -44,10 +44,8 @@ object RegJourney {
       {
         case add: Address if addressKey == "line1"  => add.line1.length <= 40
         case add: Address if addressKey == "line2"  => add.line2.length <= 40
-        case add: Address if addressKey == "line3"  => add.line3.length <= 40
-        case add: Address if addressKey == "town"   => add.line3.length <= 40
-        case add: Address if addressKey == "line4"  => add.line4.length <= 40
-        case add: Address if addressKey == "county" => add.line4.length <= 40
+        case add: Address if addressKey == "line3" || addressKey == "town"  => add.line3.length <= 40
+        case add: Address if addressKey == "line4" || addressKey == "county" => add.line4.length <= 40
         case _ => true
       },
       "limit"
