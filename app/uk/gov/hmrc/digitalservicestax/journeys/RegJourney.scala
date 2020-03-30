@@ -40,7 +40,7 @@ object RegJourney {
     import play.twirl.api.HtmlFormat.escape
     Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
   }
-
+  
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
     backendService: DSTService[F]
