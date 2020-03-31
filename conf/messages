@@ -133,12 +133,9 @@ ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (opt
 ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
 ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
 ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
-<<<<<<< HEAD
+
 ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
-=======
 ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing and enter a country from the list
->>>>>>> dst-222 error border on type ahead input & error messages for foreign addresses
 
 ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
 
@@ -148,10 +145,6 @@ ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 
 ultimate-parent-company-address.UkAddress.town.heading=Town or city
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
-<<<<<<< HEAD
-=======
-
->>>>>>> dst-222 error border on type ahead input & error messages for foreign addresses
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
@@ -426,6 +419,7 @@ repayment.FALSE=No
 bank-details-type.heading=Your bank details for repayment
 bank-details-type.invalid=Hey
 bank-details-type._1.heading=Account Name
+bank-details-type._2.required=Select yes if this is a UK bank account
 bank-details-type._2.TRUE=Yes
 bank-details-type._2.FALSE=No
 bank-details-type._2.heading.large=Is this a UK bank account?
