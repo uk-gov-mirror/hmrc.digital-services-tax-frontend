@@ -77,7 +77,18 @@ object RegJourney {
           case false =>
             (
               ask[NonEmptyString]("company-name"),
-              ask[Address]("company-registered-office-address")
+              ask[Address](
+                "company-registered-office-address",
+                validation =
+                  addressLineLimit("UkAddress", "line1") followedBy
+                    addressLineLimit("UkAddress", "line2") followedBy
+                    addressLineLimit("UkAddress", "town") followedBy
+                    addressLineLimit("UkAddress", "county") followedBy
+                    addressLineLimit("ForeignAddress", "line1") followedBy
+                    addressLineLimit("ForeignAddress", "line2") followedBy
+                    addressLineLimit("ForeignAddress", "line3") followedBy
+                    addressLineLimit("ForeignAddress", "line4")
+              )
             ).mapN(Company.apply).map(CompanyRegWrapper(_, useSafeId = true))
           case true =>
             for {
@@ -100,13 +111,13 @@ object RegJourney {
         ask[Address](
           "alternate-contact",
           validation =
-            addressLineLimit("UkAddress", "line1") alongWith
-            addressLineLimit("UkAddress", "line2") alongWith
-            addressLineLimit("UkAddress", "town") alongWith
-            addressLineLimit("UkAddress", "county") alongWith
-            addressLineLimit("ForeignAddress", "line1") alongWith
-            addressLineLimit("ForeignAddress", "line2") alongWith
-            addressLineLimit("ForeignAddress", "line3") alongWith
+            addressLineLimit("UkAddress", "line1") followedBy
+            addressLineLimit("UkAddress", "line2") followedBy
+            addressLineLimit("UkAddress", "town")  followedBy
+            addressLineLimit("UkAddress", "county") followedBy
+            addressLineLimit("ForeignAddress", "line1") followedBy
+            addressLineLimit("ForeignAddress", "line2") followedBy
+            addressLineLimit("ForeignAddress", "line3") followedBy
             addressLineLimit("ForeignAddress", "line4")
         ) when interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
         ask[Boolean]("check-if-group") >>= {
@@ -125,6 +136,15 @@ object RegJourney {
               )
               parentAddress <- ask[Address](
                 "ultimate-parent-company-address",
+                validation =
+                  addressLineLimit("UkAddress", "line1")  followedBy
+                  addressLineLimit("UkAddress", "line2")  followedBy
+                  addressLineLimit("UkAddress", "town")   followedBy
+                  addressLineLimit("UkAddress", "county") followedBy
+                  addressLineLimit("ForeignAddress", "line1") followedBy
+                  addressLineLimit("ForeignAddress", "line2") followedBy
+                  addressLineLimit("ForeignAddress", "line3") followedBy
+                  addressLineLimit("ForeignAddress", "line4"),
                 customContent = message("ultimate-parent-company-address.heading", parentName)
               )
             } yield Company(parentName, parentAddress).some
