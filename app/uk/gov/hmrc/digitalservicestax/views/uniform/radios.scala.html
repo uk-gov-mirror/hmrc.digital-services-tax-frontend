@@ -28,7 +28,7 @@
 @if(inlineRadioKeys) {
     <fieldset class="govuk-fieldset" id="add-company-to-group" aria-describedby="add-to-list-hint">
         <legend class="fieldset__legend govuk-fieldset__legend--m">
-            <h2>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
+            <h2@if(errors.definedAtRoot){class="push--top"}>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
         </legend>
         <span id="add-to-list-hint" class="hint">
             @messages.get(s"${key.mkString(".")}.radio.hint")

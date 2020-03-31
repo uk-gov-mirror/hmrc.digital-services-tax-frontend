@@ -54,7 +54,7 @@ object ReturnJourney {
 
       def askActivityReduced(actType: Activity): F[Percent] =
         { ask[Percent](s"report-${Activity.toUrl(actType)}-operating-margin") emptyUnless
-          ask[Boolean](s"report-${Activity.toUrl(actType)}-loss")}
+          ask[Boolean](s"report-${Activity.toUrl(actType)}-loss").map { x => !x }}
 
       def askActivity(actType: Activity): F[Option[Percent]] = 
         { ask[Percent](s"report-${Activity.toUrl(actType)}-operating-margin") emptyUnless

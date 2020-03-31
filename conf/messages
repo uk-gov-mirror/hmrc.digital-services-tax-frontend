@@ -156,7 +156,7 @@ ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
 contact-details.forename.heading=First name
-contact-details.surname.heading=Surname
+contact-details.surname.heading=Last name
 contact-details.phoneNumber.heading= Phone number
 contact-details.phoneNumber.hint=For international numbers include the country code.
 contact-details.email.heading=Email address
@@ -281,6 +281,7 @@ landing.account-history=Account History
 landing.balance=View your balance and transactions history
 
 #returns
+manage-companies.required=Select yes if you need to add another company to your group
 manage-companies.listing.heading=Confirm your group’s companies
 manage-companies.radio.heading=Do you need to add another company to your group?
 manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
@@ -289,9 +290,11 @@ manage-companies.Continue=No
 remove-company=Remove company
 change-company=Change company name
 
+# Company Details
 add.heading=Company details
 add.name.heading=Company name
 add.name.hint=This is the name registered with an official company register, such as Companies House.
+add.name.invalid=Enter the company’s name
 add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
 add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
@@ -312,6 +315,7 @@ select-activities.SearchEngine=Search engine
 select-activities.OnlineMarketplace=Online marketplace
 
 report-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins in this return?
+report-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK profit margins in this return
 report-alternative-charge.details=What we mean by ‘alternative charge’
 report-alternative-charge.details.text=<p>This is an alternative method that businesses can use to work out their Digital Services Tax liability.</p>\
 <p>The alternative charge only benefits groups who make a loss or have a low UK profit margin on a Digital Services activity.</p>
@@ -320,32 +324,51 @@ report-alternative-charge.FALSE=No
 
 report-social-media-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your social media activity?
+report-social-media-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your social media activity
 report-social-media-alternative-charge.TRUE=Yes
 report-social-media-alternative-charge.FALSE=No
 report-social-media-loss.heading=Has the group made a loss on its social media activity?
+report-social-media-loss.required=Select yes if the group made a loss on its social media activity
 report-social-media-loss.TRUE=Yes
 report-social-media-loss.FALSE=No
 report-social-media-operating-margin.heading=What was the group’s operating margin on its social media activity?
+report-social-media-operating-margin.required=Enter the group’s operating margin on its social media activity
+report-social-media-operating-margin.not-a-number=Enter the group’s operating margin on its social media activity \
+  in the correct format, like 0.25 or 1
 
 report-search-engine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your search engine activity?
+report-search-engine-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your search engine activity
 report-search-engine-alternative-charge.TRUE=Yes
 report-search-engine-alternative-charge.FALSE=No
 report-search-engine-loss.heading=Has the group made a loss on its search engine activity?
+report-search-engine-loss.required=Select yes if the group made a loss on its search engine activity
 report-search-engine-loss.TRUE=Yes
 report-search-engine-loss.FALSE=No
 report-search-engine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
+report-search-engine-operating-margin.required=Enter the group’s operating margin on its search engine activity
+report-search-engine-operating-margin.not-a-number=Enter the group's operating margin on its search engine activity in the correct \
+  format, like 0.25 or 1
 
 report-online-marketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your online marketplace activity?
+report-online-marketplace-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your online marketplace activity
 report-online-marketplace-alternative-charge.TRUE=Yes
 report-online-marketplace-alternative-charge.FALSE=No
 report-online-marketplace-loss.heading=Has the group made a loss on its online marketplace activity?
+report-online-marketplace-loss.required=Select yes if the group made a loss on its online marketplace activity
 report-online-marketplace-loss.TRUE=Yes
 report-online-marketplace-loss.FALSE=No
 report-online-marketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+report-online-marketplace-operating-margin.required=Enter the group’s operating margin on its online marketplace activity
+report-online-marketplace-operating-margin.not-a-number=Enter the group’s operating margin on its online marketplace activity \
+  in the correct format, like 0.25 or 1
 
 report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
+report-cross-border-transaction-relief.required=Select yes if you are claiming any relief on cross-border transactions for this return period
 report-cross-border-transaction-relief.details=What we mean by ‘relief on cross-border transactions’
 report-cross-border-transaction-relief.details.text=<p> If a transaction involves a UK user and a non-UK user who is in a country \
   that also operates a Digital Services Tax, only 50% of the revenues from that transaction will be taxable as UK revenues.</p>
@@ -353,8 +376,13 @@ report-cross-border-transaction-relief.TRUE=Yes
 report-cross-border-transaction-relief.FALSE=No
 
 relief-deducted.heading=How much cross-border transactions relief have you deducted from revenues in this return?
+relief-deducted.required=Enter the amount of cross-border transactions relief you have deducted from revenues in this return
+relief-deducted.not-a-number=The amount of cross-border transactions relief you deducted from revenues must be an amount of \
+  money, like 1,234.56 or 1,560.00
 
 company-liabilities-0.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+# TODO - NEED TO PASS THE COMANY NAME TO THE ERROR
+#company-liabilities-0.required=Enter the Digital Services Tax liability for {0}
 company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
 company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
 company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
@@ -377,19 +405,26 @@ company-liabilities-19.heading=What are your UK Digital Services Tax liabilities
 company-liabilities-20.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
 
 allowance-deducted.heading=How much of the £25m annual allowance have you deducted from revenues in this return?
+allowance-deducted.required=Enter how much of the £25m annual allowance you have deducted from revenues in this return
+allowance-deducted.not-a-number=The amount of the £25m annual allowance you have deducted from revenues must be an amount of \
+  money, like 1,234.56 or 1,560.00
 allowance-deducted.details=What we mean by ‘£25m annual allowance’
 allowance-deducted.details.text=<p>The £25m annual allowance means the first £25m of revenues derived \
   from UK users will not be subject to Digital Services Tax.</p><p>The allowance is pro-rated for accounting \
   periods less than 12 months.</p>
 
 group-liability.heading=What is the group’s total UK Digital Services Tax liability for 1 April 2020 to 31 July 2020? 
+group-liability.required=Enter the group’s total Digital Services Tax liability for 1 April 2020 to 31 July 2020
+group-liability.not-a-number=The group’s total liability must be an amount of money, like 1,234.56 or 1,560.00
 group-liability.hint=This is the total amount of liability after applying any deductions and allowances.
 
 repayment.heading=Do you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020?
+repayment.required=Select yes if you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020
 repayment.TRUE=Yes
 repayment.FALSE=No
 
 bank-details-type.heading=Your bank details for repayment
+bank-details-type.invalid=Hey
 bank-details-type._1.heading=Account Name
 bank-details-type._2.TRUE=Yes
 bank-details-type._2.FALSE=No
@@ -468,21 +503,6 @@ wrong-account.sign-in.reason=To use this service, sign in with the Government Ga
 wrong-creds.heading=You cannot use this service
 wrong-creds.sign-out.reason=You need to be an administrator user to register for the Digital Services Tax.
 wrong-creds.contact-admin=Contact your company's administrator if you need to use this service.
-
-# Please see example messages below, from most specific to most general.
-# I suggest creating the most general ones first then overriding with more
-# specific ones on a case-by-case basis.
-#
-# For example, if the error message key is 'contact-details.email.required' uniform will
-# look first for 'contact-details.email.required', then 'email.required' and finally if it
-# can't find either of these it will use a message for 'required'.
-#
-# If you want to see the keys being used, open up DSTInterpreter.scala, find where the messages
-# are provided (around line 83 at present) and comment out the preferred and best-guess lines. Then
-# uncomment the 'attentionSeeker' line. Finally reload the pages and it will show the message keys.
-#
-# The content below is made up for demo purposes. Please also check above as in some
-# cases these keys already exist above.
 
 contact-details.forename.required=Enter the contact person’s first name
 forename.required=Enter the first name
