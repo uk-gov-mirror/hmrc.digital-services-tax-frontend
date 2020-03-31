@@ -219,7 +219,7 @@ cya.accounting-period-end-date.change=Change the end date of the company’s fir
 cya.submission.title=Send your details
 cya.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
   the details you are providing are correct.
-cya.warning.body=Warning You could be prosecuted if you deliberately submit false or misleading information.
+cya.warning.body=You could be prosecuted if you deliberately submit false or misleading information.
 
 #Reg complete
 registration-sent.heading=Registration sent
@@ -228,9 +228,9 @@ registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
 registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to in \
   the next 24 hours.
-registration-sent.what-you-do-next.title=What you must do next
-registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
-registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
+#registration-sent.what-you-do-next.title=What you must do next
+#registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
+#registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.help-using-this-service.p1=For help with payments and returns, {0}.
 registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
@@ -523,3 +523,116 @@ required=This is a required field
 contact-details.email.invalid=Please enter a valid contact email
 email.invalid=Please enter a valid email address
 invalid=Please enter a valid string
+
+accessibility-statement.title=Accessibility Statement - Digital Services Tax
+accessibility-statement.heading=Accessibility statement for Digital Services Tax
+accessibility-statement.intro=This accessibility statement explains how accessible this service is, what to do if \
+  you have difficulty using it, and how to report accessibility problems with the service.
+accessibility-statement.p1-1=This service is part of the wider GOV.UK website. There is a separate
+accessibility-statement.p1-2=accessibility statement
+accessibility-statement.p1-3=for the main GOV.UK website.
+accessibility-statement.p2-1=This page only contains information about the Digital Services Tax service, available at
+accessibility-statement.p2-2=www.tax.service.gov.uk/digital-services-tax/
+
+accessibility-statement.h2=Using this service
+accessibility-statement.p3=This service enables you to register for the Digital Services Tax and submit a return if \
+  you’re registered for the tax.
+accessibility-statement.p4=This service is run by HM Revenue and Customs (HMRC). We want as many people as possible to \
+  be able to use this service. This means you should be able to:
+accessibility-statement.ul1-li1=change colours, contrast levels and fonts
+accessibility-statement.ul1-li2=zoom in up to 300% without the text spilling off the screen
+accessibility-statement.ul1-li3=get from the start of the service to the end using just a keyboard
+accessibility-statement.ul1-li4=get from the start of the service to the end using speech recognition software
+accessibility-statement.ul1-li5=listen to the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)
+accessibility-statement.p5=We have also made the text in the service as simple as possible to understand.
+accessibility-statement.p6-1=AbilityNet
+accessibility-statement.p6-2=has advice on making your device easier to use if you have a disability.
+
+accessibility-statement.h3=How accessible this service is
+accessibility-statement.p7-1=This service is partially compliant with the 
+accessibility-statement.p7-2=Web Content Accessibility Guidelines version 2.1 AA standard
+accessibility-statement.p7-3=.
+accessibility-statement.p8=Some people may find parts of this service difficult to use.
+accessibility-statement.ul2-li1=On the ‘Contact person’s details’ page, the phone number field does not have an input type, which may cause \
+  issues for people using a screen reader.
+accessibility-statement.ul2-li2=Some of the page titles in the service are not descriptive, which may cause difficulty for blind users who have multiple tabs open.
+accessibility-statement.ul2-li3=The ‘Contact person’s details’ section of the ‘Check your answers’ page when registering may cause difficulty \
+  for screen reader users.
+accessibility-statement.ul2-li4=The ‘Change’ links on the ‘Check your answers’ page when submitting a return do not function as expected.
+accessibility-statement.ul2-li5=The required format for entering numbers is not available to users of assistive technology.
+accessibility-statement.ul2-li6=The timeout feature of the service may cause issues for screen reader users using JAWS and NVDA.
+accessibility-statement.ul2-li7=The ‘Contact person’s details’ page does not use an autocomplete attribute to allow users to fill in this \
+  information automatically.
+accessibility-statement.ul2-li8=Some error messages within the service are not descriptive, which may prevent some users from understanding \
+  what they need to correct.
+accessibility-statement.ul2-li9=The colour used for the focus indicator on form elements does not meet the minimum required contrast ratio of 3:1.
+accessibility-statement.ul2-li10=When submitting a return, the 'Company details' page does not have an error summary or error skip links, and some \
+  fields do not have matching inline error validation messages.
+accessibility-statement.p9=We plan to fix these accessibility issues as soon as possible.
+
+accessibility-statement.h4=What to do if you have difficulty using this service
+accessibility-statement.p10=If you have difficulty using this service, use the ‘Get help with this page’ link on the page in the online service.
+
+
+accessibility-statement.h5=Reporting accessibility problems with this service
+accessibility-statement.p11-1=We are always looking to improve the accessibility of this service. If you find any problems that are not listed on \
+  this page or think we are not meeting accessibility requirements, report the 
+accessibility-statement.p11-2=accessibility problem (opens in a new window or tab)
+accessibility-statement.p11-3=.
+
+accessibility-statement.h6=What to do if you are not happy with how we respond to your complaint
+
+
+accessibility-statement.p12-1=The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and \
+  Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you are not happy with how we respond to your \
+  complaint,
+accessibility-statement.p12-2=contact the Equality Advisory and Support Service
+accessibility-statement.p12-3=(EASS), or the 
+accessibility-statement.p12-4=Equality Commission for Northern Ireland
+accessibility-statement.p12-5=(ECNI) if you live in Northern Ireland.
+
+accessibility-statement.h7=Contacting us by phone or getting a visit from us in person
+accessibility-statement.p13=We provide a text relay service if you are deaf, hearing impaired or have a speech impediment.
+accessibility-statement.p14=We can provide a British Sign Language (BSL) interpreter, or you can arrange a visit from an HMRC advisor to help you \
+  complete the service.
+accessibility-statement.p15-1=Find out how to 
+accessibility-statement.p15-2=contact us
+accessibility-statement.p15-3=.
+
+accessibility-statement.h8=Technical information about this service’s accessibility
+accessibility-statement.p16=HMRC is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile \
+  Applications) (No. 2) Accessibility Regulations 2018.
+accessibility-statement.p17-1=This service is partially compliant with the 
+accessibility-statement.p17-2=Web Content Accessibility Guidelines version 2.1 AA standard
+accessibility-statement.p17-3=, due to the non-compliances listed below.
+
+accessibility-statement.h9=Non-accessible content
+accessibility-statement.p18=The content listed below is non-accessible for the following reasons.
+accessibility-statement.h10=Non-compliance with the accessibility regulations
+accessibility-statement.ul3-li1=On the ‘Contact person’s details’ page, the phone number field does not have an input type, which may cause issues \
+  for people using a screen reader. This does not meet WCAG Success Criterion 4.1.2 (Name, Role, Value).
+accessibility-statement.ul3-li2=Some of the page titles in the service are not descriptive, which may cause difficulty for blind users who have \
+  multiple tabs open. This does not meet WCAG 2.1 success criterion 2.4.2 (Page Titled).
+accessibility-statement.ul3-li3=The ‘Contact person’s details’ section of the ‘Check your answers’ page when registering may cause difficulty \
+  for screen reader users. This does not meet WCAG 2.1 success criterion 1.3.1 (Info and Relationships).
+accessibility-statement.ul3-li4=The ‘Change’ links on the ‘Check your answers’ page when submitting a return do not function as expected. This \
+  does not meet WCAG Success Criterion 4.1.2 (Name, Role, Value).
+accessibility-statement.ul3-li5=The required format for entering numbers is not available to users of assistive technology. This does not meet \
+  WCAG Success Criterion 3.3.2: (Labels or Instructions).
+accessibility-statement.ul3-li6=The timeout feature of the service may cause issues for screen reader users using JAWS and NVDA. This does not \
+  meet WCAG Success Criterion 4.1.2 (Name, Role, Value).
+accessibility-statement.ul3-li7=The ‘Contact person’s details’ page does not use an autocomplete attribute to allow users to fill in this \
+  information automatically. This does not meet WCAG Success Criterion 1.3.5 (Identify Input Purpose).
+accessibility-statement.ul3-li8=Some error messages within the service are not descriptive, which may prevent some users from understanding \
+  what they need to correct. This does not meet WCAG Success Criterion 3.3.3 (Error Suggestion).
+accessibility-statement.ul3-li9=The colour used for the focus indicator on form elements does not meet the minimum required contrast ratio of \
+  3:1. This does not meet WCAG Success Criterion 1.4.11 (Non-text Contrast).
+accessibility-statement.ul3-li10=When submitting a return, the ‘Company details’ page does not have an error summary or error skip links, and \
+  some fields do not have matching inline error validation messages. This does not meet WCAG Success Criterion 3.3.3 (Error Suggestion).
+
+accessibility-statement.h11=How we tested this service
+accessibility-statement.p19=The service was last tested on 18 March 2020 and was checked for compliance with WCAG 2.1 AA.
+accessibility-statement.p20-1=The service was built using parts that were tested by the
+accessibility-statement.p20-2=Digital Accessibility Centre
+accessibility-statement.p20-3=. The full service was tested by HMRC and included disabled users.
+accessibility-statement.p21=This page was prepared on 1 April 2020. It was last updated on 1 April 2020.
