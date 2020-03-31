@@ -293,6 +293,40 @@ trait Widgets {
     }
   }
 
+  implicit def twirlForeignAddressField[T](
+    implicit gen: shapeless.LabelledGeneric.Aux[ForeignAddress,T],
+    ffhlist: FormField[T, Html]
+  ): FormField[ForeignAddress, Html] = new FormField[ForeignAddress, Html] {
+
+    def decode(out: Input): Either[ErrorTree, ForeignAddress] = {
+      (
+        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
+        out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
+        out.subField[OptAddressLine]("line3", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
+        out.subField[OptAddressLine]("line4", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
+        out.subField[CountryCode]("countryCode", {Transformation.catchOnly[IllegalArgumentException]("invalid")(CountryCode(_))})
+      ).mapN(ForeignAddress).toEither
+    }
+
+    def encode(in: ForeignAddress): Input = ffhlist.encode(gen.to(in))
+
+    def render(
+      pagekey: List[String],
+      fieldKey: List[String],
+      path: Breadcrumbs,
+      data: Input,
+      errors: ErrorTree,
+      messages: UniformMessages[Html]
+    ): Html = {
+      views.html.uniform.address(
+        fieldKey,
+        data,
+        errors,
+        messages
+      )
+    }
+  }
+
   implicit def enumeratumField[A <: EnumEntry](implicit enum: Enum[A]): FormField[A, Html] =
     new FormField[A, Html] {
 
