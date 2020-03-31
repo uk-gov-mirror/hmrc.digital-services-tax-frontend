@@ -82,7 +82,11 @@
 }
 
 @footerTop = {}
-@footerLinks = {}
+@footerLinks = {
+    @uiLayouts.footer_links(
+        accessibilityFooterUrl = Some(uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.accessibilityStatement().url)
+    )
+}
 
 @betaBanner = {
     <div class="phase-banner" style="text-align: left">
@@ -129,4 +133,4 @@
     <script defer src='@routes.Assets.versioned("javascripts/timeout-dialog.js")'></script>
 }
 
-@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(uiLayouts.footer_links()), true)(content)
+@hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), true)(content)
