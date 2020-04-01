@@ -89,6 +89,7 @@ company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
 alternate-contact.heading=Where is your contact address?
+alternate-contact.required=Select if your contact address is in the UK or outside the UK
 alternate-contact.ForeignAddress=Outside the UK
 alternate-contact.ForeignAddress.line1.heading=Address line 1
 alternate-contact.ForeignAddress.line1.invalid=Enter Address Line 1
@@ -114,7 +115,7 @@ check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent
     <li>a member of a Generally Accepted Accounting Principles (GAAP) group and not a consolidated subsidiary of another entity</li>\
     <li>not a member of a GAAP group</li>\
   </ul>\
-  <p>We use the meaniing of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
+  <p>We use the meaning of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
 check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
@@ -137,7 +138,7 @@ ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
 ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
 ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing and enter a country from the list
 
-ultimate-parent-company-address.required=Enter the building and street of the group’s ultimate group parent company’s registered office address
+ultimate-parent-company-address.required=Select if the registered office address is in the UK or outside the UK
 
 ultimate-parent-company-address.UkAddress=UK
 ultimate-parent-company-address.UkAddress.line1.heading=Building or street
