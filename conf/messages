@@ -101,10 +101,12 @@ alternate-contact.ForeignAddress.countryCode.invalid=Enter a country from the li
 
 alternate-contact.UkAddress=UK
 alternate-contact.UkAddress.line1.heading=Building or street
+alternate-contact.UkAddress.line1.not-a-none-empty-string=Enter the building and street of your contact address
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
 alternate-contact.UkAddress.town.heading=Town or city
 alternate-contact.UkAddress.county.heading=County (optional)
 alternate-contact.UkAddress.postcode.heading=Postcode
+alternate-contact.UkAddress.postcode.not-a-postcode=Enter the postcode of your contact address
 
 check-if-group.heading=Is the company you want to register part of a group?
 check-if-group.required=Select yes if the company you want to register is part of a group
