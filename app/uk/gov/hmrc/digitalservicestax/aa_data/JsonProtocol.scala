@@ -136,7 +136,6 @@ object BackendAndFrontendJson extends SimpleJson {
 
   val readCompanyReg = new Reads[CompanyRegWrapper] {
     override def reads(json: JsValue): JsResult[CompanyRegWrapper] = {
-      println(Json.prettyPrint(json))
       JsSuccess(CompanyRegWrapper (
         Company(
           {json \ "organisation" \ "organisationName"}.as[NonEmptyString],
