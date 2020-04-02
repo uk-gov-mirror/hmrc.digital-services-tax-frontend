@@ -16,9 +16,8 @@
 
 package uk.gov.hmrc.digitalservicestax.controllers
 
-import cats.syntax.semigroup._
 import ltbs.uniform.TreeLike.ops._
-import ltbs.uniform.common.web._
+import ltbs.uniform.common.web.{FormFieldStats, ProductFieldList, CoproductFieldList, InferListingPages, InferFormFieldCoProduct, InferFormFieldProduct}
 import ltbs.uniform.interpreters.playframework.{Breadcrumbs, PlayInterpreter, RichPlayMessages}
 import ltbs.uniform.{ErrorTree, Input, UniformMessages}
 import play.api.mvc.{AnyContent, Request, Results}
@@ -78,9 +77,11 @@ case class DSTInterpreter(
 
   def messages(
     request: Request[AnyContent]
-  ): UniformMessages[Html] =
+  ): UniformMessages[Html] = {
+    import cats.syntax.semigroup._
     messagesApi.preferred(request).convertMessagesTwirlHtml(escapeHtml = false) |+|
       UniformMessages.bestGuess.map(HtmlFormat.escape)
+  }
   // N.b. this next line very useful for correcting the keys of missing content, leave for now
     // UniformMessages.attentionSeeker.map(HtmlFormat.escape)
   override def pageChrome(

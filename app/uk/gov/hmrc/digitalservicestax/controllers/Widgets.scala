@@ -20,12 +20,12 @@ import java.time.LocalDate
 
 import cats.data.Validated
 import enumeratum._
-import ltbs.uniform.common.web.{FormField, FormFieldStats}
+import ltbs.uniform.common.web.{FormField, FormFieldStats, GenericWebTell, ListingTell, ListingTellRow}
+import uk.gov.hmrc.digitalservicestax.frontend.Kickout
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
-import ltbs.uniform.validation.Rule._
-import ltbs.uniform.validation._
+import ltbs.uniform.validation.{Rule, Transformation}
 import ltbs.uniform.{NonEmptyString => _, RichEither => _, _}
-import play.twirl.api.Html
+import play.twirl.api.{Html, HtmlFormat}
 import shapeless.tag, tag.{@@}
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.data._
@@ -142,7 +142,7 @@ trait Widgets {
 
     def decode(out: Input): Either[ErrorTree, Boolean] =
       out.toField[Boolean](
-        x => nonEmpty[String].apply(x) andThen ( y => Validated.catchOnly[IllegalArgumentException](y.toBoolean)
+        x => Rule.nonEmpty[String].apply(x) andThen ( y => Validated.catchOnly[IllegalArgumentException](y.toBoolean)
           .leftMap(_ => ErrorMsg("invalid").toTree))
       ).toEither
 
@@ -292,7 +292,7 @@ trait Widgets {
       override def stats = new FormFieldStats(children = enum.values.length)
 
       def decode(out: Input): Either[ErrorTree,A] = {out.toField[A](x =>
-        nonEmpty[String].apply(x) andThen
+        Rule.nonEmpty[String].apply(x) andThen
           ( y => Validated.catchOnly[NoSuchElementException](enum.withName(y)).leftMap(_ => ErrorTree.oneErr(ErrorMsg("invalid"))))
       )}.toEither
 
@@ -355,5 +355,75 @@ trait Widgets {
       }
 
     }
-  
+
+
+  implicit def autoGroupListingTell = new ListingTell[Html, GroupCompany] {
+    def apply(rows: List[ListingTellRow[GroupCompany]], messages: UniformMessages[Html]): Html =
+      views.html.uniform.listing(rows.map {
+        case ListingTellRow(value, editLink, deleteLink) => (HtmlFormat.escape(value.name), editLink, deleteLink)
+      }, messages)
+  }
+
+  implicit val addressTell = new GenericWebTell[Address, Html] {
+
+    override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p>" +
+          s"<span>" +
+            s"${in.lines.map{_.escapeHtml}.mkString("</span></br><span>")}" +
+          s"</span>" +
+        "</p>"
+      )
+  }
+
+  implicit val ukAddressTell = new GenericWebTell[UkAddress, Html] {
+    override def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html =
+      Html(s"<span class='govuk-body-m'>${in.lines.map{_.escapeHtml}.mkString("<br />")}</span>")
+  }
+
+  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html("")
+  }
+
+  implicit val companyTell = new GenericWebTell[Company, Html] {
+    override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p class='govuk-body-l' id='${key}-content'>" +
+          s"${in.name.toString.escapeHtml}</br>" +
+          s"<span class='govuk-body-m'>" +
+          s"${in.address.lines.map{_.escapeHtml}.mkString("</br>")}" +
+          s"</span>" +
+          "</p>"
+      )
+  }
+
+  implicit val booleanTell = new GenericWebTell[Boolean, Html] {
+    override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
+      Html(in.toString)
+  }
+
+  implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
+    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
+      views.html.cya.check_your_registration_answers(s"$key.reg", in.value)(messages)
+  }
+
+  implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
+    override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
+      views.html.cya.check_your_return_answers(s"$key.ret", in.value)(messages)
+  }
+
+  implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
+    override def render(in: Confirmation[Registration], key: String, messages: UniformMessages[Html]): Html = {
+      val reg = in.value
+      views.html.end.confirmation(key: String, reg.companyReg.company.name: String, reg.contact.email: Email)(messages)
+    }
+  }
+
+  implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
+    override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
+      views.html.end.confirmation_return(key: String)(messages)
+  }
+
+
 }
