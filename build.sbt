@@ -12,8 +12,8 @@ lazy val scoverageSettings = {
   import scoverage.ScoverageKeys
   Seq(
     // Semicolon-separated list of regexs matching classes to exclude
-    ScoverageKeys.coverageExcludedPackages := "<empty>;.*views.*;.*prod.*;.*test.*",
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*BuildInfo.*;.*Routes.*;",
+    ScoverageKeys.coverageExcludedPackages := "<empty>;.*views.*;.*prod.*;.*test.*;app.routes;testOnlyDoNotUseInAppConf;prod.*;uk.gov.hmrc.digitalservicestax.controllers;uk.gov.hmrc.digitalservicestax.config;",
+    ScoverageKeys.coverageExcludedFiles := "<empty>;.*BuildInfo.*;.*Routes.*;testOnlyDoNotUseInAppConf;",
     ScoverageKeys.coverageMinimum := 80,
     ScoverageKeys.coverageFailOnMinimum := false,
     ScoverageKeys.coverageHighlighting := true
@@ -29,6 +29,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test,
     scalacOptions += "-Ypartial-unification"
   )
+  .settings(scoverageSettings: _*)
   .settings(publishingSettings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)

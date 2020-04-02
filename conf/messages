@@ -204,9 +204,11 @@ cya.ultimate-parent-company-address.change=Registered Office address
 
 cya.contact-details.title=Contact person’s details
 cya.contact-details-name.question=Full name
+cya.contact-details.change.name=full name
 cya.contact-details-phone-number.question=Phone number
+cya.contact-details.change.phone-number=phone number
 cya.contact-details-email.question=Email address
-cya.contact-details.change=contact person’s details
+cya.contact-details.change.email=email
 
 cya.liability-date.title=Accounting period details
 cya.liability-start-date.question=Liability start date

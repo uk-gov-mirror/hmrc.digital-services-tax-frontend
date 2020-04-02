@@ -17,12 +17,12 @@
 package uk.gov.hmrc.digitalservicestax
 package connectors
 
-import play.api.libs.json._
 import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
 import uk.gov.hmrc.digitalservicestax.data._
-import uk.gov.hmrc.http.{HeaderCarrier, OptionHttpReads}
+import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import BackendAndFrontendJson._
 import scala.concurrent.{ExecutionContext, Future}
 import javax.inject.{Inject, Singleton}
 
@@ -35,8 +35,6 @@ class DSTConnector (
 
   val backendURL: String = servicesConfig.baseUrl("digital-services-tax") + "/digital-services-tax"
 
-  implicit val readsUnit = Reads[Unit] { _ => JsSuccess(()) }
-
   def submitRegistration(reg: Registration): Future[Unit] =
     http.POST[Registration, Unit](s"$backendURL/registration", reg)
 
@@ -48,8 +46,10 @@ class DSTConnector (
   def lookupCompany(): Future[Option[CompanyRegWrapper]] =
     http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
 
-  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] =
-    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode")
+  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] = {
+    val escaped = postcode.replaceAll("\\s+", "")
+    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$escaped")
+  }
 
   def lookupRegistration(): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")
