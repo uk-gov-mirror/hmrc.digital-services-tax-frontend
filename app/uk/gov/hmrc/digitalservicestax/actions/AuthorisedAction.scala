@@ -20,21 +20,19 @@ import cats.syntax.semigroup._
 import javax.inject.Inject
 import ltbs.uniform.UniformMessages
 import play.api.Logger
-import play.api.i18n.{I18nSupport, Lang, MessagesApi}
-import play.api.mvc.Results.{Continue, Forbidden, Ok, Redirect}
+import play.api.i18n.MessagesApi
+import play.api.mvc.Results.{Ok, Redirect}
 import play.api.mvc._
-import play.api.http.Status._
 import play.twirl.api.{Html, HtmlFormat}
 import ltbs.uniform.UniformMessages
-import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
+import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.AuthProvider.{GovernmentGateway, Verify}
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, allEnrolments, credentialRole, internalId}
-import uk.gov.hmrc.auth.core.retrieve.{Name, ~}
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
-import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
-import uk.gov.hmrc.digitalservicestax.controllers.{DSTInterpreter, JourneyController, routes}
-import uk.gov.hmrc.digitalservicestax.data.{InternalId, Registration}
+import uk.gov.hmrc.digitalservicestax.controllers.routes
+import uk.gov.hmrc.digitalservicestax.data.InternalId
 import uk.gov.hmrc.digitalservicestax.views
 import uk.gov.hmrc.digitalservicestax.views.html.main_template
 import uk.gov.hmrc.http.HeaderCarrier

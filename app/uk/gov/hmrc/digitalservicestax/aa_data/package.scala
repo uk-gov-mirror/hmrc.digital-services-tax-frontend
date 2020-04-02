@@ -16,11 +16,8 @@
 
 package uk.gov.hmrc.digitalservicestax
 
-import shapeless.{:: => _, _}
-import tag._
-import cats.implicits._
+import shapeless.tag, tag.@@
 import cats.kernel.Monoid
-import play.api.i18n.Messages
 import java.time.LocalDate
 
 package object data extends SimpleJson {
@@ -122,7 +119,7 @@ package object data extends SimpleJson {
     }
 
     implicit def mon: Monoid[Percent] = new Monoid[Percent] {
-      val base: Monoid[Byte] = implicitly[Monoid[Byte]]
+      val base: Monoid[Byte] = cats.instances.byte.catsKernelStdGroupForByte
       override def combine(a: Percent, b: Percent): Percent = Percent(base.combine(a, b))
       override def empty: Percent = Percent(base.empty)
     }

@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
-import cats.implicits._
 import enumeratum.EnumFormats
 import play.api.libs.json._
 import shapeless.tag.@@
@@ -142,9 +141,9 @@ object BackendAndFrontendJson extends SimpleJson {
           {json \ "organisation" \ "organisationName"}.as[NonEmptyString],
           {json \ "address"}.as[Address]
         ),
-        safeId = SafeId(
+        safeId = Some(SafeId(
           {json \ "safeId"}.as[String]
-        ).some
+        ))
       ))
     }
   }

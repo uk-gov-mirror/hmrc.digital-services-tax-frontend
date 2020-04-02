@@ -19,10 +19,8 @@ package controllers
 
 import config.AppConfig
 import connectors._
-import cats.implicits._
 import data._
 import frontend.Kickout
-import repo.JourneyStateStore
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
 import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, JourneyConfig, ListingTell, ListingTellRow, WebMonad}
@@ -31,13 +29,12 @@ import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.{Html, HtmlFormat}
-import HtmlFormat.escape
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
-import uk.gov.hmrc.play.bootstrap.controller.{FrontendController, FrontendHeaderCarrierProvider}
+import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.http.HeaderCarrier
@@ -67,8 +64,6 @@ class JourneyController @Inject()(
   def hod(internalId: InternalId)(implicit hc: HeaderCarrier) = new DSTService[WebMonad[*, Html]] {
     val fa = FutureAdapter[Html]()
     import fa._
-    import concurrent.duration._
-    import interpreter._
 
     def lookupCompany(utr: UTR, postcode: Postcode): WebMonad[Option[CompanyRegWrapper],Html] =
       alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company-args"), utr, postcode)(
@@ -121,7 +116,7 @@ class JourneyController @Inject()(
 
   implicit val ukAddressTell = new GenericWebTell[UkAddress, Html] {
     override def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"<span class='govuk-body-m'></br>${in.line1.escapeHtml}</br>${in.line2.escapeHtml}</br>${in.line3.escapeHtml}</br>${in.line4.escapeHtml}</br>${in.postalCode.escapeHtml}")
+      Html(s"<span class='govuk-body-m'>${in.lines.map{_.escapeHtml}.mkString("<br />")}</span>")
   }
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
@@ -265,6 +260,7 @@ class JourneyController @Inject()(
           Redirect(routes.JourneyController.registerAction(" "))
         )
       case Some(reg) if reg.registrationNumber.isDefined =>
+        import cats.implicits._
         backend.lookupOutstandingReturns().map { periods => 
           Ok(views.html.main_template(
             title =

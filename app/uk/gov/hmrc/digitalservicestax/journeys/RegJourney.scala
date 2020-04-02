@@ -22,7 +22,11 @@ import connectors.DSTService
 import data._
 import frontend.Kickout
 import cats.Monad
-import cats.implicits._
+import cats.syntax.flatMap._
+import cats.syntax.option._
+import cats.syntax.applicative._
+import cats.syntax.apply._
+import cats.syntax.functor._
 import java.time.LocalDate
 
 import ltbs.uniform.{NonEmptyString => _, _}
@@ -30,9 +34,8 @@ import ltbs.uniform.validation._
 
 object RegJourney {
 
-  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
-
+  type RegTellTypes = CYA[Registration] :: Kickout :: Company :: Address :: NilTypes
+  type RegAskTypes = Boolean :: NonEmptyString :: Address :: UTR :: Postcode :: LocalDate :: ContactDetails :: NilTypes
 
   private def message(key: String, args: String*) = {
     import play.twirl.api.HtmlFormat.escape

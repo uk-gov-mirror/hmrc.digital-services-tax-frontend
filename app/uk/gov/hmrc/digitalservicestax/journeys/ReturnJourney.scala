@@ -22,10 +22,14 @@ import scala.language.higherKinds
 import data._
 
 import cats.Monad
-import cats.implicits._
-import java.time.LocalDate
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
+import cats.syntax.flatMap._
+import cats.syntax.option._
+import cats.syntax.apply._
+import cats.syntax.functor._
+import cats.syntax.traverse._
+import cats.instances.all._
 
 object ReturnJourney {
 

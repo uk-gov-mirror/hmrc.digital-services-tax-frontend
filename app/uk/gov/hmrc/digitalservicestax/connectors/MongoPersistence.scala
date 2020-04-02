@@ -21,14 +21,9 @@ import ltbs.uniform._, interpreters.playframework._
 import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 import java.time.LocalDateTime
-// import reactivemongo.api.{ Cursor, DefaultDB, MongoConnection, AsyncDriver }
-//import reactivemongo.api.bson.BSONDocument
 import play.modules.reactivemongo._
 import concurrent.{Future,ExecutionContext}
-import java.util.UUID
-import scala.util.Try
 import play.api._, mvc._
-import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import reactivemongo.play.json._, collection._
 
@@ -56,9 +51,7 @@ case class MongoPersistence[A <: Request[AnyContent]] (
       "timestamp" -> Json.obj("$lt" -> killDate)
     )
 
-    collection.map {
-      _.delete.one(selector, Some(100))
-    }
+    collection.map { _.delete.one(selector, Some(100)) }
   }
 
   lazy val collection: Future[JSONCollection] = {

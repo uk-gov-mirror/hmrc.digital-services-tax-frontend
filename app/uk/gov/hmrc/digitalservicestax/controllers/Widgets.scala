@@ -18,11 +18,7 @@ package uk.gov.hmrc.digitalservicestax.controllers
 
 import java.time.LocalDate
 
-import ltbs.uniform
-import ltbs.uniform.common.web.GenericWebTell
-
-//import cats.data.Validated
-import cats.implicits._
+import cats.data.Validated
 import enumeratum._
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
@@ -30,17 +26,15 @@ import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
 import ltbs.uniform.{NonEmptyString => _, RichEither => _, _}
 import play.twirl.api.Html
+import shapeless.tag, tag.{@@}
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.data._
-import shapeless.tag.{@@}
-
-
-import cats.implicits._
-import cats.{Monoid, Applicative, Monad, Eq, Semigroup}
-import cats.data.{NonEmptyList, Validated}
-import shapeless.tag, tag.{@@}
-import collection.immutable.ListMap
-import uniform.validation.{Rule, Transformation}
+import cats.instances.list._
+import cats.instances.either._
+import cats.syntax.either._
+import cats.syntax.apply._
+import cats.syntax.traverse._
+import cats.syntax.applicative._
 
 trait Widgets {
 

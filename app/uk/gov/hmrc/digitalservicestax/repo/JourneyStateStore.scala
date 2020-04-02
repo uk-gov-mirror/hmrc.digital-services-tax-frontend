@@ -17,7 +17,7 @@
 package uk.gov.hmrc.digitalservicestax.repo
 
 import cats.data.OptionT
-import cats.implicits._
+import cats.instances.future._
 import com.google.inject.{ImplementedBy, Inject, Singleton}
 import play.api.Logger
 import play.api.libs.json._

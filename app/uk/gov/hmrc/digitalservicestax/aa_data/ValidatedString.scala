@@ -16,11 +16,11 @@
 
 package uk.gov.hmrc.digitalservicestax.data
 
-import shapeless._
-import tag._
-import cats.implicits._
+import shapeless.tag, tag.@@
 import scala.util.matching.Regex
 import play.api.mvc.PathBindable
+import cats.syntax.functor._
+import cats.syntax.option._
 
 trait ValidatedType[BaseType] {
 

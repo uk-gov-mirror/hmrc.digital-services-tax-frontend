@@ -8,7 +8,6 @@ object AppDependencies {
   val uniformVersion = "4.10.0"
 
   val compile = Seq(
-
     "uk.gov.hmrc"             %% "govuk-template"           % "5.52.0-play-26",
     "uk.gov.hmrc"             %% "play-ui"                  % "8.8.0-play-26",
     "com.beachape"            %% "enumeratum-play-json"     % "1.5.13",
@@ -19,7 +18,9 @@ object AppDependencies {
     "uk.gov.hmrc"             %% "auth-client"              % "2.35.0-play-26",
     "uk.gov.hmrc"             %% "play-language"            % "4.1.0",
     "commons-validator"       % "commons-validator"         % "1.6",
-    "uk.gov.hmrc"             %% "bootstrap-play-26"        % "1.5.0"
+    "uk.gov.hmrc"             %% "bootstrap-play-26"        % "1.5.0",
+    compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.4.4" cross CrossVersion.full),
+    "com.github.ghik" % "silencer-lib" % "1.4.4" % Provided cross CrossVersion.full
   )
 
   val test = Seq(

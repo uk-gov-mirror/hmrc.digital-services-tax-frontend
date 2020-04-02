@@ -49,3 +49,7 @@ libraryDependencies ++= Seq(
 
 routesImport += "uk.gov.hmrc.digitalservicestax.data._"
 TwirlKeys.templateImports += "uk.gov.hmrc.digitalservicestax.data._"
+
+// suppress warnings from generated code
+scalacOptions += "-P:silencer:pathFilters=target/.*" 
+scalacOptions += s"-P:silencer:sourceRoots=${baseDirectory.value.getCanonicalPath}"
