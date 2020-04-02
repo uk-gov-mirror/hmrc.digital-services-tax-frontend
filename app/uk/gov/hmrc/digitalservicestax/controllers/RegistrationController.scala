@@ -58,40 +58,6 @@ class RegistrationController @Inject()(
 
   private def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
-  private val hodCache = SimpleCaching[(InternalId, String)]()
-
-  private def hod(internalId: InternalId)(implicit hc: HeaderCarrier) = new DSTService[WebMonad[*, Html]] {
-    val fa = FutureAdapter[Html]()
-    import fa._
-
-    def lookupCompany(utr: UTR, postcode: Postcode): WebMonad[Option[CompanyRegWrapper],Html] =
-      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company-args"), utr, postcode)(
-        backend.lookupCompany(utr, postcode)
-      ))
-
-    def lookupCompany(): WebMonad[Option[CompanyRegWrapper],Html] =
-      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company"))(
-        backend.lookupCompany()
-      ))
-
-    def lookupOutstandingReturns(): WebMonad[Set[Period],Html] = 
-      alwaysRerun(hodCache[Set[Period]]((internalId, "lookup-outstanding-returns"))(
-        backend.lookupOutstandingReturns()
-      ))
-
-    def lookupRegistration(): WebMonad[Option[Registration],Html] = 
-      alwaysRerun(hodCache[Option[Registration]]((internalId, "lookup-reg"))(
-        backend.lookupRegistration()
-      ))
-
-    def submitRegistration(reg: Registration): WebMonad[Unit,Html] =
-      alwaysRerun(backend.submitRegistration(reg))
-
-    def submitReturn(period: Period,ret: Return): WebMonad[Unit,Html] = 
-      alwaysRerun(backend.submitReturn(period, ret))
-
-  }
-
   private val interpreter = DSTInterpreter(config, this, messagesApi)
 
   private implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
@@ -114,7 +80,7 @@ class RegistrationController @Inject()(
       case None =>
         val playProgram = registrationJourney[WM](
           create[RegTellTypes, RegAskTypes](messages(request)),
-          hod(request.internalId)
+          backend.hod(request.internalId)
         )
         playProgram.run(targetId, purgeStateUponCompletion = true) {
           backend.submitRegistration(_).map { _ => Redirect(routes.RegistrationController.registrationComplete) }

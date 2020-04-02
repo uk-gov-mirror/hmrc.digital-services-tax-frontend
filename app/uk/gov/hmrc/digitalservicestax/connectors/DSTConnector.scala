@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.connectors
+package uk.gov.hmrc.digitalservicestax
+package connectors
 
 import play.api.libs.json._
 import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
@@ -22,9 +23,10 @@ import uk.gov.hmrc.digitalservicestax.data._
 import uk.gov.hmrc.http.{HeaderCarrier, OptionHttpReads}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-
 import scala.concurrent.{ExecutionContext, Future}
+import javax.inject.{Inject, Singleton}
 
+@Singleton
 class DSTConnector (
   val http: HttpClient,
   servicesConfig: ServicesConfig
@@ -46,7 +48,6 @@ class DSTConnector (
   def lookupCompany(): Future[Option[CompanyRegWrapper]] =
     http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
 
-
   def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] =
     http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode")
 
@@ -55,5 +56,47 @@ class DSTConnector (
 
   def lookupOutstandingReturns(): Future[Set[Period]] =
     http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
+
+  private val hodCache =
+    controllers.SimpleCaching[(InternalId, String)]()
+
+  def hod(internalId: InternalId)(implicit hc: HeaderCarrier) = {
+    val backend = this
+
+    import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
+    import play.twirl.api.Html
+
+    new DSTService[WebMonad[*, Html]] {
+    val fa = FutureAdapter[Html]()
+    import fa._
+
+    def lookupCompany(utr: UTR, postcode: Postcode): WebMonad[Option[CompanyRegWrapper],Html] =
+      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company-args"), utr, postcode)(
+        backend.lookupCompany(utr, postcode)
+      ))
+
+    def lookupCompany(): WebMonad[Option[CompanyRegWrapper],Html] =
+      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company"))(
+        backend.lookupCompany()
+      ))
+
+    def lookupOutstandingReturns(): WebMonad[Set[Period],Html] = 
+      alwaysRerun(hodCache[Set[Period]]((internalId, "lookup-outstanding-returns"))(
+        backend.lookupOutstandingReturns()
+      ))
+
+    def lookupRegistration(): WebMonad[Option[Registration],Html] = 
+      alwaysRerun(hodCache[Option[Registration]]((internalId, "lookup-reg"))(
+        backend.lookupRegistration()
+      ))
+
+    def submitRegistration(reg: Registration): WebMonad[Unit,Html] =
+      alwaysRerun(backend.submitRegistration(reg))
+
+    def submitReturn(period: Period,ret: Return): WebMonad[Unit,Html] = 
+      alwaysRerun(backend.submitReturn(period, ret))
+
+    }
+  }
 
 }
