@@ -50,7 +50,7 @@ case class MongoPersistence[A <: Request[AnyContent]] (
   import MongoPersistence.Wrapper
   import reactiveMongoApi.database
 
-  def killDate = LocalDateTime.now.minusNanos(expireAfter.toNanos)
+  def killDate: LocalDateTime = LocalDateTime.now.minusNanos(expireAfter.toNanos)
 
   def reaver: Future[Unit] = {
     val selector = Json.obj(
@@ -84,9 +84,9 @@ case class MongoPersistence[A <: Request[AnyContent]] (
         Future.sequence(List(
           im.ensure(sessionIndex),
           im.ensure(timestamp)
-        )).map { case _ => c }
+        )).map(_ => c)
       } else {
-        im.ensure(sessionIndex).map { case _ => c }
+        im.ensure(sessionIndex).map(_ => c)
       }
     }
   }

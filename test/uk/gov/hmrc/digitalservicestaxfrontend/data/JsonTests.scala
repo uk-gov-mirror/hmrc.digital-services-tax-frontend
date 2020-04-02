@@ -28,6 +28,8 @@ import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
 import uk.gov.hmrc.digitalservicestax.data.{Activity, Company, CompanyRegWrapper, CountryCode, Email, GroupCompany, Money, NonEmptyString, Percent, PhoneNumber, Postcode, UTR}
 import uk.gov.hmrc.digitalservicestaxfrontend.TestInstances._
 import ltbs.uniform.interpreters.playframework.DB
+import uk.gov.hmrc.auth.core.{Enrolment, Enrolments}
+import uk.gov.hmrc.digitalservicestax.repo.JourneyState
 
 class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks with OptionValues {
 
@@ -135,6 +137,11 @@ class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChec
     }
   }
 
+  it should "fail to parse a DB instance from a Json primitive" in {
+    val source = JsString("bla")
+    source.validate[DB] shouldBe a [JsError]
+  }
+
   it should "fail to parse a formatMap from a non object" in {
     val obj = JsString("bla")
 
@@ -153,20 +160,8 @@ class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChec
     testJsonRoundtrip[Activity]
   }
 
-//  it should "serialize and de-serialise a ForeignAddress instance" in {
-//    testJsonRoundtrip[ForeignAddress]
-//  }
-//
-//  it should "serialize and de-serialise a UkAddress instance" in {
-//    testJsonRoundtrip[UkAddress]
-//  }
-
   it should "serialize and de-serialise a Company instance" in {
     testJsonRoundtrip[Company]
-  }
-
-  it should "serialize and de-serialise a Registration instance" in {
-    //testJsonRoundtrip[Registration]
   }
 
   it should "serialize and de-serialise a Map[GroupCompany, Money]" in {
@@ -181,8 +176,17 @@ class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChec
     testJsonRoundtrip[CompanyRegWrapper]
   }
 
+  it should "serialize and de-serialise a Journey State" in {
+    testJsonRoundtrip[JourneyState](Sample.generator[JourneyState])
+  }
+
   it should "serialize and de-serialise an optional LocalDate" in {
     testJsonRoundtrip[Option[LocalDate]]
+  }
+
+
+  it should "serialize and de-serialise a set of Enrolments" in {
+    testJsonRoundtrip[Set[Enrolment]]
   }
 
   it should "serialize and de-serialise a Map[Activity, Percent]" in {
