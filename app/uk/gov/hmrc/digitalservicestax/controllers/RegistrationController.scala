@@ -17,11 +17,11 @@
 package uk.gov.hmrc.digitalservicestax
 package controllers
 
+import akka.http.scaladsl.model.headers.LinkParams.title
 import config.AppConfig
 import connectors.{DSTConnector, DSTService, MongoPersistence}
 import data._
 import frontend.Kickout
-import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}
 import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
 import ltbs.uniform.interpreters.playframework._
@@ -29,23 +29,20 @@ import ltbs.uniform.{ErrorTree, UniformMessages}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{AnyContent, Action, ControllerHelpers, MessagesControllerComponents}
 import play.twirl.api.Html
-
 import scala.concurrent.{ExecutionContext, Future}
-
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
+import uk.gov.hmrc.digitalservicestax.actions.{AuthorisedAction, AuthorisedRequest}
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-import uk.gov.hmrc.http.HeaderCarrier
 
 @Singleton
 class RegistrationController @Inject()(
   authorisedAction: AuthorisedAction,
   mcc: MessagesControllerComponents,
-  val http: HttpClient,
   val authConnector: AuthConnector,
-  servicesConfig: ServicesConfig,
+  val connector: DSTConnector,
   val mongo: play.modules.reactivemongo.ReactiveMongoApi  
 )(
   implicit val config: AppConfig,
@@ -55,8 +52,6 @@ class RegistrationController @Inject()(
   with FrontendHeaderCarrierProvider
   with I18nSupport
   with AuthorisedFunctions {
-
-  private def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
   private val interpreter = DSTInterpreter(config, this, messagesApi)
 
@@ -69,6 +64,7 @@ class RegistrationController @Inject()(
     import interpreter._
     import journeys.RegJourney._
 
+    val backend = connector.cached
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](
         mongo,
@@ -80,7 +76,7 @@ class RegistrationController @Inject()(
       case None =>
         val playProgram = registrationJourney[WM](
           create[RegTellTypes, RegAskTypes](messages(request)),
-          backend.hod(request.internalId)
+          connector.uniformCached
         )
         playProgram.run(targetId, purgeStateUponCompletion = true) {
           backend.submitRegistration(_).map { _ => Redirect(routes.RegistrationController.registrationComplete) }
@@ -96,7 +92,7 @@ class RegistrationController @Inject()(
   def registrationComplete: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
-    backend.lookupRegistration().flatMap {
+    connector.cached.lookupRegistration().flatMap {
       case None =>
         Future.successful(
           Redirect(routes.RegistrationController.registerAction(" "))

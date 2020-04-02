@@ -32,7 +32,7 @@ import play.twirl.api.Html
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
+import actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -42,9 +42,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 class ReturnsController @Inject()(
   authorisedAction: AuthorisedAction,
   mcc: MessagesControllerComponents,
-  val http: HttpClient,
+  val connector: DSTConnector,  
   val authConnector: AuthConnector,
-  servicesConfig: ServicesConfig,
   val mongo: play.modules.reactivemongo.ReactiveMongoApi  
 )(
   implicit val config: AppConfig,
@@ -55,7 +54,6 @@ class ReturnsController @Inject()(
   with I18nSupport
   with AuthorisedFunctions {
 
-  private def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
   private val interpreter = DSTInterpreter(config, this, messagesApi)
 
   def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {
@@ -65,6 +63,8 @@ class ReturnsController @Inject()(
     import journeys.ReturnJourney._
 
     val periodKey = Period.Key(periodKeyString)
+
+    val backend = connector.cached
 
     implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
       MongoPersistence[AuthorisedRequest[AnyContent]](

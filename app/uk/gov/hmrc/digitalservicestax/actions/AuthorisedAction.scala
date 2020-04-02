@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.actions
+package uk.gov.hmrc.digitalservicestax.actions
 
 import cats.syntax.semigroup._
 import javax.inject.Inject

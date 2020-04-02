@@ -29,7 +29,7 @@ import play.api.mvc.{AnyContent, Action, ControllerHelpers}
 import scala.concurrent.{ExecutionContext, Future}
 
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
-import uk.gov.hmrc.digitalservicestaxfrontend.actions.AuthorisedAction
+import actions.AuthorisedAction
 import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -38,9 +38,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 @Singleton
 class JourneyController @Inject()(
   authorisedAction: AuthorisedAction,
-  val http: HttpClient,
   val authConnector: AuthConnector,
-  servicesConfig: ServicesConfig
+  val connector: DSTConnector
 )(
   implicit val config: AppConfig,
   ec: ExecutionContext,
@@ -50,13 +49,12 @@ class JourneyController @Inject()(
   with I18nSupport
   with AuthorisedFunctions {
 
-  private def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
-
   def getMsg(implicit r: play.api.mvc.Request[AnyContent]) =
     messagesApi.preferred(r).convertMessagesTwirlHtml(escapeHtml = false)
 
   def index: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg = getMsg
+    val backend = connector.cached
 
     backend.lookupRegistration().flatMap {
       case None =>

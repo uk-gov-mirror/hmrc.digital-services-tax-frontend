@@ -17,86 +17,99 @@
 package uk.gov.hmrc.digitalservicestax
 package connectors
 
-import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
-import uk.gov.hmrc.digitalservicestax.data._
-import uk.gov.hmrc.http._
+import javax.inject.{Inject, Singleton}
+import data._, BackendAndFrontendJson._
+import uk.gov.hmrc.http.{controllers => _, _}
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import BackendAndFrontendJson._
 import scala.concurrent.{ExecutionContext, Future}
-import javax.inject.{Inject, Singleton}
+import play.api.mvc.AnyContent
+import actions.AuthorisedRequest
+import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 
 @Singleton
-class DSTConnector (
+class DSTConnector @Inject() (
   val http: HttpClient,
-  servicesConfig: ServicesConfig
-)(implicit executionContext: ExecutionContext, hc: HeaderCarrier)
-    extends DSTService[Future] with OptionHttpReads {
+  servicesConfig: ServicesConfig,
+  ec: ExecutionContext
+) extends OptionHttpReads with FrontendHeaderCarrierProvider {
 
-  val backendURL: String = servicesConfig.baseUrl("digital-services-tax") + "/digital-services-tax"
-
-  def submitRegistration(reg: Registration): Future[Unit] =
-    http.POST[Registration, Unit](s"$backendURL/registration", reg)
-
-  def submitReturn(period: Period, ret: Return): Future[Unit] = {
-    val encodedKey = java.net.URLEncoder.encode(period.key, "UTF-8")
-    http.POST[Return, Unit](s"$backendURL/returns/${encodedKey}", ret)
-  }
-
-  def lookupCompany(): Future[Option[CompanyRegWrapper]] =
-    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
-
-  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] = {
-    val escaped = postcode.replaceAll("\\s+", "")
-    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$escaped")
-  }
-
-  def lookupRegistration(): Future[Option[Registration]] =
-    http.GET[Option[Registration]](s"$backendURL/registration")
-
-  def lookupOutstandingReturns(): Future[Set[Period]] =
-    http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
+  implicit val eci = ec
 
   private val hodCache =
     controllers.SimpleCaching[(InternalId, String)]()
 
-  def hod(internalId: InternalId)(implicit hc: HeaderCarrier) = {
-    val backend = this
+  val backendURL: String = servicesConfig.baseUrl("digital-services-tax") + "/digital-services-tax"
 
-    import ltbs.uniform.common.web.{FutureAdapter, GenericWebTell, WebMonad}
-    import play.twirl.api.Html
+  def uncached(implicit request: AuthorisedRequest[AnyContent]) = new DSTService[Future] {
 
-    new DSTService[WebMonad[*, Html]] {
-    val fa = FutureAdapter[Html]()
-    import fa._
+    def submitRegistration(reg: Registration): Future[Unit] =
+      http.POST[Registration, Unit](s"$backendURL/registration", reg)
 
-    def lookupCompany(utr: UTR, postcode: Postcode): WebMonad[Option[CompanyRegWrapper],Html] =
-      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company-args"), utr, postcode)(
-        backend.lookupCompany(utr, postcode)
-      ))
+    def submitReturn(period: Period, ret: Return): Future[Unit] = {
+      val encodedKey = java.net.URLEncoder.encode(period.key, "UTF-8")
+      http.POST[Return, Unit](s"$backendURL/returns/${encodedKey}", ret)
+    }
 
-    def lookupCompany(): WebMonad[Option[CompanyRegWrapper],Html] =
-      alwaysRerun(hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company"))(
-        backend.lookupCompany()
-      ))
+    def lookupCompany(): Future[Option[CompanyRegWrapper]] =
+      http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
 
-    def lookupOutstandingReturns(): WebMonad[Set[Period],Html] = 
-      alwaysRerun(hodCache[Set[Period]]((internalId, "lookup-outstanding-returns"))(
-        backend.lookupOutstandingReturns()
-      ))
+    def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] = {
+      val escaped = postcode.replaceAll("\\s+", "")
+      http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$escaped")
+    }
 
-    def lookupRegistration(): WebMonad[Option[Registration],Html] = 
-      alwaysRerun(hodCache[Option[Registration]]((internalId, "lookup-reg"))(
-        backend.lookupRegistration()
-      ))
+    def lookupRegistration(): Future[Option[Registration]] =
+      http.GET[Option[Registration]](s"$backendURL/registration")
 
-    def submitRegistration(reg: Registration): WebMonad[Unit,Html] =
-      alwaysRerun(backend.submitRegistration(reg))
+    def lookupOutstandingReturns(): Future[Set[Period]] =
+      http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
 
-    def submitReturn(period: Period,ret: Return): WebMonad[Unit,Html] = 
-      alwaysRerun(backend.submitReturn(period, ret))
+  }
 
+  def cached(implicit request: AuthorisedRequest[AnyContent]) = new DSTService[Future] {
+    val internalId = request.internalId
+
+    def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] =
+      hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company-args"), utr, postcode)(
+        uncached.lookupCompany(utr, postcode)
+      )
+
+    def lookupCompany(): Future[Option[CompanyRegWrapper]] =
+      hodCache[Option[CompanyRegWrapper]]((internalId, "lookup-company"))(
+        uncached.lookupCompany()
+      )
+
+    def lookupOutstandingReturns(): Future[Set[Period]] =
+      hodCache[Set[Period]]((internalId, "lookup-outstanding-returns"))(
+        uncached.lookupOutstandingReturns()
+      )
+
+    def lookupRegistration(): Future[Option[Registration]] =
+      hodCache[Option[Registration]]((internalId, "lookup-reg"))(
+        uncached.lookupRegistration()
+      )
+
+    def submitRegistration(reg: Registration): Future[Unit] = {
+      import cats.implicits._
+      uncached.submitRegistration(reg) >>
+      hodCache.invalidate((internalId, "lookup-reg")).pure[Future]
+    }
+
+    def submitReturn(period: Period,ret: Return): Future[Unit] = {
+      import cats.implicits._      
+      uncached.submitReturn(period, ret) >> 
+      hodCache.invalidate((internalId, "lookup-outstanding-returns")).pure[Future]
     }
   }
+
+  val fa = ltbs.uniform.common.web.FutureAdapter[play.twirl.api.Html]()
+  def uniformCached(implicit request: AuthorisedRequest[AnyContent]) = 
+    cached.natTransform(fa.alwaysRerun)
+
+  def uniformUncached(implicit request: AuthorisedRequest[AnyContent]) = 
+    uncached.natTransform(fa.alwaysRerun)
+
 
 }

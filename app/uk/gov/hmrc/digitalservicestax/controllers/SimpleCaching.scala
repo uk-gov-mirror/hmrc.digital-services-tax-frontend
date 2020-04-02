@@ -57,6 +57,9 @@ case class SimpleCaching[Key](
     _data = _data + (id -> ((checkSum, LocalDateTime.now, value)))
   }
 
+  def invalidate(id: Key): Unit = 
+    _data = _data - id
+
   def apply[A](id: Key, args: Any*)(action: => Future[A])(implicit ec: ExecutionContext): Future[A] =
     fromCache[A](id, args:_*).fold{
       action.map{ x =>

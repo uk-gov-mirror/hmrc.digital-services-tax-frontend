@@ -20,6 +20,7 @@ import enumeratum.EnumFormats
 import ltbs.uniform.interpreters.playframework.DB
 import play.api.libs.json._
 import shapeless.tag.@@
+import cats.syntax.option._
 import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.Wrapper
 
 trait SimpleJson {
@@ -158,10 +159,7 @@ object BackendAndFrontendJson extends SimpleJson {
             json \ "address"
           }.as[Address]
         ),
-        safeId = Some(SafeId(
-          {json \ "safeId"}.as[String]
-        ))
-      ))
+        safeId = SafeId({json \ "safeId"}.as[String]).some))
     }
   }
 
