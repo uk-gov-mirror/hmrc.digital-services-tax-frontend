@@ -38,12 +38,12 @@ object AppDependencies {
     "com.outworkers"            %% "util-samplers"            % "0.57.0"                % Test,
     "com.github.tomakehurst"    %  "wiremock-jre8"            % "2.25.1"                % Test,
     "uk.gov.hmrc"               %% "reactivemongo-test"       % "4.19.0-play-26"        % Test,
-    "org.pegdown"               %  "pegdown"                  % "1.6.0"                 % "test, it",
-    "org.scalatestplus.play"    %% "scalatestplus-play"       % "3.1.2"                 % "test, it",
-    "com.softwaremill.macwire"  %% "macros"                   % "2.3.3"                 % "provided",
-    "com.softwaremill.macwire"  %% "macrosakka"               % "2.3.3"                 % "provided",
-    "com.softwaremill.macwire"  %% "proxy"                    % "2.3.3",
-    "com.softwaremill.macwire"  %% "util"                     % "2.3.3"
+    "org.pegdown"               %  "pegdown"                  % "1.6.0"                 % Test,
+    "org.scalatestplus.play"    %% "scalatestplus-play"       % "3.1.2"                 % Test,
+    "com.softwaremill.macwire"  %% "macros"                   % "2.3.3"                 % Test,
+    "com.softwaremill.macwire"  %% "macrosakka"               % "2.3.3"                 % Test,
+    "com.softwaremill.macwire"  %% "proxy"                    % "2.3.3"                 % Test,
+    "com.softwaremill.macwire"  %% "util"                     % "2.3.3"                 % Test
   )
 
 }

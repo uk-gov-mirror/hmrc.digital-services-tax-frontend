@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.util
+package uk.gov.hmrc.digitalservicestax.util
 
 import java.io.File
 import java.time.Clock
 
 import com.softwaremill.macwire.wire
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.play.audit.http.HttpAuditing
 import uk.gov.hmrc.play.audit.http.config.AuditingConfig
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
@@ -38,13 +37,16 @@ trait TestWiring {
 
   lazy val auditConnector: AuditConnector = wire[DefaultAuditConnector]
   lazy val httpAuditing: HttpAuditing = wire[DefaultHttpAuditing]
-  lazy val configuration: Configuration = Configuration.load(environment, Map("auditing.enabled" -> "false"))
+  lazy val configuration: Configuration = Configuration.load(environment, Map(
+    "auditing.enabled" -> "false",
+    "services.auth.port" -> "11111"
+  ))
   lazy val runMode: RunMode = wire[RunMode]
   lazy val environment: Environment = Environment.simple(new File("."))
   lazy val mode = environment.mode
 
   implicit def clock: Clock = Clock.systemDefaultZone()
-  lazy val appConfig: AppConfig = wire[AppConfig]
-  val servicesConfig: ServicesConfig = wire[ServicesConfig]
+
+
 
 }

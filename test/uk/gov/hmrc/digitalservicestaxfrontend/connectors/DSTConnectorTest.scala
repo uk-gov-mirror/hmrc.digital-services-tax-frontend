@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.connectors
+package uk.gov.hmrc.digitalservicestax.connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import org.scalacheck.Arbitrary.arbitrary
@@ -23,16 +23,21 @@ import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.Json
 import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
 import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
-import uk.gov.hmrc.digitalservicestax.data.{CompanyRegWrapper, Period, Postcode, Registration, Return, UTR}
-import uk.gov.hmrc.digitalservicestaxfrontend.TestInstances._
+import uk.gov.hmrc.digitalservicestax.data._
+import uk.gov.hmrc.digitalservicestax.TestInstances._
 import uk.gov.hmrc.http.HeaderCarrier
+import scala.concurrent.ExecutionContext.Implicits.global
+import play.api.test.FakeRequest
+import uk.gov.hmrc.auth.core.Enrolments
+import uk.gov.hmrc.digitalservicestax.actions.AuthorisedRequest
+import play.api.mvc.AnyContent
 
 class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks {
 
   implicit override val generatorDrivenConfig =
     PropertyCheckConfiguration(minSize = 1, minSuccessful = PosInt(1))
 
-  object DSTTestConnector extends DSTConnector(httpClient, servicesConfig) {
+  object DSTTestConnector extends DSTConnector(httpClient, servicesConfig, global) {
     override val backendURL: String = mockServerUrl
   }
 
@@ -45,14 +50,20 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
       post(urlPathEqualTo(s"""/registration"""))
         .willReturn(aResponse().withStatus(200).withBody("{}")))
 
-    val response = DSTTestConnector.submitRegistration(dstRegNumber)
-    whenReady(response) { res =>
-      res
+    forAll { (user: InternalId, enrolments: Enrolments) =>    
+      implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
+
+      val response = DSTTestConnector.uncached.submitRegistration(dstRegNumber)
+      whenReady(response) { res =>
+        res
+      }
     }
   }
 
   "should submit a period and a return successfully" in {
-    forAll { (period: Period, ret: Return) =>
+    forAll { (period: Period, ret: Return, user: InternalId, enrolments: Enrolments) =>
+
+      implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
 
       val encodedKey = java.net.URLEncoder.encode(period.key, "UTF-8")
 
@@ -60,7 +71,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
         post(urlPathEqualTo(s"/returns/$encodedKey"))
           .willReturn(aResponse().withStatus(200).withBody("{}")))
 
-      val response = DSTTestConnector.submitReturn(period, ret)
+      val response = DSTTestConnector.uncached.submitReturn(period, ret)
       whenReady(response) { res =>
         res
       }
@@ -68,7 +79,9 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
   }
 
   "should lookup a company successfully" in {
-    forAll { reg: CompanyRegWrapper =>
+    forAll { (reg: CompanyRegWrapper, user: InternalId, enrolments: Enrolments) =>
+
+      implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
 
       stubFor(
         get(urlPathEqualTo(s"/lookup-company"))
@@ -79,7 +92,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
           )
       )
 
-      whenReady(DSTTestConnector.lookupCompany()) { res =>
+      whenReady(DSTTestConnector.uncached.lookupCompany()) { res =>
         res mustBe defined
         res.value mustEqual reg
       }
@@ -87,7 +100,9 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
   }
 
   "should lookup a company successfully by utr and postcode" in {
-    forAll { (utr: UTR, postcode: Postcode, reg: CompanyRegWrapper) =>
+    forAll { (utr: UTR, postcode: Postcode, reg: CompanyRegWrapper, user: InternalId, enrolments: Enrolments) =>
+
+      implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
 
       val escaped = postcode.replaceAll("\\s+", "")
 
@@ -100,7 +115,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
           )
       )
 
-      val response = DSTTestConnector.lookupCompany(utr, postcode)
+      val response = DSTTestConnector.uncached.lookupCompany(utr, postcode)
       whenReady(response) { res =>
         res mustBe defined
         res.value mustEqual reg
@@ -109,7 +124,9 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
   }
 
   "should lookup a registration successfully" in {
-    forAll { reg: Registration =>
+    forAll { (reg: Registration, user: InternalId, enrolments: Enrolments) =>
+
+      implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
 
       stubFor(
         get(urlPathEqualTo(s"/registration"))
@@ -120,7 +137,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
           )
       )
 
-      val response = DSTTestConnector.lookupRegistration()
+      val response = DSTTestConnector.uncached.lookupRegistration()
       whenReady(response) { res =>
         res mustBe defined
         res.value mustEqual reg
@@ -129,7 +146,9 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
   }
 
   "should lookup a list of return periods successfully" in {
-    forAll { periods: Set[Period] =>
+    forAll { (periods: Set[Period], user: InternalId, enrolments: Enrolments) =>
+
+      implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
 
       stubFor(
         get(urlPathEqualTo(s"/returns"))
@@ -140,7 +159,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
           )
       )
 
-      val response = DSTTestConnector.lookupOutstandingReturns()
+      val response = DSTTestConnector.uncached.lookupOutstandingReturns()
       whenReady(response) { res =>
         res must contain allElementsOf (periods)
       }

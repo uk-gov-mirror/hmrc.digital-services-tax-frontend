@@ -37,9 +37,7 @@ import uk.gov.hmrc.digitalservicestax.views
 import uk.gov.hmrc.digitalservicestax.views.html.main_template
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
-
 import scala.concurrent.{ExecutionContext, Future}
-
 
 class AuthorisedAction @Inject()(
   mcc: MessagesControllerComponents,

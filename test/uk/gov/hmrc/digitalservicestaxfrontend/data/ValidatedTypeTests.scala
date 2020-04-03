@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.data
+package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
 
@@ -28,7 +28,7 @@ import fr.marcwrobel.jbanking.iban.Iban
 import org.apache.commons.validator.routines.IBANValidator
 import org.scalactic.anyvals.PosInt
 import uk.gov.hmrc.digitalservicestax.data._
-import uk.gov.hmrc.digitalservicestaxfrontend.TestInstances._
+import uk.gov.hmrc.digitalservicestax.TestInstances._
 
 class ValidatedTypeTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChecks {
 

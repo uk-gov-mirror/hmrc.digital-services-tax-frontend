@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.util
+package uk.gov.hmrc.digitalservicestax.util
 
 
 
@@ -33,9 +33,11 @@ import play.core.DefaultWebCommands
 import play.modules.reactivemongo.DefaultReactiveMongoApi
 import reactivemongo.api.MongoConnection
 import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.digitalservicestax.config.AppConfig
 import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence
 import uk.gov.hmrc.digitalservicestax.test.TestConnector
 import uk.gov.hmrc.mongo.MongoSpecSupport
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.http.{DefaultHttpClient, HttpClient}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -62,6 +64,9 @@ trait FakeApplicationSpec extends PlaySpec
   lazy val wsClient: WSClient = app.injector.instanceOf[WSClient]
   lazy val httpClient: HttpClient = new DefaultHttpClient(configuration, httpAuditing, wsClient, actorSystem)
 
+  lazy val appConfig: AppConfig = wire[AppConfig]
+  val servicesConfig: ServicesConfig = wire[ServicesConfig]
+
   val testConnector: TestConnector = new TestConnector(httpClient, environment, configuration, servicesConfig)
 
   override def fakeApplication(): Application = {
@@ -73,7 +78,6 @@ trait FakeApplicationSpec extends PlaySpec
   }
 
   lazy val mcc: MessagesControllerComponents = app.injector.instanceOf[MessagesControllerComponents]
-  lazy val authConnector: AuthConnector = app.injector.instanceOf[AuthConnector]
 
   val reactiveMongoApi = new DefaultReactiveMongoApi(
     parsedUri = MongoConnection.parseURI(mongoUri).success.value,

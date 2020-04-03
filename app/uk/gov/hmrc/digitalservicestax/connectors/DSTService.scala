@@ -37,15 +37,16 @@ trait DSTService[F[_]] {
       def lookupCompany(): G[Option[CompanyRegWrapper]] =
         transform(old.lookupCompany())
       def lookupCompany(utr: UTR, postcode: Postcode): G[Option[CompanyRegWrapper]] =
-        transform(old.lookupCompany(utr, postcode))        
+        transform(old.lookupCompany(utr, postcode))
       def submitRegistration(reg: Registration): G[Unit] =
-        transform(old.submitRegistration(reg))        
+        transform(old.submitRegistration(reg))
       def submitReturn(period: Period, ret: Return): G[Unit] =
         transform(old.submitReturn(period, ret))
       def lookupRegistration(): G[Option[Registration]] =
-        transform(old.lookupRegistration())        
+        transform(old.lookupRegistration())
       def lookupOutstandingReturns(): G[Set[Period]] =
-        transform(old.lookupOutstandingReturns())                
+        transform(old.lookupOutstandingReturns())
     }
   }
+  
 }

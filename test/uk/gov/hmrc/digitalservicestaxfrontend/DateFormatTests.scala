@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend
+package uk.gov.hmrc.digitalservicestax
 
 import java.time.LocalDate
 

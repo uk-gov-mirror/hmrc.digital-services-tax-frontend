@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.connectors
+package uk.gov.hmrc.digitalservicestax.connectors
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-import uk.gov.hmrc.digitalservicestaxfrontend.util.FakeApplicationSpec
+import uk.gov.hmrc.digitalservicestax.util.FakeApplicationSpec
 
 import scala.concurrent.ExecutionContext
 
 trait WiremockSpec extends FakeApplicationSpec with BeforeAndAfterEach with BeforeAndAfterAll with ScalaFutures {
-  val port: Int = WireMockSupport.port
+  val port: Int = 11111
+
   protected[this] val mockServer = new WireMockServer(port)
 
   implicit lazy val ec: ExecutionContext = scala.concurrent.ExecutionContext.Implicits.global
@@ -35,20 +36,13 @@ trait WiremockSpec extends FakeApplicationSpec with BeforeAndAfterEach with Befo
   override protected def beforeAll(): Unit = {
     super.beforeAll()
     mockServer.start()
-    WireMock.configureFor("localhost", WireMockSupport.port)
+    WireMock.configureFor("localhost", port)
   }
-
-  protected val baseUrl = s"http://localhost:${WireMockSupport.port}"
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
     WireMock.reset()
   }
-
-  object WireMockSupport {
-    val port = 11111
-  }
-
   override protected def afterAll(): Unit = {
     super.afterAll()
     mockServer.stop()
