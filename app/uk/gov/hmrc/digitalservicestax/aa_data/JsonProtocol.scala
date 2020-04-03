@@ -153,7 +153,6 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
   implicit val returnFormat: OFormat[Return] = Json.format[Return]
 
-  implicit val wrapperFormat = Json.format[Wrapper]
   implicit val periodFormat: OFormat[Period] = Json.format[Period]
 
   val readCompanyReg = new Reads[CompanyRegWrapper] {

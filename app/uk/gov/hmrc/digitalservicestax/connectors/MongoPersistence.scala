@@ -86,6 +86,7 @@ case class MongoPersistence[A <: Request[AnyContent]] (
   }
 
   import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
+  implicit val wrapperFormat = Json.format[Wrapper]
 
   def apply(request: A)(f: DB => Future[(DB, Result)]): Future[Result] = {
     val selector = Json.obj("session" -> getSession(request))
