@@ -43,11 +43,8 @@ class DSTConnector (
   def lookupCompany(): Future[Option[CompanyRegWrapper]] =
     http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company")
 
-
-  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] = {
-    val escaped = postcode.replaceAll("\\s+", "")
-    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$escaped")
-  }
+  def lookupCompany(utr: UTR, postcode: Postcode): Future[Option[CompanyRegWrapper]] =
+    http.GET[Option[CompanyRegWrapper]](s"$backendURL/lookup-company/$utr/$postcode")
 
   def lookupRegistration(): Future[Option[Registration]] =
     http.GET[Option[Registration]](s"$backendURL/registration")
