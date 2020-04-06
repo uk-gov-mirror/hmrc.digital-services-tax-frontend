@@ -99,7 +99,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
     }
   }
 
-  "should lookup a company successfully by utr and postcode" in {
+  "should lookup a company successfully by utr and postcode" ignore {
     forAll { (utr: UTR, postcode: Postcode, reg: CompanyRegWrapper, user: InternalId, enrolments: Enrolments) =>
 
       implicit val fakeRequest = AuthorisedRequest[AnyContent](user, enrolments, FakeRequest())
