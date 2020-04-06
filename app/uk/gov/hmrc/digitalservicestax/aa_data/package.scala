@@ -23,6 +23,10 @@ import cats.kernel.Monoid
 import play.api.i18n.Messages
 import java.time.LocalDate
 
+import fr.marcwrobel.jbanking.iban.Iban
+import org.apache.commons.validator.routines.{EmailValidator, IBANValidator}
+import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit
+
 package object data extends SimpleJson {
 
   type UTR = String @@ UTR.Tag
@@ -66,7 +70,7 @@ package object data extends SimpleJson {
 
   type RestrictiveString = String @@ RestrictiveString.Tag
   object RestrictiveString extends RegexValidatedString(
-    """^[a-zA-Z &`\\-\\'^]{1,35}$"""
+    """^[a-zA-Z&^]{1,35}$"""
   )
 
   type CountryCode = String @@ CountryCode.Tag
@@ -97,10 +101,11 @@ package object data extends SimpleJson {
   )
 
   type IBAN = String @@ IBAN.Tag
-  object IBAN extends RegexValidatedString(
-    """^[0-9]"{4,50}""", // TODO
-    _.filter(_.isDigit)
-  )
+  object IBAN extends ValidatedType[String] {
+    override def validateAndTransform(in: String): Option[String] = {
+      Some(in).map(_.replaceAll("\\s+","")).filter(Iban.isValid)
+    }
+  }
 
   type PhoneNumber = String @@ PhoneNumber.Tag
   object PhoneNumber extends RegexValidatedString(

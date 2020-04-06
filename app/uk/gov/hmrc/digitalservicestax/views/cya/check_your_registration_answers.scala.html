@@ -91,24 +91,36 @@
         <h2 class="govuk-heading-m">@messages("cya.contact-details.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
-
             <div>
-                <dt class="cya-question">
-                @messages("cya.contact-details-name.question")<br/>
-                @messages("cya.contact-details-phone-number.question")<br/>
-                @messages("cya.contact-details-email.question")
-                </dt>
-                <dd class="cya-answer">
-                    @in.contact.forename @in.contact.surname<br/>
-                    @in.contact.phoneNumber<br/>
-                    @in.contact.email<br/>
-                </dd>
+                <dt class="cya-question">@messages("cya.contact-details-name.question")</dt>
+                <dd class="cya-answer">@in.contact.forename @in.contact.surname</dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@serviceUrl/contact-details">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages("cya.contact-details.change")</span>
+                    <a href="@serviceUrl/contact-details#contact-details_forename-input">@messages("tasklist.change")
+                        <span class="govuk-visually-hidden">@messages("cya.contact-details.change.name")</span>
                     </a>
                 </dd>
             </div>
+
+            <div>
+                <dt class="cya-question">@messages("cya.contact-details-phone-number.question")</dt>
+                <dd class="cya-answer">@in.contact.phoneNumber</dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@serviceUrl/contact-details#contact-details_phoneNumber-input">@messages("tasklist.change")
+                        <span class="govuk-visually-hidden">@messages("cya.contact-details.change.phone-number")</span>
+                    </a>
+                </dd>
+            </div>
+
+            <div>
+                <dt class="cya-question">@messages("cya.contact-details-email.question")</dt>
+                <dd class="cya-answer">@in.contact.email</dd>
+                <dd class="app-check-your-answers__change">
+                    <a href="@serviceUrl/contact-details#contact-details_email-input">@messages("tasklist.change")
+                        <span class="govuk-visually-hidden">@messages("cya.contact-details.change.email")</span>
+                    </a>
+                </dd>
+            </div>
+
         </dl>
     </div>
 

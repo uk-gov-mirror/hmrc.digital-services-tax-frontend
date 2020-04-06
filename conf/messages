@@ -119,10 +119,12 @@ alternate-contact.ForeignAddress.countryCode.heading=Country
 
 alternate-contact.UkAddress=UK
 alternate-contact.UkAddress.line1.heading=Building or street
+alternate-contact.UkAddress.line1.not-a-none-empty-string=Enter the building and street of your contact address
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
 alternate-contact.UkAddress.town.heading=Town or city
 alternate-contact.UkAddress.county.heading=County (optional)
 alternate-contact.UkAddress.postcode.heading=Postcode
+alternate-contact.UkAddress.postcode.not-a-postcode=Enter the postcode of your contact address
 
 check-if-group.heading=Is the company you want to register part of a group?
 check-if-group.required=Select yes if the company you want to register is part of a group
@@ -133,14 +135,14 @@ check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent
     <li>a member of a Generally Accepted Accounting Principles (GAAP) group and not a consolidated subsidiary of another entity</li>\
     <li>not a member of a GAAP group</li>\
   </ul>\
-  <p>We use the meaniing of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
+  <p>We use the meaning of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
 check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
 ultimate-parent-company-name.invalid=Enter the name of the group’s ultimate parent company
 ultimate-parent-company-name.error.length=Name of group’s ultimate global parent company must be 160 characters or fewer
-ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, amperstands (&), and spaces
+ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
 ultimate-parent-company-address.heading=Where is the Registered Office address of {0}?
@@ -148,12 +150,13 @@ ultimate-parent-company-address.required=Select if your Registered Office addres
 
 ultimate-parent-company-address.ForeignAddress=Outside the UK
 ultimate-parent-company-address.ForeignAddress.line1.heading=Address line 1
+ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
 ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (optional)
 ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
 ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
 ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
-ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Enter a country from the list
+
+ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing and enter a country from the list
 
 ultimate-parent-company-address.UkAddress=UK
 ultimate-parent-company-address.UkAddress.line1.heading=Building or street
@@ -165,16 +168,12 @@ ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
 contact-details.forename.heading=First name
-contact-details.surname.heading=Surname
+contact-details.surname.heading=Last name
 contact-details.phoneNumber.heading= Phone number
 contact-details.phoneNumber.hint=For international numbers include the country code.
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
-contact-details.forename.invalid=Forename
 contact-details.forename.name=Forename name
-contact-details.surname.invalid=Surname
-contact-details.phoneNumber.invalid=Phone number
-contact-details.email.invalid=Email
 
 check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
 check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020 
@@ -219,9 +218,11 @@ cya.ultimate-parent-company-address.change=Registered Office address
 
 cya.contact-details.title=Contact person’s details
 cya.contact-details-name.question=Full name
+cya.contact-details.change.name=full name
 cya.contact-details-phone-number.question=Phone number
+cya.contact-details.change.phone-number=phone number
 cya.contact-details-email.question=Email address
-cya.contact-details.change=contact person’s details
+cya.contact-details.change.email=email
 
 cya.liability-date.title=Accounting period details
 cya.liability-start-date.question=Liability start date
@@ -235,7 +236,7 @@ cya.accounting-period-end-date.change=Change the end date of the company’s fir
 cya.submission.title=Send your details
 cya.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
   the details you are providing are correct.
-cya.warning.body=Warning You could be prosecuted if you deliberately submit false or misleading information.
+cya.warning.body=You could be prosecuted if you deliberately submit false or misleading information.
 
 #Reg complete
 registration-sent.heading=Registration sent
@@ -244,9 +245,9 @@ registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
 registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to in \
   the next 24 hours.
-registration-sent.what-you-do-next.title=What you must do next
-registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
-registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
+#registration-sent.what-you-do-next.title=What you must do next
+#registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
+#registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.help-using-this-service.p1=For help with payments and returns, {0}.
 registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
@@ -290,6 +291,7 @@ landing.account-history=Account History
 landing.balance=View your balance and transactions history
 
 #returns
+manage-companies.required=Select yes if you need to add another company to your group
 manage-companies.listing.heading=Confirm your group’s companies
 manage-companies.radio.heading=Do you need to add another company to your group?
 manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
@@ -298,9 +300,11 @@ manage-companies.Continue=No
 remove-company=Remove company
 change-company=Change company name
 
+# Company Details
 add.heading=Company details
 add.name.heading=Company name
 add.name.hint=This is the name registered with an official company register, such as Companies House.
+add.name.invalid=Enter the company’s name
 add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
 add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
@@ -321,6 +325,7 @@ select-activities.SearchEngine=Search engine
 select-activities.OnlineMarketplace=Online marketplace
 
 report-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins in this return?
+report-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK profit margins in this return
 report-alternative-charge.details=What we mean by ‘alternative charge’
 report-alternative-charge.details.text=<p>This is an alternative method that businesses can use to work out their Digital Services Tax liability.</p>\
 <p>The alternative charge only benefits groups who make a loss or have a low UK profit margin on a Digital Services activity.</p>
@@ -329,32 +334,51 @@ report-alternative-charge.FALSE=No
 
 report-social-media-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your social media activity?
+report-social-media-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your social media activity
 report-social-media-alternative-charge.TRUE=Yes
 report-social-media-alternative-charge.FALSE=No
 report-social-media-loss.heading=Has the group made a loss on its social media activity?
+report-social-media-loss.required=Select yes if the group made a loss on its social media activity
 report-social-media-loss.TRUE=Yes
 report-social-media-loss.FALSE=No
 report-social-media-operating-margin.heading=What was the group’s operating margin on its social media activity?
+report-social-media-operating-margin.required=Enter the group’s operating margin on its social media activity
+report-social-media-operating-margin.not-a-number=Enter the group’s operating margin on its social media activity \
+  in the correct format, like 0.25 or 1
 
 report-search-engine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your search engine activity?
+report-search-engine-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your search engine activity
 report-search-engine-alternative-charge.TRUE=Yes
 report-search-engine-alternative-charge.FALSE=No
 report-search-engine-loss.heading=Has the group made a loss on its search engine activity?
+report-search-engine-loss.required=Select yes if the group made a loss on its search engine activity
 report-search-engine-loss.TRUE=Yes
 report-search-engine-loss.FALSE=No
 report-search-engine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
+report-search-engine-operating-margin.required=Enter the group’s operating margin on its search engine activity
+report-search-engine-operating-margin.not-a-number=Enter the group's operating margin on its search engine activity in the correct \
+  format, like 0.25 or 1
 
 report-online-marketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your online marketplace activity?
+report-online-marketplace-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your online marketplace activity
 report-online-marketplace-alternative-charge.TRUE=Yes
 report-online-marketplace-alternative-charge.FALSE=No
 report-online-marketplace-loss.heading=Has the group made a loss on its online marketplace activity?
+report-online-marketplace-loss.required=Select yes if the group made a loss on its online marketplace activity
 report-online-marketplace-loss.TRUE=Yes
 report-online-marketplace-loss.FALSE=No
 report-online-marketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+report-online-marketplace-operating-margin.required=Enter the group’s operating margin on its online marketplace activity
+report-online-marketplace-operating-margin.not-a-number=Enter the group’s operating margin on its online marketplace activity \
+  in the correct format, like 0.25 or 1
 
 report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
+report-cross-border-transaction-relief.required=Select yes if you are claiming any relief on cross-border transactions for this return period
 report-cross-border-transaction-relief.details=What we mean by ‘relief on cross-border transactions’
 report-cross-border-transaction-relief.details.text=<p> If a transaction involves a UK user and a non-UK user who is in a country \
   that also operates a Digital Services Tax, only 50% of the revenues from that transaction will be taxable as UK revenues.</p>
@@ -362,8 +386,13 @@ report-cross-border-transaction-relief.TRUE=Yes
 report-cross-border-transaction-relief.FALSE=No
 
 relief-deducted.heading=How much cross-border transactions relief have you deducted from revenues in this return?
+relief-deducted.required=Enter the amount of cross-border transactions relief you have deducted from revenues in this return
+relief-deducted.not-a-number=The amount of cross-border transactions relief you deducted from revenues must be an amount of \
+  money, like 1,234.56 or 1,560.00
 
 company-liabilities-0.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+# TODO - NEED TO PASS THE COMANY NAME TO THE ERROR
+#company-liabilities-0.required=Enter the Digital Services Tax liability for {0}
 company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
 company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
 company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
@@ -386,20 +415,28 @@ company-liabilities-19.heading=What are your UK Digital Services Tax liabilities
 company-liabilities-20.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
 
 allowance-deducted.heading=How much of the £25m annual allowance have you deducted from revenues in this return?
+allowance-deducted.required=Enter how much of the £25m annual allowance you have deducted from revenues in this return
+allowance-deducted.not-a-number=The amount of the £25m annual allowance you have deducted from revenues must be an amount of \
+  money, like 1,234.56 or 1,560.00
 allowance-deducted.details=What we mean by ‘£25m annual allowance’
 allowance-deducted.details.text=<p>The £25m annual allowance means the first £25m of revenues derived \
   from UK users will not be subject to Digital Services Tax.</p><p>The allowance is pro-rated for accounting \
   periods less than 12 months.</p>
 
 group-liability.heading=What is the group’s total UK Digital Services Tax liability for 1 April 2020 to 31 July 2020? 
+group-liability.required=Enter the group’s total Digital Services Tax liability for 1 April 2020 to 31 July 2020
+group-liability.not-a-number=The group’s total liability must be an amount of money, like 1,234.56 or 1,560.00
 group-liability.hint=This is the total amount of liability after applying any deductions and allowances.
 
 repayment.heading=Do you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020?
+repayment.required=Select yes if you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020
 repayment.TRUE=Yes
 repayment.FALSE=No
 
 bank-details-type.heading=Your bank details for repayment
+bank-details-type.invalid=Hey
 bank-details-type._1.heading=Account Name
+bank-details-type._2.required=Select yes if this is a UK bank account
 bank-details-type._2.TRUE=Yes
 bank-details-type._2.FALSE=No
 bank-details-type._2.heading.large=Is this a UK bank account?
@@ -478,21 +515,6 @@ wrong-creds.heading=You cannot use this service
 wrong-creds.sign-out.reason=You need to be an administrator user to register for the Digital Services Tax.
 wrong-creds.contact-admin=Contact your company's administrator if you need to use this service.
 
-# Please see example messages below, from most specific to most general.
-# I suggest creating the most general ones first then overriding with more
-# specific ones on a case-by-case basis.
-#
-# For example, if the error message key is 'contact-details.email.required' uniform will
-# look first for 'contact-details.email.required', then 'email.required' and finally if it
-# can't find either of these it will use a message for 'required'.
-#
-# If you want to see the keys being used, open up DSTInterpreter.scala, find where the messages
-# are provided (around line 83 at present) and comment out the preferred and best-guess lines. Then
-# uncomment the 'attentionSeeker' line. Finally reload the pages and it will show the message keys.
-#
-# The content below is made up for demo purposes. Please also check above as in some
-# cases these keys already exist above.
-
 contact-details.forename.required=Enter the contact person’s first name
 forename.required=Enter the first name
 
@@ -518,3 +540,116 @@ required=This is a required field
 contact-details.email.invalid=Please enter a valid contact email
 email.invalid=Please enter a valid email address
 invalid=Please enter a valid string
+
+accessibility-statement.title=Accessibility Statement - Digital Services Tax
+accessibility-statement.heading=Accessibility statement for Digital Services Tax
+accessibility-statement.intro=This accessibility statement explains how accessible this service is, what to do if \
+  you have difficulty using it, and how to report accessibility problems with the service.
+accessibility-statement.p1-1=This service is part of the wider GOV.UK website. There is a separate
+accessibility-statement.p1-2=accessibility statement
+accessibility-statement.p1-3=for the main GOV.UK website.
+accessibility-statement.p2-1=This page only contains information about the Digital Services Tax service, available at
+accessibility-statement.p2-2=www.tax.service.gov.uk/digital-services-tax/
+
+accessibility-statement.h2=Using this service
+accessibility-statement.p3=This service enables you to register for the Digital Services Tax and submit a return if \
+  you’re registered for the tax.
+accessibility-statement.p4=This service is run by HM Revenue and Customs (HMRC). We want as many people as possible to \
+  be able to use this service. This means you should be able to:
+accessibility-statement.ul1-li1=change colours, contrast levels and fonts
+accessibility-statement.ul1-li2=zoom in up to 300% without the text spilling off the screen
+accessibility-statement.ul1-li3=get from the start of the service to the end using just a keyboard
+accessibility-statement.ul1-li4=get from the start of the service to the end using speech recognition software
+accessibility-statement.ul1-li5=listen to the service using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)
+accessibility-statement.p5=We have also made the text in the service as simple as possible to understand.
+accessibility-statement.p6-1=AbilityNet
+accessibility-statement.p6-2=has advice on making your device easier to use if you have a disability.
+
+accessibility-statement.h3=How accessible this service is
+accessibility-statement.p7-1=This service is partially compliant with the 
+accessibility-statement.p7-2=Web Content Accessibility Guidelines version 2.1 AA standard
+accessibility-statement.p7-3=.
+accessibility-statement.p8=Some people may find parts of this service difficult to use.
+accessibility-statement.ul2-li1=On the ‘Contact person’s details’ page, the phone number field does not have an input type, which may cause \
+  issues for people using a screen reader.
+accessibility-statement.ul2-li2=Some of the page titles in the service are not descriptive, which may cause difficulty for blind users who have multiple tabs open.
+accessibility-statement.ul2-li3=The ‘Contact person’s details’ section of the ‘Check your answers’ page when registering may cause difficulty \
+  for screen reader users.
+accessibility-statement.ul2-li4=The ‘Change’ links on the ‘Check your answers’ page when submitting a return do not function as expected.
+accessibility-statement.ul2-li5=The required format for entering numbers is not available to users of assistive technology.
+accessibility-statement.ul2-li6=The timeout feature of the service may cause issues for screen reader users using JAWS and NVDA.
+accessibility-statement.ul2-li7=The ‘Contact person’s details’ page does not use an autocomplete attribute to allow users to fill in this \
+  information automatically.
+accessibility-statement.ul2-li8=Some error messages within the service are not descriptive, which may prevent some users from understanding \
+  what they need to correct.
+accessibility-statement.ul2-li9=The colour used for the focus indicator on form elements does not meet the minimum required contrast ratio of 3:1.
+accessibility-statement.ul2-li10=When submitting a return, the 'Company details' page does not have an error summary or error skip links, and some \
+  fields do not have matching inline error validation messages.
+accessibility-statement.p9=We plan to fix these accessibility issues as soon as possible.
+
+accessibility-statement.h4=What to do if you have difficulty using this service
+accessibility-statement.p10=If you have difficulty using this service, use the ‘Get help with this page’ link on the page in the online service.
+
+
+accessibility-statement.h5=Reporting accessibility problems with this service
+accessibility-statement.p11-1=We are always looking to improve the accessibility of this service. If you find any problems that are not listed on \
+  this page or think we are not meeting accessibility requirements, report the 
+accessibility-statement.p11-2=accessibility problem (opens in a new window or tab)
+accessibility-statement.p11-3=.
+
+accessibility-statement.h6=What to do if you are not happy with how we respond to your complaint
+
+
+accessibility-statement.p12-1=The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and \
+  Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’). If you are not happy with how we respond to your \
+  complaint,
+accessibility-statement.p12-2=contact the Equality Advisory and Support Service
+accessibility-statement.p12-3=(EASS), or the 
+accessibility-statement.p12-4=Equality Commission for Northern Ireland
+accessibility-statement.p12-5=(ECNI) if you live in Northern Ireland.
+
+accessibility-statement.h7=Contacting us by phone or getting a visit from us in person
+accessibility-statement.p13=We provide a text relay service if you are deaf, hearing impaired or have a speech impediment.
+accessibility-statement.p14=We can provide a British Sign Language (BSL) interpreter, or you can arrange a visit from an HMRC advisor to help you \
+  complete the service.
+accessibility-statement.p15-1=Find out how to 
+accessibility-statement.p15-2=contact us
+accessibility-statement.p15-3=.
+
+accessibility-statement.h8=Technical information about this service’s accessibility
+accessibility-statement.p16=HMRC is committed to making this service accessible, in accordance with the Public Sector Bodies (Websites and Mobile \
+  Applications) (No. 2) Accessibility Regulations 2018.
+accessibility-statement.p17-1=This service is partially compliant with the 
+accessibility-statement.p17-2=Web Content Accessibility Guidelines version 2.1 AA standard
+accessibility-statement.p17-3=, due to the non-compliances listed below.
+
+accessibility-statement.h9=Non-accessible content
+accessibility-statement.p18=The content listed below is non-accessible for the following reasons.
+accessibility-statement.h10=Non-compliance with the accessibility regulations
+accessibility-statement.ul3-li1=On the ‘Contact person’s details’ page, the phone number field does not have an input type, which may cause issues \
+  for people using a screen reader. This does not meet WCAG Success Criterion 4.1.2 (Name, Role, Value).
+accessibility-statement.ul3-li2=Some of the page titles in the service are not descriptive, which may cause difficulty for blind users who have \
+  multiple tabs open. This does not meet WCAG 2.1 success criterion 2.4.2 (Page Titled).
+accessibility-statement.ul3-li3=The ‘Contact person’s details’ section of the ‘Check your answers’ page when registering may cause difficulty \
+  for screen reader users. This does not meet WCAG 2.1 success criterion 1.3.1 (Info and Relationships).
+accessibility-statement.ul3-li4=The ‘Change’ links on the ‘Check your answers’ page when submitting a return do not function as expected. This \
+  does not meet WCAG Success Criterion 4.1.2 (Name, Role, Value).
+accessibility-statement.ul3-li5=The required format for entering numbers is not available to users of assistive technology. This does not meet \
+  WCAG Success Criterion 3.3.2: (Labels or Instructions).
+accessibility-statement.ul3-li6=The timeout feature of the service may cause issues for screen reader users using JAWS and NVDA. This does not \
+  meet WCAG Success Criterion 4.1.2 (Name, Role, Value).
+accessibility-statement.ul3-li7=The ‘Contact person’s details’ page does not use an autocomplete attribute to allow users to fill in this \
+  information automatically. This does not meet WCAG Success Criterion 1.3.5 (Identify Input Purpose).
+accessibility-statement.ul3-li8=Some error messages within the service are not descriptive, which may prevent some users from understanding \
+  what they need to correct. This does not meet WCAG Success Criterion 3.3.3 (Error Suggestion).
+accessibility-statement.ul3-li9=The colour used for the focus indicator on form elements does not meet the minimum required contrast ratio of \
+  3:1. This does not meet WCAG Success Criterion 1.4.11 (Non-text Contrast).
+accessibility-statement.ul3-li10=When submitting a return, the ‘Company details’ page does not have an error summary or error skip links, and \
+  some fields do not have matching inline error validation messages. This does not meet WCAG Success Criterion 3.3.3 (Error Suggestion).
+
+accessibility-statement.h11=How we tested this service
+accessibility-statement.p19=The service was last tested on 18 March 2020 and was checked for compliance with WCAG 2.1 AA.
+accessibility-statement.p20-1=The service was built using parts that were tested by the
+accessibility-statement.p20-2=Digital Accessibility Centre
+accessibility-statement.p20-3=. The full service was tested by HMRC and included disabled users.
+accessibility-statement.p21=This page was prepared on 1 April 2020. It was last updated on 1 April 2020.

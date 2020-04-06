@@ -18,8 +18,10 @@ package uk.gov.hmrc.digitalservicestax.data
 
 import cats.implicits._
 import enumeratum.EnumFormats
+import ltbs.uniform.interpreters.playframework.DB
 import play.api.libs.json._
 import shapeless.tag.@@
+import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.Wrapper
 
 trait SimpleJson {
 
@@ -83,6 +85,8 @@ trait SimpleJson {
 
 object BackendAndFrontendJson extends SimpleJson {
 
+  implicit val readsUnit: Reads[Unit] = Reads[Unit] { _ => JsSuccess(()) }
+
   implicit val foreignAddressFormat: OFormat[ForeignAddress] = Json.format[ForeignAddress]
   implicit val ukAddressFormat: OFormat[UkAddress] = Json.format[UkAddress]
   implicit val addressFormat: OFormat[Address] = Json.format[Address]
@@ -107,16 +111,16 @@ object BackendAndFrontendJson extends SimpleJson {
     }
   }
 
+
   implicit val groupCompanyMapFormat: OFormat[Map[GroupCompany, Money]] = new OFormat[Map[GroupCompany, Money]] {
     override def reads(json: JsValue): JsResult[Map[GroupCompany, Money]] = {
       JsSuccess(json.as[Map[String, JsNumber]].map { case (k, v) =>
-
-        val Array(name, utrS) = k.split(":")
-        val utr = utrS match {
-          case "" => None
-          case x => Some(UTR(x))
+        k.split(":") match {
+          case Array(name, utrS) =>
+            GroupCompany(NonEmptyString(name), Some(UTR(utrS))) -> v.value
+          case Array(name) =>
+            GroupCompany(NonEmptyString(name), None) -> v.value
         }
-        GroupCompany(NonEmptyString(name), utr) -> v.value
       })
     }
 
@@ -127,26 +131,55 @@ object BackendAndFrontendJson extends SimpleJson {
     }
   }
 
+  implicit def optFormatter[A](implicit innerFormatter: Format[A]): Format[Option[A]] =
+    new Format[Option[A]] {
+      def reads(json: JsValue): JsResult[Option[A]] = json match {
+        case JsNull => JsSuccess(none[A])
+        case a      => innerFormatter.reads(a).map{_.some}
+      }
+      def writes(o: Option[A]): JsValue =
+        o.map{innerFormatter.writes}.getOrElse(JsNull)
+    }
+
   implicit val domesticBankAccountFormat: OFormat[DomesticBankAccount] = Json.format[DomesticBankAccount]
   implicit val foreignBankAccountFormat: OFormat[ForeignBankAccount] = Json.format[ForeignBankAccount]
   implicit val bankAccountFormat: OFormat[BankAccount] = Json.format[BankAccount]
   implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
   implicit val returnFormat: OFormat[Return] = Json.format[Return]
 
+  implicit val wrapperFormat = Json.format[Wrapper]
   implicit val periodFormat: OFormat[Period] = Json.format[Period]
 
   val readCompanyReg = new Reads[CompanyRegWrapper] {
     override def reads(json: JsValue): JsResult[CompanyRegWrapper] = {
-      println(Json.prettyPrint(json))
-      JsSuccess(CompanyRegWrapper (
+      JsSuccess(CompanyRegWrapper(
         Company(
-          {json \ "organisation" \ "organisationName"}.as[NonEmptyString],
-          {json \ "address"}.as[Address]
+          {
+            json \ "organisation" \ "organisationName"
+          }.as[NonEmptyString], {
+            json \ "address"
+          }.as[Address]
         ),
         safeId = SafeId(
-          {json \ "safeId"}.as[String]
+          {
+            json \ "safeId"
+          }.as[String]
         ).some
       ))
+    }
+  }
+
+  implicit val formatMap: OFormat[DB] = new OFormat[DB] {
+    def writes(o: DB) = JsObject ( o.map {
+      case (k,v) => (k.mkString("/"), JsString(v))
+    }.toSeq )
+
+    def reads(json: JsValue): JsResult[DB] = json match {
+      case JsObject(data) => JsSuccess(data.map {
+        case (k, JsString(v)) => (k.split("/").toList, v)
+        case e => throw new IllegalArgumentException(s"cannot parse $e")
+      }.toMap)
+      case e => JsError(s"expected an object, got $e")
     }
   }
 

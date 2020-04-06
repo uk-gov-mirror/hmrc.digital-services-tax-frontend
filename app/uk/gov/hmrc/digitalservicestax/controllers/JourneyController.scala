@@ -282,4 +282,9 @@ class JourneyController @Inject()(
     }
   }
 
+  def accessibilityStatement: Action[AnyContent] = Action { implicit request =>
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+    Ok(views.html.accessibility_statement(s"${msg("accessibility-statement.title")}"))
+  }
+
 }

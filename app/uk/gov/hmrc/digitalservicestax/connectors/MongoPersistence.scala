@@ -29,6 +29,7 @@ import java.util.UUID
 import scala.util.Try
 import play.api._, mvc._
 import play.api.libs.functional.syntax._
+import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
 import play.api.libs.json._
 import reactivemongo.play.json._, collection._
 
@@ -90,21 +91,7 @@ case class MongoPersistence[A <: Request[AnyContent]] (
     }
   }
 
-  implicit val formatMap = new OFormat[DB] {
-    def writes(o: DB) = JsObject ( o.map {
-      case (k,v) => (k.mkString("/"), JsString(v))
-    }.toSeq )
-  
-    def reads(json: JsValue): JsResult[DB] = json match {
-      case JsObject(data) => JsSuccess(data.map {
-        case (k, JsString(v)) => (k.split("/").toList, v)
-        case e => throw new IllegalArgumentException(s"cannot parse $e")
-      }.toMap)
-      case e => JsError(s"expected an object, got $e")
-    }
-
-  }
-  implicit val formatWrapper = Json.format[Wrapper]
+  import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
 
   def apply(request: A)(f: DB => Future[(DB, Result)]): Future[Result] = {
     val selector = Json.obj("session" -> getSession(request))
