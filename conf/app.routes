@@ -12,6 +12,9 @@ GET        /register/*id                       uk.gov.hmrc.digitalservicestax.co
 POST       /register                           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id = "")
 POST       /register/*id                       uk.gov.hmrc.digitalservicestax.controllers.JourneyController.registerAction(id: String)
 
+GET        /finishing-registration                           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.finishReg
+GET        /finishing-registration-check                           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.finishRegCheck
+
 GET        /submit-return/:periodKey           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.returnAction(periodKey: String, id = "")
 GET        /submit-return/:periodKey/*id       uk.gov.hmrc.digitalservicestax.controllers.JourneyController.returnAction(periodKey: String, id: String)
 POST       /submit-return/:periodKey           uk.gov.hmrc.digitalservicestax.controllers.JourneyController.returnAction(periodKey: String, id = "")

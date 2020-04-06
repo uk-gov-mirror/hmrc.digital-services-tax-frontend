@@ -287,4 +287,19 @@ class JourneyController @Inject()(
     Ok(views.html.accessibility_statement(s"${msg("accessibility-statement.title")}"))
   }
 
+  def finishReg: Action[AnyContent] = authorisedAction { implicit request =>
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)    
+    Ok(views.html.waithere(
+      "finalising-registration",
+      routes.JourneyController.finishRegCheck,
+      routes.JourneyController.index,
+      10 seconds
+    ))
+  }
+
+  def finishRegCheck: Action[AnyContent] = authorisedAction { implicit request =>
+    NotFound("Not yet!") // will cause the page to wait, 200 will allow the user to continue
+  }
+
+
 }
