@@ -15,6 +15,7 @@ common.error=Error
 common.beta=BETA
 common.title=Digital Services Tax
 common.title.short=Digital Services Tax
+common.title.suffix=GOV.UK
 common.True=Yes
 common.False=No
 common.feedback=What do you think about this service?
@@ -64,7 +65,7 @@ company-registered-office-address=Where is the company’s Registered Office add
 company-registered-office-address.UkAddress.heading=UK
 company-registered-office-address.UkAddress.line1.heading=Building or street
 company-registered-office-address.UkAddress.line2.heading=Building or street line 2 (optional)
-company-registered-office-address.UkAddress.town.heading=Town or city
+company-registered-office-address.UkAddress.town.heading=Town or city (optional)
 company-registered-office-address.UkAddress.county.heading=County (optional)
 company-registered-office-address.UkAddress.postcode.heading=Postcode
 
@@ -121,7 +122,7 @@ alternate-contact.UkAddress=UK
 alternate-contact.UkAddress.line1.heading=Building or street
 alternate-contact.UkAddress.line1.not-a-none-empty-string=Enter the building and street of your contact address
 alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
-alternate-contact.UkAddress.town.heading=Town or city
+alternate-contact.UkAddress.town.heading=Town or city (optional)
 alternate-contact.UkAddress.county.heading=County (optional)
 alternate-contact.UkAddress.postcode.heading=Postcode
 alternate-contact.UkAddress.postcode.not-a-postcode=Enter the postcode of your contact address
@@ -161,7 +162,7 @@ ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing 
 ultimate-parent-company-address.UkAddress=UK
 ultimate-parent-company-address.UkAddress.line1.heading=Building or street
 ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
-ultimate-parent-company-address.UkAddress.town.heading=Town or city
+ultimate-parent-company-address.UkAddress.town.heading=Town or city (optional)
 ultimate-parent-company-address.UkAddress.county.heading=County (optional)
 ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
 
@@ -291,6 +292,7 @@ landing.account-history=Account History
 landing.balance=View your balance and transactions history
 
 #returns
+manage-companies-add-add.heading=Company details
 manage-companies.required=Select yes if you need to add another company to your group
 manage-companies.listing.heading=Confirm your group’s companies
 manage-companies.radio.heading=Do you need to add another company to your group?
@@ -450,7 +452,7 @@ bank-details-foreign.listing.heading=What are your bank account details?
 bank-details-foreign.iban.heading.large.label=International Bank Account Number (IBAN)
 
 #Returns cya
-check-your-answers.ret.title=Check your answers before sending you return for 1 April 2020 to July 2020
+check-your-answers.ret.title=Check your answers before sending your return for 1 April 2020 to July 2020
 check-your-answers.ret.company.title=Digital Services Tax return details
 check-your-answers.ret.group-liability.question=Group’s total Digital Services Tax liability
 check-your-answers.ret.group-liability.change=group’s total Digital Services Tax liability

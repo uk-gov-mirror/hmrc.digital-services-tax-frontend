@@ -29,6 +29,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success, Try}
 
+import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
+
 case class JourneyState (
   test: String = "test"
 )
@@ -51,8 +53,6 @@ trait JourneyStateStore {
 class JourneyStateStoreImpl @Inject() (
   mongo: ReactiveMongoComponent
 )(implicit appConfig: AppConfig, ec: ExecutionContext) extends JourneyStateStore with Store {
-
-  implicit lazy val journeyStateFormatter: Format[JourneyState] = Json.format[JourneyState]
 
   override val expireAfterSeconds: Long = appConfig.mongoJourneyStoreExpireAfter.toSeconds
   override val cacheRepository: CacheMongoRepository =

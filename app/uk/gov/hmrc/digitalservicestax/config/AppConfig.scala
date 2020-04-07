@@ -25,10 +25,7 @@ import scala.concurrent.duration.Duration
 @Singleton
 class AppConfig @Inject()(val config: Configuration, servicesConfig: ServicesConfig, environment: Environment) {
 
-  protected def mode: Mode = environment.mode
-
   private def loadConfig(key: String) = config.get[String](key)
-
 
   private val assetsUrl: String = loadConfig("assets.url")
   lazy val assetsPrefix: String = assetsUrl + loadConfig("assets.version")

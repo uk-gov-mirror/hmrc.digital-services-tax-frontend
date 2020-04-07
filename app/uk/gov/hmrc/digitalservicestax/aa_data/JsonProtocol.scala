@@ -22,6 +22,9 @@ import ltbs.uniform.interpreters.playframework.DB
 import play.api.libs.json._
 import shapeless.tag.@@
 import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.Wrapper
+import uk.gov.hmrc.auth.core.Enrolment
+import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.Wrapper
+import uk.gov.hmrc.digitalservicestax.repo.JourneyState
 
 trait SimpleJson {
 
@@ -96,6 +99,10 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val registrationFormat: OFormat[Registration] = Json.format[Registration]
   implicit val activityFormat: Format[Activity] = EnumFormats.formats(Activity)
   implicit val groupCompanyFormat: Format[GroupCompany] = Json.format[GroupCompany]
+  implicit lazy val journeyStateFormatter: Format[JourneyState] = Json.format[JourneyState]
+
+  import Enrolment.idFormat
+  implicit val enrolmentWrites = Json.writes[Enrolment]
 
   implicit val activityMapFormat: Format[Map[Activity, Percent]] = new Format[Map[Activity, Percent]] {
     override def reads(json: JsValue): JsResult[Map[Activity, Percent]] = {
@@ -147,7 +154,6 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val repaymentDetailsFormat: OFormat[RepaymentDetails] = Json.format[RepaymentDetails]
   implicit val returnFormat: OFormat[Return] = Json.format[Return]
 
-  implicit val wrapperFormat = Json.format[Wrapper]
   implicit val periodFormat: OFormat[Period] = Json.format[Period]
 
   val readCompanyReg = new Reads[CompanyRegWrapper] {
@@ -167,8 +173,8 @@ object BackendAndFrontendJson extends SimpleJson {
         ).some
       ))
     }
-  }
 
+  }
   implicit val formatMap: OFormat[DB] = new OFormat[DB] {
     def writes(o: DB) = JsObject ( o.map {
       case (k,v) => (k.mkString("/"), JsString(v))

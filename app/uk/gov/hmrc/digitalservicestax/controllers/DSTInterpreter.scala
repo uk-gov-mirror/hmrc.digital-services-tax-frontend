@@ -113,7 +113,7 @@ case class DSTInterpreter(
 
     val errorTitle: String = if(errors.isNonEmpty) s"${messages("common.error")}: " else ""
     views.html.main_template(title =
-      errorTitle + s"${messages(keyList.mkString("-") + ".heading")} - ${messages("common.title")}")(
+      errorTitle + s"${messages(keyList.mkString("-") + ".heading")} - ${messages("common.title")} - ${messages("common.title.suffix")}")(
       content)(request, messages, appConfig)
   }
 

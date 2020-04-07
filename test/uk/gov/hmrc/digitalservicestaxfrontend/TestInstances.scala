@@ -23,9 +23,9 @@ import cats.implicits.{none, _}
 import org.scalacheck.Arbitrary.{arbitrary, arbBigDecimal => _, _}
 import org.scalacheck.cats.implicits._
 import org.scalacheck.{Arbitrary, Gen, _}
-import uk.gov.hmrc.auth.core.{Enrolment, EnrolmentIdentifier, Enrolments}
 import uk.gov.hmrc.digitalservicestax.data._
 import wolfendale.scalacheck.regexp.RegexpGen
+import uk.gov.hmrc.auth.core._
 
 object TestInstances {
 
@@ -156,8 +156,7 @@ object TestInstances {
   }
 
   def nonEmptyString: Gen[NonEmptyString] =
-    arbitrary[RestrictiveString].filter(_.nonEmpty).map{NonEmptyString.apply}
-
+    arbitrary[RestrictiveString].filter(_.nonEmpty).map { NonEmptyString.apply }
 
   def genActivityPercentMap: Gen[Map[Activity, Percent]] = Gen.mapOf(
     (
@@ -175,7 +174,7 @@ object TestInstances {
     (
       nonEmptyString,
       nonEmptyString
-      ).mapN(EnrolmentIdentifier)
+    ).mapN(EnrolmentIdentifier)
   }
 
   implicit def enrolmentArbitrary: Arbitrary[Enrolment] = Arbitrary {
@@ -189,7 +188,10 @@ object TestInstances {
   }
 
   implicit def enrolmentsArbitrary: Arbitrary[Enrolments] = Arbitrary {
-    Gen.listOf(enrolmentArbitrary.arbitrary).map(list => Enrolments(list.toSet))
+    for {
+      num <- Gen.chooseNum(1, 5)
+      list <- Gen.listOfN(num, enrolmentArbitrary.arbitrary)
+    } yield Enrolments(list.toSet)
   }
 
   def gencomap: Gen[Map[GroupCompany, Money]] = Gen.mapOf(
@@ -347,5 +349,13 @@ object TestInstances {
         ).mapN(Registration.apply)
     }
   )
+
+  implicit def arbCredRole: Arbitrary[CredentialRole] = Arbitrary {
+    Gen.oneOf(List(User, Admin, Assistant))
+  }
+
+  implicit def arbAffinityGroup: Arbitrary[AffinityGroup] = Arbitrary {
+    Gen.oneOf(List(AffinityGroup.Agent, AffinityGroup.Individual, AffinityGroup.Organisation))
+  }
 
 }
