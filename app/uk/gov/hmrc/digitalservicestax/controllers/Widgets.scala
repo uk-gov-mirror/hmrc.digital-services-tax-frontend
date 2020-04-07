@@ -267,7 +267,7 @@ trait Widgets {
 
       //TODO check transformations with ltbs
       (
-        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
+        out.subField[MandatoryAddressLine]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(MandatoryAddressLine(_))}),
         out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("town", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("county", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
@@ -302,7 +302,7 @@ trait Widgets {
 
     def decode(out: Input): Either[ErrorTree, ForeignAddress] = {
       (
-        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
+        out.subField[MandatoryAddressLine]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(MandatoryAddressLine(_))}),
         out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("line3", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("line4", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),

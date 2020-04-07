@@ -74,10 +74,10 @@ UkAddress.line1.required=Enter a building or street
 UkAddress.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 UkAddress.town.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 UkAddress.county.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
-UkAddress.line1.limit=Building or street must be 40 characters or fewer
-UkAddress.line2.limit=Building or street line 2 must be 40 characters or fewer
-UkAddress.town.limit=Town or city must be 40 characters or fewer
-UkAddress.county.limit=County must be 40 characters or fewer
+UkAddress.line1.limit=Building or street must be 35 characters or fewer
+UkAddress.line2.limit=Building or street line 2 must be 35 characters or fewer
+UkAddress.town.limit=Town or city must be 35 characters or fewer
+UkAddress.county.limit=County must be 35 characters or fewer
 not-a-postcode=Enter a real postcode
 
 company-registered-office-address.ForeignAddress=Outside the UK
@@ -92,10 +92,10 @@ ForeignAddress.line1.required=Enter Address Line 1
 ForeignAddress.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 ForeignAddress.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
 ForeignAddress.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, full stops, forward slashes and spaces
-ForeignAddress.line1.limit=Address Line 1 must be 40 characters or fewer
-ForeignAddress.line2.limit=Address Line 2 must be 40 characters or fewer
-ForeignAddress.line3.limit=Address Line 3 must be 40 characters or fewer
-ForeignAddress.line4.limit=Address Line 4 must be 40 characters or fewer
+ForeignAddress.line1.limit=Address Line 1 must be 35 characters or fewer
+ForeignAddress.line2.limit=Address Line 2 must be 35 characters or fewer
+ForeignAddress.line3.limit=Address Line 3 must be 35 characters or fewer
+ForeignAddress.line4.limit=Address Line 4 must be 35 characters or fewer
 ForeignAddress.countryCode.invalid=Enter a country from the list
 
 confirm-company-details.heading=Is this the company you want to register as the responsible member?
@@ -144,7 +144,7 @@ check-if-group.FALSE=No
 
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
 ultimate-parent-company-name.invalid=Enter the name of the group’s ultimate parent company
-ultimate-parent-company-name.error.length=Name of group’s ultimate global parent company must be 160 characters or fewer
+ultimate-parent-company-name.length=Name of group’s ultimate global parent company must be 105 characters or fewer
 ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
