@@ -18,23 +18,25 @@
 
 @(key: String, in: Return)(implicit messages: UniformMessages[Html])
 
+@serviceUrl = @{"/digital-services-tax/submit-return"}
+
 <div class="govuk-grid-column-two-thirds">
     <h1 class="heading-xlarge">@messages(s"$key.title")</h1>
     <div class="subsection--wide">
         <h2 class="govuk-heading-m">@messages(s"$key.company.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
-            @standard_cya_row(key, "group-liability", Html(s"${in.totalLiability}"), "x", Html("£"))(messages)
-            @standard_cya_row(key, "allowance-deducted", Html(s"${in.allowanceAmount}"), "x", Html("£"))(messages)
-            @standard_cya_row(key, "report-cross-border-transaction-relief", Html(s"${in.crossBorderReliefAmount != 0}"), "x")(messages)
-            @standard_cya_row(key, "relief-deducted", Html(s"${in.crossBorderReliefAmount}"), "x", Html("£"))(messages)
+            @standard_cya_row(key, "group-liability", Html(s"${in.totalLiability}"), s"$serviceUrl/002/group-liability", Html("£"))(messages)
+            @standard_cya_row(key, "allowance-deducted", Html(s"${in.allowanceAmount}"), s"$serviceUrl/002/allowance-deducted", Html("£"))(messages)
+            @standard_cya_row(key, "report-cross-border-transaction-relief", if(in.crossBorderReliefAmount != 0){ messages("common.yes")} else { messages("common.no")}, s"$serviceUrl/002/report-cross-border-transaction-relief")(messages)
+            @standard_cya_row(key, "relief-deducted", Html(s"${in.crossBorderReliefAmount}"), s"$serviceUrl/002/relief-deducted", Html("£"))(messages)
 
-            @in.companiesAmount.map { co =>
+            @in.companiesAmount.zipWithIndex.map { case (co, i) =>
             <div>
                 <dt class="cya-question">@messages(s"$key.group-company", co._1.name)</dt>
                 <dd class="cya-answer">£ @co._2</dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="x">@messages("common.change")
+                    <a href=@{s"$serviceUrl/002/company-liabilities-${i}"}>@messages("common.change")
                         <span class="govuk-visually-hidden">@messages(s"$key.group-company.change", co._1.name)</span>
                     </a>
                 </dd>
@@ -45,10 +47,10 @@
         @in.alternateCharge.map{ alt =>
             <h2 class="govuk-heading-m">@messages(s"$key.${Activity.toUrl(alt._1)}.title")</h2>
             <dl class="govuk-check-your-answers cya-questions-short">
-                @standard_cya_row(key, s"report-alternative-charge", messages("common.yes"), "x")(messages)
-                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-alternative-charge", messages("common.yes"), "x")(messages)
-                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-loss", if(alt._2 == 0){ messages("common.yes")} else { messages("common.no")}, "x")(messages)
-                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-operating-margin", Html(s"${alt._2}%"), "x")(messages)
+                @standard_cya_row(key, s"report-alternative-charge", messages("common.yes"), s"$serviceUrl/002/select-activities")(messages)
+                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-alternative-charge", messages("common.yes"), s"$serviceUrl/002/report-${Activity.toUrl(alt._1)}-alternative-charge")(messages)
+                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-loss", if(alt._2 == 0){ messages("common.yes")} else { messages("common.no")}, s"$serviceUrl/002/report-${Activity.toUrl(alt._1)}-loss")(messages)
+                @standard_cya_row(key, s"report-${Activity.toUrl(alt._1)}-operating-margin", Html(s"${alt._2}%"), s"$serviceUrl/002/report-${Activity.toUrl(alt._1)}-operating-margin")(messages)
             </dl>
         }
 
