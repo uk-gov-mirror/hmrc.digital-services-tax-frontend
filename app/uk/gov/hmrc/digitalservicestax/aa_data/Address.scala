@@ -17,7 +17,7 @@
 package uk.gov.hmrc.digitalservicestax.data
 
 sealed trait Address {
-  def line1: NonEmptyString
+  def line1: MandatoryAddressLine
   def line2: OptAddressLine
   def line3: OptAddressLine
   def line4: OptAddressLine
@@ -28,7 +28,7 @@ sealed trait Address {
 }
 
 case class UkAddress(
-  line1: NonEmptyString,
+  line1: MandatoryAddressLine,
   line2: OptAddressLine,
   line3: OptAddressLine,
   line4: OptAddressLine,
@@ -39,7 +39,7 @@ case class UkAddress(
 }
 
 case class ForeignAddress(
-  line1: NonEmptyString,
+  line1: MandatoryAddressLine,
   line2: OptAddressLine,
   line3: OptAddressLine,
   line4: OptAddressLine,
