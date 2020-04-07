@@ -31,7 +31,7 @@ import ltbs.uniform.validation._
 object RegJourney {
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: OptAddressLine :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: OptAddressLine :: MandatoryAddressLine :: NilTypes
 
 
   private def message(key: String, args: String*) = {
@@ -42,10 +42,10 @@ object RegJourney {
   def addressLineLimit(addressType: String, addressKey: String): Rule[Address] = {
     Rule.condAtPath[Address](s"$addressType", addressKey)(
       {
-        case add: Address if addressKey == "line1"  => add.line1.length <= 40
-        case add: Address if addressKey == "line2"  => add.line2.length <= 40
-        case add: Address if addressKey == "line3" || addressKey == "town"  => add.line3.length <= 40
-        case add: Address if addressKey == "line4" || addressKey == "county" => add.line4.length <= 40
+        case add: Address if addressKey == "line1"  => add.line1.length <= 35
+        case add: Address if addressKey == "line2"  => add.line2.length <= 35
+        case add: Address if addressKey == "line3" || addressKey == "town"  => add.line3.length <= 35
+        case add: Address if addressKey == "line4" || addressKey == "county" => add.line4.length <= 35
         case _ => true
       },
       "limit"
@@ -126,8 +126,8 @@ object RegJourney {
               parentName <- ask[NonEmptyString]("ultimate-parent-company-name",
                 validation =
                   Rule.cond[NonEmptyString](
-                    _.length < 160,
-                    "error.length"
+                    _.length <= 105,
+                    "length"
                   ) followedBy
                   Rule.cond[NonEmptyString](
                     _.matches("""^[a-zA-Z0-9- '&\\/]{1,105}$"""),
