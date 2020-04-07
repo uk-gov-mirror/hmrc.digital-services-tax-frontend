@@ -54,7 +54,7 @@ class JourneyController @Inject()(
 
   def index: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg = getMsg
-    val backend = connector.cached
+    val backend = connector.uncached
 
     backend.lookupRegistration().flatMap {
       case None =>
