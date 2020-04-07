@@ -229,7 +229,7 @@ class JourneyController @Inject()(
                   Redirect(routes.JourneyController.index)
                   Ok(views.html.main_template(
                     title =
-                      s"${msg("common.title.short")} - ${msg("common.title")}"
+                      s"${msg("confirmation.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
                   )(views.html.end.confirmation_return("confirmation")(msg)))
                 }
               }
@@ -250,7 +250,7 @@ class JourneyController @Inject()(
         Future.successful(
           Ok(views.html.main_template(
             title =
-              s"${msg("common.title.short")} - ${msg("common.title")}"
+              s"${msg("registration-sent.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
           )(views.html.end.confirmation("registration-sent", reg.companyReg.company.name, reg.contact.email)(msg)))
         )
     }
@@ -268,7 +268,7 @@ class JourneyController @Inject()(
         backend.lookupOutstandingReturns().map { periods => 
           Ok(views.html.main_template(
             title =
-              s"${msg("common.title.short")} - ${msg("common.title")}",
+              s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
               mainClass = Some("full-width")
           )(views.html.landing(reg, periods.toList.sortBy(_.start))))
         }
