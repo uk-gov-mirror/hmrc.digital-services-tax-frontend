@@ -1,0 +1,58 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(lineItems: List[(java.time.LocalDate, String, BigDecimal)], messages: UniformMessages[Html])
+
+@formatter = @{java.time.format.DateTimeFormatter.ofPattern("d MMM YYYY")}
+
+<div class="govuk-grid-column-full">
+
+  <h1 class="heading-xlarge">
+    @messages("financial-details.heading")
+  </h1>
+  
+  <p>@messages("financial-details.balance", java.text.NumberFormat.getInstance.format(lineItems.map{_._3}.sum))</p>
+
+  <p>@messages("financial-details.delay", 3)</p>
+
+  <table class="govuk-table">
+    <caption class="govuk-table__caption"></caption>
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+	<th scope="col" class="govuk-table__header app-custom-class">@messages("financial-details.table.date")</th>
+	<th scope="col" class="govuk-table__header app-custom-class">@messages("financial-details.table.transaction")</th>
+	<th scope="col" class="govuk-table__header app-custom-class">@messages("financial-details.table.credits")</th>
+	<th scope="col" class="govuk-table__header app-custom-class">@messages("financial-details.table.debits")</th>
+	<th scope="col" class="govuk-table__header app-custom-class">@messages("financial-details.table.balance")</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      @withRunningTotal = @{lineItems zip lineItems.map(_._3).inits.toList.init.map{_.sum}.reverse}
+      @withRunningTotal.map { case ((date, desc, amt), running) => 
+      <tr class="govuk-table__row">
+	<th scope="row" class="govuk-table__header">@{date.format(formatter)}</th>
+	<td class="govuk-table__cell">@desc</td>
+	<td class="govuk-table__cell">@{Option(amt) collect { case x if x > 0 => f"$amt%,.2f" }}</td>
+	<td class="govuk-table__cell">@{Option(amt) collect { case x if x < 0 => f"$amt%,.2f" }}</td>	
+	<td class="govuk-table__cell">@{f"$running%,.2f"}</td>
+      </tr>
+      }.reverse
+    </tbody>
+  </table>
+
+  <p><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index" class="govuk-link">@messages("financial-details.back-bottom")</a></p>
+
+</div>
