@@ -39,7 +39,18 @@ object RegJourney {
     Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
   }
 
-  def addressLineLimit(addressType: String, addressKey: String): Rule[Address] = {
+   private def mandatoryAddressLineFormat(addressType: String, addressKey: String): Rule[Address] = {
+    Rule.condAtPath[Address](s"$addressType", addressKey)(
+      {
+        case add: Address if addressKey == "line1" && addressType == "ForeignAddress" => add.line1.matches("""^[a-zA-Z0-9',&-./ ]*$""")
+        case add: Address if addressKey == "line1" && addressType == "UkAddress" => add.line1.matches("""^[a-zA-Z0-9',&-./ ]*$""")
+        case _ => true
+      },
+      "format"
+    )
+  }
+
+  private def addressLineLimit(addressType: String, addressKey: String): Rule[Address] = {
     Rule.condAtPath[Address](s"$addressType", addressKey)(
       {
         case add: Address if addressKey == "line1"  => add.line1.length <= 35
@@ -59,7 +70,6 @@ object RegJourney {
     import interpreter._
 
 
-
     for {
       
       companyRegWrapper <- backendService.lookupCompany() >>= { // gets a CompanyRegWrapper but converts to a company
@@ -76,18 +86,30 @@ object RegJourney {
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
           case false =>
             (
-              ask[NonEmptyString]("company-name"),
+              ask[NonEmptyString]("company-name",
+                validation =
+                  Rule.cond[NonEmptyString](
+                    _.matches("""^[a-zA-Z0-9- '&]{1,105}$"""),
+                    "format"
+                  ) followedBy
+                  Rule.cond[NonEmptyString](
+                    _.length <= 105,
+                    "length"
+                  )
+              ),
               ask[Address](
                 "company-registered-office-address",
                 validation =
+                  mandatoryAddressLineFormat("UkAddress", "line1") followedBy
                   addressLineLimit("UkAddress", "line1") followedBy
-                    addressLineLimit("UkAddress", "line2") followedBy
-                    addressLineLimit("UkAddress", "town") followedBy
-                    addressLineLimit("UkAddress", "county") followedBy
-                    addressLineLimit("ForeignAddress", "line1") followedBy
-                    addressLineLimit("ForeignAddress", "line2") followedBy
-                    addressLineLimit("ForeignAddress", "line3") followedBy
-                    addressLineLimit("ForeignAddress", "line4")
+                  addressLineLimit("UkAddress", "line2") followedBy
+                  addressLineLimit("UkAddress", "town") followedBy
+                  addressLineLimit("UkAddress", "county") followedBy
+                  mandatoryAddressLineFormat("ForeignAddress", "line1") followedBy
+                  addressLineLimit("ForeignAddress", "line1") followedBy
+                  addressLineLimit("ForeignAddress", "line2") followedBy
+                  addressLineLimit("ForeignAddress", "line3") followedBy
+                  addressLineLimit("ForeignAddress", "line4")
               )
             ).mapN(Company.apply).map(CompanyRegWrapper(_, useSafeId = true))
           case true =>
@@ -111,10 +133,12 @@ object RegJourney {
         ask[Address](
           "alternate-contact",
           validation =
+            mandatoryAddressLineFormat("UkAddress", "line1") followedBy
             addressLineLimit("UkAddress", "line1") followedBy
             addressLineLimit("UkAddress", "line2") followedBy
             addressLineLimit("UkAddress", "town")  followedBy
             addressLineLimit("UkAddress", "county") followedBy
+            mandatoryAddressLineFormat("ForeignAddress", "line1") followedBy
             addressLineLimit("ForeignAddress", "line1") followedBy
             addressLineLimit("ForeignAddress", "line2") followedBy
             addressLineLimit("ForeignAddress", "line3") followedBy
@@ -130,17 +154,19 @@ object RegJourney {
                     "length"
                   ) followedBy
                   Rule.cond[NonEmptyString](
-                    _.matches("""^[a-zA-Z0-9- '&\\/]{1,105}$"""),
+                    _.matches("""^[a-zA-Z0-9- '&]{1,105}$"""),
                     "format"
                   )
               )
               parentAddress <- ask[Address](
                 "ultimate-parent-company-address",
                 validation =
+                  mandatoryAddressLineFormat("UkAddress", "line1") followedBy
                   addressLineLimit("UkAddress", "line1")  followedBy
                   addressLineLimit("UkAddress", "line2")  followedBy
                   addressLineLimit("UkAddress", "town")   followedBy
                   addressLineLimit("UkAddress", "county") followedBy
+                  mandatoryAddressLineFormat("ForeignAddress", "line1") followedBy
                   addressLineLimit("ForeignAddress", "line1") followedBy
                   addressLineLimit("ForeignAddress", "line2") followedBy
                   addressLineLimit("ForeignAddress", "line3") followedBy

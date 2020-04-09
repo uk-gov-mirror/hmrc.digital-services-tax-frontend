@@ -95,18 +95,19 @@ trait Widgets {
         Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
 
-  implicit def postcodeField    = validatedNonEmptyString(Postcode)
-  implicit def nesField         = validatedVariant(NonEmptyString)
-  implicit def utrField         = validatedNonEmptyString(UTR)
-  implicit def emailField       = validatedVariant(Email)
-  implicit def phoneField       = validatedNonEmptyString(PhoneNumber, 24)
-  implicit def percentField     = validatedVariant(Percent)
-  implicit def accountField     = validatedNonEmptyString(AccountNumber)
-  implicit def accountNameField = validatedNonEmptyString(AccountName, 35)
-  implicit def sortCodeField    = validatedNonEmptyString(SortCode)
-  implicit def ibanField        = validatedVariant(IBAN)
-  implicit def optAddressField  = validatedVariant(OptAddressLine)
-  implicit def restrictField    = validatedVariant(RestrictiveString)
+  implicit def postcodeField          = validatedNonEmptyString(Postcode)
+  implicit def nesField               = validatedVariant(NonEmptyString)
+  implicit def utrField               = validatedNonEmptyString(UTR)
+  implicit def emailField             = validatedVariant(Email)
+  implicit def phoneField             = validatedNonEmptyString(PhoneNumber, 24)
+  implicit def percentField           = validatedVariant(Percent)
+  implicit def accountField           = validatedNonEmptyString(AccountNumber)
+  implicit def accountNameField       = validatedNonEmptyString(AccountName, 35)
+  implicit def sortCodeField          = validatedNonEmptyString(SortCode)
+  implicit def ibanField              = validatedVariant(IBAN)
+  implicit def optAddressField        = validatedVariant(OptAddressLine)
+  implicit def mandatoryAddressField  = validatedVariant(MandatoryAddressLine)
+  implicit def restrictField          = validatedVariant(RestrictiveString)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
@@ -267,7 +268,7 @@ trait Widgets {
 
       //TODO check transformations with ltbs
       (
-        out.subField[MandatoryAddressLine]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(MandatoryAddressLine(_))}),
+        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
         out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("town", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("county", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
@@ -302,7 +303,7 @@ trait Widgets {
 
     def decode(out: Input): Either[ErrorTree, ForeignAddress] = {
       (
-        out.subField[MandatoryAddressLine]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(MandatoryAddressLine(_))}),
+        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
         out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("line3", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
         out.subField[OptAddressLine]("line4", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
