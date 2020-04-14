@@ -60,6 +60,7 @@ trait SimpleJson {
   implicit val countryCodeFormat    = validatedStringFormat(CountryCode, "country code")
   implicit val sortCodeFormat       = validatedStringFormat(SortCode, "sort code")
   implicit val accountNumberFormat  = validatedStringFormat(AccountNumber, "account number")
+  implicit val accountNameFormat    = validatedStringFormat(AccountName, "account name")
   implicit val ibanFormat           = validatedStringFormat(IBAN, "IBAN number")
   implicit val periodKeyFormat      = validatedStringFormat(Period.Key, "Period Key")
   implicit val restrictiveFormat    = validatedStringFormat(RestrictiveString, "name")

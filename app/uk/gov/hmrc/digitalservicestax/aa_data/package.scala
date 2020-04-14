@@ -68,6 +68,11 @@ package object data extends SimpleJson {
     """^[a-zA-Z&^]{1,35}$"""
   )
 
+  type AccountName = String @@ AccountName.Tag
+  object AccountName extends RegexValidatedString(
+    """^[a-zA-Z&^]{1,35}$"""
+  )
+
   type CountryCode = String @@ CountryCode.Tag
   object CountryCode extends RegexValidatedString(
     """^[A-Z][A-Z]$""", 
