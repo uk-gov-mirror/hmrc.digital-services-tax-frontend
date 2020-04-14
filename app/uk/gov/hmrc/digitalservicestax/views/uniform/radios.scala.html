@@ -38,7 +38,6 @@
 <div class="radios@if(inlineRadioKeys){--inline}">
   @for((opt,num) <- if(reverseRadios){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
     <div class="radios__item multiple-choice" data-target="@keyNoDots-@opt">
-
       <input
         class="radios__input"
         id="@keyNoDots-@num"

@@ -30,7 +30,7 @@ import ltbs.uniform.validation._
 object ReturnJourney {
 
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
-  type ReturnAskTypes = (NonEmptyString, Boolean) :: DomesticBankAccount :: ForeignBankAccount :: Set[Activity] :: Money :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
+  type ReturnAskTypes = (NonEmptyString, Boolean) :: Set[Activity] :: Money :: RepaymentDetails :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   private def message(key: String, args: String*) = {
     import play.twirl.api.HtmlFormat.escape
@@ -41,14 +41,6 @@ object ReturnJourney {
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
   ): F[Return] = {
     import interpreter._
-
-    def askRepaymentDetails(key: String): F[RepaymentDetails] = for {
-      nameAndType <- ask[(NonEmptyString, Boolean)](s"$key-type")
-      account     <- nameAndType._2 match {
-        case true => ask[DomesticBankAccount](s"$key-domestic")
-        case false => ask[ForeignBankAccount](s"$key-foreign")          
-      }
-    } yield RepaymentDetails(nameAndType._1, account)
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
@@ -102,7 +94,7 @@ object ReturnJourney {
         askAmountForCompanies(groupCos),
         ask[Money]("allowance-deducted"),
         ask[Money]("group-liability"),
-        askRepaymentDetails("bank-details") when ask[Boolean]("repayment")
+        ask[RepaymentDetails]("bank-details") when ask[Boolean]("repayment")
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA(dstReturn))
     } yield dstReturn
