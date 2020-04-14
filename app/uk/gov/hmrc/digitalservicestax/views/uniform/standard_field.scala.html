@@ -21,8 +21,9 @@
 
 @key=@{keyList.mkString(".")}
 @errorKey=@{s"${keyList.mkString(".")}-error"}
+@hasFieldset=@{(key == "manage-companies" || key == "bank-details.bankAccount")}
 
-@if(key == "manage-companies") {
+@if(hasFieldset) {
     <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
         <fieldset
         class="fieldset"
@@ -110,7 +111,7 @@
   </p>
 }
 
-@if(key == "loan-amount.estimate") {
+@if(hasFieldset) {
     </fieldset>
 </div>
 }

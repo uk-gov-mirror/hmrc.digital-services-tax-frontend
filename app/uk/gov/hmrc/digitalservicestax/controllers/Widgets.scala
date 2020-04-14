@@ -85,11 +85,12 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
-  def validatedNonEmptyString(validated: ValidatedType[String])(
+  def validatedNonEmptyString(validated: ValidatedType[String], maxLen: Int = Integer.MAX_VALUE)(
     implicit baseForm: FormField[String, Html]
   ): FormField[String @@ validated.Tag, Html] =
     baseForm.simap{
       case "" => Left(ErrorMsg("required").toTree)
+      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree) 
       case x =>
         Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
@@ -100,8 +101,9 @@ trait Widgets {
   implicit def emailField       = validatedVariant(Email)
   implicit def phoneField       = validatedVariant(PhoneNumber)
   implicit def percentField     = validatedVariant(Percent)
-  implicit def accountField     = validatedVariant(AccountNumber)
-  implicit def sortCodeField    = validatedVariant(SortCode)
+  implicit def accountField     = validatedNonEmptyString(AccountNumber)
+  implicit def accountNameField = validatedNonEmptyString(AccountName, 35)
+  implicit def sortCodeField    = validatedNonEmptyString(SortCode)
   implicit def ibanField        = validatedVariant(IBAN)
   implicit def restrictField    = validatedVariant(RestrictiveString)
 
