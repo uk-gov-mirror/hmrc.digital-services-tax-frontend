@@ -1,4 +1,8 @@
 ;(function(window, document) {
+
+    var showHideContent = new GOVUK.ShowHideContent()
+    showHideContent.init()
+
     var countryEl = document.querySelector("#location-autocomplete");
     if (countryEl) {
         openregisterLocationPicker({

@@ -439,8 +439,24 @@ repayment.required=Select yes if you need to be repaid any Digital Services Tax 
 repayment.TRUE=Yes
 repayment.FALSE=No
 
+bank-details.accountName.heading=Account name
+bank-details.accountName.required=Enter the account name
+bank-details.accountName.invalid=Account name must only include letters a to z
+bank-details.accountName.length.exceeded=Account name must be 35 characters or fewer
+bank-details.bankAccount.heading.large.label=Is this a UK bank account?
+bank-details.bankAccount.required=Select yes if this is a UK bank account
+bank-details.bankAccount.DomesticBankAccount=Yes
+bank-details.bankAccount.ForeignBankAccount=No
+
+bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
+bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
+bank-details.bankAccount.DomesticBankAccount.sortCode.required=Enter the sort code
+bank-details.bankAccount.DomesticBankAccount.sortCode.invalid=Enter the sort code in the correct format, like 123456
+bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.heading=Building society roll number (if you have one)
+bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.hint=You can find it on your card, statement or passbook
+bank-details.bankAccount.ForeignBankAccount.iban.heading=International Bank Account Number (IBAN)
+
 bank-details-type.heading=Your bank details for repayment
-bank-details-type.invalid=Hey
 bank-details-type._1.heading=Account Name
 bank-details-type._2.required=Select yes if this is a UK bank account
 bank-details-type._2.TRUE=Yes
@@ -449,11 +465,15 @@ bank-details-type._2.heading.large=Is this a UK bank account?
 
 bank-details-type-domestic.heading=What are your UK bank account details?
 bank-details-domestic.sortCode.heading.large.label=Sort code
-bank-details-domestic.accountNo.heading.large.label=Account number
+bank-details.bankAccount.DomesticBankAccount.accountNo.heading=Account number
+bank-details.bankAccount.DomesticBankAccount.accountNo.required=Enter the account number
+bank-details.bankAccount.DomesticBankAccount.accountNo.invalid=Enter the account number in the correct format, like 123456 or 12345678
+bank-details.bankAccount.DomesticBankAccount.accountNo.length.exceeded=Enter the account number in the correct format, like 123456 or 12345678
 bank-details-domestic.buildingSocietyNumber.heading.large.label=Building society roll number (if you have one)
 
 bank-details-foreign.listing.heading=What are your bank account details?
 bank-details-foreign.iban.heading.large.label=International Bank Account Number (IBAN)
+bank-details.bankAccount.ForeignBankAccount.iban.invalid=Enter the International Bank Account Number (IBAN)
 
 #Returns cya
 check-your-answers.ret.title=Check your answers before sending your return for 1 April 2020 to July 2020
@@ -541,11 +561,13 @@ phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +
 
 contact-details.email.required=Please enter a contact email
 email.required=Please enter an email address
-required=This is a required field
+# DO NOT MERGE UNCOMMENT BELOW
+#required=This is a required field
 
 contact-details.email.invalid=Please enter a valid contact email
 email.invalid=Please enter a valid email address
-invalid=Please enter a valid string
+# DO NOT MERGE UNCOMMENT BELOW
+#invalid=Please enter a valid string
 
 accessibility-statement.title=Accessibility Statement - Digital Services Tax
 accessibility-statement.heading=Accessibility statement for Digital Services Tax

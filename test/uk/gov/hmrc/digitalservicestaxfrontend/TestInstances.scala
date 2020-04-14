@@ -216,7 +216,7 @@ object TestInstances {
 
   def genRepayment: Gen[RepaymentDetails] =
     (
-      nonEmptyString,
+      AccountName.gen,
       genBankAccount
       ).mapN(RepaymentDetails.apply)
 
