@@ -33,7 +33,7 @@ not-a-date=Enter a real date
 
 # time out
 time-out.title=For your security, we signed you out
-time-out.save=Your progress will saved for 30 days
+time-out.save=Your progress will be saved for 30 days
 
 #Registration
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
