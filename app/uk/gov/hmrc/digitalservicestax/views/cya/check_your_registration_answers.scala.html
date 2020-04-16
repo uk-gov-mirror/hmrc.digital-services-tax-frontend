@@ -129,13 +129,13 @@
 
         <dl class="govuk-check-your-answers cya-questions-short">
             @standard_cya_row(
-                s"$key.reg",
+                key,
                 "liability-start-date",
                 Html(s"${formatDate(in.dateLiable)}"),
                 s"$serviceUrl/check-liability-date"
             )
             @standard_cya_row(
-                s"$key.reg",
+                key,
                 "accounting-end-date",
                 Html(s"${formatDate(in.accountingPeriodEnd)}"),
                 s"$serviceUrl/accounting-period-end-date"
