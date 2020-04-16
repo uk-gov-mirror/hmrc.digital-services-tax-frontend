@@ -65,12 +65,12 @@ package object data extends SimpleJson {
 
   type MandatoryAddressLine = String @@ MandatoryAddressLine.Tag
   object MandatoryAddressLine extends RegexValidatedString(
-    regex = """^[a-zA-Z0-9',&-./ ]{1,35}$"""
+    regex = """^[a-zA-Z0-9',&\- ]{1, 35}$"""
   )
 
   type OptAddressLine = String @@ OptAddressLine.Tag
   object OptAddressLine extends RegexValidatedString(
-    regex = """^[a-zA-Z0-9',&-./ ]*$"""
+    regex = """^[a-zA-Z0-9',&\- ]{0, 35}$"""
   )
 
   type RestrictiveString = String @@ RestrictiveString.Tag
