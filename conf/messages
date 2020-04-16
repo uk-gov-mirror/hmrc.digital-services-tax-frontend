@@ -33,7 +33,7 @@ not-a-date=Enter a real date
 
 # time out
 time-out.title=For your security, we signed you out
-time-out.save=Your progress will saved for 30 days
+time-out.save=Your progress will be saved for 30 days
 
 #Registration
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
@@ -102,9 +102,9 @@ ForeignAddress.line3.limit=Address Line 3 must be 35 characters or fewer
 ForeignAddress.line4.limit=Address Line 4 must be 35 characters or fewer
 ForeignAddress.countryCode.invalid=Enter a country from the list
 
-confirm-company-details.heading=Is this the company you want to register?
+confirm-company-details.heading=Is this the company you want to register as the responsible member?
 confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
-confirm-company-details.required=Select yes if this is the company you want to register
+confirm-company-details.required=Select yes if this is the company you want to register as the responsible member
 confirm-company-details.TRUE=Yes
 confirm-company-details.FALSE=No
 
@@ -140,7 +140,9 @@ check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent
     <li>a member of a Generally Accepted Accounting Principles (GAAP) group and not a consolidated subsidiary of another entity</li>\
     <li>not a member of a GAAP group</li>\
   </ul>\
-  <p>We use the meaning of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
+  <p>You can find a list of acceptable GAAP in the \
+    <a href="https://www.gov.uk/hmrc-internal-manuals/digital-services-tax" target="_blank">Digital Services Tax Manual (opens in a new window or tab)</a>\
+  </p>
 check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
@@ -178,10 +180,10 @@ contact-details.phoneNumber.heading= Phone number
 contact-details.phoneNumber.hint=For international numbers include the country code.
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
-contact-details.forename.name=Forename name
+#contact-details.forename.name=Forename name
 
 check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
-check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020 
+check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
@@ -205,43 +207,50 @@ accounting-period-end-date.day-and-year.empty=The end date of the group’s firs
 accounting-period-end-date.month-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month and year
 
 #Reg cya
-cya.title=Check your answers before sending your application
-cya.company.title=Your company details
+check-your-answers.reg.title=Check your answers before sending your application
+check-your-answers.reg.company.title=Responsible member details
 
-cya.check-if-group.question=Is the company you are registering part of a group?
-cya.check-if-group.change=if the company you are registering is part of a group
+check-your-answers.reg.check-if-group.question=Is the company you are registering part of a group?
+check-your-answers.reg.check-if-group.change=if the company you are registering is part of a group
 
-cya.company-name-and-reg-address.question=Company name Registered Office address
-cya.company-name-and-reg-address.change=Company name and Registered Office address
+check-your-answers.reg.company-name-and-reg-address.question=Company name Registered Office address
+check-your-answers.reg.company-name-and-reg-address.change=Company name and Registered Office address
 
-cya.ultimate-parent-company.title=Ultimate global parent company details
-cya.ultimate-parent-company-name.question=Company name
-cya.ultimate-parent-company-name.change=company name
+check-your-answers.reg.ultimate-parent-company.title=Ultimate global parent company details
+check-your-answers.reg.ultimate-parent-company-name.question=Company name
+check-your-answers.reg.ultimate-parent-company-name.change=company name
 
-cya.ultimate-parent-company-address.question=Registered Office address
-cya.ultimate-parent-company-address.change=Registered Office address
+check-your-answers.reg.ultimate-parent-company-address.question=Registered Office address
+check-your-answers.reg.ultimate-parent-company-address.change=Registered Office address
 
-cya.contact-details.title=Contact person’s details
-cya.contact-details-name.question=Full name
-cya.contact-details.change.name=full name
-cya.contact-details-phone-number.question=Phone number
-cya.contact-details.change.phone-number=phone number
-cya.contact-details-email.question=Email address
-cya.contact-details.change.email=email
+check-your-answers.reg.contact-details.title=Contact person’s details
+check-your-answers.reg.contact-details-name.question=Full name
+check-your-answers.reg.contact-details.change.name=full name
+check-your-answers.reg.contact-details-phone-number.question=Phone number
+check-your-answers.reg.contact-details.change.phone-number=phone number
+check-your-answers.reg.contact-details-email.question=Email address
+check-your-answers.reg.contact-details.change.email=email
 
-cya.liability-date.title=Accounting period details
-cya.liability-start-date.question=Liability start date
-cya.check-liability-date.change=Change the date the company become liable for Digital Services Tax
-cya.liability-start-date.change=liability start date
+check-your-answers.reg.liability-date.title=Accounting period details
+check-your-answers.reg.liability-start-date.question=Liability start date
+check-your-answers.reg.check-liability-date.change=Change the date the company become liable for Digital Services Tax
+check-your-answers.reg.liability-start-date.change=liability start date
 
-cya.accounting-end-date.question=First accounting period end date
-cya.accounting-end-date.change=first accounting period end date
-cya.accounting-period-end-date.change=Change the end date of the company’s first accounting period for Digital Services Tax
+check-your-answers.reg.accounting-end-date.question=First accounting period end date
+check-your-answers.reg.accounting-end-date.change=first accounting period end date
+check-your-answers.reg.accounting-period-end-date.change=Change the end date of the company’s first accounting period for Digital Services Tax
 
-cya.submission.title=Send your details
-cya.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
+check-your-answers.reg.submission.title=Send your details
+check-your-answers.reg.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
   the details you are providing are correct.
-cya.warning.body=You could be prosecuted if you deliberately submit false or misleading information.
+check-your-answers.reg.warning.body=You could be prosecuted if you deliberately submit false or misleading information.
+
+check-your-answers.reg.submission.group=By submitting this notification, you are confirming that:
+
+check-your-answers.reg.submission.group.list.1={0} is authorised to act on behalf of {1} as the group's responsible member
+check-your-answers.reg.submission.group.list.2={0} has agreed to provide the information and resources that {1} needs to comply with its Digital Services Tax obligations
+check-your-answers.reg.submission.group.list.3=to the best of your knowledge, the details you are providing are correct and complete
+check-your-answers.save-continue=Accept and send
 
 #Reg complete
 registration-sent.heading=Registration sent
@@ -298,9 +307,10 @@ landing.balance=View your balance and transactions history
 #returns
 manage-companies-add-add.heading=Company details
 manage-companies.required=Select yes if you need to add another company to your group
-manage-companies.listing.heading=Confirm your group’s companies
-manage-companies.radio.heading=Do you need to add another company to your group?
-manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
+manage-companies.listing.heading=Confirm the companies in your group that have a Digital Services Tax liability
+manage-companies.radio.heading=Do you need to add another company?
+manage-companies.radio.hint=You must tell us about all the companies in your group that have a Digital Services Tax \
+  liability for this return period.
 manage-companies.Add=Yes
 manage-companies.Continue=No
 remove-company=Remove company
@@ -448,7 +458,6 @@ bank-details.bankAccount.required=Select yes if this is a UK bank account
 bank-details.bankAccount.DomesticBankAccount=Yes
 bank-details.bankAccount.ForeignBankAccount=No
 
-bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.required=Enter the sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.invalid=Enter the sort code in the correct format, like 123456
