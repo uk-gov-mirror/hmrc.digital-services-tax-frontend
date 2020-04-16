@@ -85,28 +85,32 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
-  def validatedNonEmptyString(validated: ValidatedType[String], maxLen: Int = Integer.MAX_VALUE)(
+  def validatedString(
+    validated: ValidatedType[String],
+    maxLen: Int = Integer.MAX_VALUE,
+    noneEmpty: Boolean = true
+  )(
     implicit baseForm: FormField[String, Html]
   ): FormField[String @@ validated.Tag, Html] =
     baseForm.simap{
-      case "" => Left(ErrorMsg("required").toTree)
-      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree) 
+      case "" if noneEmpty => Left(ErrorMsg("required").toTree)
+      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
       case x =>
         Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
 
-  implicit def postcodeField          = validatedNonEmptyString(Postcode)
+  implicit def postcodeField          = validatedString(Postcode)
   implicit def nesField               = validatedVariant(NonEmptyString)
-  implicit def utrField               = validatedNonEmptyString(UTR)
+  implicit def utrField               = validatedString(UTR)
   implicit def emailField             = validatedVariant(Email)
   implicit def phoneField             = validatedNonEmptyString(PhoneNumber, 24)
   implicit def percentField           = validatedVariant(Percent)
-  implicit def accountField           = validatedNonEmptyString(AccountNumber)
-  implicit def accountNameField       = validatedNonEmptyString(AccountName, 35)
-  implicit def sortCodeField          = validatedNonEmptyString(SortCode)
+  implicit def accountField           = validatedString(AccountNumber)
+  implicit def accountNameField       = validatedString(AccountName, 35)
+  implicit def sortCodeField          = validatedString(SortCode)
   implicit def ibanField              = validatedVariant(IBAN)
-  implicit def optAddressField        = validatedVariant(OptAddressLine)
-  implicit def mandatoryAddressField  = validatedVariant(MandatoryAddressLine)
+  implicit def mandatoryAddressField  = validatedString(MandatoryAddressLine, 35)
+  implicit def optAddressField        = validatedString(OptAddressLine, 35, false)
   implicit def restrictField          = validatedVariant(RestrictiveString)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
