@@ -33,6 +33,8 @@
     headKey.contains("company-liabilities")
 }
 
+@telInput=@{key.contains("phoneNumber")}
+
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
     @standard_field(key, errors, "string", messages) {
     
@@ -51,13 +53,15 @@
         case (false,true) => s"${key.mkString(".")}-error"
         case _ => ""
         }){ describedBy =>
-        <input class="form-control form-control-2-3 @if(errors.definedAtRoot) {form-control-error}"
-            id="@{key.mkString("_")}-input"
-            name="@{key.mkString(".")}"
-            value="@{values}"
-            @autoFields.map { f => autocomplete=@f }
-            @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
-        />  
+            <input 
+                class="form-control form-control-2-3 @if(errors.definedAtRoot) {form-control-error}"
+                id="@{key.mkString("_")}-input"
+                @if(telInput){ inputmode="numeric" pattern="[0-9]*" }
+                name="@{key.mkString(".")}"
+                value="@{values}"
+                @autoFields.map { f => autocomplete=@f }
+                @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
+            />  
         }
 
         @if(percentageInput || currencyInput){
