@@ -234,9 +234,6 @@ registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
 registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to in \
   the next 5 days.
-#registration-sent.what-you-do-next.title=What you must do next
-#registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
-#registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.print-save=Print or save your registered details
 registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="https://www.gov.uk/topic/business-tax/digital-services-tax" target="_blank">check the Digital Services Tax guidance</a>{0}.
