@@ -35,6 +35,20 @@
 
 @telInput=@{key.contains("phoneNumber")}
 
+@autoComplete=@{key match {
+    case _ if key.contains("forename") => "given-name"
+    case _ if key.contains("surname") => "family-name"
+    case _ if key.contains("phoneNumber") => "tel"
+    case _ if key.contains("line1") => "address-line1"
+    case _ if key.contains("line2") => "address-line2"
+    case _ if key.contains("line3") => "address-line3"
+    case _ if key.contains("line4") => "address-level4"
+    case _ if key.contains("postcode") | key.contains("company-registered-office-postcode") => "postal-code"
+    case _ if key.contains("country") => "country-name"
+    case _ if key.contains("email") => "email"
+    case _ => ""
+}}
+
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
     @standard_field(key, errors, "string", messages) {
     
@@ -61,6 +75,7 @@
                 value="@{values}"
                 @autoFields.map { f => autocomplete=@f }
                 @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
+                @if(autoComplete){autocomplete="@{autoComplete}"}
             />  
         }
 
