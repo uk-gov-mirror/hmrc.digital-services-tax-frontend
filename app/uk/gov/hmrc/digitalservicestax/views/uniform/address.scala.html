@@ -27,8 +27,16 @@
         case "postcode" => "form-control-1-4"
         case _ => "form-control-2-4"
       },
+      field match {
+        case "line1" => "address-line1"
+        case "line2" => "address-line2"
+        case "town" => "address-level2"
+        case "county" => "address-level1"
+        case "postcode" => "postal-code"
+        case _ => ""
+      },
       errors.valueAtPath(List(field))
-    ) { case (formControlClass, errorOpt) =>
+    ) { case (formControlClass, autoComplete, errorOpt) =>
 
       <div class="form-group@if(errorOpt.nonEmpty) { form-group-error}">
 
@@ -46,6 +54,7 @@
           @if(errorOpt.nonEmpty){aria-describedBy="@key-@field-error"}
           name="@{key.mkString(".")}.@{field}"
 	        value="@{values.valueAt(field).headOption}"
+          @if(autoComplete){autocomplete="@{autoComplete}"}
         />
       </div>
     }
