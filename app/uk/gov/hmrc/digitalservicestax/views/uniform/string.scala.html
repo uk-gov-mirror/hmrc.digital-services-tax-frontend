@@ -46,7 +46,7 @@
     case k if k.contains("postcode") | k.contains("company-registered-office-postcode") => "postal-code"
     case k if k.contains("country") => "country-name"
     case k if k.contains("email") => "email"
-    case k => ""
+    case _ => ""
 }}
 
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
