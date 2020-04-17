@@ -236,7 +236,7 @@ registration-sent.what-happens-next.p1=We will send your Digital Services Tax re
   the next 5 days.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.print-save=Print or save your registered details
-registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="https://www.gov.uk/topic/business-tax/digital-services-tax" target="_blank">check the Digital Services Tax guidance</a>.
+registration-sent.help-using-this-service.p1=For help with payments and returns, {0}
 registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
 registration-sent.help-using-this-service.list.1=do not receive your registration number
 registration-sent.help-using-this-service.list.2=need to change your registered details
