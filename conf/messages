@@ -541,6 +541,9 @@ phoneNumber.required=Enter a phone number
 contact-details.phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 
+contact-details.phoneNumber.length.exceeded=Phone number must be 24 characters or fewer
+phoneNumber.length.exceeded=Phone number must be 24 characters or fewer
+
 contact-details.email.required=Please enter a contact email
 email.required=Please enter an email address
 # DO NOT MERGE UNCOMMENT BELOW

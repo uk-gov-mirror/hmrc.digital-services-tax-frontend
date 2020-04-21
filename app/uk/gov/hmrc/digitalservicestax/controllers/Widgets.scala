@@ -99,7 +99,7 @@ trait Widgets {
   implicit def nesField         = validatedVariant(NonEmptyString)
   implicit def utrField         = validatedNonEmptyString(UTR)
   implicit def emailField       = validatedVariant(Email)
-  implicit def phoneField       = validatedVariant(PhoneNumber)
+  implicit def phoneField       = validatedNonEmptyString(PhoneNumber, 24)
   implicit def percentField     = validatedVariant(Percent)
   implicit def accountField     = validatedNonEmptyString(AccountNumber)
   implicit def accountNameField = validatedNonEmptyString(AccountName, 35)
