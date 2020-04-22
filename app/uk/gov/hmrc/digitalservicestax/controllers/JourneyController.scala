@@ -96,6 +96,9 @@ class JourneyController @Inject()(
     def submitReturn(period: Period,ret: Return): WebMonad[Unit,Html] = 
       alwaysRerun(backend.submitReturn(period, ret))
 
+    def lookupFinancialDetails(): WebMonad[List[FinancialTransaction],Html] = 
+      alwaysRerun(backend.lookupFinancialDetails())
+    
   }
 
   val interpreter = DSTInterpreter(config, this, messagesApi)
