@@ -63,6 +63,7 @@ trait SimpleJson {
   implicit val ibanFormat                 = validatedStringFormat(IBAN, "IBAN number")
   implicit val periodKeyFormat            = validatedStringFormat(Period.Key, "Period Key")
   implicit val restrictiveFormat          = validatedStringFormat(RestrictiveString, "name")
+  implicit val companyNameFormat          = validatedStringFormat(CompanyName, "company name")
   implicit val mandatoryAddressLineFormat = validatedStringFormat(MandatoryAddressLine, "mandatory address line")
   implicit val optAddressLineFormat       = validatedStringFormat(OptAddressLine, "optional address line")
   implicit val dstRegNoFormat             = validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
@@ -163,7 +164,7 @@ object BackendAndFrontendJson extends SimpleJson {
         Company(
           {
             json \ "organisation" \ "organisationName"
-          }.as[NonEmptyString], {
+          }.as[CompanyName], {
             json \ "address"
           }.as[Address]
         ),

@@ -27,20 +27,20 @@
 @serviceUrl = @{"/digital-services-tax/register"}
 
 <div class="govuk-grid-column-two-thirds">
-    <h1 class="heading-xlarge">@messages(s"$key.reg.title")</h1>
+    <h1 class="heading-xlarge">@messages(s"$key.title")</h1>
     <div class="subsection--wide">
-        <h2 class="govuk-heading-m">@messages(s"$key.reg.company.title")</h2>
+        <h2 class="govuk-heading-m">@messages(s"$key.company.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
             @standard_cya_row(
-                s"$key.reg",
+                s"$key",
                 "check-if-group",
                 Html(s"${messages(s"common.${in.ultimateParent.fold("no")(_ => "yes")}")}"),
                 s"$serviceUrl/check-if-group"
             )
 
             <div>
-                <dt class="cya-question">@messages(s"$key.reg.company-name-and-reg-address.question")</dt>
+                <dt class="cya-question">@messages(s"$key.company-name-and-reg-address.question")</dt>
                 <dd class="cya-answer">
                     <span>@company.name</span><br/>
                     @for(line <- company.address.lines) {
@@ -49,7 +49,7 @@
                 </dd>
                 <dd class="app-check-your-answers__change">
                     <a href="@serviceUrl/company-contact-address">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages(s"$key.reg.company-name-and-reg-address.change")</span>
+                        <span class="govuk-visually-hidden">@messages(s"$key.company-name-and-reg-address.change")</span>
                     </a>
                 </dd>
             </div>
@@ -58,19 +58,19 @@
 
 @in.ultimateParent.map { up =>
     <div class="subsection--wide">
-        <h2 class="govuk-heading-m">@messages(s"$key.reg.ultimate-parent-company.title")</h2>
+        <h2 class="govuk-heading-m">@messages(s"$key.ultimate-parent-company.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
 
             @standard_cya_row(
-                s"$key.reg",
+                s"$key",
                 "ultimate-parent-company-name",
                 Html(s"${up.name}"),
                 s"$serviceUrl/ultimate-parent-company-name"
             )
 
             <div>
-                <dt class="cya-question">@messages(s"$key.reg.ultimate-parent-company-address.question")</dt>
+                <dt class="cya-question">@messages(s"$key.ultimate-parent-company-address.question")</dt>
                 <dd class="cya-answer">
                     @for(line <- up.address.lines) {
                         <span>@line</span>
@@ -79,7 +79,7 @@
                 </dd>
                 <dd class="app-check-your-answers__change">
                     <a href="@serviceUrl/ultimate-parent-company-address">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages(s"$key.reg.ultimate-parent-company-address.change")</span>
+                        <span class="govuk-visually-hidden">@messages(s"$key.ultimate-parent-company-address.change")</span>
                     </a>
                 </dd>
             </div>
@@ -88,35 +88,35 @@
 }
 
     <div class="subsection--wide">
-        <h2 class="govuk-heading-m">@messages(s"$key.reg.contact-details.title")</h2>
+        <h2 class="govuk-heading-m">@messages(s"$key.contact-details.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
             <div>
-                <dt class="cya-question">@messages(s"$key.reg.contact-details-name.question")</dt>
+                <dt class="cya-question">@messages(s"$key.contact-details-name.question")</dt>
                 <dd class="cya-answer">@in.contact.forename @in.contact.surname</dd>
                 <dd class="app-check-your-answers__change">
                     <a href="@serviceUrl/contact-details#contact-details_forename-input">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages(s"$key.reg.contact-details.change.name")</span>
+                        <span class="govuk-visually-hidden">@messages(s"$key.contact-details.change.name")</span>
                     </a>
                 </dd>
             </div>
 
             <div>
-                <dt class="cya-question">@messages(s"$key.reg.contact-details-phone-number.question")</dt>
+                <dt class="cya-question">@messages(s"$key.contact-details-phone-number.question")</dt>
                 <dd class="cya-answer">@in.contact.phoneNumber</dd>
                 <dd class="app-check-your-answers__change">
                     <a href="@serviceUrl/contact-details#contact-details_phoneNumber-input">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages(s"$key.reg.contact-details.change.phone-number")</span>
+                        <span class="govuk-visually-hidden">@messages(s"$key.contact-details.change.phone-number")</span>
                     </a>
                 </dd>
             </div>
 
             <div>
-                <dt class="cya-question">@messages(s"$key.reg.contact-details-email.question")</dt>
+                <dt class="cya-question">@messages(s"$key.contact-details-email.question")</dt>
                 <dd class="cya-answer">@in.contact.email</dd>
                 <dd class="app-check-your-answers__change">
                     <a href="@serviceUrl/contact-details#contact-details_email-input">@messages("tasklist.change")
-                        <span class="govuk-visually-hidden">@messages(s"$key.reg.contact-details.change.email")</span>
+                        <span class="govuk-visually-hidden">@messages(s"$key.contact-details.change.email")</span>
                     </a>
                 </dd>
             </div>
@@ -125,17 +125,17 @@
     </div>
 
     <div class="subsection--wide">
-        <h2 class="govuk-heading-m">@messages(s"$key.reg.liability-date.title")</h2>
+        <h2 class="govuk-heading-m">@messages(s"$key.liability-date.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
             @standard_cya_row(
-                s"$key.reg",
+                s"$key",
                 "liability-start-date",
                 Html(s"${formatDate(in.dateLiable)}"),
                 s"$serviceUrl/check-liability-date"
             )
             @standard_cya_row(
-                s"$key.reg",
+                s"$key",
                 "accounting-end-date",
                 Html(s"${formatDate(in.accountingPeriodEnd)}"),
                 s"$serviceUrl/accounting-period-end-date"
@@ -143,17 +143,17 @@
         </dl>
     </div>
 
-    <h2 class="govuk-heading-m">@messages(s"$key.reg.submission.title")</h2>
+    <h2 class="govuk-heading-m">@messages(s"$key.submission.title")</h2>
     @if(in.ultimateParent.isDefined) {
-        <p class="govuk-body">@messages(s"$key.reg.submission.group")</p>
+        <p class="govuk-body">@messages(s"$key.submission.group")</p>
         @in.ultimateParent.map { ultParent =>
             <ul class="list list-bullet">
-                <li>@messages(s"$key.reg.submission.group.list.1", in.companyReg.company.name, ultParent.name)</li>
-                <li>@messages(s"$key.reg.submission.group.list.2", ultParent.name, in.companyReg.company.name)</li>
-                <li>@messages(s"$key.reg.submission.group.list.3")</li>
+                <li>@messages(s"$key.submission.group.list.1", in.companyReg.company.name, ultParent.name)</li>
+                <li>@messages(s"$key.submission.group.list.2", ultParent.name, in.companyReg.company.name)</li>
+                <li>@messages(s"$key.submission.group.list.3")</li>
             </ul>
         }
     } else {
-        <p>@messages(s"$key.reg.submission-notice")</p>
+        <p>@messages(s"$key.submission-notice")</p>
     }
 </div>

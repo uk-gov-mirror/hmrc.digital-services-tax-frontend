@@ -25,42 +25,20 @@ import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
 
+import uk.gov.hmrc.digitalservicestax.frontend._
+
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
 object RegJourney {
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: OptAddressLine :: MandatoryAddressLine :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: ForeignAddress :: Boolean :: MandatoryAddressLine :: CompanyName :: NilTypes
 
 
   private def message(key: String, args: String*) = {
     import play.twirl.api.HtmlFormat.escape
     Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
-  }
-
-   private def mandatoryAddressLineFormat(addressType: String, addressKey: String): Rule[Address] = {
-    Rule.condAtPath[Address](s"$addressType", addressKey)(
-      {
-        case add: Address if addressKey == "line1" && addressType == "ForeignAddress" => add.line1.matches("""^[a-zA-Z0-9',&-./ ]*$""")
-        case add: Address if addressKey == "line1" && addressType == "UkAddress" => add.line1.matches("""^[a-zA-Z0-9',&-./ ]*$""")
-        case _ => true
-      },
-      "format"
-    )
-  }
-
-  private def addressLineLimit(addressType: String, addressKey: String): Rule[Address] = {
-    Rule.condAtPath[Address](s"$addressType", addressKey)(
-      {
-        case add: Address if addressKey == "line1"  => add.line1.length <= 35
-        case add: Address if addressKey == "line2"  => add.line2.length <= 35
-        case add: Address if addressKey == "line3" || addressKey == "town"  => add.line3.length <= 35
-        case add: Address if addressKey == "line4" || addressKey == "county" => add.line4.length <= 35
-        case _ => true
-      },
-      "limit"
-    )
   }
 
   def registrationJourney[F[_] : Monad](
@@ -69,9 +47,8 @@ object RegJourney {
   ): F[Registration] = {
     import interpreter._
 
-
     for {
-      
+
       companyRegWrapper <- backendService.lookupCompany() >>= { // gets a CompanyRegWrapper but converts to a company
 
         // found a matching company
@@ -85,33 +62,27 @@ object RegJourney {
         // no matching company found
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
           case false =>
-            (
-              ask[NonEmptyString]("company-name",
-                validation =
-                  Rule.cond[NonEmptyString](
-                    _.matches("""^[a-zA-Z0-9- '&]{1,105}$"""),
-                    "format"
-                  ) followedBy
-                  Rule.cond[NonEmptyString](
-                    _.length <= 105,
-                    "length"
+            for {
+              companyName <- ask[CompanyName]("company-name")
+              companyAddress <- ask[Boolean](
+                "check-company-registered-office-address",
+                customContent = (
+                    message("check-company-registered-office-address.heading", companyName) ++
+                    message("check-company-registered-office-address.required", companyName)
                   )
-              ),
-              ask[Address](
-                "company-registered-office-address",
-                validation =
-                  mandatoryAddressLineFormat("UkAddress", "line1") followedBy
-                  addressLineLimit("UkAddress", "line1") followedBy
-                  addressLineLimit("UkAddress", "line2") followedBy
-                  addressLineLimit("UkAddress", "town") followedBy
-                  addressLineLimit("UkAddress", "county") followedBy
-                  mandatoryAddressLineFormat("ForeignAddress", "line1") followedBy
-                  addressLineLimit("ForeignAddress", "line1") followedBy
-                  addressLineLimit("ForeignAddress", "line2") followedBy
-                  addressLineLimit("ForeignAddress", "line3") followedBy
-                  addressLineLimit("ForeignAddress", "line4")
-              )
-            ).mapN(Company.apply).map(CompanyRegWrapper(_, useSafeId = true))
+              ) >>=[Address] {
+                case true =>
+                  ask[UkAddress](
+                    "company-registered-office-uk-address",
+                      customContent = message("company-registered-office-uk-address.heading", companyName)
+                    ).map(identity)
+                case false =>
+                  ask[ForeignAddress](
+                    "company-registered-office-international-address",
+                    customContent = message("company-registered-office-international-address.heading", companyName)
+                  ).map(identity)
+              }
+            } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
           case true =>
             for {
               utr <- ask[UTR]("enter-utr")
@@ -130,62 +101,62 @@ object RegJourney {
 
       registration <- (
         companyRegWrapper.pure[F],
-        ask[Address](
-          "alternate-contact",
-          validation =
-            mandatoryAddressLineFormat("UkAddress", "line1") followedBy
-            addressLineLimit("UkAddress", "line1") followedBy
-            addressLineLimit("UkAddress", "line2") followedBy
-            addressLineLimit("UkAddress", "town")  followedBy
-            addressLineLimit("UkAddress", "county") followedBy
-            mandatoryAddressLineFormat("ForeignAddress", "line1") followedBy
-            addressLineLimit("ForeignAddress", "line1") followedBy
-            addressLineLimit("ForeignAddress", "line2") followedBy
-            addressLineLimit("ForeignAddress", "line3") followedBy
-            addressLineLimit("ForeignAddress", "line4")
+        (
+          ask[Boolean]("check-contact-address") >>=[Address] {
+            case true =>
+              ask[UkAddress](
+                "contact-uk-address"
+              ).map(identity)
+            case false =>
+              ask[ForeignAddress](
+                "contact-international-address"
+              ).map(identity)
+          }
         ) when interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
         ask[Boolean]("check-if-group") >>= {
           case true =>
             for {
-              parentName <- ask[NonEmptyString]("ultimate-parent-company-name",
-                validation =
-                  Rule.cond[NonEmptyString](
-                    _.length <= 105,
-                    "length"
-                  ) followedBy
-                  Rule.cond[NonEmptyString](
-                    _.matches("""^[a-zA-Z0-9- '&]{1,105}$"""),
-                    "format"
-                  )
-              )
-              parentAddress <- ask[Address](
-                "ultimate-parent-company-address",
-                validation =
-                  mandatoryAddressLineFormat("UkAddress", "line1") followedBy
-                  addressLineLimit("UkAddress", "line1")  followedBy
-                  addressLineLimit("UkAddress", "line2")  followedBy
-                  addressLineLimit("UkAddress", "town")   followedBy
-                  addressLineLimit("UkAddress", "county") followedBy
-                  mandatoryAddressLineFormat("ForeignAddress", "line1") followedBy
-                  addressLineLimit("ForeignAddress", "line1") followedBy
-                  addressLineLimit("ForeignAddress", "line2") followedBy
-                  addressLineLimit("ForeignAddress", "line3") followedBy
-                  addressLineLimit("ForeignAddress", "line4"),
-                customContent = message("ultimate-parent-company-address.heading", parentName)
-              )
+              parentName <- ask[CompanyName]("ultimate-parent-company-name")
+              parentAddress <-
+                ask[Boolean](
+                  "check-ultimate-parent-company-address",
+                  customContent = (
+                      message("check-ultimate-parent-company-address.heading", parentName) ++
+                      message("check-ultimate-parent-company-address.required", parentName)
+                    )
+                ) >>=[Address] {
+                  case true =>
+                    ask[UkAddress](
+                      "ultimate-parent-company-uk-address",
+                      customContent = message("ultimate-parent-company-uk-address.heading", parentName)
+                    ).map(identity)
+                  case false =>
+                    ask[ForeignAddress](
+                      "ultimate-parent-company-international-address",
+                      customContent =
+                        message("ultimate-parent-company-international-address.heading", parentName)
+                    ).map(identity)
+                }
             } yield Company(parentName, parentAddress).some
           case false =>
             Option.empty[Company].pure[F]
         },
         ask[ContactDetails]("contact-details"),
-        ask[Boolean]("check-liability-date") flatMap {
+        for (
+        startDate <- ask[Boolean]("check-liability-date") flatMap {
           case true => LocalDate.of(2020,4,6).pure[F]
           case false =>
             ask[LocalDate]("liability-start-date",
-              validation = Rule.min(LocalDate.of(2020,4,6))
+              validation =
+                Rule.min(LocalDate.of(2020,4,6), "minimum-date") followedBy
+                Rule.max(LocalDate.now.plusYears(1), "maximum-date"),
+              customContent = message("liability-start-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
             )
-        },
-        ask[LocalDate]("accounting-period-end-date"),
+        }
+        periodEnd <- ask[LocalDate](
+          "accounting-period-end-date",
+          customContent = message("accounting-period-end-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
+        )) yield()
         None.pure[F]
       ).mapN(Registration.apply)
       _ <- tell("check-your-answers", CYA(registration))

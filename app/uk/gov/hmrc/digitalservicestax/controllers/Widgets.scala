@@ -20,6 +20,8 @@ import java.time.LocalDate
 
 import ltbs.uniform
 import ltbs.uniform.common.web.GenericWebTell
+import uk.gov.hmrc.digitalservicestax.data
+import uk.gov.hmrc.digitalservicestax.data.MandatoryAddressLine
 
 //import cats.data.Validated
 import cats.implicits._
@@ -66,10 +68,12 @@ trait Widgets {
   }
 
   def inlineOptionString(
-    validated: ValidatedType[String]
+    validated: ValidatedType[String],
+    maxLen: Int = Integer.MAX_VALUE
   ): FormField[Option[String @@ validated.Tag], Html] =
     twirlStringField.simap{
       case "" => Right(None)
+      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
       case x  => Either.fromOption(
         validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
       )
@@ -87,31 +91,30 @@ trait Widgets {
 
   def validatedString(
     validated: ValidatedType[String],
-    maxLen: Int = Integer.MAX_VALUE,
-    noneEmpty: Boolean = true
+    maxLen: Int = Integer.MAX_VALUE
   )(
     implicit baseForm: FormField[String, Html]
   ): FormField[String @@ validated.Tag, Html] =
     baseForm.simap{
-      case "" if noneEmpty => Left(ErrorMsg("required").toTree)
+      case x if x.trim.isEmpty => Left(ErrorMsg("required").toTree)
       case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
-      case x =>
-        Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+      case x => Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
 
   implicit def postcodeField          = validatedString(Postcode)
   implicit def nesField               = validatedVariant(NonEmptyString)
   implicit def utrField               = validatedString(UTR)
-  implicit def emailField             = validatedVariant(Email)
-  implicit def phoneField             = validatedVariant(PhoneNumber)
+  implicit def emailField             = validatedString(Email, 132)
+  implicit def phoneField             = validatedString(PhoneNumber, 24)
   implicit def percentField           = validatedVariant(Percent)
   implicit def accountField           = validatedString(AccountNumber)
   implicit def accountNameField       = validatedString(AccountName, 35)
   implicit def sortCodeField          = validatedString(SortCode)
   implicit def ibanField              = validatedVariant(IBAN)
+  implicit def companyNameField       = validatedString(CompanyName, 105)
   implicit def mandatoryAddressField  = validatedString(MandatoryAddressLine, 35)
-  implicit def optAddressField        = validatedString(OptAddressLine, 35, false)
-  implicit def restrictField          = validatedVariant(RestrictiveString)
+  implicit def optAddressField        = inlineOptionString(MandatoryAddressLine, 35)
+  implicit def restrictField          = validatedString(RestrictiveString, 35)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
@@ -266,20 +269,9 @@ trait Widgets {
     ffhlist: FormField[T, Html]
   ): FormField[UkAddress, Html] = new FormField[UkAddress, Html] {
 
-    def decode(out: Input): Either[ErrorTree, UkAddress] = {
-      // Not used due to international postcodes
-      // val postCodeRegex = """([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2}|.{0})"""
+    override def stats = FormFieldStats(children = 5)
 
-      //TODO check transformations with ltbs
-      (
-        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
-        out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
-        out.subField[OptAddressLine]("town", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
-        out.subField[OptAddressLine]("county", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
-        out.subField[Postcode]("postcode", {Transformation.catchOnly[IllegalArgumentException]("not-a-postcode")(Postcode(_))})
-      ).mapN(UkAddress).toEither
-    }
-
+    def decode(out: Input): Either[ErrorTree, UkAddress] = ffhlist.decode(out).map(gen.from)
     def encode(in: UkAddress): Input = ffhlist.encode(gen.to(in))
 
     def render(
@@ -295,7 +287,8 @@ trait Widgets {
         fieldKey,
         data,
         errors,
-        messages
+        messages,
+        "UkAddress"
       )
     }
   }
@@ -305,16 +298,9 @@ trait Widgets {
     ffhlist: FormField[T, Html]
   ): FormField[ForeignAddress, Html] = new FormField[ForeignAddress, Html] {
 
-    def decode(out: Input): Either[ErrorTree, ForeignAddress] = {
-      (
-        out.subField[NonEmptyString]("line1", {Transformation.catchOnly[IllegalArgumentException]("required")(NonEmptyString(_))}),
-        out.subField[OptAddressLine]("line2", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
-        out.subField[OptAddressLine]("line3", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
-        out.subField[OptAddressLine]("line4", {Transformation.catchOnly[IllegalArgumentException]("invalid")(OptAddressLine(_))}),
-        out.subField[CountryCode]("countryCode", {Transformation.catchOnly[IllegalArgumentException]("invalid")(CountryCode(_))})
-      ).mapN(ForeignAddress).toEither
-    }
+    override def stats = FormFieldStats(children = 5)
 
+    def decode(out: Input): Either[ErrorTree, ForeignAddress] = ffhlist.decode(out).map(gen.from)
     def encode(in: ForeignAddress): Input = ffhlist.encode(gen.to(in))
 
     def render(

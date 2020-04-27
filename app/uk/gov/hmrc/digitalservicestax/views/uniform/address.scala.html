@@ -18,10 +18,10 @@
 @import uk.gov.hmrc.digitalservicestax.views.html.helpers._
 @import ltbs.uniform._
 
-@(key: List[String], values: Input, errors: ErrorTree, messages: UniformMessages[Html])
+@(key: List[String], values: Input, errors: ErrorTree, messages: UniformMessages[Html], addressKey: String = "")
 
-@fieldList = @{if(key.last == "UkAddress") {
-    List("line1", "line2", "town", "county", "postcode")
+@fieldList = @{if(addressKey == "UkAddress") {
+    List("line1", "line2", "town", "county", "postalCode")
 } else {
     List("line1", "line2", "line3", "line4", "countryCode")
     }
@@ -30,8 +30,8 @@
   @for(field <- fieldList) {
     @defining(
       field match {
-        case "line1" | "line2" | "line3" | "line 4" => "form-control-3-4"
-        case "postcode" => "form-control-1-4"
+        case "line1" | "line2" | "line3" | "line4" => "form-control-3-4"
+        case "postalCode" => "form-control-1-4"
         case _ => "form-control-2-4"
       },
       errors.valueAtPath(List(field))
