@@ -121,7 +121,7 @@ class JourneyController @Inject()(
 
   implicit val ukAddressTell = new GenericWebTell[UkAddress, Html] {
     override def render(in: UkAddress, key: String, messages: UniformMessages[Html]): Html =
-      Html(s"<span class='govuk-body-m'></br>${in.line1.escapeHtml}</br>${in.line2.escapeHtml}</br>${in.line3.escapeHtml}</br>${in.line4.escapeHtml}</br>${in.postalCode.escapeHtml}")
+      Html(s"<span class='govuk-body-m'></br>${in.line1.escapeHtml}</br>${in.line2.fold("")(_.escapeHtml)}</br>${in.line3.fold("")(_.escapeHtml)}</br>${in.line4.fold("")(_.escapeHtml)}</br>${in.postalCode.escapeHtml}")
   }
 
   implicit val kickoutTell = new GenericWebTell[Kickout, Html] {

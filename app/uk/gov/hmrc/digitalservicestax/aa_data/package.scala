@@ -63,14 +63,19 @@ package object data extends SimpleJson {
       Some(in).filter(_.nonEmpty)
   }
 
+  type CompanyName = String @@ CompanyName.Tag
+  object CompanyName extends RegexValidatedString(
+    regex = """^[a-zA-Z0-9- '&]{1,105}$"""
+  )
+
   type MandatoryAddressLine = String @@ MandatoryAddressLine.Tag
   object MandatoryAddressLine extends RegexValidatedString(
-    regex = """^[a-zA-Z0-9',&\- ]{1, 35}$"""
+    regex = """^[a-zA-Z0-9',&./ ]{1,35}$"""
   )
 
   type OptAddressLine = String @@ OptAddressLine.Tag
   object OptAddressLine extends RegexValidatedString(
-    regex = """^[a-zA-Z0-9',&\- ]{0, 35}$"""
+    regex = """^[a-zA-Z0-9',&\- ]*$"""
   )
 
   type RestrictiveString = String @@ RestrictiveString.Tag
