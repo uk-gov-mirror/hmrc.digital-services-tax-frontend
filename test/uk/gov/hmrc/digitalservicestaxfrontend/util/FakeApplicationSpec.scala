@@ -32,9 +32,7 @@ import play.api.{Application, ApplicationLoader}
 import play.core.DefaultWebCommands
 import play.modules.reactivemongo.DefaultReactiveMongoApi
 import reactivemongo.api.MongoConnection
-import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
-import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence
 import uk.gov.hmrc.digitalservicestax.test.TestConnector
 import uk.gov.hmrc.mongo.MongoSpecSupport
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
