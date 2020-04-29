@@ -23,7 +23,7 @@ package object controllers {
     def escapeHtml: String = HtmlFormat.escape(in).toString
   }
 
-  implicit class OrderedYesNo(l: List[String]) {
+  implicit class OrderedYesNo(val l: List[String]) extends AnyVal {
     def orderYesNoRadio: List[String] = l match {
       case "None" :: "Some" :: _ if l.length == 2 => l.reverse
       case _ => l

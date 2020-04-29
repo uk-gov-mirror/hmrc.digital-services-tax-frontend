@@ -58,8 +58,8 @@ case class SimpleCaching[Key](
   }
 
   def apply[A](id: Key, args: Any*)(action: => Future[A])(implicit ec: ExecutionContext): Future[A] =
-    fromCache[A](id, args:_*).fold{
-      action.map{ x =>
+    fromCache[A](id, args:_*).fold {
+      action.map { x =>
         update(id, args, x)
         x
       }

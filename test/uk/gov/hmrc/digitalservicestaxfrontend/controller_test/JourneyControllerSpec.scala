@@ -14,17 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.controllers
+package uk.gov.hmrc.digitalservicestaxfrontend.controller_test
 
 import org.scalatest.{Matchers, WordSpec}
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
-import play.api.http.Status
-import play.api.test.FakeRequest
-import play.api.test.Helpers._
-import play.api.{Configuration, Environment, _}
-import play.api.mvc._
-import uk.gov.hmrc.play.bootstrap.config.{RunMode, ServicesConfig}
-import uk.gov.hmrc.digitalservicestax.config.AppConfig
 
 class JourneyControllerSpec extends WordSpec with Matchers {
 

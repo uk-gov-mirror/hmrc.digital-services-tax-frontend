@@ -16,10 +16,8 @@
 
 package uk.gov.hmrc.digitalservicestaxfrontend.connectors
 
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.http.Status
 import play.api.mvc.{AnyContent, Results}
