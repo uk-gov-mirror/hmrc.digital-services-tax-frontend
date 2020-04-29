@@ -39,17 +39,17 @@ class SimpleCachingTest extends FlatSpec
   it should "add an element to the cache" in {
     val cache = SimpleCaching[InternalId]()
 
-    forAll { (internalId: InternalId, checksumKey: String) =>
+    forAll { (internalId: InternalId, checksumKey: String, storedValue: String) =>
       val chain = for {
         _ <- cache.apply[String](internalId, Seq(checksumKey)) {
-          Future.successful("test")
+          Future.successful(storedValue)
         }
         retrieve = cache.fromCache[String](internalId, Seq(checksumKey))
       } yield retrieve
 
       whenReady(chain) { res =>
         res shouldBe defined
-        res.value shouldEqual "test"
+        res.value shouldEqual storedValue
       }
     }
   }
@@ -83,10 +83,10 @@ class SimpleCachingTest extends FlatSpec
   it should "update the value of an element in the cache" in {
     val cache = SimpleCaching[InternalId]()
     
-    forAll { (internalId: InternalId, checksumKey: String, newValue: String) =>
+    forAll { (internalId: InternalId, checksumKey: String, oldValue: String, newValue: String) =>
       val chain = for {
         _ <- cache.apply[String](internalId, checksumKey) {
-          Future.successful("test")
+          Future.successful(oldValue)
         }
         beforeUpdate = cache.fromCache[String](internalId, checksumKey)
         _ = cache.update(internalId, Seq(checksumKey), newValue)
@@ -95,7 +95,7 @@ class SimpleCachingTest extends FlatSpec
 
       whenReady(chain) { case (beforeUpdate, afterUpdate) =>
         beforeUpdate shouldBe defined
-        beforeUpdate.value shouldEqual "test"
+        beforeUpdate.value shouldEqual oldValue
 
         afterUpdate shouldBe defined
         afterUpdate.value shouldEqual newValue
