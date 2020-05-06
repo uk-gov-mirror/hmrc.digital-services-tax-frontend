@@ -115,19 +115,6 @@ check-if-group.FALSE=No
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
-<<<<<<< HEAD
-ultimate-parent-company-address.heading=Where is the Registered Office address of {0}?
-ultimate-parent-company-address.required=Select if your Registered Office address is in the UK or outside the UK
-
-ultimate-parent-company-address.ForeignAddress=Outside the UK
-ultimate-parent-company-address.ForeignAddress.line1.heading=Address line 1
-ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (optional)
-ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
-ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
-ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
-ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing and enter a country from the list
-=======
 check-ultimate-parent-company-address.heading=Is the registered office address of {0} in the UK?
 check-ultimate-parent-company-address.TRUE=Yes
 check-ultimate-parent-company-address.FALSE=No
@@ -138,7 +125,6 @@ ultimate-parent-company-uk-address.line2.heading=Building or street line 2 (opti
 ultimate-parent-company-uk-address.town.heading=Town or city (optional)
 ultimate-parent-company-uk-address.county.heading=County (optional)
 ultimate-parent-company-uk-address.postalCode.heading=Postcode
->>>>>>> Added validation for Address lines used tagged type, also added some validation for Date pages.
 
 ultimate-parent-company-international-address.heading=What is the registered office address of {0}?
 ultimate-parent-company-international-address.line1.heading=Address line 1
@@ -157,10 +143,6 @@ contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
 
 check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
-<<<<<<< HEAD
-check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020 
-=======
->>>>>>> Added validation for Address lines used tagged type, also added some validation for Date pages.
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 

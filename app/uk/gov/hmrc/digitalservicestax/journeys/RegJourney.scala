@@ -142,23 +142,24 @@ object RegJourney {
             Option.empty[Company].pure[F]
         },
         ask[ContactDetails]("contact-details"),
-        for (
-        startDate <- ask[Boolean]("check-liability-date") flatMap {
-          case true => LocalDate.of(2020,4,6).pure[F]
-          case false =>
-            ask[LocalDate]("liability-start-date",
-              validation =
-                Rule.min(LocalDate.of(2020,4,6), "minimum-date") followedBy
-                Rule.max(LocalDate.now.plusYears(1), "maximum-date"),
-              customContent = message("liability-start-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
-            )
-        }
-        periodEnd <- ask[LocalDate](
-          "accounting-period-end-date",
-          customContent = message("accounting-period-end-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
-        )) yield()
+        for {
+          liability <- ask[Boolean] ("check-liability-date") flatMap {
+            case true => LocalDate.of(2020, 4, 6).pure[F]
+            case false =>
+              ask[LocalDate]("liability-start-date",
+                validation =
+                  Rule.min(LocalDate.of(2020, 4, 6), "minimum-date") followedBy
+                    Rule.max(LocalDate.now.plusYears(1), "maximum-date"),
+                customContent = message("liability-start-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
+              )
+          }
+          accountingPeriodEnd <- ask[LocalDate] (
+                           "accounting-period-end-date",
+                           customContent = message("accounting-period-end-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
+          )
+        } yield List(liability, accountingPeriodEnd),
         None.pure[F]
-      ).mapN(Registration.apply)
+      ).mapN(Registration.apply_)
       _ <- tell("check-your-answers", CYA(registration))
     } yield (registration)
   }
