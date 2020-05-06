@@ -9,7 +9,7 @@ common.try-again=Try again
 common.alpha-info.p1=This is a new service – your 
 common.alpha-info.link=feedback
 common.alpha-info.p2= will help us to improve it.
-common.print-save=Print or save your registered details
+common.print-save=Print or save this page
 common.warning.title=Warning
 common.error=Error
 common.beta=BETA
@@ -211,11 +211,11 @@ registration-sent.heading=Registration sent
 registration-sent.detail=We received your registration for {0} for the Digital Services Tax
 registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
-registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to in \
+registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in \
   the next 5 days.
 registration-sent.help-using-this-service.title=Help using this service
-registration-sent.print-save=Print or save your registered details
-registration-sent.help-using-this-service.p1=For help with payments and returns, {0}
+registration-sent.print-save=Print or save this page
+registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="{0}">check the Digital Services Tax guidance</a>.
 registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
 registration-sent.help-using-this-service.list.1=do not receive your registration number
 registration-sent.help-using-this-service.list.2=need to change your registered details
