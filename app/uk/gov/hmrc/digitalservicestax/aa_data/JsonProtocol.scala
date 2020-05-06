@@ -69,7 +69,7 @@ trait SimpleJson {
   implicit val optAddressLineFormat       = validatedStringFormat(OptAddressLine, "optional address line")
   implicit val dstRegNoFormat             = validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
 
-    implicit val percentFormat: Format[Percent] = new Format[Percent] {
+  implicit val percentFormat: Format[Percent] = new Format[Percent] {
     override def reads(json: JsValue): JsResult[Percent] = {
       json match {
         case JsNumber(value) =>
