@@ -99,51 +99,52 @@ object RegJourney {
         }
       }
 
-      registration <- (
-        companyRegWrapper.pure[F],
-        (
-          ask[Boolean]("check-contact-address") >>=[Address] {
-            case true =>
-              ask[UkAddress](
-                "contact-uk-address"
-              ).map(identity)
-            case false =>
-              ask[ForeignAddress](
-                "contact-international-address"
-              ).map(identity)
-          }
-        ) when interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
-        ask[Boolean]("check-if-group") >>= {
-          case true =>
-            for {
-              parentName <- ask[CompanyName]("ultimate-parent-company-name")
-              parentAddress <-
-                ask[Boolean](
-                  "check-ultimate-parent-company-address",
-                  customContent = (
-                      message("check-ultimate-parent-company-address.heading", parentName) ++
-                      message("check-ultimate-parent-company-address.required", parentName)
-                    )
-                ) >>=[Address] {
-                  case true =>
-                    ask[UkAddress](
-                      "ultimate-parent-company-uk-address",
-                      customContent = message("ultimate-parent-company-uk-address.heading", parentName)
-                    ).map(identity)
-                  case false =>
-                    ask[ForeignAddress](
-                      "ultimate-parent-company-international-address",
-                      customContent =
-                        message("ultimate-parent-company-international-address.heading", parentName)
-                    ).map(identity)
-                }
-            } yield Company(parentName, parentAddress).some
-          case false =>
-            Option.empty[Company].pure[F]
-        },
-        ask[ContactDetails]("contact-details"),
+
+      registration <- {
         for {
-          liability <- ask[Boolean] ("check-liability-date") flatMap {
+          a <- companyRegWrapper.pure[F]
+          b <- (
+            ask[Boolean]("check-contact-address") >>=[Address] {
+              case true =>
+                ask[UkAddress](
+                  "contact-uk-address"
+                ).map(identity)
+              case false =>
+                ask[ForeignAddress](
+                  "contact-international-address"
+                ).map(identity)
+            }
+            ) when interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x}
+          c <- ask[Boolean]("check-if-group") >>= {
+            case true =>
+              for {
+                parentName <- ask[CompanyName]("ultimate-parent-company-name")
+                parentAddress <-
+                  ask[Boolean](
+                    "check-ultimate-parent-company-address",
+                    customContent = (
+                      message("check-ultimate-parent-company-address.heading", parentName) ++
+                        message("check-ultimate-parent-company-address.required", parentName)
+                      )
+                  ) >>=[Address] {
+                    case true =>
+                      ask[UkAddress](
+                        "ultimate-parent-company-uk-address",
+                        customContent = message("ultimate-parent-company-uk-address.heading", parentName)
+                      ).map(identity)
+                    case false =>
+                      ask[ForeignAddress](
+                        "ultimate-parent-company-international-address",
+                        customContent =
+                          message("ultimate-parent-company-international-address.heading", parentName)
+                      ).map(identity)
+                  }
+              } yield Company(parentName, parentAddress).some
+            case false =>
+              Option.empty[Company].pure[F]
+          }
+          d <- ask[ContactDetails]("contact-details")
+          e <- ask[Boolean] ("check-liability-date") flatMap {
             case true => LocalDate.of(2020, 4, 6).pure[F]
             case false =>
               ask[LocalDate]("liability-start-date",
@@ -153,13 +154,15 @@ object RegJourney {
                 customContent = message("liability-start-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
               )
           }
-          accountingPeriodEnd <- ask[LocalDate] (
-                           "accounting-period-end-date",
-                           customContent = message("accounting-period-end-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
+          f <- ask[LocalDate] (
+            "accounting-period-end-date",
+            validation = Rule.min(e, "minimum-date"),
+            customContent = message("accounting-period-end-date.maximum-date", formatDate(LocalDate.now.plusYears(1)))
           )
-        } yield List(liability, accountingPeriodEnd),
-        None.pure[F]
-      ).mapN(Registration.apply_)
+          g <- None.pure[F]
+        } yield Registration(a,b,c,d,e,f,g)
+      }
+
       _ <- tell("check-your-answers", CYA(registration))
     } yield (registration)
   }
