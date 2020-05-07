@@ -65,8 +65,7 @@ trait SimpleJson {
   implicit val periodKeyFormat            = validatedStringFormat(Period.Key, "Period Key")
   implicit val restrictiveFormat          = validatedStringFormat(RestrictiveString, "name")
   implicit val companyNameFormat          = validatedStringFormat(CompanyName, "company name")
-  implicit val mandatoryAddressLineFormat = validatedStringFormat(MandatoryAddressLine, "mandatory address line")
-  implicit val optAddressLineFormat       = validatedStringFormat(OptAddressLine, "optional address line")
+  implicit val mandatoryAddressLineFormat = validatedStringFormat(AddressLine, "address line")
   implicit val dstRegNoFormat             = validatedStringFormat(DSTRegNumber, "Digital Services Tax Registration Number")
 
   implicit val percentFormat: Format[Percent] = new Format[Percent] {

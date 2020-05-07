@@ -21,7 +21,7 @@ import java.time.LocalDate
 import ltbs.uniform
 import ltbs.uniform.common.web.GenericWebTell
 import uk.gov.hmrc.digitalservicestax.data
-import uk.gov.hmrc.digitalservicestax.data.MandatoryAddressLine
+import uk.gov.hmrc.digitalservicestax.data.AddressLine
 
 //import cats.data.Validated
 import cats.implicits._
@@ -112,8 +112,8 @@ trait Widgets {
   implicit def sortCodeField          = validatedString(SortCode)
   implicit def ibanField              = validatedVariant(IBAN)
   implicit def companyNameField       = validatedString(CompanyName, 105)
-  implicit def mandatoryAddressField  = validatedString(MandatoryAddressLine, 35)
-  implicit def optAddressField        = inlineOptionString(MandatoryAddressLine, 35)
+  implicit def mandatoryAddressField  = validatedString(AddressLine, 35)
+  implicit def optAddressField        = inlineOptionString(AddressLine, 35)
   implicit def restrictField          = validatedString(RestrictiveString, 35)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
