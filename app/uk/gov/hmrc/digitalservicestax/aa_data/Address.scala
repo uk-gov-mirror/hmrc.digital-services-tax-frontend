@@ -17,21 +17,21 @@
 package uk.gov.hmrc.digitalservicestax.data
 
 sealed trait Address {
-  def line1: MandatoryAddressLine
-  def line2: Option[MandatoryAddressLine]
-  def line3: Option[MandatoryAddressLine]
-  def line4: Option[MandatoryAddressLine]
+  def line1: AddressLine
+  def line2: Option[AddressLine]
+  def line3: Option[AddressLine]
+  def line4: Option[AddressLine]
   def countryCode: CountryCode
   def postalCode: String
   def lines: List[String] =
-    (line1 :: line2.getOrElse(MandatoryAddressLine("")) :: line3.getOrElse(MandatoryAddressLine("")) :: line4.getOrElse(MandatoryAddressLine("")) :: postalCode :: Country.name(countryCode) :: Nil).filter(_.nonEmpty)
+    (line1 :: line2.getOrElse("") :: line3.getOrElse("") :: line4.getOrElse("") :: postalCode :: Country.name(countryCode) :: Nil).filter(_.nonEmpty)
 }
 
 case class UkAddress(
-  line1: MandatoryAddressLine,
-  line2: Option[MandatoryAddressLine],
-  line3: Option[MandatoryAddressLine],
-  line4: Option[MandatoryAddressLine],
+  line1: AddressLine,
+  line2: Option[AddressLine],
+  line3: Option[AddressLine],
+  line4: Option[AddressLine],
   postalCode: Postcode
 ) extends Address {
   def countryCode = CountryCode("GB")
@@ -39,10 +39,10 @@ case class UkAddress(
 }
 
 case class ForeignAddress(
-  line1: MandatoryAddressLine,
-  line2: Option[MandatoryAddressLine],
-  line3: Option[MandatoryAddressLine],
-  line4: Option[MandatoryAddressLine],
+  line1: AddressLine,
+  line2: Option[AddressLine],
+  line3: Option[AddressLine],
+  line4: Option[AddressLine],
   countryCode: CountryCode
 ) extends Address {
   def postalCode = ""

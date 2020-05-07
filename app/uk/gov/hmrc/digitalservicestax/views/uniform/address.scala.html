@@ -21,7 +21,7 @@
 @(key: List[String], values: Input, errors: ErrorTree, messages: UniformMessages[Html], addressKey: String = "")
 
 @fieldList = @{if(addressKey == "UkAddress") {
-    List("line1", "line2", "town", "county", "postalCode")
+    List("line1", "line2", "line3", "line4", "postalCode")
 } else {
     List("line1", "line2", "line3", "line4", "countryCode")
     }
@@ -29,16 +29,24 @@
 
   @for(field <- fieldList) {
     @defining(
-      field match {
-        case "line1" | "line2" | "line3" | "line4" => "form-control-3-4"
-        case "postalCode" => "form-control-1-4"
-        case _ => "form-control-2-4"
-      },
+        addressKey match {
+            case "UkAddress" =>
+                field match {
+                    case "line1" | "line2" => "form-control-3-4"
+                    case "postalCode" => "form-control-1-4"
+                    case _ => "form-control-2-4"
+                }
+            case _ =>
+                field match {
+                    case "line1" | "line2" | "line3" | "line4" => "form-control-3-4"
+                    case _ => "form-control-2-4"
+                }
+        },
       field match {
         case "line1" => "address-line1"
         case "line2" => "address-line2"
-        case "town" => "address-level2"
-        case "county" => "address-level1"
+        case "line3" => "address-level2"
+        case "line4" => "address-level1"
         case "postcode" => "postal-code"
         case _ => ""
       },

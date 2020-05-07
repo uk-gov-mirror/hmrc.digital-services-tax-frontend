@@ -26,6 +26,8 @@ common.edit=Edit
 common.remove=Remove
 common.yes=Yes
 common.no=No
+common.group=Group
+common.company=Company
 
 # Errors
 there.is.a.problem=There is a problem
@@ -60,8 +62,8 @@ check-company-registered-office-address.FALSE=No
 company-registered-office-uk-address.heading=Where is the registered office address of {0}?
 company-registered-office-uk-address.line1.heading=Building or street
 company-registered-office-uk-address.line2.heading=Building or street line 2 (optional)
-company-registered-office-uk-address.town.heading=Town or city (optional)
-company-registered-office-uk-address.county.heading=County (optional)
+company-registered-office-uk-address.line3.heading=Town or city (optional)
+company-registered-office-uk-address.line4.heading=County (optional)
 company-registered-office-uk-address.postalCode.heading=Postcode
 
 company-registered-office-international-address.heading=Where is the registered office address of {0}?
@@ -87,8 +89,8 @@ check-contact-address.FALSE=No
 contact-uk-address.heading=What is your contact address?
 contact-uk-address.line1.heading=Building or street
 contact-uk-address.line2.heading=Building or street line 2 (optional)
-contact-uk-address.town.heading=Town or city (optional)
-contact-uk-address.county.heading=County (optional)
+contact-uk-address.line3.heading=Town or city (optional)
+contact-uk-address.line4.heading=County (optional)
 contact-uk-address.postalCode.heading=Postcode
 
 contact-international-address.heading=What is your contact address?
@@ -122,8 +124,8 @@ check-ultimate-parent-company-address.FALSE=No
 ultimate-parent-company-uk-address.heading=What is the registered office address of {0}?
 ultimate-parent-company-uk-address.line1.heading=Building or street
 ultimate-parent-company-uk-address.line2.heading=Building or street line 2 (optional)
-ultimate-parent-company-uk-address.town.heading=Town or city (optional)
-ultimate-parent-company-uk-address.county.heading=County (optional)
+ultimate-parent-company-uk-address.line3.heading=Town or city (optional)
+ultimate-parent-company-uk-address.line4.heading=County (optional)
 ultimate-parent-company-uk-address.postalCode.heading=Postcode
 
 ultimate-parent-company-international-address.heading=What is the registered office address of {0}?
@@ -267,12 +269,12 @@ check-company-registered-office-address.required=Select yes if the registered of
 company-registered-office-uk-address.line1.required=Enter a building or street
 company-registered-office-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
 company-registered-office-uk-address.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
-company-registered-office-uk-address.town.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
-company-registered-office-uk-address.county.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
+company-registered-office-uk-address.line3.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
+company-registered-office-uk-address.line4.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
 company-registered-office-uk-address.line1.length.exceeded=Building or street must be 35 characters or fewer
 company-registered-office-uk-address.line2.length.exceeded=Building or street line 2 must be 35 characters or fewer
-company-registered-office-uk-address.town.length.exceeded=Town or city must be 35 characters or fewer
-company-registered-office-uk-address.county.length.exceeded=County must be 35 characters or fewer
+company-registered-office-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
+company-registered-office-uk-address.line4.length.exceeded=County must be 35 characters or fewer
 company-registered-office-uk-address.postalCode.required=Enter the postcode of your registered office address
 company-registered-office-uk-address.postalCode.not-a-postcode=Enter a real postcode
 
@@ -299,12 +301,12 @@ check-contact-address.required=Select yes if your contact address is in the UK
 contact-uk-address.line1.required=Enter the building and street of your contact address
 contact-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
 contact-uk-address.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
-contact-uk-address.town.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
-contact-uk-address.county.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
+contact-uk-address.line3.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
+contact-uk-address.line4.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
 contact-uk-address.line1.length.exceeded=Building or street must be 35 characters or fewer
 contact-uk-address.line2.length.exceeded=Building or street line 2 must be 35 characters or fewer
-contact-uk-address.town.length.exceeded=Town or city must be 35 characters or fewer
-contact-uk-address.county.length.exceeded=County must be 35 characters or fewer
+contact-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
+contact-uk-address.line4.length.exceeded=County must be 35 characters or fewer
 contact-uk-address.postalCode.required=Enter the postcode of your contact address
 contact-uk-address.postalCode.not-a-postcode=Enter a real postcode
 
@@ -333,12 +335,12 @@ check-ultimate-parent-company-address.required=Select yes if the registered offi
 ultimate-parent-company-uk-address.line1.required=Enter the building and street of your contact address
 ultimate-parent-company-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
 ultimate-parent-company-uk-address.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
-ultimate-parent-company-uk-address.town.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
-ultimate-parent-company-uk-address.county.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
+ultimate-parent-company-uk-address.line3.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
+ultimate-parent-company-uk-address.line4.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens and spaces
 ultimate-parent-company-uk-address.line1.length.exceeded=Building or street must be 35 characters or fewer
 ultimate-parent-company-uk-address.line2.length.exceeded=Building or street line 2 must be 35 characters or fewer
-ultimate-parent-company-uk-address.town.length.exceeded=Town or city must be 35 characters or fewer
-ultimate-parent-company-uk-address.county.length.exceeded=County must be 35 characters or fewer
+ultimate-parent-company-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
+ultimate-parent-company-uk-address.line4.length.exceeded=County must be 35 characters or fewer
 ultimate-parent-company-uk-address.postalCode.required=Enter the postcode of your registered office address
 ultimate-parent-company-uk-address.postalCode.not-a-postcode=Enter a real postcode
 not-a-postcode=Enter a real postcode
@@ -385,28 +387,31 @@ email.invalid=Please enter a valid email address
 email.length.exceeded=Email address must be 132 characters or fewer
 
 #Check liability date
-check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020
+check-liability-date.required=Select yes if the {0} was liable for Digital Services Tax on 1 April 2020
 
 #liability start date
 not-a-date=Enter a real date
-liability-start-date.minimum-date=The date the company became liable for Digital Services Tax must be after 1 April 2020
-liability-start-date.maximum-date=The date the company became liable for Digital Services Tax must be earlier than {0}
-liability-start-date.day-and-month-and-year.empty=Enter the date the company became liable for Digital Services Tax
-liability-start-date.day.empty=The date the company became liable for Digital Services Tax must include a day
-liability-start-date.month.empty=The date the company became liable for Digital Services Tax must include a month
-liability-start-date.year.empty=The date the company became liable for Digital Services Tax must include a year
-liability-start-date.day-and-month.empty=The date the company became liable for Digital Services Tax must include a day and month
-liability-start-date.day-and-year.empty=The date the company became liable for Digital Services Tax must include a day and year
-liability-start-date.month-and-year.empty=The date the company became liable for Digital Services Tax must include a month and year
+liability-start-date.minimum-date=The date the {0} became liable for Digital Services Tax must be after 1 April 2020
+liability-start-date.maximum-date=The date the {0} became liable for Digital Services Tax must be earlier than {1}
+liability-start-date.day-and-month-and-year.empty=Enter the date the {0} became liable for Digital Services Tax
+liability-start-date.day.empty=The date the {0} became liable for Digital Services Tax must include a day
+liability-start-date.month.empty=The date the {0} became liable for Digital Services Tax must include a month
+liability-start-date.year.empty=The date the {0} became liable for Digital Services Tax must include a year
+liability-start-date.day-and-month.empty=The date the {0} became liable for Digital Services Tax must include a day and month
+liability-start-date.day-and-year.empty=The date the {0} became liable for Digital Services Tax must include a day and year
+liability-start-date.month-and-year.empty=The date the {0} became liable for Digital Services Tax must include a month and year
 
 #accounting period end date
-accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the company’s first accounting period for Digital Services Tax
-accounting-period-end-date.day.empty=The end date of the company’s first accounting period for Digital Services Tax must include a day
-accounting-period-end-date.month.empty=The end date of the company’s first accounting period for Digital Services Tax must include a month
-accounting-period-end-date.year.empty=The end date of the company’s first accounting period for Digital Services Tax must include a year
-accounting-period-end-date.day-and-month.empty=The end date of the company’s  first accounting period for Digital Services Tax must include a day and month
-accounting-period-end-date.day-and-year.empty=The end date of the company’s first accounting period for Digital Services Tax must include a day and year
-accounting-period-end-date.month-and-year.empty=The end date of the company’s first accounting period for Digital Services Tax must include a month and year
+accounting-period-end-date.maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must before {1}
+accounting-period-end-date.fixed-maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be on or before {1}
+accounting-period-end-date.minimum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be after 1 April 2020
+accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the {0}’s first accounting period for Digital Services Tax
+accounting-period-end-date.day.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a day
+accounting-period-end-date.month.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a month
+accounting-period-end-date.year.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a year
+accounting-period-end-date.day-and-month.empty=The end date of the {0}’s  first accounting period for Digital Services Tax must include a day and month
+accounting-period-end-date.day-and-year.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a day and year
+accounting-period-end-date.month-and-year.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a month and year
 
 #service page
 landing.heading=Digital Services Tax details
