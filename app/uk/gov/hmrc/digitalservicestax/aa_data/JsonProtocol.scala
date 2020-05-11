@@ -100,6 +100,8 @@ object BackendAndFrontendJson extends SimpleJson {
   implicit val activityFormat: Format[Activity] = EnumFormats.formats(Activity)
   implicit val groupCompanyFormat: Format[GroupCompany] = Json.format[GroupCompany]
   implicit lazy val journeyStateFormatter: Format[JourneyState] = Json.format[JourneyState]
+  implicit val finTransactFormat: OFormat[FinancialTransaction] = Json.format[FinancialTransaction]
+
 
   import Enrolment.idFormat
   implicit val enrolmentWrites = Json.writes[Enrolment]

@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.connectors
+package uk.gov.hmrc.digitalservicestax.data
 
-import uk.gov.hmrc.digitalservicestax.data._
-
-import scala.language.higherKinds
-
-trait DSTService[F[_]] {
-
-  def lookupCompany(): F[Option[CompanyRegWrapper]]
-  def lookupCompany(utr: UTR, postcode: Postcode): F[Option[CompanyRegWrapper]]
-  def submitRegistration(reg: Registration): F[Unit]
-  def submitReturn(period: Period, ret: Return): F[Unit]
-  def lookupRegistration(): F[Option[Registration]]
-  def lookupOutstandingReturns(): F[Set[Period]]
-  def lookupFinancialDetails(): F[List[FinancialTransaction]]
-}
+case class FinancialTransaction (
+  date: java.time.LocalDate,
+  description: String,
+  amount: BigDecimal
+)
