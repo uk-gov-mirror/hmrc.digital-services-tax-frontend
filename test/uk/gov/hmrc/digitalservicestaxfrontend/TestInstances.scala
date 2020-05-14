@@ -166,7 +166,7 @@ object TestInstances {
   )
 
   def genGroupCo: Gen[GroupCompany] = (
-    nonEmptyString,
+    arbitrary[CompanyName],
     Gen.option(UTR.gen)
     ).mapN(GroupCompany.apply)
 
