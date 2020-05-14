@@ -17,19 +17,20 @@
 package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
+import cats.implicits._
 
 object SampleData {
 
   val sampleAddress = UkAddress (
-    NonEmptyString("12 The Street"),
-    "False Crescent",
-    "Genericford",
-    "Madeupshire",    
+    AddressLine("12 The Street"),
+    AddressLine("False Crescent").some,
+    AddressLine("Genericford").some,
+    AddressLine("Madeupshire").some,
     Postcode("GE12 3CD")
   )
 
   val sampleCompany = Company (
-    NonEmptyString("TestCo Ltd"),
+    CompanyName("TestCo Ltd"),
     sampleAddress
   )
 

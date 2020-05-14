@@ -63,6 +63,16 @@ package object data extends SimpleJson {
       Some(in).filter(_.nonEmpty)
   }
 
+  type CompanyName = String @@ CompanyName.Tag
+  object CompanyName extends RegexValidatedString(
+    regex = """^[a-zA-Z0-9- '&]{1,105}$"""
+  )
+
+  type AddressLine = String @@ AddressLine.Tag
+  object AddressLine extends RegexValidatedString(
+    regex = """^[a-zA-Z0-9',&./ ]{1,35}$"""
+  )
+
   type RestrictiveString = String @@ RestrictiveString.Tag
   object RestrictiveString extends RegexValidatedString(
     """^[a-zA-Z&^]{1,35}$"""
@@ -109,12 +119,9 @@ package object data extends SimpleJson {
 
   type PhoneNumber = String @@ PhoneNumber.Tag
   object PhoneNumber extends RegexValidatedString(
-    "^[0-9 ]{6,30}$"
-    // TODO: check phone number regex
-//    """^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]
-//      |?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|
-//      |(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$""".stripMargin.replace("\n","") 
-//    _.filter(_.isDigit)
+//    "^[A-Z0-9)/(\\-*#+]{0,24}$"
+    //Regex which fits both phoneNumberType and regimeSpecificDetailsType/paramValue eeitt_subscribe
+    "^[A-Z0-9 \\-]{1,30}$"
   )
 
   type Email = String @@ Email.Tag
