@@ -49,3 +49,5 @@ libraryDependencies ++= Seq(
 
 routesImport += "uk.gov.hmrc.digitalservicestax.data._"
 TwirlKeys.templateImports += "uk.gov.hmrc.digitalservicestax.data._"
+
+scalaVersion := "2.12.11"

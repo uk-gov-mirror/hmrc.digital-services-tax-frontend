@@ -21,21 +21,16 @@ import java.time.LocalDate
 import ltbs.uniform
 import ltbs.uniform.common.web.GenericWebTell
 
-//import cats.data.Validated
 import cats.implicits._
 import enumeratum._
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
 import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
-import ltbs.uniform.{NonEmptyString => _, RichEither => _, _}
+import ltbs.uniform.{NonEmptyString => _, _}
 import play.twirl.api.Html
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.data._
-import shapeless.tag.{@@}
-
-
-import cats.implicits._
 import cats.{Monoid, Applicative, Monad, Eq, Semigroup}
 import cats.data.{NonEmptyList, Validated}
 import shapeless.tag, tag.{@@}
