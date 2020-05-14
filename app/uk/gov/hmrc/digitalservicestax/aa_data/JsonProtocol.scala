@@ -125,9 +125,9 @@ object BackendAndFrontendJson extends SimpleJson {
       JsSuccess(json.as[Map[String, JsNumber]].map { case (k, v) =>
         k.split(":") match {
           case Array(name, utrS) =>
-            GroupCompany(NonEmptyString(name), Some(UTR(utrS))) -> v.value
+            GroupCompany(CompanyName(name), Some(UTR(utrS))) -> v.value
           case Array(name) =>
-            GroupCompany(NonEmptyString(name), None) -> v.value
+            GroupCompany(CompanyName(name), None) -> v.value
         }
       })
     }
