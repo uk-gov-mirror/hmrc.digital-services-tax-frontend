@@ -19,7 +19,6 @@ package uk.gov.hmrc.digitalservicestax.controllers
 import java.time.LocalDate
 
 import ltbs.uniform
-import ltbs.uniform.common.web.GenericWebTell
 
 import cats.implicits._
 import enumeratum._
@@ -29,19 +28,24 @@ import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
 import ltbs.uniform.{NonEmptyString => _, _}
 import play.twirl.api.Html
+import play.twirl.api.HtmlFormat.Appendable
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.data._
-import cats.{Monoid, Applicative, Monad, Eq, Semigroup}
-import cats.data.{NonEmptyList, Validated}
+import cats.data.Validated
 import shapeless.tag, tag.{@@}
-import collection.immutable.ListMap
 import uniform.validation.{Rule, Transformation}
 
 trait Widgets {
 
   implicit val twirlStringField: FormField[String, Html] = twirlStringFields()
 
-  def twirlStringFields(autoFields: Option[String] = None): FormField[String, Html] = new FormField[String, Html] {
+  type CustomStringRenderer =
+    (List[String], String, ErrorTree, UniformMessages[Html], Option[String]) => Appendable
+
+  def twirlStringFields(
+    autoFields: Option[String] = None,
+    customRender: CustomStringRenderer = views.html.uniform.string.apply(_,_,_,_,_)
+  ): FormField[String, Html] = new FormField[String, Html] {
     def decode(out: Input): Either[ErrorTree, String] =
       out.toStringField().toEither
 
@@ -56,7 +60,7 @@ trait Widgets {
       messages: UniformMessages[Html]
     ): Html = {
       val existingValue: String = data.valueAtRoot.flatMap{_.headOption}.getOrElse("")
-      views.html.uniform.string(fieldKey, existingValue, errors, messages, autoFields)
+      customRender(fieldKey, existingValue, errors, messages, autoFields)
     }
   }
 
@@ -80,7 +84,10 @@ trait Widgets {
       Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: BaseType}
 
-  def validatedNonEmptyString(validated: ValidatedType[String], maxLen: Int = Integer.MAX_VALUE)(
+  def validatedNonEmptyString(
+    validated: ValidatedType[String],
+    maxLen: Int = Integer.MAX_VALUE
+  )(
     implicit baseForm: FormField[String, Html]
   ): FormField[String @@ validated.Tag, Html] =
     baseForm.simap{
@@ -94,11 +101,17 @@ trait Widgets {
   implicit def nesField         = validatedVariant(NonEmptyString)
   implicit def utrField         = validatedNonEmptyString(UTR)
   implicit def emailField       = validatedVariant(Email)
-  implicit def phoneField       = validatedNonEmptyString(PhoneNumber, 24)
+  implicit def phoneField       = validatedNonEmptyString(PhoneNumber, 24)(twirlStringFields(
+    // use a different view
+    customRender = views.html.uniform.phonenumber.apply _
+  ))
   implicit def percentField     = validatedVariant(Percent)
   implicit def accountField     = validatedNonEmptyString(AccountNumber)
   implicit def accountNameField = validatedNonEmptyString(AccountName, 35)
-  implicit def sortCodeField    = validatedNonEmptyString(SortCode)
+  implicit def sortCodeField    = validatedNonEmptyString(SortCode)(twirlStringFields(
+    // use the string view but pass in an extra parameter
+    customRender = views.html.uniform.string(_,_,_,_,_,"sort-code")
+  ))
   implicit def ibanField        = validatedVariant(IBAN)
   implicit def restrictField    = validatedVariant(RestrictiveString)
 
