@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.digitalservicestax
 
-import ltbs.uniform.common.web.FormField
-
 package object controllers {
 
   implicit class HtmlEscapingString(val in: String) extends AnyVal {

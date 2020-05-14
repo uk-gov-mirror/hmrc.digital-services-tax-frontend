@@ -42,12 +42,12 @@ trait Widgets {
 
   type CustomStringView = (List[String], String, ErrorTree, UniformMessages[Html], Option[String]) => Appendable
 
-  implicit val twirlStringField: FormField[String, Html] = new twirlStringFields() 
+  implicit val twirlStringField: FormField[String, Html] = twirlStringFields() 
 
-  private class twirlStringFields(
-    val autoFields: Option[String] = None,
-    val renderM: CustomStringView = views.html.uniform.string(_,_,_,_,_)
-  ) extends FormField[String, Html] {
+  def twirlStringFields(
+    autoFields: Option[String] = None,
+    renderM: CustomStringView = views.html.uniform.string(_,_,_,_,_)
+  ) = new FormField[String, Html] {
     def decode(out: Input): Either[ErrorTree, String] =
       out.toStringField().toEither
 
@@ -90,26 +90,13 @@ trait Widgets {
     validated: ValidatedType[String],
     maxLen: Int = Integer.MAX_VALUE,
     customView: CustomStringView = views.html.uniform.string.apply(_,_,_,_,_)
-  ): FormField[String @@ validated.Tag, Html] = { 
-    val base = (new twirlStringFields(None, customView)).simap{
+  ): FormField[String @@ validated.Tag, Html] = 
+    twirlStringFields(None, customView).simap{
       case "" => Left(ErrorMsg("required").toTree)
       case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree) 
       case x =>
         Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
-
-    new FormField[String @@ validated.Tag, Html] {
-      def decode(out: Input): Either[ErrorTree,String @@ validated.Tag] = base.decode(out)
-      def encode(in: String @@ validated.Tag): Input = base.encode(in)
-      def render(
-        pageKey: List[String],
-        fieldKey: List[String],
-        breadcrumbs: Breadcrumbs,
-        data: Input,errors: ErrorTree,
-        messages: UniformMessages[Html]
-      ): Html = ???
-    }
-  }
 
   implicit def postcodeField    = validatedNonEmptyString(Postcode)
   implicit def nesField         = validatedVariant(NonEmptyString)
@@ -126,7 +113,7 @@ trait Widgets {
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
   implicit val intField: FormField[Int,Html] =
-    (new twirlStringFields()).simap(x => 
+    twirlStringFields().simap(x => 
       {
         Rule.nonEmpty[String].apply(x) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toInt)
@@ -134,7 +121,7 @@ trait Widgets {
     )(_.toString)
 
   implicit val byteField: FormField[Byte,Html] =
-    (new twirlStringFields()).simap(x => 
+    twirlStringFields().simap(x => 
       {
         Rule.nonEmpty[String].apply(x) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toByte)
@@ -142,7 +129,7 @@ trait Widgets {
     )(_.toString)
 
   implicit val longField: FormField[Long,Html] =
-    (new twirlStringFields()).simap(x => 
+    twirlStringFields().simap(x => 
       {
         Rule.nonEmpty[String].apply(x) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toLong)
@@ -150,7 +137,7 @@ trait Widgets {
     )(_.toString)
 
   implicit val bigdecimalField: FormField[BigDecimal,Html] =
-    (new twirlStringFields()).simap(x => 
+    twirlStringFields().simap(x => 
       {
         Rule.nonEmpty[String].apply(x) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(BigDecimal.apply)
