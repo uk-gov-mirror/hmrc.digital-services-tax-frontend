@@ -279,16 +279,7 @@ class JourneyController @Inject()(
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
     import java.time.LocalDate
-
-    val f = Future(
-      List(
-        (LocalDate.of(2020, 4, 1), "Opening balance", 0),
-        (LocalDate.of(2021, 4, 7), "Payment received", 513000.40),
-        (LocalDate.of(2021, 4, 11), "Late payment fee", -100),
-        (LocalDate.of(2021, 7, 31), "Return received", -512000.40),
-        (LocalDate.of(2021, 8, 11), "Repayment", 	-900)
-      ) : List[(LocalDate, String, BigDecimal)]
-    )
+    val f = backend.lookupFinancialDetails()
 
     f.map{ lineItems => 
       Ok(views.html.main_template(
@@ -297,6 +288,8 @@ class JourneyController @Inject()(
         mainClass = Some("full-width")
       )(views.html.financial_details(lineItems, msg)))
     }
+
+
   }
 
   def accessibilityStatement: Action[AnyContent] = Action { implicit request =>

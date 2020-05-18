@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@(lineItems: List[(java.time.LocalDate, String, BigDecimal)], messages: UniformMessages[Html])
+@(lineItems: List[FinancialTransaction], messages: UniformMessages[Html])
 
 @formatter = @{java.time.format.DateTimeFormatter.ofPattern("d MMM YYYY")}
 
@@ -24,7 +24,7 @@
     @messages("financial-details.heading")
   </h1>
   
-  <p>@messages("financial-details.balance", java.text.NumberFormat.getInstance.format(lineItems.map{_._3}.sum))</p>
+  <p>@messages("financial-details.balance", java.text.NumberFormat.getInstance.format(lineItems.map{_.amount}.sum))</p>
 
   <p>@messages("financial-details.delay", 3)</p>
 
@@ -40,8 +40,8 @@
       </tr>
     </thead>
     <tbody class="govuk-table__body">
-      @withRunningTotal = @{lineItems zip lineItems.map(_._3).inits.toList.init.map{_.sum}.reverse}
-      @withRunningTotal.map { case ((date, desc, amt), running) => 
+      @withRunningTotal = @{lineItems zip lineItems.map(_.amount).inits.toList.init.map{_.sum}.reverse}
+      @withRunningTotal.map { case (FinancialTransaction(date, desc, amt), running) => 
       <tr class="govuk-table__row">
 	<th scope="row" class="govuk-table__header">@{date.format(formatter)}</th>
 	<td class="govuk-table__cell">@desc</td>
