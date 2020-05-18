@@ -25,13 +25,15 @@ import cats.Monad
 import cats.implicits._
 import java.time.LocalDate
 
+import uk.gov.hmrc.digitalservicestax.frontend._
+
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
 object RegJourney {
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
-  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: Boolean :: NilTypes
+  type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: String :: NonEmptyString :: Address :: UkAddress :: ForeignAddress :: Boolean :: AddressLine :: CompanyName :: NilTypes
 
 
   private def message(key: String, args: String*) = {
@@ -45,10 +47,8 @@ object RegJourney {
   ): F[Registration] = {
     import interpreter._
 
-
-
     for {
-      
+
       companyRegWrapper <- backendService.lookupCompany() >>= { // gets a CompanyRegWrapper but converts to a company
 
         // found a matching company
@@ -62,10 +62,27 @@ object RegJourney {
         // no matching company found
         case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
           case false =>
-            (
-              ask[NonEmptyString]("company-name"),
-              ask[Address]("company-registered-office-address")
-            ).mapN(Company.apply).map(CompanyRegWrapper(_, useSafeId = true))
+            for {
+              companyName <- ask[CompanyName]("company-name")
+              companyAddress <- ask[Boolean](
+                "check-company-registered-office-address",
+                customContent = (
+                    message("check-company-registered-office-address.heading", companyName) ++
+                    message("check-company-registered-office-address.required", companyName)
+                  )
+              ) >>=[Address] {
+                case true =>
+                  ask[UkAddress](
+                    "company-registered-office-uk-address",
+                      customContent = message("company-registered-office-uk-address.heading", companyName)
+                    ).map(identity)
+                case false =>
+                  ask[ForeignAddress](
+                    "company-registered-office-international-address",
+                    customContent = message("company-registered-office-international-address.heading", companyName)
+                  ).map(identity)
+              }
+            } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
           case true =>
             for {
               utr <- ask[UTR]("enter-utr")
@@ -82,43 +99,101 @@ object RegJourney {
         }
       }
 
-      registration <- (
-        companyRegWrapper.pure[F],
-        ask[Address]("alternate-contact") when
-          interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x},
-        ask[Boolean]("check-if-group") >>= {
-          case true =>
+
+      registration <- {
+        for {
+          companyRegWrapper <- companyRegWrapper.pure[F]
+          contactAddress <- (
+            ask[Boolean]("check-contact-address") >>=[Address] {
+              case true =>
+                ask[UkAddress](
+                  "contact-uk-address"
+                ).map(identity)
+              case false =>
+                ask[ForeignAddress](
+                  "contact-international-address"
+                ).map(identity)
+            }
+            ) when interact[Address, Boolean]("company-contact-address", companyRegWrapper.company.address).map{x => !x}
+          isGroup <- ask[Boolean]("check-if-group")
+          ultimateParent <- if(isGroup){
             for {
-              parentName <- ask[NonEmptyString]("ultimate-parent-company-name",
-                validation =
-                  Rule.cond[NonEmptyString](
-                    _.length < 160,
-                    "error.length"
-                  ) followedBy
-                    Rule.cond[NonEmptyString](
-                      _.matches("""^[a-zA-Z0-9- '&\\/]{1,105}$"""),
-                      "format"
-                    )
-              )
-              parentAddress <- ask[Address](
-                "ultimate-parent-company-address",
-                customContent = message("ultimate-parent-company-address.heading", parentName)
-              )
-            } yield Company(parentName, parentAddress).some
-          case false =>
-            Option.empty[Company].pure[F]
-        },
-        ask[ContactDetails]("contact-details"),
-        ask[Boolean]("check-liability-date") flatMap {
-          case true => LocalDate.of(2020,4,6).pure[F]
-          case false =>
-            ask[LocalDate]("liability-start-date",
-              validation = Rule.min(LocalDate.of(2020,4,6))
-            )
-        },
-        ask[LocalDate]("accounting-period-end-date"),
-        None.pure[F]
-      ).mapN(Registration.apply)
+               parentName <- ask[CompanyName]("ultimate-parent-company-name")
+               parentAddress <-
+                 ask[Boolean](
+                   "check-ultimate-parent-company-address",
+                   customContent = (
+                     message("check-ultimate-parent-company-address.heading", parentName) ++
+                       message("check-ultimate-parent-company-address.required", parentName)
+                     )
+                 ) >>=[Address] {
+                   case true =>
+                     ask[UkAddress](
+                       "ultimate-parent-company-uk-address",
+                       customContent = message("ultimate-parent-company-uk-address.heading", parentName)
+                     ).map(identity)
+                   case false =>
+                     ask[ForeignAddress](
+                       "ultimate-parent-company-international-address",
+                       customContent =
+                         message("ultimate-parent-company-international-address.heading", parentName)
+                     ).map(identity)
+                 }
+             } yield Company(parentName, parentAddress).some
+           } else {
+             Option.empty[Company].pure[F]
+           }
+          contactDetails <- ask[ContactDetails]("contact-details")
+          groupMessage = if(isGroup) "group" else "company"
+          liabilityDate <- ask[Boolean] (
+            "check-liability-date",
+            customContent = message("check-liability-date.required", groupMessage)
+          ) flatMap {
+              case true => LocalDate.of(2020, 4, 1).pure[F]
+              case false =>
+                ask[LocalDate]("liability-start-date",
+                  validation =
+                    Rule.min(LocalDate.of(2020, 4, 1), "minimum-date") followedBy
+                    Rule.max(LocalDate.now.plusYears(1), "maximum-date"),
+                  customContent =
+                    message("liability-start-date.maximum-date", groupMessage, formatDate(LocalDate.now.plusYears(1))) ++
+                    message("liability-start-date.minimum-date", groupMessage) ++
+                    message("liability-start-date.day-and-month-and-year.empty", groupMessage) ++
+                    message("liability-start-date.day.empty", groupMessage) ++
+                    message("liability-start-date.month.empty", groupMessage) ++
+                    message("liability-start-date.year.empty", groupMessage) ++
+                    message("liability-start-date.day-and-month.empty", groupMessage) ++
+                    message("liability-start-date.day-and-year.empty", groupMessage) ++
+                    message("liability-start-date.month-and-year.empty", groupMessage)
+                )
+          }
+          periodEndDate <- ask[LocalDate] (
+            "accounting-period-end-date",
+            validation =
+              liabilityDate match {
+                case ld if ld == LocalDate.of(2020, 4, 1) =>
+                  Rule.min(LocalDate.of(2020, 4, 2), "minimum-date") followedBy
+                  Rule.max(liabilityDate.plusYears(1).minusDays(1), "fixed-maximum-date")
+                case _ =>
+                  Rule.min(LocalDate.of(2020, 4, 2), "minimum-date") followedBy
+                  Rule.max(liabilityDate.plusYears(1), "maximum-date")
+              },
+            customContent =
+              message("accounting-period-end-date.maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).plusDays(1))) ++
+              message("accounting-period-end-date.fixed-maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).minusDays(1))) ++
+              message("accounting-period-end-date.minimum-date", groupMessage) ++
+              message("accounting-period-end-date.day-and-month-and-year.empty", groupMessage) ++
+              message("accounting-period-end-date.day.empty", groupMessage) ++
+              message("accounting-period-end-date.month.empty", groupMessage) ++
+              message("accounting-period-end-date.year.empty", groupMessage) ++
+              message("accounting-period-end-date.day-and-month.empty", groupMessage) ++
+              message("accounting-period-end-date.day-and-year.empty", groupMessage) ++
+              message("accounting-period-end-date.month-and-year.empty", groupMessage)
+          )
+          emptyRegNo <- None.pure[F]
+        } yield Registration(companyRegWrapper, contactAddress , ultimateParent, contactDetails, liabilityDate, periodEndDate, emptyRegNo)
+      }
+
       _ <- tell("check-your-answers", CYA(registration))
     } yield (registration)
   }

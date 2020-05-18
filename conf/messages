@@ -9,7 +9,7 @@ common.try-again=Try again
 common.alpha-info.p1=This is a new service – your 
 common.alpha-info.link=feedback
 common.alpha-info.p2= will help us to improve it.
-common.print-save=Print or save your registered details
+common.print-save=Print or save this page
 common.warning.title=Warning
 common.error=Error
 common.beta=BETA
@@ -26,14 +26,15 @@ common.edit=Edit
 common.remove=Remove
 common.yes=Yes
 common.no=No
+common.group=Group
+common.company=Company
 
 # Errors
 there.is.a.problem=There is a problem
-not-a-date=Enter a real date
 
 # time out
 time-out.title=For your security, we signed you out
-time-out.save=Your progress will saved for 30 days
+time-out.save=Your progress will be saved for 30 days
 
 #Registration
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
@@ -43,72 +44,63 @@ check-unique-taxpayer-reference.FALSE=No
 check-unique-taxpayer-reference.required=Select yes if the company you are registering has a UK Corporation Tax Unique Taxpayer Reference
 
 enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
-enter-utr.required=Enter the company’s Corporation Tax Unique Taxpayer Reference
-enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
 enter-utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   You can <a target=_blank href="https://www.gov.uk/find-lost-utr-number">find a lost UTR (opens in a new window or tab)</a>.
 
 company-registered-office-postcode.heading=What is the postcode of the company’s Registered Office address?
-company-registered-office-postcode.required=Enter the postcode of the company’s registered office address
-company-registered-office-postcode.invalid=Enter a real postcode
 
 enter-postcode.heading=What is the postcode of the company’s registered office address?
-enter-postcode.required=Enter the postcode of the company’s registered office address
-enter-postcode.invalid=Enter a real postcode
-
 
 company-name.heading=What is the name of the company you want to register?
 company-name.hint=This is the name registered with an official company register, such as Companies House.
-company-name.invalid=Enter the name of the company you want to register
 
-company-registered-office-address=Where is the company’s Registered Office address?
-company-registered-office-address.UkAddress.heading=UK
-company-registered-office-address.UkAddress.line1.heading=Building or street
-company-registered-office-address.UkAddress.line2.heading=Building or street line 2 (optional)
-company-registered-office-address.UkAddress.town.heading=Town or city (optional)
-company-registered-office-address.UkAddress.county.heading=County (optional)
-company-registered-office-address.UkAddress.postcode.heading=Postcode
+check-company-registered-office-address.heading=Is the registered office address of {0} in the UK?
+check-company-registered-office-address.TRUE=Yes
+check-company-registered-office-address.FALSE=No
 
-company-registered-office-address.ForeignAddress=Outside the UK
-company-registered-office-address.ForeignAddress.line1.heading=Address line 1
-company-registered-office-address.ForeignAddress.line2.heading=Address line 2 (optional)
-company-registered-office-address.ForeignAddress.line3.heading=Address line 3 (optional)
-company-registered-office-address.ForeignAddress.line4.heading=Address line 4 (optional)
-company-registered-office-address.ForeignAddress.countryCode.heading=Country
-company-registered-office-address.ForeignAddress.countryCode.invalid=Enter a country from the list
+company-registered-office-uk-address.heading=Where is the registered office address of {0}?
+company-registered-office-uk-address.line1.heading=Building or street
+company-registered-office-uk-address.line2.heading=Building or street line 2 (optional)
+company-registered-office-uk-address.line3.heading=Town or city (optional)
+company-registered-office-uk-address.line4.heading=County (optional)
+company-registered-office-uk-address.postalCode.heading=Postcode
 
-confirm-company-details.heading=Is this the company you want to register?
+company-registered-office-international-address.heading=Where is the registered office address of {0}?
+company-registered-office-international-address.line1.heading=Address line 1
+company-registered-office-international-address.line2.heading=Address line 2 (optional)
+company-registered-office-international-address.line3.heading=Address line 3 (optional)
+company-registered-office-international-address.line4.heading=Address line 4 (optional)
+company-registered-office-international-address.countryCode.heading=Country
+
+confirm-company-details.heading=Is this the company you want to register as the responsible member?
 confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
-confirm-company-details.required=Select yes if this is the company you want to register
 confirm-company-details.TRUE=Yes
 confirm-company-details.FALSE=No
 
 company-contact-address.heading=Can we use this address to contact you about your Digital Services Tax?
-company-contact-address.required=Select yes if we can use this address to contact you about your Digital Services Tax
 company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
-alternate-contact.heading=Where is your contact address?
-alternate-contact.required=Select if your contact address is in the UK or outside the UK
-alternate-contact.ForeignAddress=Outside the UK
-alternate-contact.ForeignAddress.line1.heading=Address line 1
-alternate-contact.ForeignAddress.line1.invalid=Enter Address Line 1
-alternate-contact.ForeignAddress.line2.heading=Address line 2 (optional)
-alternate-contact.ForeignAddress.line3.heading=Address line 3 (optional)
-alternate-contact.ForeignAddress.line4.heading=Address line 4 (optional)
-alternate-contact.ForeignAddress.countryCode.heading=Country
-alternate-contact.ForeignAddress.countryCode.invalid=Enter a country from the list
+check-contact-address.heading=Is your contact address in the UK?
+check-contact-address.TRUE=Yes
+check-contact-address.FALSE=No
 
-alternate-contact.UkAddress=UK
-alternate-contact.UkAddress.line1.heading=Building or street
-alternate-contact.UkAddress.line2.heading=Building or street line 2 (optional)
-alternate-contact.UkAddress.town.heading=Town or city (optional)
-alternate-contact.UkAddress.county.heading=County (optional)
-alternate-contact.UkAddress.postcode.heading=Postcode
+contact-uk-address.heading=What is your contact address?
+contact-uk-address.line1.heading=Building or street
+contact-uk-address.line2.heading=Building or street line 2 (optional)
+contact-uk-address.line3.heading=Town or city (optional)
+contact-uk-address.line4.heading=County (optional)
+contact-uk-address.postalCode.heading=Postcode
+
+contact-international-address.heading=What is your contact address?
+contact-international-address.line1.heading=Address line 1
+contact-international-address.line2.heading=Address line 2 (optional)
+contact-international-address.line3.heading=Address line 3 (optional)
+contact-international-address.line4.heading=Address line 4 (optional)
+contact-international-address.countryCode.heading=Country
 
 check-if-group.heading=Is the company you want to register part of a group?
-check-if-group.required=Select yes if the company you want to register is part of a group
 check-if-group.details=What we mean by a 'group'
 check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent company and all its consolidated subsidiaries.</p>\
   <p>A parent company is an entity that is (one of the following):</p>\
@@ -116,37 +108,32 @@ check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent
     <li>a member of a Generally Accepted Accounting Principles (GAAP) group and not a consolidated subsidiary of another entity</li>\
     <li>not a member of a GAAP group</li>\
   </ul>\
-  <p>We use the meaning of 'group', 'entity' and 'consolidated subsidiary' given by UK GAAP, US GAAP or International Accounting Standards (IAS).</p>
+  <p>You can find a list of acceptable GAAP in the \
+    <a href="https://www.gov.uk/hmrc-internal-manuals/digital-services-tax" target="_blank">Digital Services Tax Manual (opens in a new window or tab)</a>\
+  </p>
 check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
-ultimate-parent-company-name.invalid=Enter the name of the group’s ultimate parent company
-ultimate-parent-company-name.error.length=Name of group’s ultimate global parent company must be 160 characters or fewer
-ultimate-parent-company-name.format=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
-ultimate-parent-company-address.heading=Where is the Registered Office address of {0}?
+check-ultimate-parent-company-address.heading=Is the registered office address of {0} in the UK?
+check-ultimate-parent-company-address.TRUE=Yes
+check-ultimate-parent-company-address.FALSE=No
 
-ultimate-parent-company-address.ForeignAddress=Outside the UK
-ultimate-parent-company-address.ForeignAddress.line1.heading=Address line 1
-ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.line2.heading=Address line 2 (optional)
-ultimate-parent-company-address.ForeignAddress.line3.heading=Address line 3 (optional)
-ultimate-parent-company-address.ForeignAddress.line4.heading=Address line 4 (optional)
-ultimate-parent-company-address.ForeignAddress.countryCode.heading=Country
+ultimate-parent-company-uk-address.heading=What is the registered office address of {0}?
+ultimate-parent-company-uk-address.line1.heading=Building or street
+ultimate-parent-company-uk-address.line2.heading=Building or street line 2 (optional)
+ultimate-parent-company-uk-address.line3.heading=Town or city (optional)
+ultimate-parent-company-uk-address.line4.heading=County (optional)
+ultimate-parent-company-uk-address.postalCode.heading=Postcode
 
-ultimate-parent-company-address.ForeignAddress.line1.invalid=Enter Address Line 1
-ultimate-parent-company-address.ForeignAddress.countryCode.invalid=Start typing and enter a country from the list
-
-ultimate-parent-company-address.required=Select if the registered office address is in the UK or outside the UK
-
-ultimate-parent-company-address.UkAddress=UK
-ultimate-parent-company-address.UkAddress.line1.heading=Building or street
-ultimate-parent-company-address.UkAddress.line2.heading=Building or street line 2 (optional)
-ultimate-parent-company-address.UkAddress.town.heading=Town or city (optional)
-ultimate-parent-company-address.UkAddress.county.heading=County (optional)
-ultimate-parent-company-address.UkAddress.postcode.heading=Postcode
+ultimate-parent-company-international-address.heading=What is the registered office address of {0}?
+ultimate-parent-company-international-address.line1.heading=Address line 1
+ultimate-parent-company-international-address.line2.heading=Address line 2 (optional)
+ultimate-parent-company-international-address.line3.heading=Address line 3 (optional)
+ultimate-parent-company-international-address.line4.heading=Address line 4 (optional)
+ultimate-parent-company-international-address.countryCode.heading=Country
 
 contact-details.heading=Contact person’s details
 contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
@@ -156,14 +143,8 @@ contact-details.phoneNumber.heading= Phone number
 contact-details.phoneNumber.hint=For international numbers include the country code.
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
-contact-details.forename.invalid=Forename
-contact-details.forename.name=Forename name
-contact-details.surname.invalid=Surname
-contact-details.phoneNumber.invalid=Phone number
-contact-details.email.invalid=Email
 
 check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
-check-liability-date.required=Select yes if the group was liable for Digital Services Tax on 1 April 2020 
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
@@ -178,65 +159,63 @@ accounting-period-end-date.hint=For example, 31 7 2020.
 accounting-period-end-date.Date.day.heading=Day
 accounting-period-end-date.Date.month.heading=Month
 accounting-period-end-date.Date.year.heading=Year
-accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the group’s first accounting period for Digital Services Tax
-accounting-period-end-date.day.empty=The end date of the group’s first accounting period for Digital Services Tax must include a day
-accounting-period-end-date.month.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month
-accounting-period-end-date.year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a year
-accounting-period-end-date.day-and-month.empty=The end date of the group’s  first accounting period for Digital Services Tax must include a day and month
-accounting-period-end-date.day-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a day and year
-accounting-period-end-date.month-and-year.empty=The end date of the group’s first accounting period for Digital Services Tax must include a month and year
 
 #Reg cya
-cya.title=Check your answers before sending your application
-cya.company.title=Your company details
+check-your-answers.reg.title=Check your answers before sending your application
+check-your-answers.reg.company.title=Responsible member details
 
-cya.check-if-group.question=Is the company you are registering part of a group?
-cya.check-if-group.change=if the company you are registering is part of a group
+check-your-answers.reg.check-if-group.question=Is the company you are registering part of a group?
+check-your-answers.reg.check-if-group.change=if the company you are registering is part of a group
 
-cya.company-name-and-reg-address.question=Company name Registered Office address
-cya.company-name-and-reg-address.change=Company name and Registered Office address
+check-your-answers.reg.company-name-and-reg-address.question=Company name Registered Office address
+check-your-answers.reg.company-name-and-reg-address.change=Company name and Registered Office address
 
-cya.ultimate-parent-company.title=Ultimate global parent company details
-cya.ultimate-parent-company-name.question=Company name
-cya.ultimate-parent-company-name.change=company name
+check-your-answers.reg.ultimate-parent-company.title=Ultimate global parent company details
+check-your-answers.reg.ultimate-parent-company-name.question=Company name
+check-your-answers.reg.ultimate-parent-company-name.change=company name
 
-cya.ultimate-parent-company-address.question=Registered Office address
-cya.ultimate-parent-company-address.change=Registered Office address
+check-your-answers.reg.ultimate-parent-company-address.question=Registered Office address
+check-your-answers.reg.ultimate-parent-company-address.change=Registered Office address
 
-cya.contact-details.title=Contact person’s details
-cya.contact-details-name.question=Full name
-cya.contact-details.change.name=full name
-cya.contact-details-phone-number.question=Phone number
-cya.contact-details.change.phone-number=phone number
-cya.contact-details-email.question=Email address
-cya.contact-details.change.email=email
+check-your-answers.reg.contact-details.title=Contact person’s details
+check-your-answers.reg.contact-details-name.question=Full name
+check-your-answers.reg.contact-details.change.name=full name
+check-your-answers.reg.contact-details-phone-number.question=Phone number
+check-your-answers.reg.contact-details.change.phone-number=phone number
+check-your-answers.reg.contact-details-email.question=Email address
+check-your-answers.reg.contact-details.change.email=email
 
-cya.liability-date.title=Accounting period details
-cya.liability-start-date.question=Liability start date
-cya.check-liability-date.change=Change the date the company become liable for Digital Services Tax
-cya.liability-start-date.change=liability start date
+check-your-answers.reg.liability-date.title=Accounting period details
+check-your-answers.reg.liability-start-date.question=Liability start date
+check-your-answers.reg.check-liability-date.change=Change the date the company become liable for Digital Services Tax
+check-your-answers.reg.liability-start-date.change=liability start date
 
-cya.accounting-end-date.question=First accounting period end date
-cya.accounting-end-date.change=first accounting period end date
-cya.accounting-period-end-date.change=Change the end date of the company’s first accounting period for Digital Services Tax
+check-your-answers.reg.accounting-end-date.question=First accounting period end date
+check-your-answers.reg.accounting-end-date.change=first accounting period end date
+check-your-answers.reg.accounting-period-end-date.change=Change the end date of the company’s first accounting period for Digital Services Tax
 
-cya.submission.title=Send your details
-cya.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
+check-your-answers.reg.submission.title=Send your details
+check-your-answers.reg.submission-notice=By submitting this notification you are confirming that, to the best of your knowledge, \
   the details you are providing are correct.
-cya.warning.body=You could be prosecuted if you deliberately submit false or misleading information.
+check-your-answers.reg.warning.body=You could be prosecuted if you deliberately submit false or misleading information.
+
+check-your-answers.reg.submission.group=By submitting this notification, you are confirming that:
+
+check-your-answers.reg.submission.group.list.1={0} is authorised to act on behalf of {1} as the group's responsible member
+check-your-answers.reg.submission.group.list.2={0} has agreed to provide the information and resources that {1} needs to comply with its Digital Services Tax obligations
+check-your-answers.reg.submission.group.list.3=to the best of your knowledge, the details you are providing are correct and complete
+check-your-answers.save-continue=Accept and send
 
 #Reg complete
 registration-sent.heading=Registration sent
 registration-sent.detail=We received your registration for {0} for the Digital Services Tax
 registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
-registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to in \
-  the next 24 hours.
-#registration-sent.what-you-do-next.title=What you must do next
-#registration-sent.what-you-do-next.p1=You must pay any Digital Services Tax you owe by 1 April 2021.
-#registration-sent.what-you-do-next.p2=You must submit your first return by 31 July 2021.
+registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in \
+  the next 5 days.
 registration-sent.help-using-this-service.title=Help using this service
-registration-sent.help-using-this-service.p1=For help with payments and returns, {0}.
+registration-sent.print-save=Print or save this page
+registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="{0}">check the Digital Services Tax guidance</a>.
 registration-sent.help-using-this-service.list.title=Contact your HMRC Customer Compliance Manager (CCM) if you:
 registration-sent.help-using-this-service.list.1=do not receive your registration number
 registration-sent.help-using-this-service.list.2=need to change your registered details
@@ -265,6 +244,175 @@ registration.pending.ccm-content=If you do not know who your CCM is, or do not h
 registration.pending.ccm-link=ccgdstmailbox@hmrc.gov.uk
 registration.pending.ccm-email=mailto:ccgdstmailbox@hmrc.gov.uk
 
+#Reg error messages
+
+#Enter UTR
+enter-utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
+enter-utr.required=Enter the company’s Corporation Tax Unique Taxpayer Reference
+
+#Company registered office postcode
+company-registered-office-postcode.required=Enter the postcode of the company’s registered office address
+company-registered-office-postcode.invalid=Enter a real postcode
+
+#Enter postcode
+enter-postcode.required=Enter the postcode of the company’s registered office address
+enter-postcode.invalid=Enter a real postcode
+
+#Company name
+company-name.required=Enter the name of the company you want to register
+company-name.length.exceeded=The name of the company must be 105 characters or fewer
+company-name.invalid=The name of the company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
+
+#Check company registered office address
+check-company-registered-office-address.required=Select yes if the registered office address of {0} is in the UK
+
+company-registered-office-uk-address.line1.required=Enter a building or street
+company-registered-office-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-uk-address.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-uk-address.line3.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-uk-address.line4.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-uk-address.line1.length.exceeded=Building or street must be 35 characters or fewer
+company-registered-office-uk-address.line2.length.exceeded=Building or street line 2 must be 35 characters or fewer
+company-registered-office-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
+company-registered-office-uk-address.line4.length.exceeded=County must be 35 characters or fewer
+company-registered-office-uk-address.postalCode.required=Enter the postcode of your registered office address
+company-registered-office-uk-address.postalCode.not-a-postcode=Enter a real postcode
+
+company-registered-office-international-address.line1.required=Enter Address Line 1
+company-registered-office-international-address.line1.invalid=Address Line 1 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-international-address.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-international-address.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-international-address.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+company-registered-office-international-address.line1.length.exceeded=Address Line 1 must be 35 characters or fewer
+company-registered-office-international-address.line2.length.exceeded=Address Line 2 must be 35 characters or fewer
+company-registered-office-international-address.line3.length.exceeded=Address Line 3 must be 35 characters or fewer
+company-registered-office-international-address.line4.length.exceeded=Address Line 4 must be 35 characters or fewer
+company-registered-office-international-address.countryCode.invalid=Start typing and enter a country from the list
+
+#confirm company details
+confirm-company-details.required=Select yes if this is the company you want to register as the responsible member
+
+#company contact address
+company-contact-address.required=Select yes if we can use this address to contact you about your Digital Services Tax
+
+#Check contact address
+check-contact-address.required=Select yes if your contact address is in the UK
+
+contact-uk-address.line1.required=Enter the building and street of your contact address
+contact-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-uk-address.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-uk-address.line3.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-uk-address.line4.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-uk-address.line1.length.exceeded=Building or street must be 35 characters or fewer
+contact-uk-address.line2.length.exceeded=Building or street line 2 must be 35 characters or fewer
+contact-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
+contact-uk-address.line4.length.exceeded=County must be 35 characters or fewer
+contact-uk-address.postalCode.required=Enter the postcode of your contact address
+contact-uk-address.postalCode.not-a-postcode=Enter a real postcode
+
+contact-international-address.line1.required=Enter Address Line 1
+contact-international-address.line1.invalid=Address Line 1 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-international-address.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-international-address.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-international-address.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+contact-international-address.line1.length.exceeded=Address Line 1 must be 35 characters or fewer
+contact-international-address.line2.length.exceeded=Address Line 2 must be 35 characters or fewer
+contact-international-address.line3.length.exceeded=Address Line 3 must be 35 characters or fewer
+contact-international-address.line4.length.exceeded=Address Line 4 must be 35 characters or fewer
+contact-international-address.countryCode.invalid=Start typing and enter a country from the list
+
+#Check if group
+check-if-group.required=Select yes if the company you want to register is part of a group
+
+#ultimate parent company name
+ultimate-parent-company-name.required=Enter the name of the group’s ultimate parent company
+ultimate-parent-company-name.length.exceeded=Name of group’s ultimate global parent company must be 105 characters or fewer
+ultimate-parent-company-name.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
+
+#check ultimate parent company address
+check-ultimate-parent-company-address.required=Select yes if the registered office address of {0} is in the UK?
+
+ultimate-parent-company-uk-address.line1.required=Enter the building and street of your contact address
+ultimate-parent-company-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-uk-address.line2.invalid=Building or street line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-uk-address.line3.invalid=Town or city must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-uk-address.line4.invalid=County must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-uk-address.line1.length.exceeded=Building or street must be 35 characters or fewer
+ultimate-parent-company-uk-address.line2.length.exceeded=Building or street line 2 must be 35 characters or fewer
+ultimate-parent-company-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
+ultimate-parent-company-uk-address.line4.length.exceeded=County must be 35 characters or fewer
+ultimate-parent-company-uk-address.postalCode.required=Enter the postcode of your registered office address
+ultimate-parent-company-uk-address.postalCode.not-a-postcode=Enter a real postcode
+not-a-postcode=Enter a real postcode
+
+ultimate-parent-company-international-address.line1.required=Enter Address Line 1
+ultimate-parent-company-international-address.line1.invalid=Address Line 1 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-international-address.line2.invalid=Address Line 2 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-international-address.line3.invalid=Address Line 3 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-international-address.line4.invalid=Address Line 4 must only include letters a to z, numbers, apostrophes, ampersands, commas, hyphens, backslashes and spaces
+ultimate-parent-company-international-address.line1.length.exceeded=Address Line 1 must be 35 characters or fewer
+ultimate-parent-company-international-address.line2.length.exceeded=Address Line 2 must be 35 characters or fewer
+ultimate-parent-company-international-address.line3.length.exceeded=Address Line 3 must be 35 characters or fewer
+ultimate-parent-company-international-address.line4.length.exceeded=Address Line 4 must be 35 characters or fewer
+ultimate-parent-company-international-address.countryCode.invalid=Start typing and enter a country from the list
+countryCode.invalid=Enter a country from the list
+
+#contact details
+contact-details.forename.required=Enter the contact person’s first name
+contact-details.forename.length.exceeded=Contact person’s first name must be 35 characters or fewer
+contact-details.forename.invalid=First name must only include letters a to z and ampersands
+forename.length.exceeded=Contact person’s first name must be 35 characters or fewer
+forename.required=Enter the first name
+forename.invalid=First name must only include letters a to z and ampersands
+
+contact-details.surname.required=Enter the contact person’s last name
+contact-details.surname.length.exceeded=Contact person’s first name must be 35 characters or fewer
+contact-details.surname.invalid=Last name must only include letters a to z, ampersands and spaces
+surname.required=Enter the last name
+surname.length.exceeded=Contact person’s first name must be 35 characters or fewer
+surname.invalid=Last name must only include letters a to z, ampersands and spaces
+
+contact-details.phoneNumber.required=Enter a phone number
+contact-details.phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or 0044 0808 157 0192
+contact-details.phoneNumber.length.exceeded=Phone number must be 24 characters or fewer
+phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or 0044 0808 157 0192
+phoneNumber.required=Enter a phone number
+phoneNumber.length.exceeded=Phone number must be 24 characters or fewer
+
+contact-details.email.required=Enter the contact person's email address
+contact-details.email.invalid=Enter an email address in the correct format, like name@example.com
+contact-details.email.length.exceeded=Email address must be 132 characters or fewer
+email.required=Please enter an email address
+email.invalid=Please enter a valid email address
+email.length.exceeded=Email address must be 132 characters or fewer
+
+#Check liability date
+check-liability-date.required=Select yes if the {0} was liable for Digital Services Tax on 1 April 2020
+
+#liability start date
+not-a-date=Enter a real date
+liability-start-date.minimum-date=The date the {0} became liable for Digital Services Tax must be after 1 April 2020
+liability-start-date.maximum-date=The date the {0} became liable for Digital Services Tax must be earlier than {1}
+liability-start-date.day-and-month-and-year.empty=Enter the date the {0} became liable for Digital Services Tax
+liability-start-date.day.empty=The date the {0} became liable for Digital Services Tax must include a day
+liability-start-date.month.empty=The date the {0} became liable for Digital Services Tax must include a month
+liability-start-date.year.empty=The date the {0} became liable for Digital Services Tax must include a year
+liability-start-date.day-and-month.empty=The date the {0} became liable for Digital Services Tax must include a day and month
+liability-start-date.day-and-year.empty=The date the {0} became liable for Digital Services Tax must include a day and year
+liability-start-date.month-and-year.empty=The date the {0} became liable for Digital Services Tax must include a month and year
+
+#accounting period end date
+accounting-period-end-date.maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must before {1}
+accounting-period-end-date.fixed-maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be on or before {1}
+accounting-period-end-date.minimum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be after 1 April 2020
+accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the {0}’s first accounting period for Digital Services Tax
+accounting-period-end-date.day.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a day
+accounting-period-end-date.month.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a month
+accounting-period-end-date.year.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a year
+accounting-period-end-date.day-and-month.empty=The end date of the {0}’s  first accounting period for Digital Services Tax must include a day and month
+accounting-period-end-date.day-and-year.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a day and year
+accounting-period-end-date.month-and-year.empty=The end date of the {0}’s first accounting period for Digital Services Tax must include a month and year
+
 #service page
 landing.heading=Digital Services Tax details
 landing.ultimate-parent-name=Group’s ultimate parent company: {0}
@@ -280,9 +428,10 @@ landing.balance=View your balance and transactions history
 #returns
 manage-companies-add-add.heading=Company details
 manage-companies.required=Select yes if you need to add another company to your group
-manage-companies.listing.heading=Confirm your group’s companies
-manage-companies.radio.heading=Do you need to add another company to your group?
-manage-companies.radio.hint=You must tell us about all the companies in your group that are liable for Digital Services Tax.
+manage-companies.listing.heading=Confirm the companies in your group that have a Digital Services Tax liability
+manage-companies.radio.heading=Do you need to add another company?
+manage-companies.radio.hint=You must tell us about all the companies in your group that have a Digital Services Tax \
+  liability for this return period.
 manage-companies.Add=Yes
 manage-companies.Continue=No
 remove-company=Remove company
@@ -431,7 +580,6 @@ bank-details.bankAccount.DomesticBankAccount=Yes
 bank-details.bankAccount.ForeignBankAccount=No
 
 bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
-bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.required=Enter the sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.invalid=Enter the sort code in the correct format, like 123456
 bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.heading=Building society roll number (if you have one)
@@ -523,31 +671,9 @@ wrong-creds.heading=You cannot use this service
 wrong-creds.sign-out.reason=You need to be an administrator user to register for the Digital Services Tax.
 wrong-creds.contact-admin=Contact your company's administrator if you need to use this service.
 
-contact-details.forename.required=Enter the contact person’s first name
-forename.required=Enter the first name
-
-contact-details.forename.invalid=First name must only include letters a to z, hyphens, apostrophes and spaces
-forename.invalid=First name must only include letters a to z, hyphens, apostrophes and spaces
-
-contact-details.surname.required=Enter the contact person’s last name
-surname.required=Enter the last name
-
-contact-details.surname.invalid=Last name must only include letters a to z, hyphens, apostrophes and spaces
-surname.invalid=Last name must only include letters a to z, hyphens, apostrophes and spaces
-
-contact-details.phoneNumber.required=Enter a phone number
-phoneNumber.required=Enter a phone number
-
-contact-details.phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
-phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
-
-contact-details.email.required=Please enter a contact email
-email.required=Please enter an email address
 # DO NOT MERGE UNCOMMENT BELOW
 #required=This is a required field
 
-contact-details.email.invalid=Please enter a valid contact email
-email.invalid=Please enter a valid email address
 # DO NOT MERGE UNCOMMENT BELOW
 #invalid=Please enter a valid string
 

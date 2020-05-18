@@ -26,19 +26,14 @@
 <p class="govuk-body">@messages(s"$key.email", email)</p>
 
 <div class="subsection">
-    <a href="javascript:window.print()" class="govuk-body">@messages("common.print-save")</a>
+    <a href="javascript:window.print()" class="govuk-body">@messages(s"$key.print-save")</a>
 </div>
 
 <h2 class="govuk-heading-m">@messages(s"$key.what-happens-next.title")</h2>
-<p class="govuk-body">@messages(s"$key.what-happens-next.p1")</p>
+<p class="govuk-body">@messages(s"$key.what-happens-next.p1", email)</p>
 
 <h2 class="govuk-heading-m">@messages(s"$key.help-using-this-service.title")</h2>
-    <!--TODO Correct url for guidance-->
-<p class="govuk-body">@messages(
-    s"$key.help-using-this-service.p1",
-    "<a href=govuk/digital-services-tax>check the Digital Services Tax guidance</a>"
-)
-</p>
+<p class="govuk-body">@messages(s"$key.help-using-this-service.p1", "https://www.gov.uk/topic/business-tax/digital-services-tax")</p>
 
 <p class="govuk-body">@messages(s"$key.help-using-this-service.list.title")</p>
 <ul class="list list-bullet">

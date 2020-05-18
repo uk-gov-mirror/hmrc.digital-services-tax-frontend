@@ -42,9 +42,9 @@ class ValidatedTypeTests extends FlatSpec with Matchers with ScalaCheckDrivenPro
     forAll { ukAddress: UkAddress =>
       ukAddress.lines shouldEqual List(
         ukAddress.line1,
-        ukAddress.line2,
-        ukAddress.line3,
-        ukAddress.line4,
+        ukAddress.line2.getOrElse(""),
+        ukAddress.line3.getOrElse(""),
+        ukAddress.line4.getOrElse(""),
         ukAddress.postalCode
       ).filter(_.nonEmpty)
     }
@@ -62,9 +62,9 @@ class ValidatedTypeTests extends FlatSpec with Matchers with ScalaCheckDrivenPro
     forAll { foreignAddress: ForeignAddress =>
       foreignAddress.lines shouldEqual List(
         foreignAddress.line1,
-        foreignAddress.line2,
-        foreignAddress.line3,
-        foreignAddress.line4,
+        foreignAddress.line2.getOrElse(""),
+        foreignAddress.line3.getOrElse(""),
+        foreignAddress.line4.getOrElse(""),
         Country.name(foreignAddress.countryCode)
       ).filter(_.nonEmpty)
     }

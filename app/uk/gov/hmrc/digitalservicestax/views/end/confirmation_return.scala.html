@@ -24,12 +24,8 @@
 <p class="govuk-body">@messages(s"$key.email")</p>
 
 <div class="subsection">
-    <a href="javascript:window.print()" class="govuk-body">@messages("common.print-save")</a>
+    <a href="javascript:window.print()" class="govuk-body">@messages(s"$key.print-save")</a>
 </div>
-
-<h2 class="govuk-heading-m">@messages(s"$key.what-you-do-next.title")</h2>
-<p class="govuk-body">@messages(s"$key.what-you-do-next.p1")</p>
-<p class="govuk-body">@messages(s"$key.what-you-do-next.p2")</p>
 
 <p>
     <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index()">
