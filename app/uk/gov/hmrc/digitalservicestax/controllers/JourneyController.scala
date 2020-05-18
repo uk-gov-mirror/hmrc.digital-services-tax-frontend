@@ -26,7 +26,8 @@ import config.AppConfig
 import javax.inject.{Inject, Singleton}
 
 import ltbs.uniform.UniformMessages
-import play.api.i18n.{I18nSupport, MessagesApi}
+import ltbs.uniform.interpreters.playframework.RichPlayMessages
+import play.api.i18n.{I18nSupport, MessagesApi, Messages}
 import play.api.mvc._
 import play.twirl.api.Html
 import scala.concurrent.{ExecutionContext, Future}
@@ -56,7 +57,8 @@ class JourneyController @Inject()(
   def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
   def index: Action[AnyContent] = authorisedAction.async { implicit request =>
-    implicit val msg: UniformMessages[Html] = ???
+    implicit val msg: UniformMessages[Html] =
+      implicitly[Messages].convertMessagesTwirlHtml(false)
 
     backend.lookupRegistration().flatMap {
       case None =>
@@ -82,7 +84,8 @@ class JourneyController @Inject()(
   }
 
   def accessibilityStatement: Action[AnyContent] = Action { implicit request =>
-    implicit val msg: UniformMessages[Html] = ???
+    implicit val msg: UniformMessages[Html] =
+      implicitly[Messages].convertMessagesTwirlHtml(false)
     Ok(views.html.accessibility_statement(s"${msg("accessibility-statement.title")}"))
   }
 
