@@ -110,7 +110,7 @@ trait Widgets {
   implicit def accountNameField = validatedNonEmptyString(AccountName, 35)
   implicit def sortCodeField    = validatedNonEmptyString(SortCode)(twirlStringFields(
     // use the string view but pass in an extra parameter
-    customRender = views.html.uniform.string(_,_,_,_,_,"sort-code")
+    customRender = views.html.uniform.string(_,_,_,_,_,"form-control form-control-1-4")
   ))
   implicit def ibanField        = validatedVariant(IBAN)
   implicit def restrictField    = validatedVariant(RestrictiveString)

@@ -16,7 +16,7 @@
 
 @import cats.implicits._
 
-@(key: List[String], values: String, errors: ErrorTree, messages: UniformMessages[Html], autoFields: Option[String] = None, clazz: String = "form-control-1-4")
+@(key: List[String], values: String, errors: ErrorTree, messages: UniformMessages[Html], autoFields: Option[String] = None, inputClass: String = "form-control form-control-2-3")
 
 @headKey=@{key.headOption.getOrElse("")}
 
@@ -68,7 +68,7 @@
         case _ => ""
         }){ describedBy =>
             <input 
-                class="form-control form-control-2-3 @if(errors.definedAtRoot) {form-control-error}"
+                class="@{inputClass}@if(errors){ form-control-error}"
                 id="@{key.mkString("_")}-input"
                 @if(telInput){ inputmode="numeric" pattern="[0-9]*" }
                 name="@{key.mkString(".")}"
