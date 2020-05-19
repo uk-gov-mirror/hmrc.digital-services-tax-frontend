@@ -21,7 +21,7 @@ import config.AppConfig
 import connectors._
 import cats.implicits._
 import data._
-import frontend.Kickout
+import frontend._
 import repo.JourneyStateStore
 import akka.http.scaladsl.model.headers.LinkParams.title
 import javax.inject.{Inject, Singleton}

@@ -40,4 +40,25 @@ package object frontend {
     sdf
   }
 
+  implicit class RichAddress(value: data.Address) {
+
+    def lines: List[String] = {
+      import value._ 
+      val basic = List(
+        line1,
+        line2.getOrElse(""),
+        line3.getOrElse(""),
+        line4.getOrElse(""),
+        postalCode
+      ).filter(_.nonEmpty)
+
+      value match {
+        case _: data.UkAddress => basic
+        case _ => basic :+ Country.name(countryCode)
+      }
+    }
+
+    
+  }
+
 }

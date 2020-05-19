@@ -29,4 +29,3 @@ object Activity extends Enum[Activity] {
     activity.toString.replaceAll("(^[A-Z].*)([A-Z])", "$1-$2").toLowerCase
   }
 }
-

@@ -128,6 +128,7 @@ class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChec
   }
 
   it should "serialize and de-serialise a DB instance" in {
+    import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.formatMap
     forAll { sample: DB =>
       val js = Json.toJson(sample)
 
@@ -138,11 +139,13 @@ class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChec
   }
 
   it should "fail to parse a DB instance from a Json primitive" in {
+    import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.formatMap    
     val source = JsString("bla")
     source.validate[DB] shouldBe a [JsError]
   }
 
   it should "fail to parse a formatMap from a non object" in {
+    import uk.gov.hmrc.digitalservicestax.connectors.MongoPersistence.formatMap    
     val obj = JsString("bla")
 
     obj.validate[DB] shouldBe JsError(s"expected an object, got $obj")
@@ -177,6 +180,7 @@ class JsonTests extends FlatSpec with Matchers with ScalaCheckDrivenPropertyChec
   }
 
   it should "serialize and de-serialise a Journey State" in {
+    import uk.gov.hmrc.digitalservicestax.repo.JsonConversion._
     testJsonRoundtrip[JourneyState](Sample.generator[JourneyState])
   }
 
