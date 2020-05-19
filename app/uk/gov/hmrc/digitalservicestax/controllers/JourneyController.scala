@@ -184,8 +184,8 @@ class JourneyController @Inject()(
         config.mongoJourneyStoreExpireAfter        
       )(_.internalId)
 
-    backend.lookupRegistration().flatMap {
-      case None =>
+    backend.lookupRegistration().flatMap { // are they registered
+      case None => // not registered
         val playProgram = registrationJourney[WM](
           create[RegTellTypes, RegAskTypes](messages(request)),
           hod(request.internalId)
@@ -194,7 +194,7 @@ class JourneyController @Inject()(
           backend.submitRegistration(_).map { _ => Redirect(routes.JourneyController.registrationComplete) }
       }
 
-      case Some(reg) => index(request)
+      case Some(reg) => index(request) // registered
     }
   }
 
