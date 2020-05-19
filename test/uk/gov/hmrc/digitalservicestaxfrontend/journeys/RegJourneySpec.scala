@@ -18,18 +18,14 @@ package uk.gov.hmrc.digitalservicestaxfrontend.journeys
 
 import java.time.LocalDate
 
-//import cats.Id
-
-//import cats.Id
 import org.scalatest.{FlatSpec, Matchers}
 import ltbs.uniform._
 import interpreters.logictable._
-//import ltbs.uniform.{NonEmptyString => _, _}
 import uk.gov.hmrc.digitalservicestax.connectors.DSTService
 import uk.gov.hmrc.digitalservicestax.data.{Address, CompanyRegWrapper, ContactDetails, NonEmptyString, Period, Postcode, Registration, Return, SampleData, UTR, UkAddress}
 import uk.gov.hmrc.digitalservicestax.journeys.RegJourney
 import uk.gov.hmrc.digitalservicestax.journeys.RegJourney.{RegAskTypes, RegTellTypes}
-
+import cats.implicits._
 
 class RegJourneySpec extends FlatSpec with Matchers {
 
@@ -64,22 +60,19 @@ class RegJourneySpec extends FlatSpec with Matchers {
   val interpreter = LogicTableInterpreter[RegTellTypes, RegAskTypes]() // need implicit instances for every ask and tell (one for all tells0
 
   val service = new DSTService[cats.Id] {
-
-    override def lookupCompany(): Option[CompanyRegWrapper] = ???
-
-    override def lookupCompany(utr: UTR, postcode: Postcode): Option[CompanyRegWrapper] = ???
-
-    override def submitRegistration(reg: Registration): Unit = ???
-
-    override def submitReturn(period: Period, ret: Return): Unit = ???
-
-    override def lookupRegistration(): Option[Registration] = ???
-
-    override def lookupOutstandingReturns(): Set[Period] = ???
-
+    def lookupCompany(): Option[CompanyRegWrapper] = ???
+    def lookupCompany(utr: UTR, postcode: Postcode): Option[CompanyRegWrapper] = ???
+    def submitRegistration(reg: Registration): Unit = ???
+    def submitReturn(period: Period, ret: Return): Unit = ???
+    def lookupRegistration(): Option[Registration] = ???
+    def lookupOutstandingReturns(): Set[Period] = ???
   }
 
-  val outcome = RegJourney.registrationJourney[cats.Id](interpreter, service)
+  object ToLogic extends cats.~>[cats.Id, Logic] {
+    def apply[A](fa: cats.Id[A]): Logic[A] = fa.pure[Logic]
+  }
+
+  val outcome = RegJourney.registrationJourney(interpreter, service.transform(ToLogic)).value.run
 //  val outcome = RegJourney.registrationJourney[cats.Id](interpreter, service).value.run
 
   "foo" should "do something " in {
