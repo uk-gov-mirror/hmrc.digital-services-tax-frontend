@@ -21,63 +21,163 @@ import java.time.LocalDate
 import org.scalatest.{FlatSpec, Matchers}
 import ltbs.uniform._
 import interpreters.logictable._
-import uk.gov.hmrc.digitalservicestax.connectors.DSTService
-import uk.gov.hmrc.digitalservicestax.data.{Address, CompanyRegWrapper, ContactDetails, NonEmptyString, Period, Postcode, Registration, Return, SampleData, UTR, UkAddress}
+import uk.gov.hmrc.digitalservicestax.data.{Address, CompanyRegWrapper, NonEmptyString, Postcode, Registration, UTR}
+import uk.gov.hmrc.digitalservicestax.data.SampleData._
 import uk.gov.hmrc.digitalservicestax.journeys.RegJourney
-import uk.gov.hmrc.digitalservicestax.journeys.RegJourney.{RegAskTypes, RegTellTypes}
 import cats.implicits._
+import uk.gov.hmrc.digitalservicestaxfrontend.util.TestDstService
 
 class RegJourneySpec extends FlatSpec with Matchers {
 
-  implicit val sampleUtr = new SampleData[UTR] {
-    def apply(key: String): List[UTR] = List(UTR("1234567891"))
-  }
-  implicit val samplePostcode = new SampleData[Postcode] {
-    def apply(key: String): List[Postcode] = List(Postcode("BN1 1NB"))
-  }
-  implicit val sampleDate = new SampleData[LocalDate] {
-    def apply(key: String): List[LocalDate] = List(LocalDate.now)
-  }
-  implicit val sampleContactDetails= new SampleData[ContactDetails] {
-    def apply(key: String): List[ContactDetails] = List(SampleData.sampleContact)
-  }
-  implicit val sampleAddress= new SampleData[Address] {
-    def apply(key: String): List[Address] = List(SampleData.sampleAddress)
-  }
-  implicit val sampleUkAddress= new SampleData[UkAddress] {
-    def apply(key: String): List[UkAddress] = List(SampleData.sampleAddress)
-  }
-  implicit val sampleBoolean= new SampleData[Boolean] {
-    def apply(key: String): List[Boolean] = List(true)
-  }
-  implicit val sampleString= new SampleData[String] {
-    def apply(key: String): List[String] = List("foo")
-  }
-  implicit val sampleNonEmptyString= new SampleData[NonEmptyString] {
-    def apply(key: String): List[NonEmptyString] = List(NonEmptyString("foo"))
+  implicit val sampleUtrAsk = instances(UTR("1234567891"))
+  implicit val samplePostcodeAsk = instances(Postcode("BN1 1NB"))
+  implicit val sampleDateAsk = instances(LocalDate.now)
+  implicit val sampleContactDetailsAsk = instances(sampleContact)
+
+  implicit val sampleAddressAsk = instancesF[Address] {
+    case "company-registered-office-address" => List(nonUkAddress.copy(line1 = NonEmptyString("Supplied")))
+    case "alternate-contact" => List(sampleAddress.copy(line1 = NonEmptyString("Supplied Alternate")))
+    case _ => List(sampleAddress)
   }
 
-  val interpreter = LogicTableInterpreter[RegTellTypes, RegAskTypes]() // need implicit instances for every ask and tell (one for all tells0
-
-  val service = new DSTService[cats.Id] {
-    def lookupCompany(): Option[CompanyRegWrapper] = ???
-    def lookupCompany(utr: UTR, postcode: Postcode): Option[CompanyRegWrapper] = ???
-    def submitRegistration(reg: Registration): Unit = ???
-    def submitReturn(period: Period, ret: Return): Unit = ???
-    def lookupRegistration(): Option[Registration] = ???
-    def lookupOutstandingReturns(): Set[Period] = ???
+  implicit val sampleUkAddressAsk = instances(sampleAddress)
+  implicit val sampleBooleanAsk = instances(true)
+  implicit val sampleStringAsk = instances("foo")
+  implicit val sampleNonEmptyStringAsk = instancesF {
+    case "company-name" => List(NonEmptyString("Supplied company name"))
+    case _ => List(NonEmptyString("foo"))
   }
 
-  object ToLogic extends cats.~>[cats.Id, Logic] {
-    def apply[A](fa: cats.Id[A]): Logic[A] = fa.pure[Logic]
+  val defaultInterpreter: TestRegInterpreter = new TestRegInterpreter
+
+  "when there is a Company from sign in accepting this" should "give you a Registration for that Company " in {
+    val reg: Registration = RegJourney.registrationJourney(
+      defaultInterpreter,
+      testService).value.run.asReg()
+
+    reg.companyReg.company shouldBe sampleCompany
   }
 
-  val outcome = RegJourney.registrationJourney(interpreter, service.transform(ToLogic)).value.run
-//  val outcome = RegJourney.registrationJourney[cats.Id](interpreter, service).value.run
+  "when there is no Company from sign in and the user does not supply a UTR we" should "get a Registration with the supplied Company details" in {
+    implicit val sampleBooleanAsk = instancesF(_ => List(false))
 
-  "foo" should "do something " in {
-    println(s"outcome is $outcome")
-    1 shouldBe 1
+    val reg = RegJourney.registrationJourney(
+      new TestRegInterpreter,
+      new TestDstService {
+        override def lookupCompany(): Option[CompanyRegWrapper] = None
+      }.get
+    ).value.run.asReg()
+
+    reg.companyReg.company.name shouldBe "Supplied company name"
+    reg.companyReg.company.address.line1 shouldBe "Supplied"
+  }
+
+  "when there is no Company from sign in, but one is found using the UTR, and the user confirms it we" should "get a Registration for that company" in {
+    val reg: Registration = RegJourney.registrationJourney(
+      defaultInterpreter,
+      new TestDstService {
+        override def lookupCompany(): Option[CompanyRegWrapper] = None
+      }.get
+    ).value.run.asReg()
+
+    reg.companyReg.company.name shouldBe utrLookupCompanyName
+  }
+
+  "when there is a Company from sign in, saying this is the wrong company" should "kick you out of the journey " in {
+    implicit val sampleBooleanAsk = instancesF(_ => List(false))
+
+    val caught = intercept[IllegalStateException] {
+      RegJourney.registrationJourney(new TestRegInterpreter, testService).value.run
+    }
+
+    assert(caught.getMessage.indexOf("Journey end at details-not-correct") > -1)
+  }
+
+  "when there is no Company from sign in, and none found for a supplied UTR we" should "be kicked out" in {
+    val caught = intercept[IllegalStateException] {
+      RegJourney.registrationJourney(
+        defaultInterpreter,
+        new TestDstService {
+          override def lookupCompany(): Option[CompanyRegWrapper] = None
+          override def lookupCompany(utr: UTR, postcode: Postcode): Option[CompanyRegWrapper] = None
+        }.get
+      ).value.run.asReg(true)
+    }
+
+    assert(caught.getMessage.indexOf("Journey end at cannot-find-company") > -1)
+  }
+
+  "when there is no Company from sign in, and the one found by UTR is rejected by the user we" should "be kicked out" in {
+    implicit val sampleBooleanAsk = instancesF {
+      case "confirm-company-details" => List(false)
+      case _ => List(true)
+    }
+
+    val caught = intercept[IllegalStateException] {
+      RegJourney.registrationJourney(
+        new TestRegInterpreter,
+        new TestDstService {
+          override def lookupCompany(): Option[CompanyRegWrapper] = None
+        }.get
+      ).value.run.asReg(true)
+    }
+
+    assert(caught.getMessage.indexOf("Journey end at details-not-correct") > -1)
+  }
+
+  "the Registration" should "have an alternativeContact when user elected to provide one" in {
+    implicit val sampleBooleanAsk = instancesF {
+      case "company-contact-address" => List(false)
+      case _ => List(true)
+    }
+
+    val reg: Registration = RegJourney.registrationJourney(
+      new TestRegInterpreter,
+      testService
+    ).value.run.asReg()
+
+    reg.alternativeContact should be ('defined)
+  }
+
+  "the Registration" should "not have an alternativeContact when user elected not to provide one" in {
+    val reg: Registration = RegJourney.registrationJourney(
+      new TestRegInterpreter,
+      testService
+    ).value.run.asReg()
+
+    reg.alternativeContact should be ('empty)
+  }
+
+  "the Registation" should "have an ultimateParent when the user elected to provide one" in {
+    val reg: Registration = RegJourney.registrationJourney(
+      defaultInterpreter,
+      testService
+    ).value.run.asReg()
+
+    reg.ultimateParent should be ('defined)
+  }
+
+  "the Registation" should "not have an ultimateParent when the user elected not to provide one" in {
+    implicit val sampleBooleanAsk = instancesF {
+      case "check-if-group" => List(false)
+      case _ => List(true)
+    }
+
+    val reg: Registration = RegJourney.registrationJourney(
+      new TestRegInterpreter,
+      testService
+    ).value.run.asReg()
+
+    reg.ultimateParent should be ('empty)
+  }
+
+  "when the user chooses not to provide a liability start it " should "be set to 2020-04-06 " in {
+    val reg: Registration = RegJourney.registrationJourney(
+      defaultInterpreter,
+      testService
+    ).value.run.asReg()
+
+    reg.dateLiable shouldBe LocalDate.of(2020,4, 6)
   }
 
 }

@@ -56,7 +56,7 @@ object RegJourney {
           for {
             confirmCompany <- interact[Company, Boolean]("confirm-company-details", companyRW.company)
             //TODO Here we need to sign the user out
-            _ <- if (!confirmCompany) { tell("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
+            _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
           } yield companyRW // useSafeId is false, no utr or safeId sent
 
         // no matching company found

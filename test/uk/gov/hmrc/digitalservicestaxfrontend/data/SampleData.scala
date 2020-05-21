@@ -18,6 +18,7 @@ package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
 
+
 object SampleData {
 
   val sampleAddress = UkAddress (
@@ -28,10 +29,22 @@ object SampleData {
     Postcode("GE12 3CD")
   )
 
+  val nonUkAddress = ForeignAddress(
+    NonEmptyString("Ave La Gare"),
+    "",
+    "",
+    "Paris",
+    CountryCode("FR")
+  )
+
   val sampleCompany = Company (
     NonEmptyString("TestCo Ltd"),
     sampleAddress
   )
+
+  val utrLookupCompanyName = "UTR Lookup Ltd."
+  val utrLookupCompanyRegWrapper =
+    CompanyRegWrapper(sampleCompany.copy(name = NonEmptyString(utrLookupCompanyName)))
 
   val sampleCompanyRegWrapper = CompanyRegWrapper(
     sampleCompany
@@ -52,4 +65,5 @@ object SampleData {
     LocalDate.of(2020, 7, 1),
     LocalDate.of(2021, 4, 5)
   )
+
 }
