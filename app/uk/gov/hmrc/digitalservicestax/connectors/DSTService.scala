@@ -29,4 +29,22 @@ trait DSTService[F[_]] {
   def submitReturn(period: Period, ret: Return): F[Unit]
   def lookupRegistration(): F[Option[Registration]]
   def lookupOutstandingReturns(): F[Set[Period]]
+
+  def transform[G[_]](nat: F ~> G) = {
+    val old = this
+    new DSTService[G] {
+      def lookupCompany(utr: UTR,postcode: Postcode): G[Option[CompanyRegWrapper]] =
+        nat(old.lookupCompany(utr, postcode))
+      def lookupCompany(): G[Option[CompanyRegWrapper]] =
+        nat(old.lookupCompany())
+      def lookupOutstandingReturns(): G[Set[Period]] =
+        nat(old.lookupOutstandingReturns())
+      def lookupRegistration(): G[Option[Registration]] =
+        nat(old.lookupRegistration())
+      def submitRegistration(reg: Registration): G[Unit] =
+        nat(old.submitRegistration(reg))
+      def submitReturn(period: Period,ret: Return): G[Unit] =
+        nat(old.submitReturn(period, ret))
+    }
+  }
 }
