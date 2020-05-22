@@ -18,7 +18,6 @@ package uk.gov.hmrc.digitalservicestaxfrontend.util
 
 import cats.Id
 import cats.implicits._
-import ltbs.uniform.interpreters.logictable._
 import uk.gov.hmrc.digitalservicestax.connectors.DSTService
 import uk.gov.hmrc.digitalservicestax.data.SampleData.{sampleCompanyRegWrapper, sampleReg, utrLookupCompanyRegWrapper}
 import uk.gov.hmrc.digitalservicestax.data.{CompanyRegWrapper, Period, Postcode, Registration, Return, UTR}
@@ -31,9 +30,4 @@ trait TestDstService extends DSTService[Id] {
   def lookupRegistration(): Option[Registration] = sampleReg.some
   def lookupOutstandingReturns(): Set[Period] = Set.empty
   def get = this.transform(ToLogic)
-
-  object ToLogic extends cats.~>[cats.Id, Logic] {
-    def apply[A](fa: cats.Id[A]): Logic[A] = fa.pure[Logic]
-  }
-
 }

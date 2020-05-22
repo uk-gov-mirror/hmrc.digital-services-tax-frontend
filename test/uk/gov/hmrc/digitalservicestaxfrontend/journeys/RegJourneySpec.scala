@@ -18,13 +18,12 @@ package uk.gov.hmrc.digitalservicestaxfrontend.journeys
 
 import java.time.LocalDate
 
-import org.scalatest.{FlatSpec, Matchers}
-import ltbs.uniform._
-import interpreters.logictable._
-import uk.gov.hmrc.digitalservicestax.data.{Address, CompanyRegWrapper, NonEmptyString, Postcode, Registration, UTR}
-import uk.gov.hmrc.digitalservicestax.data.SampleData._
-import uk.gov.hmrc.digitalservicestax.journeys.RegJourney
 import cats.implicits._
+import ltbs.uniform.{NonEmptyString => _}
+import ltbs.uniform.interpreters.logictable._
+import org.scalatest.{FlatSpec, Matchers}
+import uk.gov.hmrc.digitalservicestax.data._, SampleData._
+import uk.gov.hmrc.digitalservicestax.journeys.RegJourney
 import uk.gov.hmrc.digitalservicestaxfrontend.util.TestDstService
 
 class RegJourneySpec extends FlatSpec with Matchers {
@@ -59,7 +58,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
   }
 
   "when there is no Company from sign in and the user does not supply a UTR we" should "get a Registration with the supplied Company details" in {
-    implicit val sampleBooleanAsk = instancesF(_ => List(false))
+    implicit val sampleBooleanAsk = instances(false)
 
     val reg = RegJourney.registrationJourney(
       new TestRegInterpreter,
