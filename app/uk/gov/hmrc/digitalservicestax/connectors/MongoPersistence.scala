@@ -39,6 +39,21 @@ object MongoPersistence {
     data: DB,
     timestamp: LocalDateTime = LocalDateTime.now
   )
+
+  implicit val formatMap: OFormat[DB] = new OFormat[DB] {
+    def writes(o: DB) = JsObject ( o.map {
+      case (k,v) => (k.mkString("/"), JsString(v))
+    }.toSeq )
+
+    def reads(json: JsValue): JsResult[DB] = json match {
+      case JsObject(data) => JsSuccess(data.map {
+        case (k, JsString(v)) => (k.split("/").toList, v)
+        case e => throw new IllegalArgumentException(s"cannot parse $e")
+      }.toMap)
+      case e => JsError(s"expected an object, got $e")
+    }
+  }  
+
 }
 
 case class MongoPersistence[A <: Request[AnyContent]] (
@@ -47,7 +62,7 @@ case class MongoPersistence[A <: Request[AnyContent]] (
   expireAfter: Duration,
   useMongoTTL: Boolean = false
 )(getSession: A => String)(implicit ec: ExecutionContext) extends PersistenceEngine[A] {
-  import MongoPersistence.Wrapper
+  import MongoPersistence._
   import reactiveMongoApi.database
 
   def killDate: LocalDateTime = LocalDateTime.now.minusNanos(expireAfter.toNanos)
@@ -91,7 +106,6 @@ case class MongoPersistence[A <: Request[AnyContent]] (
     }
   }
 
-  import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
   implicit val wrapperFormat = Json.format[Wrapper]
 
   def apply(request: A)(f: DB => Future[(DB, Result)]): Future[Result] = {

@@ -33,7 +33,7 @@
 
         <dl class="govuk-check-your-answers cya-questions-short">
             @standard_cya_row(
-                s"$key.reg",
+                s"$key",
                 "check-if-group",
                 Html(s"${messages(s"common.${in.ultimateParent.fold("no")(_ => "yes")}")}"),
                 s"$serviceUrl/check-if-group"
@@ -63,7 +63,7 @@
         <dl class="govuk-check-your-answers cya-questions-short">
 
             @standard_cya_row(
-                s"$key.reg",
+                s"$key",
                 "ultimate-parent-company-name",
                 Html(s"${up.name}"),
                 s"$serviceUrl/ultimate-parent-company-name"

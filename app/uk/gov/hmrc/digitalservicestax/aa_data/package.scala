@@ -20,12 +20,9 @@ import shapeless.{:: => _, _}
 import tag._
 import cats.implicits._
 import cats.kernel.Monoid
-import play.api.i18n.Messages
 import java.time.LocalDate
 
 import fr.marcwrobel.jbanking.iban.Iban
-import org.apache.commons.validator.routines.{EmailValidator, IBANValidator}
-import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit
 
 package object data extends SimpleJson {
 
@@ -63,13 +60,18 @@ package object data extends SimpleJson {
       Some(in).filter(_.nonEmpty)
   }
 
-  type RestrictiveString = String @@ RestrictiveString.Tag
-  object RestrictiveString extends RegexValidatedString(
-    """^[a-zA-Z&^]{1,35}$"""
+  type CompanyName = String @@ CompanyName.Tag
+  object CompanyName extends RegexValidatedString(
+    regex = """^[a-zA-Z0-9 '&.-]{1,105}$"""
   )
 
-  type AccountName = String @@ AccountName.Tag
-  object AccountName extends RegexValidatedString(
+  type AddressLine = String @@ AddressLine.Tag
+  object AddressLine extends RegexValidatedString(
+    regex = """^[a-zA-Z0-9 '&.-]{1,35}$"""
+  )
+
+  type RestrictiveString = String @@ RestrictiveString.Tag
+  object RestrictiveString extends RegexValidatedString(
     """^[a-zA-Z&^]{1,35}$"""
   )
 
@@ -100,6 +102,11 @@ package object data extends SimpleJson {
     _.filter(_.isDigit)
   )
 
+  type AccountName = String @@ AccountName.Tag
+  object AccountName extends RegexValidatedString(
+    """^[a-zA-Z&^]{1,35}$"""
+  )
+
   type IBAN = String @@ IBAN.Tag
   object IBAN extends ValidatedType[String] {
     override def validateAndTransform(in: String): Option[String] = {
@@ -109,12 +116,17 @@ package object data extends SimpleJson {
 
   type PhoneNumber = String @@ PhoneNumber.Tag
   object PhoneNumber extends RegexValidatedString(
-    "^[0-9 ]{6,30}$"
-    // TODO: check phone number regex
-//    """^(?:(?:\(?(?:0(?:0|11)\)?[\s-]?\(?|\+)44\)?[\s-]?(?:\(?0\)?[\s-]?)?)|(?:\(?0))(?:(?:\d{5}\)?[\s-]
-//      |?\d{4,5})|(?:\d{4}\)?[\s-]?(?:\d{5}|\d{3}[\s-]?\d{3}))|(?:\d{3}\)?[\s-]?\d{3}[\s-]?\d{3,4})|
-//      |(?:\d{2}\)?[\s-]?\d{4}[\s-]?\d{4}))(?:[\s-]?(?:x|ext\.?|\#)\d{3,4})?$""".stripMargin.replace("\n","") 
-//    _.filter(_.isDigit)
+  // TODO: check phone number regex
+  //Regex which fits both eeitt_subscribe
+    "^[A-Z0-9 \\-]{1,30}$"
+  //eeitt_subscribe/phoneNumberType
+    // "^[A-Z0-9 )/(*#-]+{1,30}$"
+  //eeitt_subscribe/regimeSpecificDetailsType/paramValue
+    // "^[0-9a-zA-Z{À-˿'}\\- &`'^._@]{1,255}$"
+  //tested regex on QA reg submission
+    // "^[A-Z0-9)/(\\-*#+]{1,24}$"
+  //Strict previous regex
+    // "^[0-9 ]{6,30}$"
   )
 
   type Email = String @@ Email.Tag

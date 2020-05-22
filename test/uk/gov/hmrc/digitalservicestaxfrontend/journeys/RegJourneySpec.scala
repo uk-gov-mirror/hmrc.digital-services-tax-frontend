@@ -32,19 +32,13 @@ class RegJourneySpec extends FlatSpec with Matchers {
   implicit val samplePostcodeAsk = instances(Postcode("BN1 1NB"))
   implicit val sampleDateAsk = instances(LocalDate.now)
   implicit val sampleContactDetailsAsk = instances(sampleContact)
-
-  implicit val sampleAddressAsk = instancesF[Address] {
-    case "company-registered-office-address" => List(nonUkAddress.copy(line1 = NonEmptyString("Supplied")))
-    case "alternate-contact" => List(sampleAddress.copy(line1 = NonEmptyString("Supplied Alternate")))
-    case _ => List(sampleAddress)
-  }
-
+  implicit val sampleInternationalAddressAsk = instances(internationalAddress)
   implicit val sampleUkAddressAsk = instances(sampleAddress)
   implicit val sampleBooleanAsk = instances(true)
-  implicit val sampleStringAsk = instances("foo")
-  implicit val sampleNonEmptyStringAsk = instancesF {
-    case "company-name" => List(NonEmptyString("Supplied company name"))
-    case _ => List(NonEmptyString("foo"))
+
+  implicit val sampleCompanyName = instancesF {
+    case "company-name" => List(CompanyName("Supplied company name"))
+    case _ => List(CompanyName("Foo Ltd."))
   }
 
   val defaultInterpreter: TestRegInterpreter = new TestRegInterpreter
@@ -57,7 +51,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
     reg.companyReg.company shouldBe sampleCompany
   }
 
-  "when there is no Company from sign in and the user does not supply a UTR we" should "get a Registration with the supplied Company details" in {
+  "when there is no Company from sign in and the user does not supply a UTR we" should "get a Registration with the supplied Company name" in {
     implicit val sampleBooleanAsk = instances(false)
 
     val reg = RegJourney.registrationJourney(
@@ -68,7 +62,35 @@ class RegJourneySpec extends FlatSpec with Matchers {
     ).value.run.asReg()
 
     reg.companyReg.company.name shouldBe "Supplied company name"
-    reg.companyReg.company.address.line1 shouldBe "Supplied"
+  }
+
+  "when there is no Company from sign in & no supplied UTR & an InternationalAddress is specified we" should "get a Registration with an InternatinalAddress" in {
+    implicit val sampleBooleanAsk = instances(false)
+
+    val reg = RegJourney.registrationJourney(
+      new TestRegInterpreter,
+      new TestDstService {
+        override def lookupCompany(): Option[CompanyRegWrapper] = None
+      }.get
+    ).value.run.asReg()
+
+    reg.companyReg.company.address shouldBe a[ForeignAddress]
+  }
+
+  "when there is no Company from sign in & no supplied UTR & a UkAddress is specified we" should "get a Registration with a UkAddress" in {
+    implicit val sampleBooleanAsk = instancesF {
+      case "check-unique-taxpayer-reference" => List(false)
+      case _ => List(true)
+    }
+
+    val reg = RegJourney.registrationJourney(
+      new TestRegInterpreter,
+      new TestDstService {
+        override def lookupCompany(): Option[CompanyRegWrapper] = None
+      }.get
+    ).value.run.asReg()
+
+    reg.companyReg.company.address shouldBe a[UkAddress]
   }
 
   "when there is no Company from sign in, but one is found using the UTR, and the user confirms it we" should "get a Registration for that company" in {
@@ -83,7 +105,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
   }
 
   "when there is a Company from sign in, saying this is the wrong company" should "kick you out of the journey " in {
-    implicit val sampleBooleanAsk = instancesF(_ => List(false))
+    implicit val sampleBooleanAsk = instances(false)
 
     val caught = intercept[IllegalStateException] {
       RegJourney.registrationJourney(new TestRegInterpreter, testService).value.run
@@ -176,7 +198,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
       testService
     ).value.run.asReg()
 
-    reg.dateLiable shouldBe LocalDate.of(2020,4, 6)
+    reg.dateLiable shouldBe LocalDate.of(2020,4, 1)
   }
 
 }

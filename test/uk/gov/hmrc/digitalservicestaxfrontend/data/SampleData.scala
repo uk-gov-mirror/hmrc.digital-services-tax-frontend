@@ -17,34 +17,35 @@
 package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
+import cats.implicits._
 
 
 object SampleData {
 
   val sampleAddress = UkAddress (
-    NonEmptyString("12 The Street"),
-    "False Crescent",
-    "Genericford",
-    "Madeupshire",    
+    AddressLine("12 The Street"),
+    AddressLine("False Crescent").some,
+    AddressLine("Genericford").some,
+    AddressLine("Madeupshire").some,
     Postcode("GE12 3CD")
   )
 
-  val nonUkAddress = ForeignAddress(
-    NonEmptyString("Ave La Gare"),
-    "",
-    "",
-    "Paris",
+  val internationalAddress = ForeignAddress(
+    AddressLine("Ave La Gare"),
+    None,
+    None,
+    Some(AddressLine("Paris")),
     CountryCode("FR")
   )
 
   val sampleCompany = Company (
-    NonEmptyString("TestCo Ltd"),
+    CompanyName("TestCo Ltd"),
     sampleAddress
   )
 
   val utrLookupCompanyName = "UTR Lookup Ltd."
   val utrLookupCompanyRegWrapper =
-    CompanyRegWrapper(sampleCompany.copy(name = NonEmptyString(utrLookupCompanyName)))
+    CompanyRegWrapper(sampleCompany.copy(name = CompanyName(utrLookupCompanyName)))
 
   val sampleCompanyRegWrapper = CompanyRegWrapper(
     sampleCompany
