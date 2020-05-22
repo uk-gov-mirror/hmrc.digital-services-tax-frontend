@@ -44,7 +44,7 @@
       @withRunningTotal.map { case (FinancialTransaction(date, desc, amt), running) => 
       <tr class="govuk-table__row">
 	<th scope="row" class="govuk-table__header">@{date.format(formatter)}</th>
-	<td class="govuk-table__cell">@desc</td>
+	<td class="govuk-table__cell">@Html(desc)</td>
 	<td class="govuk-table__cell">@{Option(amt) collect { case x if x > 0 => f"$amt%,.2f" }}</td>
 	<td class="govuk-table__cell">@{Option(amt) collect { case x if x < 0 => f"$amt%,.2f" }}</td>	
 	<td class="govuk-table__cell">@{f"$running%,.2f"}</td>

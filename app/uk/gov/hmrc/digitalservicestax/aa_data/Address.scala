@@ -23,8 +23,6 @@ sealed trait Address {
   def line4: Option[AddressLine]
   def countryCode: CountryCode
   def postalCode: String
-  def lines: List[String] =
-    (line1 :: line2.getOrElse("") :: line3.getOrElse("") :: line4.getOrElse("") :: postalCode :: Country.name(countryCode) :: Nil).filter(_.nonEmpty)
 }
 
 case class UkAddress(
@@ -35,7 +33,6 @@ case class UkAddress(
   postalCode: Postcode
 ) extends Address {
   def countryCode = CountryCode("GB")
-  override def lines: List[String] = super.lines.init
 }
 
 case class ForeignAddress(
@@ -45,5 +42,5 @@ case class ForeignAddress(
   line4: Option[AddressLine],
   countryCode: CountryCode
 ) extends Address {
-  def postalCode = ""
+  def postalCode: String = ""
 }

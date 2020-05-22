@@ -18,28 +18,25 @@ package uk.gov.hmrc.digitalservicestax.controllers
 
 import java.time.LocalDate
 
-import ltbs.uniform
-import ltbs.uniform.common.web.GenericWebTell
-import uk.gov.hmrc.digitalservicestax.data
-import uk.gov.hmrc.digitalservicestax.data.AddressLine
-
+import cats.data.Validated
 import cats.implicits._
 import enumeratum._
+import ltbs.uniform.{NonEmptyString => _, _}
+import ltbs.uniform.common.web.GenericWebTell
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
 import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
-import ltbs.uniform.{NonEmptyString => _, _}
 import play.twirl.api.Html
-import uk.gov.hmrc.digitalservicestax._
-import uk.gov.hmrc.digitalservicestax.data._
-import cats.{Monoid, Applicative, Monad, Eq, Semigroup}
-import cats.data.{NonEmptyList, Validated}
 import shapeless.tag, tag.{@@}
-import collection.immutable.ListMap
-import uniform.validation.{Rule, Transformation}
+import uk.gov.hmrc.digitalservicestax._
+import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.data._
+import uk.gov.hmrc.digitalservicestax.frontend.{RichAddress, Kickout}
 
 trait Widgets {
+
+  def appConfig: AppConfig
 
   implicit val twirlStringField: FormField[String, Html] = twirlStringFields()
 
@@ -384,5 +381,38 @@ trait Widgets {
       }
 
     }
-  
+
+  implicit val addressTell = new GenericWebTell[Address, Html] {
+    override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p>${in.lines.map{x => s"<span class='govuk-body-m'>${x.escapeHtml}</span>"}.mkString("<br/>")}</p>"
+      )
+  }
+
+  implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
+    override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
+      views.html.end.kickout(key)(messages, appConfig)
+  }
+
+  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html("")
+  }
+
+  implicit val companyTell = new GenericWebTell[Company, Html] {
+    override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p class='govuk-body-l' id='${key}-content'>" +
+          s"${in.name.toString.escapeHtml}</br>" +
+          s"<span class='govuk-body-m'>" +
+          s"${in.address.lines.map{_.escapeHtml}.mkString("</br>")}" +
+          s"</span>" +
+          "</p>"
+      )
+  }
+
+  implicit val booleanTell = new GenericWebTell[Boolean, Html] {
+    override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
+      Html(in.toString)
+  }
 }
