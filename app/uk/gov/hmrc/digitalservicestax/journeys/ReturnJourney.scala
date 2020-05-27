@@ -30,7 +30,7 @@ import ltbs.uniform.validation._
 object ReturnJourney {
 
   type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
-  type ReturnAskTypes = (NonEmptyString, Boolean) :: Set[Activity] :: Money :: RepaymentDetails :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
+  type ReturnAskTypes = Set[Activity] :: Money :: RepaymentDetails :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   private def message(key: String, args: String*) = {
     import play.twirl.api.HtmlFormat.escape

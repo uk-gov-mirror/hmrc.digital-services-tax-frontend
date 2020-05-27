@@ -17,7 +17,9 @@
 package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
+
 import cats.implicits._
+import uk.gov.hmrc.digitalservicestax.data.Activity.{OnlineMarketplace, SearchEngine, SocialMedia}
 
 
 object SampleData {
@@ -38,8 +40,9 @@ object SampleData {
     CountryCode("FR")
   )
 
+  val sampleCompanyName = CompanyName("TestCo Ltd")
   val sampleCompany = Company (
-    CompanyName("TestCo Ltd"),
+    sampleCompanyName,
     sampleAddress
   )
 
@@ -66,5 +69,23 @@ object SampleData {
     LocalDate.of(2020, 7, 1),
     LocalDate.of(2021, 4, 5)
   )
+
+  val sampleMoney: Money = 100.00
+  val sampleActivitySet: Set[Activity] = Set(SocialMedia, SearchEngine, OnlineMarketplace)
+  val sampleForeignBankAccount: ForeignBankAccount = ForeignBankAccount(IBAN("GB82 WEST 1234 5698 7654 32"))
+  val sampleDomesticBankAccount: DomesticBankAccount = DomesticBankAccount(
+    SortCode("11-22-33"),
+    AccountNumber("88888888"),
+    "buildingSocietyNumber"
+  )
+  val sampleRepaymentDetails: RepaymentDetails = RepaymentDetails(
+    AccountName("DigitalService"),
+    sampleDomesticBankAccount
+  )
+  val samplePercent: Percent = Percent(50)
+  val sampleGroupCompanyList: List[GroupCompany] = List(GroupCompany(
+    sampleCompanyName,
+    Some(UTR("1234567891"))
+  ))
 
 }

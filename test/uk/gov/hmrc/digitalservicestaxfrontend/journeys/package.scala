@@ -16,10 +16,11 @@
 
 package uk.gov.hmrc.digitalservicestaxfrontend
 
+import ltbs.uniform.ErrorTree
 import ltbs.uniform.interpreters.logictable._
 import uk.gov.hmrc.digitalservicestax.connectors.DSTService
-import uk.gov.hmrc.digitalservicestax.data.Registration
 import uk.gov.hmrc.digitalservicestax.journeys.RegJourney.{RegAskTypes, RegTellTypes}
+import uk.gov.hmrc.digitalservicestax.journeys.ReturnJourney.{ReturnAskTypes, ReturnTellTypes}
 import uk.gov.hmrc.digitalservicestaxfrontend.util.TestDstService
 
 package object journeys {
@@ -35,16 +36,32 @@ package object journeys {
   }
 
   type TestRegInterpreter = LogicTableInterpreter[RegTellTypes, RegAskTypes]
+  type TestReturnInterpreter = LogicTableInterpreter[ReturnTellTypes, ReturnAskTypes]
 
-  implicit class RichRegJourney (in: List[(List[_], Either[_, Registration])]) {
-    def asReg(debug: Boolean = false): Registration = {
+  implicit class RichJourney[A] (in: List[(List[_], Either[ErrorTree, A])]) {
+    def asOutcome(debug: Boolean = false): A = {
       if (debug) {
         in.foreach { case (messages, outcome) =>
           println(messages.mkString("\n"))
           println(s"   => $outcome")
         }
       }
-      in.head._2.right.get
+      in.head._2 match {
+        case Right(a) => a
+        case Left(errorTree) => errorTree.toThrowable
+      }
+    }
+  }
+
+  // TODO consider lifting to uniform
+  implicit class RichErrorTree (in: ErrorTree) {
+    def humanReadable: String = in.map {
+      case (a, b) =>
+        a.toList.flatten.mkString("::") + " -> " + b.toList.map(_.msg).mkString("::")
+    }.mkString(";")
+
+    def toThrowable = {
+      throw new IllegalStateException(in.humanReadable)
     }
   }
 
