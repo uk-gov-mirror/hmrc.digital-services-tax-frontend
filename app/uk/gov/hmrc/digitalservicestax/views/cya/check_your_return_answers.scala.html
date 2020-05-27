@@ -54,6 +54,32 @@
             </dl>
         }
 
+        @in.repayment.map { rep =>
+
+
+        <h2 class="govuk-heading-m">@messages(s"$key.repayment.title")</h2>
+        <dl class="govuk-check-your-answers cya-questions-short">
+            @standard_cya_row(key, s"repayment", messages("common.yes"), s"$serviceUrl/002/repayment")(messages)
+            @standard_cya_row(key, s"account-name", Html(rep.accountName), s"$serviceUrl/002/bank-details")(messages)
+            @defining(rep.bankAccount match {
+                case dba: DomesticBankAccount => Html(
+                    s"${standard_cya_row(key, s"account-type", messages("common.yes"), s"$serviceUrl/002/bank-details")(messages)}" ++
+                    s"${standard_cya_row(key, s"sort-code", Html(s"${dba.sortCode}"), s"$serviceUrl/002/bank-details")(messages)}" ++
+                    s"${standard_cya_row(key, s"account-number", Html(s"${dba.accountNo}"), s"$serviceUrl/002/bank-details")(messages)}" ++
+                    s"${dba.buildingSocietyNumber.map{ bsn =>
+                        standard_cya_row(key, s"building-society", Html(s"$bsn"), s"$serviceUrl/002/bank-details")(messages)
+                    }.getOrElse(Html(""))}"
+                )
+                case fba: ForeignBankAccount => Html(
+                    s"${standard_cya_row(key, s"account-type", messages("common.no"), s"$serviceUrl/002/bank-details")(messages)}" ++
+                    s"${standard_cya_row(key, s"iban", Html(s"${fba.iban}"), s"$serviceUrl/002/bank-details")(messages)}"
+                )
+            }){ bankAccountHtml =>
+                @bankAccountHtml
+             }
+        </dl>
+        }
+
         
     </div>
 

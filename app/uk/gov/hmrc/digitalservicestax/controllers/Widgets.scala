@@ -59,21 +59,6 @@ trait Widgets {
     }
   }
 
-  def inlineOptionString(
-    validated: ValidatedType[String],
-    maxLen: Int = Integer.MAX_VALUE
-  ): FormField[Option[String @@ validated.Tag], Html] =
-    twirlStringField.simap{
-      case "" => Right(None)
-      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
-      case x  => Either.fromOption(
-        validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
-      )
-    }{
-      case None => ""
-      case Some(x) => x.toString
-    }
-
   def validatedVariant[BaseType](validated: ValidatedType[BaseType])(
     implicit baseForm: FormField[BaseType, Html]
   ): FormField[BaseType @@ validated.Tag, Html] =
@@ -93,20 +78,37 @@ trait Widgets {
       case x => Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
 
-  implicit def postcodeField          = validatedString(Postcode)
-  implicit def nesField               = validatedVariant(NonEmptyString)
-  implicit def utrField               = validatedString(UTR)
-  implicit def emailField             = validatedString(Email, 132)
-  implicit def phoneField             = validatedString(PhoneNumber, 24)
-  implicit def percentField           = validatedVariant(Percent)
-  implicit def accountField           = validatedString(AccountNumber)
-  implicit def accountNameField       = validatedString(AccountName, 35)
-  implicit def sortCodeField          = validatedString(SortCode)
-  implicit def ibanField              = validatedVariant(IBAN)
-  implicit def companyNameField       = validatedString(CompanyName, 105)
-  implicit def mandatoryAddressField  = validatedString(AddressLine, 35)
-  implicit def optAddressField        = inlineOptionString(AddressLine, 35)
-  implicit def restrictField          = validatedString(RestrictiveString, 35)
+  def inlineOptionString(
+    validated: ValidatedType[String],
+    maxLen: Int = Integer.MAX_VALUE
+  ): FormField[Option[String @@ validated.Tag], Html] =
+    twirlStringField.simap{
+      case "" => Right(None)
+      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
+      case x  => Either.fromOption(
+        validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
+      )
+    }{
+      case None => ""
+      case Some(x) => x.toString
+    }
+
+  implicit def postcodeField                  = validatedString(Postcode)
+  implicit def nesField                       = validatedVariant(NonEmptyString)
+  implicit def utrField                       = validatedString(UTR)
+  implicit def emailField                     = validatedString(Email, 132)
+  implicit def phoneField                     = validatedString(PhoneNumber, 24)
+  implicit def percentField                   = validatedVariant(Percent)
+  implicit def moneyField                     = validatedVariant(Money)
+  implicit def accountNumberField             = validatedString(AccountNumber)
+  implicit def BuildingSocietyRollNumberField = inlineOptionString(BuildingSocietyRollNumber, 18)
+  implicit def accountNameField               = validatedString(AccountName, 35)
+  implicit def sortCodeField                  = validatedString(SortCode)
+  implicit def ibanField                      = validatedString(IBAN, 34)
+  implicit def companyNameField               = validatedString(CompanyName, 105)
+  implicit def mandatoryAddressField          = validatedString(AddressLine, 35)
+  implicit def optAddressField                = inlineOptionString(AddressLine, 35)
+  implicit def restrictField                  = validatedString(RestrictiveString, 35)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
@@ -137,7 +139,7 @@ trait Widgets {
   implicit val bigdecimalField: FormField[BigDecimal,Html] =
     twirlStringFields().simap(x => 
       {
-        Rule.nonEmpty[String].apply(x) andThen
+        Rule.nonEmpty[String].apply(x.replace(",", "")) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(BigDecimal.apply)
       }.toEither
     )(_.toString)

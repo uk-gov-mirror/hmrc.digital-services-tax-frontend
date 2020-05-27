@@ -101,7 +101,7 @@ contact-international-address.line4.heading=Address line 4 (optional)
 contact-international-address.countryCode.heading=Country
 
 check-if-group.heading=Is the company you want to register part of a group?
-check-if-group.details=What we mean by a 'group'
+check-if-group.details=What we mean by a ‘group’
 check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent company and all its consolidated subsidiaries.</p>\
   <p>A parent company is an entity that is (one of the following):</p>\
   <ul class="list list-bullet">\
@@ -201,7 +201,7 @@ check-your-answers.reg.warning.body=You could be prosecuted if you deliberately 
 
 check-your-answers.reg.submission.group=By submitting this notification, you are confirming that:
 
-check-your-answers.reg.submission.group.list.1={0} is authorised to act on behalf of {1} as the group's responsible member
+check-your-answers.reg.submission.group.list.1={0} is authorised to act on behalf of {1} as the group’s responsible member
 check-your-answers.reg.submission.group.list.2={0} has agreed to provide the information and resources that {1} needs to comply with its Digital Services Tax obligations
 check-your-answers.reg.submission.group.list.3=to the best of your knowledge, the details you are providing are correct and complete
 check-your-answers.save-continue=Accept and send
@@ -379,7 +379,7 @@ phoneNumber.invalid=Enter a phone number, like 01632 960 001, 07700 900 982 or 0
 phoneNumber.required=Enter a phone number
 phoneNumber.length.exceeded=Phone number must be 24 characters or fewer
 
-contact-details.email.required=Enter the contact person's email address
+contact-details.email.required=Enter the contact person’s email address
 contact-details.email.invalid=Enter an email address in the correct format, like name@example.com
 contact-details.email.length.exceeded=Email address must be 132 characters or fewer
 email.required=Please enter an email address
@@ -426,8 +426,8 @@ landing.account-history=Account History
 landing.balance=View your balance and transactions history
 
 #returns
+#Manage companies
 manage-companies-add-add.heading=Company details
-manage-companies.required=Select yes if you need to add another company to your group
 manage-companies.listing.heading=Confirm the companies in your group that have a Digital Services Tax liability
 manage-companies.radio.heading=Do you need to add another company?
 manage-companies.radio.hint=You must tell us about all the companies in your group that have a Digital Services Tax \
@@ -436,12 +436,12 @@ manage-companies.Add=Yes
 manage-companies.Continue=No
 remove-company=Remove company
 change-company=Change company name
+manage-companies.required=Select yes if you need to add another company to your group
 
 # Company Details
 add.heading=Company details
 add.name.heading=Company name
 add.name.hint=This is the name registered with an official company register, such as Companies House.
-add.name.invalid=Enter the company’s name
 add.utr.heading=UK Corporation Tax Unique Taxpayer Reference (UTR) (optional)
 add.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and other letters about Self Assessment. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
@@ -455,155 +455,160 @@ edit.utr.hint=This is 10 numbers like 12345 67890. It will be on tax returns and
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   <a target=_blank href="https://www.gov.uk/find-lost-utr-number">Find a lost UTR (opens in a new window or tab)</a>.
 
+#Add & edit company error messages
+name.required=Enter the company’s name
+name.invalid=Company name must only include letters a to z, numbers, full stops, apostrophes, hyphens, ampersands (&) and spaces
+name.length.exceeded=Company name must be 105 characters or fewer
+utr.invalid=Enter the company’s Corporation Tax Unique Taxpayer Reference in the correct format
+
+#Select activities
 select-activities.heading=Which activities are you reporting in this return?
 select-activities.heading.hint=Select all that apply.
 select-activities.SocialMedia=Social media
 select-activities.SearchEngine=Search engine
 select-activities.OnlineMarketplace=Online marketplace
+select-activities.minLength=Select if you are reporting social media, search engine or online marketplace activities in this return
 
+#Report alternative charge
 report-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins in this return?
-report-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK profit margins in this return
 report-alternative-charge.details=What we mean by ‘alternative charge’
 report-alternative-charge.details.text=<p>This is an alternative method that businesses can use to work out their Digital Services Tax liability.</p>\
 <p>The alternative charge only benefits groups who make a loss or have a low UK profit margin on a Digital Services activity.</p>
 report-alternative-charge.TRUE=Yes
 report-alternative-charge.FALSE=No
+report-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK profit margins in this return
 
+#Report social media
 report-social-media-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your social media activity?
-report-social-media-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
-  profit margins to your social media activity
 report-social-media-alternative-charge.TRUE=Yes
 report-social-media-alternative-charge.FALSE=No
+report-social-media-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your social media activity
+
 report-social-media-loss.heading=Has the group made a loss on its social media activity?
-report-social-media-loss.required=Select yes if the group made a loss on its social media activity
 report-social-media-loss.TRUE=Yes
 report-social-media-loss.FALSE=No
+report-social-media-loss.required=Select yes if the group made a loss on its social media activity
+
 report-social-media-operating-margin.heading=What was the group’s operating margin on its social media activity?
 report-social-media-operating-margin.required=Enter the group’s operating margin on its social media activity
 report-social-media-operating-margin.not-a-number=Enter the group’s operating margin on its social media activity \
-  in the correct format, like 0.25 or 1
+  in the correct format, like 25 or 100
 
+#Report search engine
 report-search-engine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your search engine activity?
-report-search-engine-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
-  profit margins to your search engine activity
 report-search-engine-alternative-charge.TRUE=Yes
 report-search-engine-alternative-charge.FALSE=No
+report-search-engine-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your search engine activity
+
 report-search-engine-loss.heading=Has the group made a loss on its search engine activity?
-report-search-engine-loss.required=Select yes if the group made a loss on its search engine activity
 report-search-engine-loss.TRUE=Yes
 report-search-engine-loss.FALSE=No
+report-search-engine-loss.required=Select yes if the group made a loss on its search engine activity
+
 report-search-engine-operating-margin.heading=What was the group’s operating margin on its search engine activity?
 report-search-engine-operating-margin.required=Enter the group’s operating margin on its search engine activity
-report-search-engine-operating-margin.not-a-number=Enter the group's operating margin on its search engine activity in the correct \
-  format, like 0.25 or 1
+report-search-engine-operating-margin.not-a-number=Enter the group’s operating margin on its search engine activity in the correct \
+  format, like 25 or 100
 
+#Report online marketplace
 report-online-marketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
   to your online marketplace activity?
-report-online-marketplace-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
-  profit margins to your online marketplace activity
 report-online-marketplace-alternative-charge.TRUE=Yes
 report-online-marketplace-alternative-charge.FALSE=No
+report-online-marketplace-alternative-charge.required=Select yes if you are applying the alternative charge for low or negative UK \
+  profit margins to your online marketplace activity
+
 report-online-marketplace-loss.heading=Has the group made a loss on its online marketplace activity?
-report-online-marketplace-loss.required=Select yes if the group made a loss on its online marketplace activity
 report-online-marketplace-loss.TRUE=Yes
 report-online-marketplace-loss.FALSE=No
-report-online-marketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
-report-online-marketplace-operating-margin.required=Enter the group’s operating margin on its online marketplace activity
-report-online-marketplace-operating-margin.not-a-number=Enter the group’s operating margin on its online marketplace activity \
-  in the correct format, like 0.25 or 1
+report-online-marketplace-loss.required=Select yes if the group made a loss on its online marketplace activity
 
+report-online-marketplace-operating-margin.heading=What was the group’s operating margin on its online marketplace activity?
+report-online-marketplace-operating-margin.not-a-number=Enter the group’s operating margin on its online marketplace activity \
+  in the correct format, like 25 or 100
+report-online-marketplace-operating-margin.required=Enter the group’s operating margin on its online marketplace activity
+
+#Report cross border transactions
 report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
-report-cross-border-transaction-relief.required=Select yes if you are claiming any relief on cross-border transactions for this return period
 report-cross-border-transaction-relief.details=What we mean by ‘relief on cross-border transactions’
 report-cross-border-transaction-relief.details.text=<p> If a transaction involves a UK user and a non-UK user who is in a country \
   that also operates a Digital Services Tax, only 50% of the revenues from that transaction will be taxable as UK revenues.</p>
 report-cross-border-transaction-relief.TRUE=Yes
 report-cross-border-transaction-relief.FALSE=No
+report-cross-border-transaction-relief.required=Select yes if you are claiming any relief on cross-border transactions for this return period
 
+#relief deducted
 relief-deducted.heading=How much cross-border transactions relief have you deducted from revenues in this return?
 relief-deducted.required=Enter the amount of cross-border transactions relief you have deducted from revenues in this return
 relief-deducted.not-a-number=The amount of cross-border transactions relief you deducted from revenues must be an amount of \
   money, like 1,234.56 or 1,560.00
+relief-deducted.invalid=The amount of cross-border transactions relief you deducted from revenues must include pence \
+  like 1,234.56 or 1,560.00
 
+#company liabilities - duplicated messages are EOF
 company-liabilities-0.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-# TODO - NEED TO PASS THE COMANY NAME TO THE ERROR
-#company-liabilities-0.required=Enter the Digital Services Tax liability for {0}
-company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-4.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-5.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-6.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-7.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-8.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-9.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-10.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-11.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-12.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-13.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-14.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-15.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-16.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-17.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-18.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-19.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
-company-liabilities-20.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-0.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-0.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-0.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
 
+#Allowance deducted
 allowance-deducted.heading=How much of the £25m annual allowance have you deducted from revenues in this return?
-allowance-deducted.required=Enter how much of the £25m annual allowance you have deducted from revenues in this return
-allowance-deducted.not-a-number=The amount of the £25m annual allowance you have deducted from revenues must be an amount of \
-  money, like 1,234.56 or 1,560.00
 allowance-deducted.details=What we mean by ‘£25m annual allowance’
 allowance-deducted.details.text=<p>The £25m annual allowance means the first £25m of revenues derived \
   from UK users will not be subject to Digital Services Tax.</p><p>The allowance is pro-rated for accounting \
   periods less than 12 months.</p>
+allowance-deducted.required=Enter how much of the £25m annual allowance you have deducted from revenues in this return
+allowance-deducted.not-a-number=The amount of the £25m annual allowance you have deducted from revenues must be an amount of \
+  money, like 1,234.56 or 1,560.00
+allowance-deducted.invalid=The amount of the £25m annual allowance you have deducted from revenues must be an amount \
+  of money, like 1,234.56 or 1,560.00
 
+#Group Liability
 group-liability.heading=What is the group’s total UK Digital Services Tax liability for 1 April 2020 to 31 July 2020? 
+group-liability.hint=This is the total amount of liability after applying any deductions and allowances.
 group-liability.required=Enter the group’s total Digital Services Tax liability for 1 April 2020 to 31 July 2020
 group-liability.not-a-number=The group’s total liability must be an amount of money, like 1,234.56 or 1,560.00
-group-liability.hint=This is the total amount of liability after applying any deductions and allowances.
+group-liability.invalid=The group’s total liability must include pence like 1,234.56 or 1,560.00
 
+#repayment
 repayment.heading=Do you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020?
-repayment.required=Select yes if you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020
 repayment.TRUE=Yes
 repayment.FALSE=No
+repayment.required=Select yes if you need to be repaid any Digital Services Tax for 1 April 2020 to 31 July 2020
 
+#bank details
+bank-details.heading=Your bank details for repayment
 bank-details.accountName.heading=Account name
 bank-details.accountName.required=Enter the account name
 bank-details.accountName.invalid=Account name must only include letters a to z
 bank-details.accountName.length.exceeded=Account name must be 35 characters or fewer
+
 bank-details.bankAccount.heading.large.label=Is this a UK bank account?
-bank-details.bankAccount.required=Select yes if this is a UK bank account
 bank-details.bankAccount.DomesticBankAccount=Yes
 bank-details.bankAccount.ForeignBankAccount=No
+bank-details.bankAccount.required=Select yes if this is a UK bank account
 
 bank-details.bankAccount.DomesticBankAccount.sortCode.heading=Sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.required=Enter the sort code
 bank-details.bankAccount.DomesticBankAccount.sortCode.invalid=Enter the sort code in the correct format, like 123456
-bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.heading=Building society roll number (if you have one)
-bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.hint=You can find it on your card, statement or passbook
-bank-details.bankAccount.ForeignBankAccount.iban.heading=International Bank Account Number (IBAN)
 
-bank-details-type.heading=Your bank details for repayment
-bank-details-type._1.heading=Account Name
-bank-details-type._2.required=Select yes if this is a UK bank account
-bank-details-type._2.TRUE=Yes
-bank-details-type._2.FALSE=No
-bank-details-type._2.heading.large=Is this a UK bank account?
-
-bank-details-type-domestic.heading=What are your UK bank account details?
-bank-details-domestic.sortCode.heading.large.label=Sort code
 bank-details.bankAccount.DomesticBankAccount.accountNo.heading=Account number
 bank-details.bankAccount.DomesticBankAccount.accountNo.required=Enter the account number
 bank-details.bankAccount.DomesticBankAccount.accountNo.invalid=Enter the account number in the correct format, like 123456 or 12345678
-bank-details.bankAccount.DomesticBankAccount.accountNo.length.exceeded=Enter the account number in the correct format, like 123456 or 12345678
-bank-details-domestic.buildingSocietyNumber.heading.large.label=Building society roll number (if you have one)
 
-bank-details-foreign.listing.heading=What are your bank account details?
-bank-details-foreign.iban.heading.large.label=International Bank Account Number (IBAN)
-bank-details.bankAccount.ForeignBankAccount.iban.invalid=Enter the International Bank Account Number (IBAN)
+bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.heading=Building society roll number (if you have one)
+bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.hint=You can find it on your card, statement or passbook
+bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.invalid=Building society roll number must only include letters a to z, numbers, hyphens and spaces
+bank-details.bankAccount.DomesticBankAccount.buildingSocietyNumber.length.exceeded=Building society roll number must be 18 characters or fewer
+
+bank-details.bankAccount.ForeignBankAccount.iban.heading=International Bank Account Number (IBAN)
+bank-details.bankAccount.ForeignBankAccount.iban.invalid=Please enter a valid International Bank Account Number (IBAN)
+bank-details.bankAccount.ForeignBankAccount.iban.required=Enter the International Bank Account Number (IBAN)
+bank-details.bankAccount.ForeignBankAccount.iban.length.exceeded=International Bank Account Number (IBAN) must be 34 characters or fewer
 
 #Returns cya
 check-your-answers.ret.title=Check your answers before sending your return for 1 April 2020 to July 2020
@@ -648,6 +653,17 @@ check-your-answers.ret.report-online-marketplace-loss.change=loss made
 check-your-answers.ret.report-online-marketplace-operating-margin.question=Group’s profit margin on activity
 check-your-answers.ret.report-online-marketplace-operating-margin.change=group’s profit margin on activity
 
+check-your-answers.ret.repayment.title=Return repayments
+check-your-answers.ret.repayment.question=Do you need to be repaid any Digital Services Tax for this period? 
+check-your-answers.ret.account-name.question=Account name
+check-your-answers.ret.account-type.question=Is this a UK bank account?
+check-your-answers.ret.sort-code.question=Sort code
+check-your-answers.ret.account-number.question=Account number
+check-your-answers.ret.building-society.question=Building society roll number (if you have one)
+check-your-answers.ret.iban.question=IBAN
+
+
+
 check-your-answers.ret.submission.title=Now submit your return
 check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \
   to the best of your knowledge, the details you are providing are correct.
@@ -669,7 +685,7 @@ wrong-account.sign-in.reason=To use this service, sign in with the Government Ga
 
 wrong-creds.heading=You cannot use this service
 wrong-creds.sign-out.reason=You need to be an administrator user to register for the Digital Services Tax.
-wrong-creds.contact-admin=Contact your company's administrator if you need to use this service.
+wrong-creds.contact-admin=Contact your company’s administrator if you need to use this service.
 
 # DO NOT MERGE UNCOMMENT BELOW
 #required=This is a required field
@@ -719,7 +735,7 @@ accessibility-statement.ul2-li7=The ‘Contact person’s details’ page does n
 accessibility-statement.ul2-li8=Some error messages within the service are not descriptive, which may prevent some users from understanding \
   what they need to correct.
 accessibility-statement.ul2-li9=The colour used for the focus indicator on form elements does not meet the minimum required contrast ratio of 3:1.
-accessibility-statement.ul2-li10=When submitting a return, the 'Company details' page does not have an error summary or error skip links, and some \
+accessibility-statement.ul2-li10=When submitting a return, the ‘Company details’ page does not have an error summary or error skip links, and some \
   fields do not have matching inline error validation messages.
 accessibility-statement.p9=We plan to fix these accessibility issues as soon as possible.
 
@@ -789,3 +805,407 @@ accessibility-statement.p20-1=The service was built using parts that were tested
 accessibility-statement.p20-2=Digital Accessibility Centre
 accessibility-statement.p20-3=. The full service was tested by HMRC and included disabled users.
 accessibility-statement.p21=This page was prepared on 1 April 2020. It was last updated on 1 April 2020.
+
+company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-4.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-5.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-6.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-7.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-8.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-9.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-10.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-11.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-12.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-13.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-14.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-15.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-16.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-17.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-18.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-19.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-20.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-21.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-22.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-23.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-24.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-25.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-26.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-27.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-28.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-29.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-30.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-31.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-32.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-33.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-34.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-35.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-36.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-37.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-38.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-39.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-40.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-41.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-42.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-43.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-44.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-45.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-46.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-47.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-48.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-49.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-50.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-51.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-52.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-53.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-54.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-55.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-56.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-57.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-58.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-59.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-60.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-61.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-62.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-63.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-64.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-65.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-66.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-67.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-68.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-69.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-70.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-71.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-72.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-73.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-74.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-75.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-76.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-77.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-78.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-79.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-80.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-81.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-82.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-83.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-84.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-85.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-86.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-87.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-88.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-89.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-90.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-91.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-92.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-93.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-94.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-95.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-96.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-97.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-98.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-99.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+company-liabilities-100.heading=What are your UK Digital Services Tax liabilities for {0} from 1 April 2020 to 31 July 2020?
+
+company-liabilities-1.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-2.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-3.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-4.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-5.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-6.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-7.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-8.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-9.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-10.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-11.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-12.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-13.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-14.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-15.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-16.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-17.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-18.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-19.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-20.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-21.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-22.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-23.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-24.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-25.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-26.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-27.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-28.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-29.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-30.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-31.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-32.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-33.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-34.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-35.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-36.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-37.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-38.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-39.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-40.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-41.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-42.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-43.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-44.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-45.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-46.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-47.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-48.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-49.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-50.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-51.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-52.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-53.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-54.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-55.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-56.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-57.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-58.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-59.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-60.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-61.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-62.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-63.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-64.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-65.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-66.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-67.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-68.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-69.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-70.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-71.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-72.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-73.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-74.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-75.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-76.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-77.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-78.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-79.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-80.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-81.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-82.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-83.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-84.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-85.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-86.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-87.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-88.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-89.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-90.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-91.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-92.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-93.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-94.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-95.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-96.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-97.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-98.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-99.required=Enter the Digital Services Tax liability for {0}
+company-liabilities-100.required=Enter the Digital Services Tax liability for {0}
+
+company-liabilities-1.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-2.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-3.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-4.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-5.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-6.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-7.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-8.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-9.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-10.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-11.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-12.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-13.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-14.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-15.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-16.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-17.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-18.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-19.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-20.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-21.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-22.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-23.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-24.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-25.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-26.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-27.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-28.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-29.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-30.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-31.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-32.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-33.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-34.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-35.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-36.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-37.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-38.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-39.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-40.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-41.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-42.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-43.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-44.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-45.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-46.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-47.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-48.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-49.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-50.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-51.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-52.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-53.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-54.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-55.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-56.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-57.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-58.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-59.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-60.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-61.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-62.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-63.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-64.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-65.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-66.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-67.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-68.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-69.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-70.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-71.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-72.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-73.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-74.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-75.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-76.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-77.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-78.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-79.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-80.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-81.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-82.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-83.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-84.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-85.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-86.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-87.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-88.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-89.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-90.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-91.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-92.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-93.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-94.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-95.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-96.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-97.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-98.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-99.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+company-liabilities-100.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
+
+company-liabilities-1.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-2.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-3.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-4.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-5.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-6.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-7.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-8.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-9.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-10.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-11.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-12.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-13.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-14.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-15.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-16.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-17.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-18.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-19.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-20.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-21.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-22.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-23.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-24.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-25.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-26.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-27.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-28.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-29.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-30.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-31.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-32.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-33.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-34.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-35.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-36.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-37.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-38.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-39.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-40.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-41.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-42.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-43.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-44.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-45.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-46.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-47.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-48.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-49.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-50.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-51.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-52.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-53.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-54.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-55.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-56.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-57.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-58.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-59.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-60.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-61.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-62.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-63.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-64.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-65.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-66.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-67.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-68.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-69.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-70.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-71.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-72.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-73.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-74.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-75.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-76.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-77.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-78.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-79.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-80.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-81.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-82.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-83.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-84.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-85.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-86.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-87.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-88.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-89.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-90.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-91.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-92.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-93.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-94.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-95.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-96.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-97.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-98.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-99.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-100.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
