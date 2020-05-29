@@ -70,13 +70,13 @@ object SampleData {
     LocalDate.of(2021, 4, 5)
   )
 
-  val sampleMoney: Money = 100.00
+  val sampleMoney: Money = Money(BigDecimal(100.00))
   val sampleActivitySet: Set[Activity] = Set(SocialMedia, SearchEngine, OnlineMarketplace)
   val sampleForeignBankAccount: ForeignBankAccount = ForeignBankAccount(IBAN("GB82 WEST 1234 5698 7654 32"))
   val sampleDomesticBankAccount: DomesticBankAccount = DomesticBankAccount(
     SortCode("11-22-33"),
     AccountNumber("88888888"),
-    "buildingSocietyNumber"
+    Some(BuildingSocietyRollNumber("buildingSocietyNumber"))
   )
   val sampleRepaymentDetails: RepaymentDetails = RepaymentDetails(
     AccountName("DigitalService"),
