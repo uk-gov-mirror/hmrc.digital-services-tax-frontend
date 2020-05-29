@@ -195,6 +195,8 @@ object TestInstances {
     } yield Enrolments(list.toSet)
   }
 
+  def gencomapOpt = Gen.option(gencomap)
+
   def gencomap: Gen[Map[GroupCompany, Money]] = Gen.mapOf(
     (
       genGroupCo,
@@ -227,7 +229,7 @@ object TestInstances {
   implicit def returnGen: Arbitrary[Return] = Arbitrary((
     genActivityPercentMap,
     arbitrary[Money],
-    gencomap,
+    gencomapOpt,
     arbitrary[Money],
     arbitrary[Money],
     Gen.option(genRepayment)

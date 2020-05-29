@@ -31,16 +31,18 @@
             @standard_cya_row(key, "report-cross-border-transaction-relief", if(ret.crossBorderReliefAmount != 0){ messages("common.yes")} else { messages("common.no")}, s"$serviceUrl/${per.key}/report-cross-border-transaction-relief")(messages)
             @standard_cya_row(key, "relief-deducted", Html(s"${ret.crossBorderReliefAmount}"), s"$serviceUrl/${per.key}/relief-deducted", Html("£"))(messages)
 
-            @ret.companiesAmount.zipWithIndex.map { case (co, i) =>
-            <div>
-                <dt class="cya-question">@messages(s"$key.group-company", co._1.name)</dt>
-                <dd class="cya-answer">£ @co._2</dd>
-                <dd class="app-check-your-answers__change">
-                    <a href=@{s"$serviceUrl/${per.key}/company-liabilities-${i}"}>@messages("common.change")
-                        <span class="govuk-visually-hidden">@messages(s"$key.group-company.change", co._1.name)</span>
-                    </a>
-                </dd>
-            </div>
+            @ret.companiesAmount.map { ca =>
+                @ca.zipWithIndex.map { case (co, i) =>
+                    <div>
+                        <dt class="cya-question">@messages(s"$key.group-company", co._1.name)</dt>
+                        <dd class="cya-answer">£ @co._2</dd>
+                        <dd class="app-check-your-answers__change">
+                            <a href=@{s"$serviceUrl/${per.key}/company-liabilities-${i}"}>@messages("common.change")
+                                <span class="govuk-visually-hidden">@messages(s"$key.group-company.change", co._1.name)</span>
+                            </a>
+                        </dd>
+                    </div>
+                }
             }
         </dl>
 

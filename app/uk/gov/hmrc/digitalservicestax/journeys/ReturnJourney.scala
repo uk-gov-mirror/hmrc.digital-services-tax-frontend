@@ -44,7 +44,9 @@ object ReturnJourney {
   ): F[Return] = {
     import interpreter._
 
-    val isGroupMessage = if(registration.ultimateParent.isDefined) "group" else "company"
+
+    val isGroup = registration.ultimateParent.isDefined
+    val isGroupMessage = if(isGroup) "group" else "company"
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
@@ -97,8 +99,8 @@ object ReturnJourney {
     } emptyUnless ask[Boolean]("report-alternative-charge")
 
 
-    def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Money]] = {
-      companies.zipWithIndex.map{ case (co, i) => 
+    def askAmountForCompanies(companies: Option[List[GroupCompany]]): F[Map[GroupCompany, Money]] = {
+      companies.fold(Map.empty[GroupCompany, Money].pure[F]){_.zipWithIndex.map{ case (co, i) =>
         interact[GroupCompany, Money](
           s"company-liabilities-$i",
           co,
@@ -108,11 +110,11 @@ object ReturnJourney {
             message(s"company-liabilities-$i.not-a-number", co.name) ++
             message(s"company-liabilities-$i.invalid", co.name)
         ).map{(co, _)}
-      }.sequence.map{_.toMap}
+      }.sequence.map{_.toMap}}
     }
 
     for {
-      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1))
+      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1)) when isGroup
       activities <- ask[Set[Activity]]("select-activities", validation = Rule.minLength(1))
 
       dstReturn <- (
@@ -121,7 +123,7 @@ object ReturnJourney {
           case true => ask[Money]("relief-deducted")
           case false => Money(BigDecimal(0).setScale(2)).pure[F]
         },
-        askAmountForCompanies(groupCos),
+        askAmountForCompanies(groupCos) when isGroup,
         ask[Money]("allowance-deducted"),
         ask[Money]("group-liability",
           customContent =

@@ -41,6 +41,27 @@ class ReturnJourneySpec extends FlatSpec with Matchers {
 
   val defaultInterpreter = new TestReturnInterpreter
 
+  "If the registration is not for a group we" should "not see manage-companies questions" in {
+    implicit val sampleGroupCompanyListAsk = instances(List.empty[GroupCompany])
+    val ret:Return = ReturnJourney.returnJourney(
+      new TestReturnInterpreter,
+      samplePeriod,
+      sampleReg
+    ).value.run.asOutcome()
+
+    ret.companiesAmount shouldBe 'empty
+  }
+
+  "If the registration is for a group we" should "see manage-companies questions" in {
+    val ret:Return = ReturnJourney.returnJourney(
+      defaultInterpreter,
+      samplePeriod,
+      sampleRegWithParent
+    ).value.run.asOutcome()
+
+    ret.companiesAmount shouldBe 'nonEmpty
+  }
+
   "Return.alternativeCharge length" should "be the same as length of reported activities" in {
     implicit val sampleActivitySetAsk = instances(Set[Activity](SocialMedia))
     val ret:Return = ReturnJourney.returnJourney(
