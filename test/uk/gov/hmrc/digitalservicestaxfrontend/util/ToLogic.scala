@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestaxfrontend.controller_test
+package uk.gov.hmrc.digitalservicestaxfrontend.util
 
-import org.scalatest.{Matchers, WordSpec}
-import uk.gov.hmrc.digitalservicestax.controllers.JourneyController
+import cats.implicits._
+import ltbs.uniform.interpreters.logictable._
 
-class JourneyControllerSpec extends WordSpec with Matchers {
-
-  //TODO add tests when journey logic is implemented
-
-  "GET /" should {
-    "return 200" in {
-      1 shouldBe 1
-    }
-  }
+object ToLogic extends cats.~>[cats.Id, Logic] {
+  def apply[A](fa: cats.Id[A]): Logic[A] = fa.pure[Logic]
 }
