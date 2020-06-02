@@ -221,7 +221,7 @@ object TestInstances {
     (
       AccountName.gen,
       genBankAccount
-      ).mapN(RepaymentDetails.apply)
+    ).mapN(RepaymentDetails.apply)
 
   def date(start: LocalDate, end: LocalDate): Gen[LocalDate] =
     Gen.choose(start.toEpochDay, end.toEpochDay).map(LocalDate.ofEpochDay)
