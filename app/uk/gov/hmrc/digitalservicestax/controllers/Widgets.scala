@@ -93,13 +93,24 @@ trait Widgets {
       case Some(x) => x.toString
     }
 
+  def validatedBigDecimal(
+    validated: ValidatedType[BigDecimal],
+    maxLen: Int = Integer.MAX_VALUE
+  )(
+    implicit baseForm: FormField[BigDecimal, Html]
+  ): FormField[BigDecimal @@ validated.Tag, Html] =
+    baseForm.simap{
+      case l if l.precision > maxLen => Left(ErrorMsg("length.exceeded").toTree)
+      case x => Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+    }{x => x: BigDecimal}
+
   implicit def postcodeField                  = validatedString(Postcode)
   implicit def nesField                       = validatedVariant(NonEmptyString)
   implicit def utrField                       = validatedString(UTR)
   implicit def emailField                     = validatedString(Email, 132)
   implicit def phoneField                     = validatedString(PhoneNumber, 24)
   implicit def percentField                   = validatedVariant(Percent)
-  implicit def moneyField                     = validatedVariant(Money)
+  implicit def moneyField                     = validatedBigDecimal(Money, 15)
   implicit def accountNumberField             = validatedString(AccountNumber)
   implicit def BuildingSocietyRollNumberField = inlineOptionString(BuildingSocietyRollNumber, 18)
   implicit def accountNameField               = validatedString(AccountName, 35)

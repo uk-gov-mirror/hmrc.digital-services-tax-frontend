@@ -108,6 +108,7 @@ object ReturnJourney {
             message(s"company-liabilities-$i.heading", co.name, formatDate(period.start), formatDate(period.end)) ++
             message(s"company-liabilities-$i.required", co.name) ++
             message(s"company-liabilities-$i.not-a-number", co.name) ++
+            message(s"company-liabilities-$i.length.exceeded", co.name) ++
             message(s"company-liabilities-$i.invalid", co.name)
         ).map{(co, _)}
       }.sequence.map{_.toMap}}
@@ -130,6 +131,7 @@ object ReturnJourney {
             message("group-liability.heading", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
             message("group-liability.required", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
             message("group-liability.not-a-number", isGroupMessage) ++
+            message("group-liability.length.exceeded", isGroupMessage) ++
             message("group-liability.invalid", isGroupMessage)
         ),
         ask[RepaymentDetails]("bank-details") when ask[Boolean](

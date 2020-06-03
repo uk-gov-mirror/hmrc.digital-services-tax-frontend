@@ -39,7 +39,7 @@ object TestInstances {
   )
   // what range of values is acceptable? pennies? fractional pennies?
   implicit val arbMoney: Arbitrary[Money] = Arbitrary(
-    Gen.choose(0L, Long.MaxValue).map(b => Money(BigDecimal(b).setScale(2)))
+    Gen.choose(0L, 1000000000000L).map(b => Money(BigDecimal(b).setScale(2)))
   )
 
 
