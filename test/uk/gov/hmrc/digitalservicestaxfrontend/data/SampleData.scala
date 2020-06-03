@@ -70,13 +70,22 @@ object SampleData {
     LocalDate.of(2021, 4, 5)
   )
 
-  val sampleMoney: Money = 100.00
+  val sampleRegWithParent = Registration (
+    sampleCompanyRegWrapper,
+    None,
+    sampleCompany.some,
+    sampleContact,
+    LocalDate.of(2020, 7, 1),
+    LocalDate.of(2021, 4, 5)
+  )
+
+  val sampleMoney: Money = Money(BigDecimal(100.00).setScale(2))
   val sampleActivitySet: Set[Activity] = Set(SocialMedia, SearchEngine, OnlineMarketplace)
   val sampleForeignBankAccount: ForeignBankAccount = ForeignBankAccount(IBAN("GB82 WEST 1234 5698 7654 32"))
   val sampleDomesticBankAccount: DomesticBankAccount = DomesticBankAccount(
     SortCode("11-22-33"),
     AccountNumber("88888888"),
-    "buildingSocietyNumber"
+    Some(BuildingSocietyRollNumber("ABC - 123"))
   )
   val sampleRepaymentDetails: RepaymentDetails = RepaymentDetails(
     AccountName("DigitalService"),
@@ -87,5 +96,12 @@ object SampleData {
     sampleCompanyName,
     Some(UTR("1234567891"))
   ))
+
+  val samplePeriod: Period = Period(
+    LocalDate.now,
+    LocalDate.now,
+    LocalDate.now,
+    Period.Key("FOOO")
+  )
 
 }

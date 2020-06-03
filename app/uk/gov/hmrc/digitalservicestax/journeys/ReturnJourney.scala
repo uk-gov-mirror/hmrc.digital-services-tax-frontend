@@ -20,16 +20,16 @@ package journeys
 import scala.language.higherKinds
 
 import data._
+import frontend.formatDate
 
 import cats.Monad
 import cats.implicits._
-import java.time.LocalDate
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
 object ReturnJourney {
 
-  type ReturnTellTypes = Confirmation[Return] :: CYA[Return] :: GroupCompany :: NilTypes
+  type ReturnTellTypes = Confirmation[Return] :: CYA[(Return, Period)] :: GroupCompany :: NilTypes
   type ReturnAskTypes = Set[Activity] :: Money :: RepaymentDetails :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   private def message(key: String, args: String*) = {
@@ -38,20 +38,45 @@ object ReturnJourney {
   }
 
   def returnJourney[F[_] : Monad](
-    interpreter: Language[F, ReturnTellTypes, ReturnAskTypes]
+    interpreter: Language[F, ReturnTellTypes, ReturnAskTypes],
+    period: Period,
+    registration: Registration
   ): F[Return] = {
     import interpreter._
+
+
+    val isGroup = registration.ultimateParent.isDefined
+    val isGroupMessage = if(isGroup) "group" else "company"
 
     def askAlternativeCharge(applicableActivities: Set[Activity]): F[Map[Activity, Percent]] = {
 
       def askActivityReduced(actType: Activity): F[Percent] =
-        { ask[Percent](s"report-${Activity.toUrl(actType)}-operating-margin") emptyUnless
-          ask[Boolean](s"report-${Activity.toUrl(actType)}-loss").map { x => !x }}
+        { ask[Percent](
+          s"report-${Activity.toUrl(actType)}-operating-margin",
+          customContent =
+            message(s"report-${Activity.toUrl(actType)}-operating-margin.heading", isGroupMessage) ++
+            message(s"report-${Activity.toUrl(actType)}-operating-margin.required", isGroupMessage) ++
+            message(s"report-${Activity.toUrl(actType)}-operating-margin.not-a-number", isGroupMessage)
+        ) emptyUnless ask[Boolean](
+            s"report-${Activity.toUrl(actType)}-loss",
+            customContent =
+              message(s"report-${Activity.toUrl(actType)}-loss.heading", isGroupMessage) ++
+              message(s"report-${Activity.toUrl(actType)}-loss.required", isGroupMessage)
+          ).map { x => !x }}
 
       def askActivity(actType: Activity): F[Option[Percent]] = 
-        { ask[Percent](s"report-${Activity.toUrl(actType)}-operating-margin") emptyUnless
-          ask[Boolean](s"report-${Activity.toUrl(actType)}-loss").map { x => !x }} when
-        ask[Boolean](s"report-${Activity.toUrl(actType)}-alternative-charge")
+        { ask[Percent](
+            s"report-${Activity.toUrl(actType)}-operating-margin",
+            customContent =
+              message(s"report-${Activity.toUrl(actType)}-operating-margin.heading", isGroupMessage) ++
+              message(s"report-${Activity.toUrl(actType)}-operating-margin.required", isGroupMessage) ++
+              message(s"report-${Activity.toUrl(actType)}-operating-margin.not-a-number", isGroupMessage)
+        ) emptyUnless ask[Boolean](
+            s"report-${Activity.toUrl(actType)}-loss",
+            customContent =
+              message(s"report-${Activity.toUrl(actType)}-loss.heading", isGroupMessage) ++
+              message(s"report-${Activity.toUrl(actType)}-loss.required", isGroupMessage)
+        ).map { x => !x }} when ask[Boolean](s"report-${Activity.toUrl(actType)}-alternative-charge")
       
       val allEntries: List[F[(Activity, Option[Percent])]] =
         if(applicableActivities.size == 1) {
@@ -74,29 +99,49 @@ object ReturnJourney {
     } emptyUnless ask[Boolean]("report-alternative-charge")
 
 
-    def askAmountForCompanies(companies: List[GroupCompany]): F[Map[GroupCompany, Money]] = {
-      companies.zipWithIndex.map{ case (co, i) => 
+    def askAmountForCompanies(companies: Option[List[GroupCompany]]): F[Map[GroupCompany, Money]] = {
+      companies.fold(Map.empty[GroupCompany, Money].pure[F]){_.zipWithIndex.map{ case (co, i) =>
         interact[GroupCompany, Money](
           s"company-liabilities-$i",
           co,
-          customContent = message(s"company-liabilities-$i.heading", co.name)
+          customContent =
+            message(s"company-liabilities-$i.heading", co.name, formatDate(period.start), formatDate(period.end)) ++
+            message(s"company-liabilities-$i.required", co.name) ++
+            message(s"company-liabilities-$i.not-a-number", co.name) ++
+            message(s"company-liabilities-$i.length.exceeded", co.name) ++
+            message(s"company-liabilities-$i.invalid", co.name)
         ).map{(co, _)}
-      }.sequence.map{_.toMap}
+      }.sequence.map{_.toMap}}
     }
 
     for {
-      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1))
-      activities <- ask[Set[Activity]]("select-activities")
+      groupCos <- ask[List[GroupCompany]]("manage-companies", validation = Rule.minLength(1)) when isGroup
+      activities <- ask[Set[Activity]]("select-activities", validation = Rule.minLength(1))
 
       dstReturn <- (
-        askAlternativeCharge(activities), 
-        ask[Money]("relief-deducted") emptyUnless ask[Boolean]("report-cross-border-transaction-relief"),
-        askAmountForCompanies(groupCos),
+        askAlternativeCharge(activities),
+        ask[Boolean]("report-cross-border-transaction-relief") >>= {
+          case true => ask[Money]("relief-deducted")
+          case false => Money(BigDecimal(0).setScale(2)).pure[F]
+        },
+        askAmountForCompanies(groupCos) when isGroup,
         ask[Money]("allowance-deducted"),
-        ask[Money]("group-liability"),
-        ask[RepaymentDetails]("bank-details") when ask[Boolean]("repayment")
+        ask[Money]("group-liability",
+          customContent =
+            message("group-liability.heading", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
+            message("group-liability.required", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
+            message("group-liability.not-a-number", isGroupMessage) ++
+            message("group-liability.length.exceeded", isGroupMessage) ++
+            message("group-liability.invalid", isGroupMessage)
+        ),
+        ask[RepaymentDetails]("bank-details") when ask[Boolean](
+            "repayment",
+            customContent =
+            message("repayment.heading", formatDate(period.start), formatDate(period.end)) ++
+            message("repayment.required", formatDate(period.start), formatDate(period.end))
+        )
       ).mapN(Return.apply)
-      _ <- tell("check-your-answers", CYA(dstReturn))
+      _ <- tell("check-your-answers", CYA((dstReturn, period)))
     } yield dstReturn
   }
 
