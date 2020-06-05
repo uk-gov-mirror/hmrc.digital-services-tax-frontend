@@ -124,7 +124,7 @@ object ReturnJourney {
           case true => ask[Money]("relief-deducted")
           case false => Money(BigDecimal(0).setScale(2)).pure[F]
         },
-        askAmountForCompanies(groupCos) when isGroup,
+        askAmountForCompanies(groupCos) emptyUnless isGroup,
         ask[Money]("allowance-deducted"),
         ask[Money]("group-liability",
           customContent =
