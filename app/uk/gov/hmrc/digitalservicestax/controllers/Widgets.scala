@@ -19,7 +19,6 @@ package uk.gov.hmrc.digitalservicestax.controllers
 import java.time.LocalDate
 
 import cats.data.Validated
-import cats.data.Validated
 import cats.implicits._
 import enumeratum._
 import ltbs.uniform.common.web.GenericWebTell
@@ -117,7 +116,6 @@ trait Widgets {
   implicit def utrField                       = validatedString(UTR)
   implicit def emailField                     = validatedString(Email, 132)
   implicit def phoneField       = validatedString(PhoneNumber, 24)(twirlStringFields(
-    // use a different view
     customRender = views.html.uniform.phonenumber.apply _
   ))
   implicit def percentField                   = validatedVariant(Percent)
@@ -126,7 +124,6 @@ trait Widgets {
   implicit def BuildingSocietyRollNumberField = inlineOptionString(BuildingSocietyRollNumber, 18)
   implicit def accountNameField               = validatedString(AccountName, 35)
   implicit def sortCodeField    = validatedString(SortCode)(twirlStringFields(
-    // use the string view but pass in an extra parameter
     customRender = views.html.uniform.string(_,_,_,_,_,"form-control form-control-1-4")
   ))
   
