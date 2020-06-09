@@ -17,6 +17,7 @@
 package uk.gov.hmrc.digitalservicestaxfrontend.controller_test
 
 import org.scalatest.{Matchers, WordSpec}
+import uk.gov.hmrc.digitalservicestax.controllers.JourneyController
 
 class JourneyControllerSpec extends WordSpec with Matchers {
 

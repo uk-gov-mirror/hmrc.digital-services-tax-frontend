@@ -18,13 +18,11 @@ package uk.gov.hmrc.digitalservicestax.controllers
 
 import java.time.LocalDate
 
-import ltbs.uniform
-import ltbs.uniform.common.web.GenericWebTell
-import uk.gov.hmrc.digitalservicestax.data
-import uk.gov.hmrc.digitalservicestax.data.AddressLine
-
+import cats.data.Validated
+import cats.data.Validated
 import cats.implicits._
 import enumeratum._
+import ltbs.uniform.common.web.GenericWebTell
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
 import ltbs.uniform.validation.Rule._
@@ -32,13 +30,15 @@ import ltbs.uniform.validation._
 import ltbs.uniform.{NonEmptyString => _, _}
 import play.twirl.api.Html
 import play.twirl.api.HtmlFormat.Appendable
-import uk.gov.hmrc.digitalservicestax._
-import uk.gov.hmrc.digitalservicestax.data._
-import cats.data.Validated
 import shapeless.tag, tag.{@@}
-import uniform.validation.{Rule, Transformation}
+import uk.gov.hmrc.digitalservicestax._
+import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.data._
+import uk.gov.hmrc.digitalservicestax.frontend.{RichAddress, Kickout}
 
 trait Widgets {
+
+  def appConfig: AppConfig
 
   implicit val twirlStringField: FormField[String, Html] = twirlStringFields()
 
@@ -67,21 +67,6 @@ trait Widgets {
     }
   }
 
-  def inlineOptionString(
-    validated: ValidatedType[String],
-    maxLen: Int = Integer.MAX_VALUE
-  ): FormField[Option[String @@ validated.Tag], Html] =
-    twirlStringField.simap{
-      case "" => Right(None)
-      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
-      case x  => Either.fromOption(
-        validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
-      )
-    }{
-      case None => ""
-      case Some(x) => x.toString
-    }
-
   def validatedVariant[BaseType](validated: ValidatedType[BaseType])(
     implicit baseForm: FormField[BaseType, Html]
   ): FormField[BaseType @@ validated.Tag, Html] =
@@ -101,26 +86,55 @@ trait Widgets {
       case x => Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
     }{x => x: String}
 
-  implicit def postcodeField          = validatedString(Postcode)
-  implicit def nesField               = validatedVariant(NonEmptyString)
-  implicit def utrField               = validatedString(UTR)
-  implicit def emailField             = validatedString(Email, 132)
+  def inlineOptionString(
+    validated: ValidatedType[String],
+    maxLen: Int = Integer.MAX_VALUE
+  ): FormField[Option[String @@ validated.Tag], Html] =
+    twirlStringField.simap{
+      case "" => Right(None)
+      case l if l.length > maxLen => Left(ErrorMsg("length.exceeded").toTree)
+      case x  => Either.fromOption(
+        validated.of(x).map(Some(_)), ErrorMsg("invalid").toTree
+      )
+    }{
+      case None => ""
+      case Some(x) => x.toString
+    }
+
+  def validatedBigDecimal(
+    validated: ValidatedType[BigDecimal],
+    maxLen: Int = Integer.MAX_VALUE
+  )(
+    implicit baseForm: FormField[BigDecimal, Html]
+  ): FormField[BigDecimal @@ validated.Tag, Html] =
+    baseForm.simap{
+      case l if l.precision > maxLen => Left(ErrorMsg("length.exceeded").toTree)
+      case x => Either.fromOption(validated.of(x), ErrorMsg("invalid").toTree)
+    }{x => x: BigDecimal}
+
+  implicit def postcodeField                  = validatedString(Postcode)
+  implicit def nesField                       = validatedVariant(NonEmptyString)
+  implicit def utrField                       = validatedString(UTR)
+  implicit def emailField                     = validatedString(Email, 132)
   implicit def phoneField       = validatedString(PhoneNumber, 24)(twirlStringFields(
     // use a different view
     customRender = views.html.uniform.phonenumber.apply _
   ))
-  implicit def percentField           = validatedVariant(Percent)
-  implicit def accountField           = validatedString(AccountNumber)
-  implicit def accountNameField       = validatedString(AccountName, 35)
+  implicit def percentField                   = validatedVariant(Percent)
+  implicit def moneyField                     = validatedBigDecimal(Money, 15)
+  implicit def accountNumberField             = validatedString(AccountNumber)
+  implicit def BuildingSocietyRollNumberField = inlineOptionString(BuildingSocietyRollNumber, 18)
+  implicit def accountNameField               = validatedString(AccountName, 35)
   implicit def sortCodeField    = validatedString(SortCode)(twirlStringFields(
     // use the string view but pass in an extra parameter
     customRender = views.html.uniform.string(_,_,_,_,_,"form-control form-control-1-4")
   ))
-  implicit def ibanField              = validatedVariant(IBAN)
-  implicit def companyNameField       = validatedString(CompanyName, 105)
-  implicit def mandatoryAddressField  = validatedString(AddressLine, 35)
-  implicit def optAddressField        = inlineOptionString(AddressLine, 35)
-  implicit def restrictField          = validatedString(RestrictiveString, 35)
+  
+  implicit def ibanField                      = validatedString(IBAN, 34)
+  implicit def companyNameField               = validatedString(CompanyName, 105)
+  implicit def mandatoryAddressField          = validatedString(AddressLine, 35)
+  implicit def optAddressField                = inlineOptionString(AddressLine, 35)
+  implicit def restrictField                  = validatedString(RestrictiveString, 35)
 
   implicit def optUtrField: FormField[Option[UTR], Html] = inlineOptionString(UTR)
 
@@ -151,7 +165,7 @@ trait Widgets {
   implicit val bigdecimalField: FormField[BigDecimal,Html] =
     twirlStringFields().simap(x => 
       {
-        Rule.nonEmpty[String].apply(x) andThen
+        Rule.nonEmpty[String].apply(x.replace(",", "")) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(BigDecimal.apply)
       }.toEither
     )(_.toString)
@@ -395,5 +409,38 @@ trait Widgets {
       }
 
     }
-  
+
+  implicit val addressTell = new GenericWebTell[Address, Html] {
+    override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p>${in.lines.map{x => s"<span class='govuk-body-m'>${x.escapeHtml}</span>"}.mkString("<br/>")}</p>"
+      )
+  }
+
+  implicit val kickoutTell = new GenericWebTell[Kickout, Html] {
+    override def render(in: Kickout, key: String, messages: UniformMessages[Html]): Html =
+      views.html.end.kickout(key)(messages, appConfig)
+  }
+
+  implicit val groupCoTell = new GenericWebTell[GroupCompany, Html] {
+    override def render(in: GroupCompany, key: String, messages: UniformMessages[Html]): Html =
+      Html("")
+  }
+
+  implicit val companyTell = new GenericWebTell[Company, Html] {
+    override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
+      Html(
+        s"<p class='govuk-body-l' id='${key}-content'>" +
+          s"${in.name.toString.escapeHtml}</br>" +
+          s"<span class='govuk-body-m'>" +
+          s"${in.address.lines.map{_.escapeHtml}.mkString("</br>")}" +
+          s"</span>" +
+          "</p>"
+      )
+  }
+
+  implicit val booleanTell = new GenericWebTell[Boolean, Html] {
+    override def render(in: Boolean, key: String, messages: UniformMessages[Html]): Html =
+      Html(in.toString)
+  }
 }

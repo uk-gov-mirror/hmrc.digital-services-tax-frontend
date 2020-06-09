@@ -20,12 +20,9 @@ import shapeless.{:: => _, _}
 import tag._
 import cats.implicits._
 import cats.kernel.Monoid
-import play.api.i18n.Messages
 import java.time.LocalDate
 
 import fr.marcwrobel.jbanking.iban.Iban
-import org.apache.commons.validator.routines.{EmailValidator, IBANValidator}
-import org.apache.commons.validator.routines.checkdigit.IBANCheckDigit
 
 package object data extends SimpleJson {
 
@@ -55,7 +52,18 @@ package object data extends SimpleJson {
     _.toUpperCase
   )
 
-  type Money = BigDecimal
+  type Money = BigDecimal @@ Money.Tag
+  object Money extends ValidatedType[BigDecimal] {
+    def validateAndTransform(in: BigDecimal): Option[BigDecimal] = {
+      Some(in).filter(_.scale == 2)
+    }
+
+    implicit def mon: Monoid[Money] = new Monoid[Money] {
+      val base: Monoid[BigDecimal] = implicitly[Monoid[BigDecimal]]
+      override def combine(a: Money, b: Money): Money = Money(base.combine(a, b))
+      override def empty: Money = Money(base.empty)
+    }
+  }
 
   type NonEmptyString = String @@ NonEmptyString.Tag
   object NonEmptyString extends ValidatedType[String]{
@@ -75,11 +83,6 @@ package object data extends SimpleJson {
 
   type RestrictiveString = String @@ RestrictiveString.Tag
   object RestrictiveString extends RegexValidatedString(
-    """^[a-zA-Z&^]{1,35}$"""
-  )
-
-  type AccountName = String @@ AccountName.Tag
-  object AccountName extends RegexValidatedString(
     """^[a-zA-Z&^]{1,35}$"""
   )
 
@@ -110,6 +113,16 @@ package object data extends SimpleJson {
     _.filter(_.isDigit)
   )
 
+  type BuildingSocietyRollNumber = String @@ BuildingSocietyRollNumber.Tag
+  object BuildingSocietyRollNumber extends RegexValidatedString(
+    """^[A-Za-z0-9 -]{1,18}$"""
+  )
+
+  type AccountName = String @@ AccountName.Tag
+  object AccountName extends RegexValidatedString(
+    """^[a-zA-Z&^]{1,35}$"""
+  )
+
   type IBAN = String @@ IBAN.Tag
   object IBAN extends ValidatedType[String] {
     override def validateAndTransform(in: String): Option[String] = {
@@ -119,9 +132,17 @@ package object data extends SimpleJson {
 
   type PhoneNumber = String @@ PhoneNumber.Tag
   object PhoneNumber extends RegexValidatedString(
-//    "^[A-Z0-9)/(\\-*#+]{0,24}$"
-    //Regex which fits both phoneNumberType and regimeSpecificDetailsType/paramValue eeitt_subscribe
+  // TODO: check phone number regex
+  //Regex which fits both eeitt_subscribe
     "^[A-Z0-9 \\-]{1,30}$"
+  //eeitt_subscribe/phoneNumberType
+    // "^[A-Z0-9 )/(*#-]+{1,30}$"
+  //eeitt_subscribe/regimeSpecificDetailsType/paramValue
+    // "^[0-9a-zA-Z{À-˿'}\\- &`'^._@]{1,255}$"
+  //tested regex on QA reg submission
+    // "^[A-Z0-9)/(\\-*#+]{1,24}$"
+  //Strict previous regex
+    // "^[0-9 ]{6,30}$"
   )
 
   type Email = String @@ Email.Tag

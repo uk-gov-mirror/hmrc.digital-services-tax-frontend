@@ -19,14 +19,12 @@ package uk.gov.hmrc.digitalservicestaxfrontend.data
 import java.time.LocalDate
 
 import cats.kernel.Monoid
-import com.outworkers.util.samplers._
 import org.scalacheck.Gen
 import org.scalatest.{FlatSpec, Matchers}
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import cats.implicits._
-import fr.marcwrobel.jbanking.iban.Iban
-import org.apache.commons.validator.routines.IBANValidator
 import org.scalactic.anyvals.PosInt
+import uk.gov.hmrc.digitalservicestax.frontend._
 import uk.gov.hmrc.digitalservicestax.data._
 import uk.gov.hmrc.digitalservicestaxfrontend.TestInstances._
 
