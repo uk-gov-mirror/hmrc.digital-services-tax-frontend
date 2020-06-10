@@ -83,21 +83,24 @@ class JourneyController @Inject()(
     }
   }
 
-  def financialDetails: Action[AnyContent] = Action.async { implicit request =>
+  def financialDetails: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg: UniformMessages[Html] =
       implicitly[Messages].convertMessagesTwirlHtml(false)
 
-    val f = backend.lookupFinancialDetails()
-
-    f.map{ lineItems => 
-      Ok(views.html.main_template(
-        title =
-          s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
-        mainClass = Some("full-width")
-      )(views.html.financial_details(lineItems, msg)))
+    backend.lookupRegistration().flatMap {
+      case Some(_) =>
+        backend.lookupFinancialDetails().map{ lineItems =>
+          Ok(views.html.main_template(
+            title =
+              s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
+            mainClass = Some("full-width")
+          )(views.html.financial_details(lineItems, msg)))
+        }
+      case None =>
+        Future.successful(
+          Redirect(routes.RegistrationController.registerAction(" "))
+        )        
     }
-
-
   }
 
   def accessibilityStatement: Action[AnyContent] = Action { implicit request =>
