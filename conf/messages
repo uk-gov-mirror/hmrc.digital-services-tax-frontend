@@ -425,6 +425,14 @@ landing.submit-return=Submit a return
 landing.account-history=Account History
 landing.balance=View your balance and transactions history
 
+#pay your dst page
+pay-your-dst.heading=Pay your Digital Services Tax
+pay-your-dst.due-date=You need to pay any Digital Services Tax you owe by {0}.
+pay-your-dst.include-reg-no=Make sure you include your registration number {0} when making payments.
+pay-your-dst.how-to-pay.1=Find out 
+pay-your-dst.how-to-pay.2=how to pay your Digital Services Tax (opens in a new window or tab)
+pay-your-dst.back-to-details=Back to details
+
 #returns
 #Manage companies
 manage-companies-add-add.heading=Company details
@@ -665,8 +673,6 @@ check-your-answers.ret.sort-code.question=Sort code
 check-your-answers.ret.account-number.question=Account number
 check-your-answers.ret.building-society.question=Building society roll number (if you have one)
 check-your-answers.ret.iban.question=IBAN
-
-
 
 check-your-answers.ret.submission.title=Now submit your return
 check-your-answers.ret.submission.notice=By submitting this notification you are confirming that, \

@@ -24,3 +24,4 @@ GET        /time-in                            uk.gov.hmrc.digitalservicestax.co
 GET        /time-out                           uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.timeOut()
 
 GET        /accessibility-statement            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.accessibilityStatement()
+GET        /pay-your-digital-services-tax      uk.gov.hmrc.digitalservicestax.controllers.PaymentsController.payYourDST()

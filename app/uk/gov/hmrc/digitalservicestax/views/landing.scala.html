@@ -14,10 +14,10 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.digitalservicestax.config.AppConfig
-
 @import uk.gov.hmrc.digitalservicestax.data.Registration
-@(reg: Registration, outstanding: List[Period])(implicit request: Request[_], messages: UniformMessages[Html], appConfig: AppConfig)
+@import uk.gov.hmrc.digitalservicestax.frontend.formatDate
+
+@(reg: Registration, outstanding: List[Period])(implicit messages: UniformMessages[Html])
 
 @company = @{reg.companyReg.company}
 
@@ -35,28 +35,36 @@
           @messages("landing.company-name", company.name)<br />
         </span>
     </h1>
-    
-    <div class="grid-row">
-        <div class="column-one-third">
-            <div class="card">
-                <h2 class="heading-medium flush--top">@messages("landing.payment-due")</h2>
-                    <p>@reg.dateLiable</p>
-                <p><a href="#">@messages("landing.pay-tax")</a></p>
+    @outstanding.headOption.map { period =>
+        <div class="grid-row">
+            <div class="column-one-third">
+                <div class="card">
+
+                    <h2 class="heading-medium flush--top">@messages("landing.payment-due")</h2>
+                    <p>@formatDate(period.paymentDue)</p>
+                    <p>
+                        <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.PaymentsController.payYourDST()">
+                        @messages("landing.pay-tax")
+                        </a>
+                    </p>
+                </div>
             </div>
-        </div>
 
-        <div class="column-one-third">
-          <div class="card">
+            <div class="column-one-third">
+                <div class="card">
 
-	    @outstanding.headOption.map { case period => 
-               <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
-               <p>@{period.paymentDue}</p>
-               <p><a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.returnAction(period.key, "")/'>@messages("landing.submit-return")</a></p>
-	    }
+                       <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
+                       <p>@{formatDate(period.returnDue)}</p>
+                       <p>
+                           <a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.returnAction(period.key, "")/'>
+                               @messages("landing.submit-return")
+                           </a>
+                       </p>
+                </div>
             </div>
-        </div>
 
-        <div class="column-one-third"></div>
-    </div>
+            <div class="column-one-third"></div>
+        </div>
+    }
 
 </div>
