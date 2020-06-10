@@ -799,3 +799,14 @@ financial-details.table.credits=£Credits
 financial-details.table.debits=£Debits
 financial-details.table.balance=£Balance
 financial-details.back-bottom=Back to details
+financial-details.paynow=You need to pay now. Find <a href="https://www.gov.uk/guidance/pay-your-digital-services-tax" target="_blank">how to pay</a> (opens in a new window or tab).
+
+# We can override the description of the line items sent from MDTP
+financial-details.line-item.cleared-by-payment=Payment received
+financial-details.line-item.dst-determination=HMRC Determination
+financial-details.line-item.dst-late-filing-penalty=Late filing penalty
+financial-details.line-item.dst-late-payment-penalty=Late payment fee
+financial-details.line-item.dst-return-charge=Return received
+financial-details.line-item.opening-balance=Opening balance
+financial-details.line-item.outgoing-payment-paid=Repayment
+financial-details.line-item.dst-repayment-interest=Repayment interest

@@ -17,14 +17,18 @@
 @(lineItems: List[FinancialTransaction], messages: UniformMessages[Html])
 
 @formatter = @{java.time.format.DateTimeFormatter.ofPattern("d MMM YYYY")}
-
+@cash = @{java.text.NumberFormat.getInstance.format(_: BigDecimal)}
 <div class="govuk-grid-column-full">
 
   <h1 class="heading-xlarge">
     @messages("financial-details.heading")
   </h1>
-  
-  <p>@messages("financial-details.balance", java.text.NumberFormat.getInstance.format(lineItems.map{_.amount}.sum))</p>
+  @balance=@{lineItems.map{_.amount}.sum}
+  <p>@messages("financial-details.balance", cash(balance))
+    @if(balance < 0) {
+      @messages("financial-details.paynow")
+    }
+  </p>
 
   <p>@messages("financial-details.delay", 3)</p>
 
@@ -44,10 +48,16 @@
       @withRunningTotal.map { case (FinancialTransaction(date, desc, amt), running) => 
       <tr class="govuk-table__row">
 	<th scope="row" class="govuk-table__header">@{date.format(formatter)}</th>
-	<td class="govuk-table__cell">@Html(desc)</td>
-	<td class="govuk-table__cell">@{Option(amt) collect { case x if x > 0 => f"$amt%,.2f" }}</td>
-	<td class="govuk-table__cell">@{Option(amt) collect { case x if x < 0 => f"$amt%,.2f" }}</td>	
-	<td class="govuk-table__cell">@{f"$running%,.2f"}</td>
+	<td class="govuk-table__cell">
+	  @* Check to see if there is a message overriding the supplied description,
+	   * if not strip 'DST' from the beginning of the description, if present.
+ 	   *@
+
+	  @messages.get("financial-details.line-item." ++ desc.toLowerCase.replaceAll("[^a-z0-9]+", "-")).getOrElse(desc.replaceFirst("^DST ", ""))
+	</td>
+	<td class="govuk-table__cell">@{Option(amt) collect { case x if x > 0 => cash(amt) }}</td>
+	<td class="govuk-table__cell">@{Option(amt) collect { case x if x < 0 => cash(amt) }}</td>	
+	<td class="govuk-table__cell">@{cash(running)}</td>
       </tr>
       }.reverse
     </tbody>
