@@ -816,6 +816,27 @@ accessibility-statement.p20-2=Digital Accessibility Centre
 accessibility-statement.p20-3=. The full service was tested by HMRC and included disabled users.
 accessibility-statement.p21=This page was prepared on 1 April 2020. It was last updated on 1 April 2020.
 
+financial-details.heading=Your balance and transactions history
+financial-details.balance=Your balance is <strong>£{0}</strong>.
+financial-details.delay=Your account balance may not reflect payments made in the last {0} days.
+financial-details.table.date=Date
+financial-details.table.transaction=Transaction
+financial-details.table.credits=£Credits
+financial-details.table.debits=£Debits
+financial-details.table.balance=£Balance
+financial-details.back-bottom=Back to details
+financial-details.paynow=You need to pay now. Find <a href="https://www.gov.uk/guidance/pay-your-digital-services-tax" target="_blank">how to pay</a> (opens in a new window or tab).
+
+# We can override the description of the line items sent from MDTP
+financial-details.line-item.cleared-by-payment=Payment received
+financial-details.line-item.dst-determination=HMRC Determination
+financial-details.line-item.dst-late-filing-penalty=Late filing penalty
+financial-details.line-item.dst-late-payment-penalty=Late payment fee
+financial-details.line-item.dst-return-charge=Return received
+financial-details.line-item.opening-balance=Opening balance
+financial-details.line-item.outgoing-payment-paid=Repayment
+financial-details.line-item.dst-repayment-interest=Repayment interest
+
 company-liabilities-1.heading=What are your UK Digital Services Tax liabilities for {0} from {0} to {1}?
 company-liabilities-2.heading=What are your UK Digital Services Tax liabilities for {0} from {0} to {1}?
 company-liabilities-3.heading=What are your UK Digital Services Tax liabilities for {0} from {0} to {1}?

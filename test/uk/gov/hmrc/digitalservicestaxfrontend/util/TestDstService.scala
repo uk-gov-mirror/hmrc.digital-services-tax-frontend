@@ -20,7 +20,7 @@ import cats.Id
 import cats.implicits._
 import uk.gov.hmrc.digitalservicestax.connectors.DSTService
 import uk.gov.hmrc.digitalservicestax.data.SampleData.{sampleCompanyRegWrapper, sampleReg, utrLookupCompanyRegWrapper}
-import uk.gov.hmrc.digitalservicestax.data.{CompanyRegWrapper, Period, Postcode, Registration, Return, UTR}
+import uk.gov.hmrc.digitalservicestax.data._
 
 trait TestDstService extends DSTService[Id] {
   def lookupCompany(): Option[CompanyRegWrapper] = sampleCompanyRegWrapper.some
@@ -30,4 +30,5 @@ trait TestDstService extends DSTService[Id] {
   def lookupRegistration(): Option[Registration] = sampleReg.some
   def lookupOutstandingReturns(): Set[Period] = Set.empty
   def get = this.transform(ToLogic)
+  def lookupFinancialDetails: List[FinancialTransaction] = Nil
 }
