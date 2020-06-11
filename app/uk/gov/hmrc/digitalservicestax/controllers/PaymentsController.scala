@@ -14,32 +14,27 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax
-package controllers
-
-import data._
-import connectors._
-
-import akka.http.scaladsl.model.headers.LinkParams.title
-import cats.implicits._
-import config.AppConfig
+package uk.gov.hmrc.digitalservicestax.controllers
 import javax.inject.{Inject, Singleton}
-
 import ltbs.uniform.UniformMessages
 import ltbs.uniform.interpreters.playframework.RichPlayMessages
-import play.api.i18n.{I18nSupport, MessagesApi, Messages}
-import play.api.mvc._
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.mvc.{Action, AnyContent, ControllerHelpers}
 import play.twirl.api.Html
-import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
+import uk.gov.hmrc.digitalservicestax.config.AppConfig
+import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
+import uk.gov.hmrc.digitalservicestax.views
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.AuthorisedAction
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class JourneyController @Inject()(
+class PaymentsController @Inject()(
   authorisedAction: AuthorisedAction,
   val http: HttpClient,
   val authConnector: AuthConnector,
@@ -56,7 +51,7 @@ class JourneyController @Inject()(
 
   def backend(implicit hc: HeaderCarrier) = new DSTConnector(http, servicesConfig)
 
-  def index: Action[AnyContent] = authorisedAction.async { implicit request =>
+  def payYourDST: Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg: UniformMessages[Html] =
       implicitly[Messages].convertMessagesTwirlHtml(false)
 
@@ -66,12 +61,11 @@ class JourneyController @Inject()(
           Redirect(routes.RegistrationController.registerAction(" "))
         )
       case Some(reg) if reg.registrationNumber.isDefined =>
-        backend.lookupOutstandingReturns().map { periods => 
+        backend.lookupOutstandingReturns().map { periods =>
           Ok(views.html.main_template(
             title =
-              s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
-              mainClass = Some("full-width")
-          )(views.html.landing(reg, periods.toList.sortBy(_.start))))
+              s"${msg("common.title.short")} - ${msg("common.title")}"
+          )(views.html.pay_your_dst(reg.registrationNumber, periods)(msg)))
         }
       case Some(reg) =>
         Future.successful(
@@ -81,32 +75,6 @@ class JourneyController @Inject()(
           )(views.html.end.pending()(msg)))
         )
     }
-  }
-
-  def financialDetails: Action[AnyContent] = authorisedAction.async { implicit request =>
-    implicit val msg: UniformMessages[Html] =
-      implicitly[Messages].convertMessagesTwirlHtml(false)
-
-    backend.lookupRegistration().flatMap {
-      case Some(reg) if reg.registrationNumber.isDefined =>
-        backend.lookupFinancialDetails().map{ lineItems =>
-          Ok(views.html.main_template(
-            title =
-              s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
-            mainClass = Some("full-width")
-          )(views.html.financial_details(lineItems, msg)))
-        }
-      case _ =>
-        Future.successful(
-          Redirect(routes.RegistrationController.registerAction(" "))
-        )        
-    }
-  }
-
-  def accessibilityStatement: Action[AnyContent] = Action { implicit request =>
-    implicit val msg: UniformMessages[Html] =
-      implicitly[Messages].convertMessagesTwirlHtml(false)
-    Ok(views.html.accessibility_statement(s"${msg("accessibility-statement.title")}"))
   }
 
 }

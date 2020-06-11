@@ -21,13 +21,14 @@ import java.time.LocalDate
 import cats.data.Validated
 import cats.implicits._
 import enumeratum._
-import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.common.web.GenericWebTell
 import ltbs.uniform.common.web.{FormField, FormFieldStats}
 import ltbs.uniform.interpreters.playframework.Breadcrumbs
 import ltbs.uniform.validation.Rule._
 import ltbs.uniform.validation._
+import ltbs.uniform.{NonEmptyString => _, _}
 import play.twirl.api.Html
+import play.twirl.api.HtmlFormat.Appendable
 import shapeless.tag, tag.{@@}
 import uk.gov.hmrc.digitalservicestax._
 import uk.gov.hmrc.digitalservicestax.config.AppConfig
@@ -40,7 +41,13 @@ trait Widgets {
 
   implicit val twirlStringField: FormField[String, Html] = twirlStringFields()
 
-  def twirlStringFields(autoFields: Option[String] = None): FormField[String, Html] = new FormField[String, Html] {
+  type CustomStringRenderer =
+    (List[String], String, ErrorTree, UniformMessages[Html], Option[String]) => Appendable
+
+  def twirlStringFields(
+    autoFields: Option[String] = None,
+    customRender: CustomStringRenderer = views.html.uniform.string.apply(_,_,_,_,_)
+  ): FormField[String, Html] = new FormField[String, Html] {
     def decode(out: Input): Either[ErrorTree, String] =
       out.toStringField().toEither
 
@@ -55,7 +62,7 @@ trait Widgets {
       messages: UniformMessages[Html]
     ): Html = {
       val existingValue: String = data.valueAtRoot.flatMap{_.headOption}.getOrElse("")
-      views.html.uniform.string(fieldKey, existingValue, errors, messages, autoFields)
+      customRender(fieldKey, existingValue, errors, messages, autoFields)
     }
   }
 
@@ -108,13 +115,18 @@ trait Widgets {
   implicit def nesField                       = validatedVariant(NonEmptyString)
   implicit def utrField                       = validatedString(UTR)
   implicit def emailField                     = validatedString(Email, 132)
-  implicit def phoneField                     = validatedString(PhoneNumber, 24)
+  implicit def phoneField       = validatedString(PhoneNumber, 24)(twirlStringFields(
+    customRender = views.html.uniform.phonenumber.apply _
+  ))
   implicit def percentField                   = validatedVariant(Percent)
   implicit def moneyField                     = validatedBigDecimal(Money, 15)
   implicit def accountNumberField             = validatedString(AccountNumber)
   implicit def BuildingSocietyRollNumberField = inlineOptionString(BuildingSocietyRollNumber, 18)
   implicit def accountNameField               = validatedString(AccountName, 35)
-  implicit def sortCodeField                  = validatedString(SortCode)
+  implicit def sortCodeField    = validatedString(SortCode)(twirlStringFields(
+    customRender = views.html.uniform.string(_,_,_,_,_,"form-control form-control-1-4")
+  ))
+  
   implicit def ibanField                      = validatedString(IBAN, 34)
   implicit def companyNameField               = validatedString(CompanyName, 105)
   implicit def mandatoryAddressField          = validatedString(AddressLine, 35)
