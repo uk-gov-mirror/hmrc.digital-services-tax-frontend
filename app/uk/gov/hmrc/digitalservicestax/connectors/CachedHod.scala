@@ -59,4 +59,9 @@ case class CachedDstService(
     def submitReturn(period: Period,ret: Return): WebMonad[Unit,Html] = 
       alwaysRerun(backend.submitReturn(period, ret))
 
+    def lookupFinancialDetails(): WebMonad[List[FinancialTransaction], Html] =
+      alwaysRerun(hodCache[List[FinancialTransaction]]((internalId, "lookup-financial-details"))(
+        backend.lookupFinancialDetails()
+      ))
+
   }
