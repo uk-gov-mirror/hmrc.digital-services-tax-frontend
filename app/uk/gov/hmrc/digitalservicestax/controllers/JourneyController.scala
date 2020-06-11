@@ -88,7 +88,7 @@ class JourneyController @Inject()(
       implicitly[Messages].convertMessagesTwirlHtml(false)
 
     backend.lookupRegistration().flatMap {
-      case Some(_) =>
+      case Some(reg) if reg.registrationNumber.isDefined =>
         backend.lookupFinancialDetails().map{ lineItems =>
           Ok(views.html.main_template(
             title =
