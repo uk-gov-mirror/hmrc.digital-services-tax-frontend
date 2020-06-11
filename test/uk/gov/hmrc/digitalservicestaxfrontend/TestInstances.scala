@@ -39,9 +39,10 @@ object TestInstances {
   )
   // what range of values is acceptable? pennies? fractional pennies?
   implicit val arbMoney: Arbitrary[Money] = Arbitrary(
-    Gen.choose(0L, Long.MaxValue).map{BigDecimal.apply}
-
+    Gen.choose(0L, 1000000000000L).map(b => Money(BigDecimal(b).setScale(2)))
   )
+
+
 
   val ibanList = List(
     "AD9179714843548170724658",
@@ -206,7 +207,7 @@ object TestInstances {
     val genDomestic: Gen[DomesticBankAccount] = (
       SortCode.gen,
       AccountNumber.gen,
-      arbitrary[String]
+      Gen.option(BuildingSocietyRollNumber.gen)
       ).mapN(DomesticBankAccount.apply)
 
     val genForeign: Gen[ForeignBankAccount] =
@@ -218,7 +219,7 @@ object TestInstances {
     (
       AccountName.gen,
       genBankAccount
-      ).mapN(RepaymentDetails.apply)
+    ).mapN(RepaymentDetails.apply)
 
   def date(start: LocalDate, end: LocalDate): Gen[LocalDate] =
     Gen.choose(start.toEpochDay, end.toEpochDay).map(LocalDate.ofEpochDay)

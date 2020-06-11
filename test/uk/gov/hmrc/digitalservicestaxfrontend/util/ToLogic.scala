@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.digitalservicestax.data
+package uk.gov.hmrc.digitalservicestaxfrontend.util
 
-sealed trait BankAccount
+import cats.implicits._
+import ltbs.uniform.interpreters.logictable._
 
-case class ForeignBankAccount(iban: IBAN) extends BankAccount
-
-case class DomesticBankAccount(
-  sortCode: SortCode,
-  accountNo: AccountNumber,
-  buildingSocietyNumber: Option[BuildingSocietyRollNumber]
-) extends BankAccount
-
-case class RepaymentDetails(
-  accountName: AccountName,
-  bankAccount: BankAccount
-)
+object ToLogic extends cats.~>[cats.Id, Logic] {
+  def apply[A](fa: cats.Id[A]): Logic[A] = fa.pure[Logic]
+}

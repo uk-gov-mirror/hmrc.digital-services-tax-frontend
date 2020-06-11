@@ -23,23 +23,25 @@ object AppDependencies {
   )
 
   val test = Seq(
-    "org.scalatest"             %% "scalatest"                % "3.0.8"                 % Test,
-    "org.jsoup"                 %  "jsoup"                    % "1.13.1"                % Test,
-    "com.typesafe.play"         %% "play-test"                % current                 % Test,
-    "org.scalacheck"            %% "scalacheck"               % "1.14.3"                % Test,
-    "uk.gov.hmrc"               %% "stub-data-generator"      % "0.5.3"                 % Test,
-    "io.chrisdavenport"         %% "cats-scalacheck"          % "0.2.0"                 % Test,
-    "com.beachape"              %% "enumeratum-scalacheck"    % "1.6.0"                 % Test,
-    "wolfendale"                %% "scalacheck-gen-regexp"    % "0.1.2"                 % Test,
-    "com.outworkers"            %% "util-samplers"            % "0.57.0"                % Test,
-    "com.github.tomakehurst"    %  "wiremock-jre8"            % "2.25.1"                % Test,
-    "uk.gov.hmrc"               %% "reactivemongo-test"       % "4.19.0-play-26"        % Test,
-    "org.pegdown"               %  "pegdown"                  % "1.6.0"                 % Test,
-    "org.scalatestplus.play"    %% "scalatestplus-play"       % "3.1.3"                 % Test,
-    "com.softwaremill.macwire"  %% "macros"                   % "2.3.3"                 % Test,
-    "com.softwaremill.macwire"  %% "macrosakka"               % "2.3.3"                 % Test,
-    "com.softwaremill.macwire"  %% "proxy"                    % "2.3.3"                 % Test,
-    "com.softwaremill.macwire"  %% "util"                     % "2.3.3"                 % Test
-  )
+    "org.scalatest"             %% "scalatest"                % "3.0.8",
+    "org.jsoup"                 %  "jsoup"                    % "1.13.1",
+    "com.typesafe.play"         %% "play-test"                % current,
+    "org.scalacheck"            %% "scalacheck"               % "1.14.3",
+    "uk.gov.hmrc"               %% "stub-data-generator"      % "0.5.3",
+    "io.chrisdavenport"         %% "cats-scalacheck"          % "0.2.0",
+    "com.beachape"              %% "enumeratum-scalacheck"    % "1.6.0",
+    "wolfendale"                %% "scalacheck-gen-regexp"    % "0.1.2",
+    "com.outworkers"            %% "util-samplers"            % "0.57.0",
+    "com.github.tomakehurst"    %  "wiremock-jre8"            % "2.25.1",
+    "uk.gov.hmrc"               %% "reactivemongo-test"       % "4.19.0-play-26",
+    "org.pegdown"               %  "pegdown"                  % "1.6.0",
+    "org.scalatestplus.play"    %% "scalatestplus-play"       % "3.1.3",
+    "com.softwaremill.macwire"  %% "macros"                   % "2.3.3",
+    "com.softwaremill.macwire"  %% "macrosakka"               % "2.3.3",
+    "com.softwaremill.macwire"  %% "proxy"                    % "2.3.3",
+    "com.softwaremill.macwire"  %% "util"                     % "2.3.3",
+    "com.luketebbs.uniform"     %% "interpreter-logictable"   % uniformVersion
+
+  ).map (_ % Test)
 
 }

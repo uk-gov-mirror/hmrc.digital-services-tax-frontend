@@ -17,7 +17,7 @@
 package uk.gov.hmrc.digitalservicestax.connectors
 
 import uk.gov.hmrc.digitalservicestax.data._
-
+import cats.~>
 import scala.language.higherKinds
 
 trait DSTService[F[_]] {
@@ -29,4 +29,24 @@ trait DSTService[F[_]] {
   def lookupRegistration(): F[Option[Registration]]
   def lookupOutstandingReturns(): F[Set[Period]]
   def lookupFinancialDetails(): F[List[FinancialTransaction]]
+
+  def transform[G[_]](nat: F ~> G) = {
+    val old = this
+    new DSTService[G] {
+      def lookupCompany(utr: UTR,postcode: Postcode): G[Option[CompanyRegWrapper]] =
+        nat(old.lookupCompany(utr, postcode))
+      def lookupCompany(): G[Option[CompanyRegWrapper]] =
+        nat(old.lookupCompany())
+      def lookupOutstandingReturns(): G[Set[Period]] =
+        nat(old.lookupOutstandingReturns())
+      def lookupRegistration(): G[Option[Registration]] =
+        nat(old.lookupRegistration())
+      def submitRegistration(reg: Registration): G[Unit] =
+        nat(old.submitRegistration(reg))
+      def submitReturn(period: Period,ret: Return): G[Unit] =
+        nat(old.submitReturn(period, ret))
+      def lookupFinancialDetails(): G[List[FinancialTransaction]] =
+        nat(old.lookupFinancialDetails())
+    }
+  }
 }

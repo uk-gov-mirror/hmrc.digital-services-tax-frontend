@@ -66,9 +66,9 @@ class ReturnsController @Inject()(
       }, messages)
   }
 
-  private implicit val cyaRetTell = new GenericWebTell[CYA[Return], Html] {
-    override def render(in: CYA[Return], key: String, messages: UniformMessages[Html]): Html =
-      views.html.cya.check_your_return_answers(s"$key.ret", in.value)(messages)
+  private implicit val cyaRetTell = new GenericWebTell[CYA[(Return, Period)], Html] {
+    override def render(in: CYA[(Return, Period)], key: String, messages: UniformMessages[Html]): Html =
+      views.html.cya.check_your_return_answers(s"$key.ret", in.value._1, in.value._2)(messages)
   }
 
   private implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
@@ -93,16 +93,18 @@ class ReturnsController @Inject()(
 
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
-      case Some(_) =>
+      case Some(reg) =>
         backend.lookupOutstandingReturns().flatMap { periods => 
           periods.find(_.key == periodKey) match {
             case None => Future.successful(NotFound)
             case Some(period) =>
               val playProgram = returnJourney[WM](
-                create[ReturnTellTypes, ReturnAskTypes](messages(request))
+                create[ReturnTellTypes, ReturnAskTypes](messages(request)),
+                period,
+                reg
               )
-              playProgram.run(targetId, purgeStateUponCompletion = true, config =  JourneyConfig(askFirstListItem = true)) { x =>
-                backend.submitReturn(period, x).map{ _ =>
+              playProgram.run(targetId, purgeStateUponCompletion = true, config =  JourneyConfig(askFirstListItem = true)) { ret =>
+                backend.submitReturn(period, ret).map{ _ =>
 
                   Redirect(routes.JourneyController.index)
                   Ok(views.html.main_template(
