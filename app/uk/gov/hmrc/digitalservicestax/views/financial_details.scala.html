@@ -20,6 +20,8 @@
 @cash = @{java.text.NumberFormat.getInstance.format(_: BigDecimal)}
 <div class="govuk-grid-column-full">
 
+  <a href="javascript:history.back();" class="govuk link-back">@messages("common.back")</a>
+  
   <h1 class="heading-xlarge">
     @messages("financial-details.heading")
   </h1>
@@ -32,7 +34,7 @@
 
   <p>@messages("financial-details.delay", 3)</p>
 
-  <table class="govuk-table">
+  <table class="govuk-table" style="margin-bottom: 30px;">
     <caption class="govuk-table__caption"></caption>
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">

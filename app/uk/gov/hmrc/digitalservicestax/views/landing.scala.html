@@ -56,7 +56,17 @@
             </div>
         </div>
 
-        <div class="column-one-third"></div>
+	<div class="column-one-third">
+          <div class="card" id="cardAmount">
+            <div class="card-body" style="border-bottom: 0px;">
+              <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
+              <ul class="govuk-list">
+                <li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">@messages("landing.balance")</a></li>
+                
+              </ul>
+            </div>
+          </div>
+      </div>	
     </div>
 
 </div>
