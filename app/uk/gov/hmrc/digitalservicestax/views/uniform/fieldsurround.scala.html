@@ -22,11 +22,9 @@
     val ariaHint = if(hasHint) Some(s"$key-hint") else None
     val ariaErrors = if(hasErrors) Some(s"$key-error") else None
     val ariaIntro = if(hasIntro) Some(s"$key-intro") else None
-    val ariaContent = if(content != Html("")) Some(s"$key-content") else None
+    val ariaContent = if(content.toString().contains(s"id='${key}--sfer-content'")) Some(s"$key--sfer-content") else None
     List(ariaHint, ariaErrors, ariaIntro, ariaContent).collect{ case Some(s) => s }.mkString(" ")
 }
-
-/* TODO - @content is the whole HTML for the fieldset - not just supporting copy. Need a way to let this view know it has supporting copy that we can pass to the describedby */
 
     @* There are more than one fieldset/formgroup on the page *@
     @if(stats.compoundChildren >= 2) {

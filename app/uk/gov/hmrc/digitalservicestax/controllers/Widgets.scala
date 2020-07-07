@@ -410,7 +410,7 @@ trait Widgets {
   implicit val addressTell = new GenericWebTell[Address, Html] {
     override def render(in: Address, key: String, messages: UniformMessages[Html]): Html =
       Html(
-        s"<div id='${key}-content'>" +
+        s"<div id='${key}--sfer-content'>" +
         s"<p>${in.lines.map{x => s"<span class='govuk-body-m'>${x.escapeHtml}</span>"}.mkString("<br/>")}</p>" +
         "</div>"
       )
@@ -429,7 +429,7 @@ trait Widgets {
   implicit val companyTell = new GenericWebTell[Company, Html] {
     override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
       Html(
-        s"<p class='govuk-body-l' id='${key}-content'>" +
+        s"<p class='govuk-body-l' id='${key}--sfer-content'>" +
           s"${in.name.toString.escapeHtml}</br>" +
           s"<span class='govuk-body-m'>" +
           s"${in.address.lines.map{_.escapeHtml}.mkString("</br>")}" +
