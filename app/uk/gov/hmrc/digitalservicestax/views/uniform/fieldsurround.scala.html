@@ -18,16 +18,14 @@
 
 @(key: String, content: Html, isCompoundField: Boolean, hasHint: Boolean, hasErrors: Boolean, hasIntro: Boolean, stats: FormFieldStats)(implicit messages: UniformMessages[Html])
 
-@defining((hasHint, hasErrors, hasIntro) match {
-    case (true,true,true) => s"$key-hint $key-error $key-intro"
-    case (true,false,true) => s"$key-hint $key-intro"
-    case (false,true,true) => s"$key-error $key-intro"
-    case (true,true,false) => s"$key-error $key-hint"
-    case (false,false,true) => s"$key-intro"
-    case (true,false,false) => s"$key-hint"
-    case (false,true,false) => s"$key-error"
-    case _ => ""
-}){ describedByClass =>
+@describedByClass = @{
+    val ariaHint = if(hasHint) Some(s"$key-hint") else None
+    val ariaErrors = if(hasErrors) Some(s"$key-error") else None
+    val ariaIntro = if(hasIntro) Some(s"$key-intro") else None
+    val ariaContent = if(content.toString().contains(s"id='${key}--sfer-content'")) Some(s"$key--sfer-content") else None
+    List(ariaHint, ariaErrors, ariaIntro, ariaContent).collect{ case Some(s) => s }.mkString(" ")
+}
+
     @* There are more than one fieldset/formgroup on the page *@
     @if(stats.compoundChildren >= 2) {
         <h1 class="heading-xlarge @if(key == "loan-amount"){margin-bottom-20}">
@@ -104,4 +102,3 @@
         }
     }
 
-}
