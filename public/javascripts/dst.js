@@ -3,6 +3,15 @@
     var showHideContent = new GOVUK.ShowHideContent()
     showHideContent.init()
 
+    // Error summary focus
+    function setUpErrorSummary() {
+        var errorSummary = document.querySelector('.error-summary');
+        if (errorSummary) {
+          errorSummary.focus();
+        }
+    }
+    setUpErrorSummary()
+
     var countryEl = document.querySelector("#location-autocomplete");
     if (countryEl) {
         openregisterLocationPicker({
@@ -31,5 +40,6 @@
         }
 
         wrapper.addEventListener('change', resetSelectIfEmpty);
+        
     }
 })(window, document);
