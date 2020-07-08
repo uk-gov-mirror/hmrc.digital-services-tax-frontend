@@ -323,6 +323,16 @@ select:focus,
     box-shadow: inset 0 0 0 2px;
 }
 
+.govuk-input--error {
+    border: 4px solid #d4351c;
+}
+
+.govuk-input--error:focus {
+    border-color: #0b0c0c;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
 .multiple-choice [type=checkbox]:focus + label::before {
     border-width: 3px;
 }
