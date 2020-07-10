@@ -21,7 +21,8 @@
 
 @key=@{keyList.mkString(".")}
 @errorKey=@{s"${keyList.mkString(".")}-error"}
-@hasFieldset=@{(key == "manage-companies" || key == "bank-details.bankAccount")}
+@hasFieldset=@{key == "bank-details.bankAccount"}
+@noShowErrors=@{key == "manage-companies"}
 
 @if(hasFieldset) {
     <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
@@ -99,8 +100,10 @@
     </details>
 }
 
-@errors.valueAtRootList.map { error =>
-  @error_message(key, error.prefixWith(keyList).render(messages), messages)
+@if(!noShowErrors) {
+    @errors.valueAtRootList.map { error =>
+        @error_message(key, error.prefixWith(keyList).render(messages), messages)
+    }
 }
 
 @inner
