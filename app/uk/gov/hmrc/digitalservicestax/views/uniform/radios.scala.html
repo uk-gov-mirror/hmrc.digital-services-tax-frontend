@@ -28,17 +28,15 @@
 
 @standard_field(key, errors, "radios", messages) {
 @if(inlineRadioKeys) {
-    <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
-        <fieldset class="govuk-fieldset" id="add-company-to-group" aria-describedby="add-to-list-hint">
-            <legend class="fieldset__legend govuk-fieldset__legend--m">
-                <h2@if(errors.definedAtRoot){ class="push--top"}>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
-            </legend>
-            <span id="add-to-list-hint" class="hint">
-                @messages.get(s"${key.mkString(".")}.radio.hint")
-            </span>
-            @errors.valueAtRootList.map { error =>
-                @error_message(key.mkString("."), error.prefixWith(key).render(messages), messages)
-            }
+    <legend class="fieldset__legend govuk-fieldset__legend--m">
+        <h2@if(errors.definedAtRoot){ class="push--top"}>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
+    </legend>
+    <span id="add-to-list-hint" class="hint">
+        @messages.get(s"${key.mkString(".")}.radio.hint")
+    </span>
+    @errors.valueAtRootList.map { error =>
+        @error_message(key.mkString("."), error.prefixWith(key).render(messages), messages)
+    }
 }
 
             <div class="radios@if(inlineRadioKeys){--inline}">
@@ -69,9 +67,4 @@
                 }
               }
             </div>
-
-@if(inlineRadioKeys){
-    </fieldset>
-</div>
-}
 }
