@@ -29,7 +29,7 @@
 @standard_field(key, errors, "radios", messages) {
 @if(inlineRadioKeys) {
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
-    <fieldset class="govuk-fieldset" id="@{key.mkString("_")}-input" aria-describedby="add-to-list-hint">
+    <fieldset class="govuk-fieldset" id="@{key.mkString("_")}-input" aria-describedby="add-to-list-hint @if(errors.definedAtRoot){@{s"${key.mkString(".")}-error"}}">
     <legend class="fieldset__legend govuk-fieldset__legend--m">
         <h2@if(errors.definedAtRoot){ class="push--top"}>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
     </legend>
