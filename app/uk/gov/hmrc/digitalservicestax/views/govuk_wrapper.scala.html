@@ -64,13 +64,11 @@
 
 @withCustomJS = {
     @scriptElem
-    <script>
-            openregisterLocationPicker({
-                defaultValue: '',
-                selectElement: document.getElementById('location-autocomplete'),
-                url: '@controllers.routes.Assets.versioned("location-autocomplete-graph.json")'
-            })
-    </script>
+    <script defer src='@routes.Assets.versioned("javascripts/show-hide-content.js")'></script>
+    <script defer src='@routes.Assets.versioned("javascripts/css-escape.polyfill.js")'></script>
+    <script defer src='@routes.Assets.versioned("javascripts/session-timeout.js")'></script>
+    <script defer src='@routes.Assets.versioned("javascripts/dst.js")'></script>
+    <script defer src='@routes.Assets.versioned("javascripts/timeout-dialog.js")'></script>
 }
 
 
@@ -133,11 +131,6 @@
     <link rel="stylesheet" href='@controllers.routes.Assets.versioned("stylesheets/location-autocomplete.min.css")' />
     <link rel="stylesheet"  href='@controllers.routes.Assets.versioned("stylesheets/digital-services-tax-frontend.css")'/>
     <link rel="stylesheet"  href='@controllers.routes.Assets.versioned("stylesheets/govuk-focus.css")'/>
-    <script defer src='@routes.Assets.versioned("javascripts/show-hide-content.js")'></script>
-    <script defer src='@routes.Assets.versioned("javascripts/css-escape.polyfill.js")'></script>
-    <script defer src='@routes.Assets.versioned("javascripts/session-timeout.js")'></script>
-    <script defer src='@routes.Assets.versioned("javascripts/dst.js")'></script>
-    <script defer src='@routes.Assets.versioned("javascripts/timeout-dialog.js")'></script>
 }
 
 @hmrcGovUkTemplate(Some(title), bodyClasses)(head, bodyEnd, insideHeader, afterHeader, footerTop, Some(footerLinks), true)(content)
