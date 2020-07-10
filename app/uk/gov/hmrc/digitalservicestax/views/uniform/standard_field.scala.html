@@ -21,7 +21,7 @@
 
 @key=@{keyList.mkString(".")}
 @errorKey=@{s"${keyList.mkString(".")}-error"}
-@hasFieldset=@{key == "manage-companies"|| key == "bank-details.bankAccount"}
+@hasFieldset=@{key == "bank-details.bankAccount"}
 @noShowErrors=@{key == "manage-companies"}
 
 @if(hasFieldset) {
