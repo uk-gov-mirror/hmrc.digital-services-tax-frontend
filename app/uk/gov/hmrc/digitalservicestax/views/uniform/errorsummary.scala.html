@@ -33,7 +33,7 @@
                         <a href="#@{s"${keyList.last ++ "_" ++ path.head.mkString("_")}-input"}"
                         data-focuses="@{s"${keyList.last ++ "_" ++ path.head.mkString("_")}-input"}">
                     } else {
-                        <a href="#@(keyList ++ path.head).mkString("_")-input"
+                        <a href="#@{(keyList ++ path.head).mkString("_")}-input"
                         data-focuses="@{(keyList ++ path.head).mkString("_")}-input">
                     }
                     @if(path.map(x => x.nonEmpty).head) {

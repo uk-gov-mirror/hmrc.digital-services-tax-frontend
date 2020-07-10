@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.digitalservicestax.views.html.helpers._
+
 @(key: List[String], options: Seq[String], existing: Option[String], errors: ErrorTree, messages: UniformMessages[Html], conditional: PartialFunction[String,Html] = PartialFunction.empty )
 
 @keyNoDots=@{key.mkString("-")}
@@ -26,45 +28,50 @@
 
 @standard_field(key, errors, "radios", messages) {
 @if(inlineRadioKeys) {
-    <fieldset class="govuk-fieldset" id="add-company-to-group" aria-describedby="add-to-list-hint">
-        <legend class="fieldset__legend govuk-fieldset__legend--m">
-            <h2@if(errors.definedAtRoot){class="push--top"}>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
-        </legend>
-        <span id="add-to-list-hint" class="hint">
-            @messages.get(s"${key.mkString(".")}.radio.hint")
-        </span>
-    }
+    <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
+        <fieldset class="govuk-fieldset" id="add-company-to-group" aria-describedby="add-to-list-hint">
+            <legend class="fieldset__legend govuk-fieldset__legend--m">
+                <h2@if(errors.definedAtRoot){ class="push--top"}>@messages.get(s"${key.mkString(".")}.radio.heading")</h2>
+            </legend>
+            <span id="add-to-list-hint" class="hint">
+                @messages.get(s"${key.mkString(".")}.radio.hint")
+            </span>
+            @errors.valueAtRootList.map { error =>
+                @error_message(key.mkString("."), error.prefixWith(key).render(messages), messages)
+            }
+}
 
-<div class="radios@if(inlineRadioKeys){--inline}">
-  @for((opt,num) <- if(reverseRadios){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
-    <div class="radios__item multiple-choice" data-target="@keyNoDots-@opt">
-      <input
-        class="radios__input"
-        id="@keyNoDots-@num"
-        name="@{key.mkString(".")}"
-        type="radio"
-        value="@opt"
-        @if(existing.exists(_.toUpperCase == opt.toUpperCase())){ checked }
-      >
-      <label class="label radios__label form-label" for="@keyNoDots-@num">
-        <span>@messages.decompose({key :+ opt}.mkString("."))</span>
-        @messages.get({key :+ opt :+ "hint"}.mkString(".")).map { hint =>
-          <span id="@keyNoDots-@opt-item-hint" class="form-hint checkboxes__hint">
-            @hint
-          </span>
-      }
-      </label>
-    </div>
+            <div class="radios@if(inlineRadioKeys){--inline}">
+              @for((opt,num) <- if(reverseRadios){options.reverse.zipWithIndex} else {options.zipWithIndex}) {
+                <div class="radios__item multiple-choice" data-target="@keyNoDots-@opt">
+                  <input
+                    class="radios__input"
+                    id="@keyNoDots-@num"
+                    name="@{key.mkString(".")}"
+                    type="radio"
+                    value="@opt"
+                    @if(existing.exists(_.toUpperCase == opt.toUpperCase())){ checked }
+                  >
+                  <label class="label radios__label form-label" for="@keyNoDots-@num">
+                    <span>@messages.decompose({key :+ opt}.mkString("."))</span>
+                    @messages.get({key :+ opt :+ "hint"}.mkString(".")).map { hint =>
+                      <span id="@keyNoDots-@opt-item-hint" class="form-hint checkboxes__hint">
+                        @hint
+                      </span>
+                  }
+                  </label>
+                </div>
 
-    @if(conditional.isDefinedAt(opt)) {
-      <div id="@keyNoDots-@opt" class="radios__conditional panel panel-border-narrow js-hidden">
-        @conditional(opt)
-      </div>
-    }
-  }
-</div>
+                @if(conditional.isDefinedAt(opt)) {
+                  <div id="@keyNoDots-@opt" class="radios__conditional panel panel-border-narrow js-hidden">
+                    @conditional(opt)
+                  </div>
+                }
+              }
+            </div>
 
 @if(inlineRadioKeys){
     </fieldset>
+</div>
 }
 }
