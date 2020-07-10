@@ -342,6 +342,7 @@ ultimate-parent-company-uk-address.line2.length.exceeded=Building or street line
 ultimate-parent-company-uk-address.line3.length.exceeded=Town or city must be 35 characters or fewer
 ultimate-parent-company-uk-address.line4.length.exceeded=County must be 35 characters or fewer
 ultimate-parent-company-uk-address.postalCode.required=Enter the postcode of your registered office address
+ultimate-parent-company-uk-address.postalCode.invalid=Enter a real postcode
 ultimate-parent-company-uk-address.postalCode.not-a-postcode=Enter a real postcode
 not-a-postcode=Enter a real postcode
 
