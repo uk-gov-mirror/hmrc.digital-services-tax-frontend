@@ -128,11 +128,11 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
     }
   }
 
-  "should lookup a list of return periods successfully" in {
+  "should lookup a list of outstanding return periods successfully" in {
     forAll { periods: Set[Period] =>
 
       stubFor(
-        get(urlPathEqualTo(s"/returns"))
+        get(urlPathEqualTo(s"/returns/outstanding"))
           .willReturn(
             aResponse()
               .withStatus(200)
@@ -141,6 +141,25 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
       )
 
       val response = DSTTestConnector.lookupOutstandingReturns()
+      whenReady(response) { res =>
+        res must contain allElementsOf (periods)
+      }
+    }
+  }
+
+  "should lookup a list of submitted return periods successfully" in {
+    forAll { periods: Set[Period] =>
+
+      stubFor(
+        get(urlPathEqualTo(s"/returns/submitted"))
+          .willReturn(
+            aResponse()
+              .withStatus(200)
+              .withBody(Json.toJson(periods).toString())
+          )
+      )
+
+      val response = DSTTestConnector.lookupSubmittedReturns()
       whenReady(response) { res =>
         res must contain allElementsOf (periods)
       }

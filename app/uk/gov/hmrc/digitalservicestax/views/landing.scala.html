@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.digitalservicestax.data.Registration
 @import uk.gov.hmrc.digitalservicestax.frontend.formatDate
 
-@(reg: Registration, outstanding: List[Period])(implicit messages: UniformMessages[Html])
+@(reg: Registration, outstanding: List[Period], submitted: List[Period])(implicit messages: UniformMessages[Html])
 
 @company = @{reg.companyReg.company}
 
@@ -72,7 +72,7 @@
               <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
               <ul class="govuk-list">
                 <li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">@messages("landing.balance")</a></li>
-                
+                @*<li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">@messages("landing.balance")</a></li>*@
               </ul>
             </div>
           </div>

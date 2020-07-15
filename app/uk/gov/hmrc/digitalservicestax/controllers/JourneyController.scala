@@ -66,13 +66,16 @@ class JourneyController @Inject()(
           Redirect(routes.RegistrationController.registerAction(" "))
         )
       case Some(reg) if reg.registrationNumber.isDefined =>
-        backend.lookupOutstandingReturns().map { periods => 
-          Ok(views.html.main_template(
-            title =
-              s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
+        backend.lookupOutstandingReturns().flatMap{ outstandingPeriods =>
+          backend.lookupSubmittedReturns().map { submittedPeriods =>
+            Ok(views.html.main_template(
+              title =
+                s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
               mainClass = Some("full-width")
-          )(views.html.landing(reg, periods.toList.sortBy(_.start))))
+            )(views.html.landing(reg, outstandingPeriods.toList.sortBy(_.start), submittedPeriods.toList.sortBy(_.start))))
+          }
         }
+
       case Some(reg) =>
         Future.successful(
           Ok(views.html.main_template(

@@ -50,7 +50,10 @@ class DSTConnector (
     http.GET[Option[Registration]](s"$backendURL/registration")
 
   def lookupOutstandingReturns(): Future[Set[Period]] =
-    http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
+    http.GET[List[Period]](s"$backendURL/returns/outstanding").map{_.toSet}
+
+  def lookupSubmittedReturns(): Future[Set[Period]] =
+    http.GET[List[Period]](s"$backendURL/returns/submitted").map{_.toSet}
 
   def lookupFinancialDetails(): Future[List[FinancialTransaction]] =
     http.GET[List[FinancialTransaction]](s"$backendURL/financial-transactions")    
