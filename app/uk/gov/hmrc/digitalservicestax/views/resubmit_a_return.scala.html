@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *@
-
-@(periods: List[Period])(implicit messages: UniformMessages[Html])
+@import hmrc.digitalServicesTax
+@(periods: List[Period], form: Form[Period])(implicit messages: UniformMessages[Html])
 
 <div class="govuk-grid-column-two-thirds">
 
@@ -32,19 +32,19 @@
      </h1>
     </legend>
     <p class="govuk-body">@messages("resubmit-a-return.amend-a-return")</p>
+
     <div class="govuk-radios">
+
+     @for(period <- periods){
      <div class="govuk-radios__item">
       <input class="govuk-radios__input" id="part-of-a-group-yes" name="alt-charge-socialmedia-yesno" type="radio" value="yes">
       <label class="govuk-label govuk-radios__label" for="part-of-a-group-yes">
-       1 January 2021 to 31 December 2021
+       @period.start to @period.end
       </label>
+      <a id="period-key" hidden>@period.key</a>
      </div>
-     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="part-of-a-group-no" name="alt-charge-socialmedia-yesno" type="radio" value="no">
-      <label class="govuk-label govuk-radios__label" for="part-of-a-group-no">
-       1 April 2020 to 31 December 2020
-      </label>
-     </div>
+     }
+
     </div>
    </fieldset>
   </div>
