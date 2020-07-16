@@ -20,7 +20,6 @@ package controllers
 import data._
 import config.AppConfig
 import connectors.{DSTConnector, MongoPersistence}
-
 import javax.inject.Inject
 import ltbs.uniform.UniformMessages
 import ltbs.uniform.common.web.{GenericWebTell, JourneyConfig}
@@ -38,6 +37,8 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendHeaderCarrierProvider
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import ltbs.uniform.common.web.ListingTell
 import ltbs.uniform.common.web.ListingTellRow
+import play.api.data.Form
+import play.api.data.Forms._
 import play.twirl.api.HtmlFormat
 
 class ReturnsController @Inject()(
@@ -80,6 +81,15 @@ class ReturnsController @Inject()(
     implicit request: AuthorisedRequest[AnyContent] =>
       implicit val msg: UniformMessages[Html] = interpreter.messages(request)
 
+      val periodForm: Form[Period] = Form(
+        mapping(
+          "start" -> localDate,
+          "end" -> localDate,
+          "returnDue" -> localDate,
+          "key" -> nonEmptyText.transform(Period.Key.apply, {x: Period.Key => x.toString})
+        )(Period.apply)(Period.unapply)
+      )
+
 //      val periodKey = Period.Key(periodKeyString)
 
       implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
@@ -101,7 +111,7 @@ class ReturnsController @Inject()(
                   Ok(views.html.main_template(
                       title =
                         s"${msg("resubmit-a-return.title")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
-                )(views.html.resubmit_a_return(periods)(msg))))
+                )(views.html.resubmit_a_return("resubmit-a-return", periods, periodForm)(msg, request))))
              }
             }
           }

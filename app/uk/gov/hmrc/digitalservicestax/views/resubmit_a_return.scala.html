@@ -13,43 +13,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *@
-@import hmrc.digitalServicesTax
-@(periods: List[Period], form: Form[Period])(implicit messages: UniformMessages[Html])
+
+@import uk.gov.hmrc.digitalservicestax.views.html.helpers._
+@import uk.gov.hmrc.digitalservicestax.frontend.formatDate
+
+@(key: String, periods: List[Period], form: Form[Period])(implicit messages: UniformMessages[Html], request: Request[AnyContent])
 
 <div class="govuk-grid-column-two-thirds">
 
- <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index" class="govuk link-back">
+    <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index" class="govuk link-back">
     @messages("common.back")
- </a>
-@periods
- <form class="form" action="/manage-account/3-0/returns/resubmit-return" method="post">
+    </a>
 
-  <div class="govuk-form-group">
-   <fieldset class="govuk-fieldset" id="applying-alt-charge-socialmedia">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-     <h1 class="govuk-fieldset__heading">
-      @messages("resubmit-a-return.title")
-     </h1>
-    </legend>
-    <p class="govuk-body">@messages("resubmit-a-return.amend-a-return")</p>
+    @helper.form(action = play.api.mvc.Call("post", "resubmit-a-return")) {
+        @helper.CSRF.formField
+        @if(form.errors.nonEmpty) {
+            <div class="error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary" id="error-summary-heading">
+                <h2 class="heading-medium error-summary-heading" id="error-summary-title">
+                @messages("there.is.a.problem")
+                </h2>
 
-    <div class="govuk-radios">
+                <ul class="error-summary-list">
+                    <li>
+                        <a href="submit-declaration" data-focuses="submit-declaration">@messages(s"$key.required")</a>
+                    </li>
+                </ul>
+            </div>
+        }
+        <div class="form-group@if(form.errors.nonEmpty){ form-group-error}">
+            <fieldset class="fieldset" id=s$key-input">
+                <legend class="fieldset__legend fieldset__legend--xl">
+                    <h1 class="fieldset__heading">
+                        @messages(s"$key.title")
+                    </h1>
+                </legend>
+                <p class="govuk-body">@messages(s"$key.amend-a-return")</p>
+                @if(form.errors.nonEmpty){
+                    @error_message(s"$key", messages(s"$key.required"), messages)
+                }
 
-     @for(period <- periods){
-     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="part-of-a-group-yes" name="alt-charge-socialmedia-yesno" type="radio" value="yes">
-      <label class="govuk-label govuk-radios__label" for="part-of-a-group-yes">
-       @period.start to @period.end
-      </label>
-      <a id="period-key" hidden>@period.key</a>
-     </div>
-     }
+                <div class="radios">
+                @for(period <- periods) {
+                    <div class="radios__item multiple-choice">
+                        <input
+                            class="radios__input"
+                            id="@key-@period.key"
+                            name="@key.@period.key"
+                            type="radio"
+                            value="@period.key"
+                        >
+                        <label
+                            class="label radios__label form-label"
+                            for="@key-@period.key">
+                            @messages(s"$key.radio-label", formatDate(period.start), formatDate(period.end))
+                        </label>
+                    </div>
+                }
 
-    </div>
-   </fieldset>
-  </div>
-  <button class="govuk-button" data-module="govuk-button">@messages("common.save-continue")</button>&nbsp;&nbsp;
-
- </form>
+                </div>
+            </fieldset>
+        </div>
+        <button type="submit" class="button">@messages("common.save-continue")</button>
+    }
 
 </div>

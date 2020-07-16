@@ -18,8 +18,6 @@ package uk.gov.hmrc.digitalservicestax.data
 
 import java.time.LocalDate
 
-import play.api.data.Form
-import play.api.data.Forms._
 import shapeless.tag.@@
 
 case class Period(
@@ -39,12 +37,4 @@ object Period {
       Some(in).filter{x => x.nonEmpty && x.size <= 4}
   }
 
-  val periodForm: Form[Period] = Form(
-    mapping(
-      "start" -> localDate,
-      "end" -> localDate,
-      "returnDue" -> localDate,
-      "key" -> nonEmptyText.transform(Period.Key.apply, {x: Period.Key => x.toString})
-    )(apply)(unapply)
-  )
 }
