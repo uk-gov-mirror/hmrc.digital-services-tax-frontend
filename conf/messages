@@ -439,7 +439,7 @@ pay-your-dst.back-to-details=Back to details
 resubmit-a-return.title=Which return do you need to resubmit?
 resubmit-a-return.amend-a-return=You can amend a return up to 2 years after the end of the accounting period.
 resubmit-a-return.radio-label={0} to {1}
-resubmit-a-return.radio-required=Select which return you need to resubmit
+resubmit-a-return.required=Select which return you need to resubmit
 
 
 #returns

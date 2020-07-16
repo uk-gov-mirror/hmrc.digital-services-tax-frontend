@@ -77,20 +77,17 @@ class ReturnsController @Inject()(
       views.html.end.confirmation_return(key: String)(messages)
   }
 
+  private val periodForm: Form[Period] = Form(
+    mapping(
+      "start" -> localDate,
+      "end" -> localDate,
+      "returnDue" -> localDate,
+      "key" -> nonEmptyText.transform(Period.Key.apply, {x: Period.Key => x.toString})
+    )(Period.apply)(Period.unapply)
+  )
   def showAmendments(): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
       implicit val msg: UniformMessages[Html] = interpreter.messages(request)
-
-      val periodForm: Form[Period] = Form(
-        mapping(
-          "start" -> localDate,
-          "end" -> localDate,
-          "returnDue" -> localDate,
-          "key" -> nonEmptyText.transform(Period.Key.apply, {x: Period.Key => x.toString})
-        )(Period.apply)(Period.unapply)
-      )
-
-//      val periodKey = Period.Key(periodKeyString)
 
       implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
         MongoPersistence[AuthorisedRequest[AnyContent]](
@@ -117,8 +114,33 @@ class ReturnsController @Inject()(
           }
       }
 
-  def postAmendments(): Action[AnyContent] =  {
-    ???
+  def postAmendments(): Action[AnyContent] = authorisedAction.async {
+    implicit request: AuthorisedRequest[AnyContent] =>
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+      backend.lookupSubmittedReturns().flatMap { outstandingPeriods =>
+        outstandingPeriods.toList match {
+          case Nil =>
+            Future.successful(NotFound)
+          case periods =>
+            periodForm.bindFromRequest.fold(
+              formWithErrors => {
+                Future.successful(
+                  BadRequest(views.html.main_template(
+                  title =
+                    s"${msg("resubmit-a-return.title")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+                )(views.html.resubmit_a_return("resubmit-a-return", periods, formWithErrors)(msg, request))
+                  )
+                )
+              },
+              postedForm => {
+                Future.successful(
+                  Redirect(routes.ReturnsController.returnAction("", ""))
+                )
+              }
+            )
+        }
+      }
+
   }
 
   def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {

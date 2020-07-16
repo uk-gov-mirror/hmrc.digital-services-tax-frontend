@@ -35,13 +35,13 @@
 
                 <ul class="error-summary-list">
                     <li>
-                        <a href="submit-declaration" data-focuses="submit-declaration">@messages(s"$key.required")</a>
+                        <a href="@key" data-focuses="@key">@messages(s"$key.required")</a>
                     </li>
                 </ul>
             </div>
         }
         <div class="form-group@if(form.errors.nonEmpty){ form-group-error}">
-            <fieldset class="fieldset" id=s$key-input">
+            <fieldset class="fieldset" id=@key-input">
                 <legend class="fieldset__legend fieldset__legend--xl">
                     <h1 class="fieldset__heading">
                         @messages(s"$key.title")
