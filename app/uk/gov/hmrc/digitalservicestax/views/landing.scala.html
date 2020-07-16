@@ -72,7 +72,9 @@
               <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
               <ul class="govuk-list">
                 <li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">@messages("landing.balance")</a></li>
-                @*<li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">@messages("landing.balance")</a></li>*@
+                @if(submitted.nonEmpty) {
+                    <li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.showAmendments" class="govuk-link">@messages("landing.amendments")</a></li>
+                }
               </ul>
             </div>
           </div>

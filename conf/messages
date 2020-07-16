@@ -425,6 +425,7 @@ landing.return-due=Next return due
 landing.submit-return=Submit a return
 landing.account-history=Account History
 landing.balance=View your balance and transactions history
+landing.amendments=Resubmit a previous return
 
 #pay your dst page
 pay-your-dst.heading=Pay your Digital Services Tax
@@ -433,6 +434,11 @@ pay-your-dst.include-reg-no=Make sure you include your registration number {0} w
 pay-your-dst.how-to-pay.1=Find out 
 pay-your-dst.how-to-pay.2=how to pay your Digital Services Tax (opens in a new window or tab)
 pay-your-dst.back-to-details=Back to details
+
+#amendments
+resubmit-a-return.title=Which return do you need to resubmit?
+resubmit-a-return.amend-a-return=You can amend a return up to 2 years after the end of the accounting period.
+
 
 #returns
 #Manage companies

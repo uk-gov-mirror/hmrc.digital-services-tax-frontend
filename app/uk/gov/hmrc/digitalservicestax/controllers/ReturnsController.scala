@@ -76,6 +76,41 @@ class ReturnsController @Inject()(
       views.html.end.confirmation_return(key: String)(messages)
   }
 
+  def showAmendments(): Action[AnyContent] = authorisedAction.async {
+    implicit request: AuthorisedRequest[AnyContent] =>
+      implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+
+//      val periodKey = Period.Key(periodKeyString)
+
+      implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
+        MongoPersistence[AuthorisedRequest[AnyContent]](
+          mongo,
+          collectionName = "uf-amendments-returns",
+          appConfig.mongoJourneyStoreExpireAfter
+        )(_.internalId)
+
+      backend.lookupRegistration().flatMap{
+        case None      => Future.successful(NotFound)
+        case Some(_) => Future.successful(NotFound)
+          backend.lookupSubmittedReturns().flatMap { outstandingPeriods =>
+             outstandingPeriods.toList match {
+               case Nil =>
+                Future.successful(NotFound)
+               case periods =>
+                Future.successful(
+                  Ok(views.html.main_template(
+                      title =
+                        s"${msg("resubmit-a-return.title")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+                )(views.html.resubmit_a_return(periods)(msg))))
+             }
+            }
+          }
+      }
+
+  def postAmendments(): Action[AnyContent] =  {
+    ???
+  }
+
   def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
       implicit val msg: UniformMessages[Html] = interpreter.messages(request)
@@ -117,6 +152,5 @@ class ReturnsController @Inject()(
         }
     } 
   }
-
 
 }

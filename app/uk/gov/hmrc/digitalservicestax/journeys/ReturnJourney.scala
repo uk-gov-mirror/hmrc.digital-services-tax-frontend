@@ -44,7 +44,6 @@ object ReturnJourney {
   ): F[Return] = {
     import interpreter._
 
-
     val isGroup = registration.ultimateParent.isDefined
     val isGroupMessage = if(isGroup) "group" else "company"
 

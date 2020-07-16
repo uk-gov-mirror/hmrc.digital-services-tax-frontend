@@ -17,6 +17,9 @@ GET        /submit-return/:periodKey/*id       uk.gov.hmrc.digitalservicestax.co
 POST       /submit-return/:periodKey           uk.gov.hmrc.digitalservicestax.controllers.ReturnsController.returnAction(periodKey: String, id = "")
 POST       /submit-return/:periodKey/*id       uk.gov.hmrc.digitalservicestax.controllers.ReturnsController.returnAction(periodKey: String, id: String)
 
+GET        /resubmit-a-return                  uk.gov.hmrc.digitalservicestax.controllers.ReturnsController.showAmendments()
+POST       /resubmit-a-return                  uk.gov.hmrc.digitalservicestax.controllers.ReturnsController.postAmendments()
+
 GET        /sign-in                            uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signIn()
 GET        /sign-out                           uk.gov.hmrc.digitalservicestax.controllers.AuthenticationController.signOut()
 
