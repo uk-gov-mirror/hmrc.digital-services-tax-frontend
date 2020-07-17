@@ -28,7 +28,8 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, ControllerHelpers}
 import play.modules.reactivemongo.ReactiveMongoApi
 import play.twirl.api.Html
-import scala.concurrent.{Future, ExecutionContext}
+
+import scala.concurrent.{ExecutionContext, Future}
 import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisedFunctions}
 import uk.gov.hmrc.digitalservicestaxfrontend.actions.{AuthorisedAction, AuthorisedRequest}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -40,6 +41,7 @@ import ltbs.uniform.common.web.ListingTellRow
 import play.api.data.Form
 import play.api.data.Forms._
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.digitalservicestax.data.Period.Key
 
 class ReturnsController @Inject()(
   authorisedAction: AuthorisedAction,
@@ -77,14 +79,15 @@ class ReturnsController @Inject()(
       views.html.end.confirmation_return(key: String)(messages)
   }
 
-  private val periodForm: Form[Period] = Form(
+  private def applyKey(key: Key): Period.Key = key
+  private def unapplyKey(arg: Period.Key): Option[(Key)] = Option(arg)
+
+  private val periodForm: Form[Period.Key] = Form(
     mapping(
-      "start" -> localDate,
-      "end" -> localDate,
-      "returnDue" -> localDate,
       "key" -> nonEmptyText.transform(Period.Key.apply, {x: Period.Key => x.toString})
-    )(Period.apply)(Period.unapply)
+    )(applyKey)(unapplyKey)
   )
+
   def showAmendments(): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
       implicit val msg: UniformMessages[Html] = interpreter.messages(request)
@@ -134,7 +137,7 @@ class ReturnsController @Inject()(
               },
               postedForm => {
                 Future.successful(
-                  Redirect(routes.ReturnsController.returnAction("", ""))
+                  Redirect(routes.ReturnsController.returnAction(postedForm, " "))
                 )
               }
             )

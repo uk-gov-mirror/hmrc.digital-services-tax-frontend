@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.digitalservicestax.views.html.helpers._
 @import uk.gov.hmrc.digitalservicestax.frontend.formatDate
 
-@(key: String, periods: List[Period], form: Form[Period])(implicit messages: UniformMessages[Html], request: Request[AnyContent])
+@(key: String, periods: List[Period], form: Form[Period.Key])(implicit messages: UniformMessages[Html], request: Request[AnyContent])
 
 <div class="govuk-grid-column-two-thirds">
 
@@ -59,7 +59,7 @@
                             <input
                                 class="radios__input"
                                 id="@key-@i"
-                                name="@key.@period.key"
+                                name="key"
                                 type="radio"
                                 value="@period.key"
                             >
