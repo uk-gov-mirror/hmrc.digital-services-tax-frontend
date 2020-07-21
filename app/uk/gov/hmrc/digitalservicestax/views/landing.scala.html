@@ -17,7 +17,7 @@
 @import uk.gov.hmrc.digitalservicestax.data.Registration
 @import uk.gov.hmrc.digitalservicestax.frontend.formatDate
 
-@(reg: Registration, outstanding: List[Period])(implicit messages: UniformMessages[Html])
+@(reg: Registration, outstanding: List[Period], financialDetailsPeriods: List[FinancialTransaction] = Nil)(implicit messages: UniformMessages[Html])
 
 @company = @{reg.companyReg.company}
 
@@ -39,12 +39,11 @@
         <div class="grid-row">
             <div class="column-one-third">
                 <div class="card">
-
                     <h2 class="heading-medium flush--top">@messages("landing.payment-due")</h2>
                     <p>@formatDate(period.paymentDue)</p>
                     <p>
                         <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.PaymentsController.payYourDST()">
-                        @messages("landing.pay-tax")
+                            @messages("landing.pay-tax")
                         </a>
                     </p>
                 </div>
@@ -52,7 +51,6 @@
 
             <div class="column-one-third">
                 <div class="card">
-
                        <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
                        <p>@{formatDate(period.returnDue)}</p>
                        <p>
@@ -62,21 +60,24 @@
                        </p>
                 </div>
             </div>
-
-            <div class="column-one-third"></div>
     }
 
-	<div class="column-one-third">
-          <div class="card" id="cardAmount">
-            <div class="card-body" style="border-bottom: 0px;">
-              <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
-              <ul class="govuk-list">
-                <li><a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">@messages("landing.balance")</a></li>
-                
-              </ul>
+    @if(financialDetailsPeriods.nonEmpty) {
+        <div class="column-one-third">
+            <div class="card" id="cardAmount">
+                <div class="card-body" style="border-bottom: 0px;">
+                    <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
+                    <ul class="govuk-list">
+                        <li>
+                            <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">
+                                @messages("landing.balance")
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </div>
-      </div>	
+        </div>
+    }
         </div>
 
 </div>
