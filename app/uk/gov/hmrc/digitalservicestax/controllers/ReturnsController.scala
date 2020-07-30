@@ -102,7 +102,7 @@ class ReturnsController @Inject()(
       backend.lookupRegistration().flatMap{
         case None      => Future.successful(NotFound)
         case Some(_) => Future.successful(NotFound)
-          backend.lookupSubmittedReturns().flatMap { outstandingPeriods =>
+          backend.lookupAmendableReturns().flatMap { outstandingPeriods =>
              outstandingPeriods.toList match {
                case Nil =>
                 Future.successful(NotFound)
@@ -120,7 +120,7 @@ class ReturnsController @Inject()(
   def postAmendments(): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
-      backend.lookupSubmittedReturns().flatMap { outstandingPeriods =>
+      backend.lookupAmendableReturns().flatMap { outstandingPeriods =>
         outstandingPeriods.toList match {
           case Nil =>
             Future.successful(NotFound)
@@ -164,7 +164,7 @@ class ReturnsController @Inject()(
     backend.lookupRegistration().flatMap{
       case None      => Future.successful(NotFound)
       case Some(reg) =>
-        backend.lookupOutstandingReturns().flatMap { periods => 
+        backend.lookupAllReturns().flatMap { periods =>
           periods.find(_.key == periodKey) match {
             case None => Future.successful(NotFound)
             case Some(period) =>
@@ -173,7 +173,7 @@ class ReturnsController @Inject()(
                 period,
                 reg
               )
-              playProgram.run(targetId, purgeStateUponCompletion = true, config =  JourneyConfig(askFirstListItem = true)) { ret =>
+              playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) { ret =>
                 backend.submitReturn(period, ret).map{ _ =>
 
                   Redirect(routes.JourneyController.index)

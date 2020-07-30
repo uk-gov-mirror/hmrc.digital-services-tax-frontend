@@ -67,7 +67,7 @@ class JourneyController @Inject()(
         )
       case Some(reg) if reg.registrationNumber.isDefined =>
         backend.lookupOutstandingReturns().flatMap{ outstandingPeriods =>
-          backend.lookupSubmittedReturns().map { submittedPeriods =>
+          backend.lookupAmendableReturns().map { submittedPeriods =>
             Ok(views.html.main_template(
               title =
                 s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",

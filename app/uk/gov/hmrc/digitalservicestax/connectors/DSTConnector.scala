@@ -52,8 +52,11 @@ class DSTConnector (
   def lookupOutstandingReturns(): Future[Set[Period]] =
     http.GET[List[Period]](s"$backendURL/returns/outstanding").map{_.toSet}
 
-  def lookupSubmittedReturns(): Future[Set[Period]] =
-    http.GET[List[Period]](s"$backendURL/returns/submitted").map{_.toSet}
+  def lookupAmendableReturns(): Future[Set[Period]] =
+    http.GET[List[Period]](s"$backendURL/returns/amendable").map{_.toSet}
+
+  def lookupAllReturns(): Future[Set[Period]] =
+    http.GET[List[Period]](s"$backendURL/returns/all").map{_.toSet}
 
   def lookupFinancialDetails(): Future[List[FinancialTransaction]] =
     http.GET[List[FinancialTransaction]](s"$backendURL/financial-transactions")    
