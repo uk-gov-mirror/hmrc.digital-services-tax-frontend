@@ -35,7 +35,7 @@
 
                 <ul class="error-summary-list">
                     <li>
-                        <a href="@key-1" data-focuses="@key-1">@messages(s"$key.required")</a>
+                        <a href="@key-@periods.head.key" data-focuses="@key-@periods.head.key">@messages(s"$key.required")</a>
                     </li>
                 </ul>
             </div>
@@ -53,12 +53,12 @@
                 }
 
                 <div class="radios">
-                @for(i <- 1 to periods.size){
+
                     @for(period <- periods) {
                         <div class="radios__item multiple-choice">
                             <input
                                 class="radios__input"
-                                id="@key-@i"
+                                id="@key-@period.key"
                                 name="key"
                                 type="radio"
                                 value="@period.key"
@@ -70,7 +70,7 @@
                             </label>
                         </div>
                     }
-                }
+
 
                 </div>
             </fieldset>
