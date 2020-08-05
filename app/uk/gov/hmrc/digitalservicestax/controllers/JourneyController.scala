@@ -62,17 +62,32 @@ class JourneyController @Inject()(
 
     backend.lookupRegistration().flatMap {
       case None =>
-        Future.successful(
-          Redirect(routes.RegistrationController.registerAction(" "))
-        )
+        Future.successful(Redirect(routes.RegistrationController.registerAction(" ")))
+
       case Some(reg) if reg.registrationNumber.isDefined =>
-        backend.lookupOutstandingReturns().flatMap{ outstandingPeriods =>
-          backend.lookupAmendableReturns().map { submittedPeriods =>
-            Ok(views.html.main_template(
-              title =
-                s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
-              mainClass = Some("full-width")
-            )(views.html.landing(reg, outstandingPeriods.toList.sortBy(_.start), submittedPeriods.toList.sortBy(_.start))))
+        backend.lookupOutstandingReturns().flatMap { outstandingPeriods =>
+          backend.lookupAmendableReturns().flatMap { amendedPeriods =>
+            backend.lookupFinancialDetails().flatMap { lineItems =>
+
+              //            def financialDetailsView(lineItems: List[FinancialTransaction] = Nil) = {
+              Future.successful(
+                Ok(views.html.main_template(
+                title =
+                  s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
+                mainClass = Some("full-width")
+              )(views.html.landing(
+                reg, outstandingPeriods.toList.sortBy(_.start), amendedPeriods.toList.sortBy(_.start), lineItems
+              )))
+              )
+              //            }
+
+              //            backend.lookupFinancialDetails().map {
+              //              case Nil =>
+              //                Ok(financialDetailsView())
+              //              case li =>
+              //                Ok(financialDetailsView(li))
+              //            }
+            }
           }
         }
 

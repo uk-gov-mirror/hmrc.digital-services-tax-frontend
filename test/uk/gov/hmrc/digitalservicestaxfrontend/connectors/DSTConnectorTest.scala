@@ -23,7 +23,7 @@ import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.libs.json.Json
 import uk.gov.hmrc.digitalservicestax.connectors.DSTConnector
 import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
-import uk.gov.hmrc.digitalservicestax.data.{CompanyRegWrapper, Period, Postcode, Registration, Return, UTR}
+import uk.gov.hmrc.digitalservicestax.data.{CompanyRegWrapper, FinancialTransaction, Period, Postcode, Registration, Return, UTR}
 import uk.gov.hmrc.digitalservicestaxfrontend.TestInstances._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -142,7 +142,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
 
       val response = DSTTestConnector.lookupOutstandingReturns()
       whenReady(response) { res =>
-        res must contain allElementsOf (periods)
+        res must contain allElementsOf periods
       }
     }
   }
@@ -161,7 +161,7 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
 
       val response = DSTTestConnector.lookupAmendableReturns()
       whenReady(response) { res =>
-        res must contain allElementsOf (periods)
+        res must contain allElementsOf periods
       }
     }
   }
@@ -180,7 +180,44 @@ class DSTConnectorTest extends WiremockSpec with ScalaCheckDrivenPropertyChecks 
 
       val response = DSTTestConnector.lookupAllReturns()
       whenReady(response) { res =>
-        res must contain allElementsOf (periods)
+        res must contain allElementsOf periods
+      }
+    }
+  }
+
+  "should lookup a list of financial transactions successfully" in {
+    forAll { financialTransactions: List[FinancialTransaction] =>
+
+      stubFor(
+        get(urlPathEqualTo(s"/financial-transactions"))
+          .willReturn(
+            aResponse()
+              .withStatus(200)
+              .withBody(Json.toJson(financialTransactions).toString())
+          )
+      )
+
+      val response = DSTTestConnector.lookupFinancialDetails()
+      whenReady(response) { res =>
+        res must contain allElementsOf financialTransactions
+      }
+    }
+  }
+
+  "should return an empty list when a list of financial transactions cannot be found" in {
+    forAll { _: List[FinancialTransaction] =>
+
+      stubFor(
+        get(urlPathEqualTo(s"/financial-transactions"))
+          .willReturn(
+            aResponse()
+              .withStatus(404)
+          )
+      )
+
+      val response = DSTTestConnector.lookupFinancialDetails()
+      whenReady(response) { res =>
+        res mustBe List.empty
       }
     }
   }
