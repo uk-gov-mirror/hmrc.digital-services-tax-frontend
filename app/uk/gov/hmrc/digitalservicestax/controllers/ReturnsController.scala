@@ -102,16 +102,15 @@ class ReturnsController @Inject()(
       backend.lookupRegistration().flatMap{
         case None      => Future.successful(NotFound)
         case Some(_) => Future.successful(NotFound)
-          backend.lookupAmendableReturns().flatMap { outstandingPeriods =>
+          backend.lookupAmendableReturns().map { outstandingPeriods =>
              outstandingPeriods.toList match {
                case Nil =>
-                Future.successful(NotFound)
+                NotFound
                case periods =>
-                Future.successful(
-                  Ok(views.html.main_template(
-                      title =
-                        s"${msg("resubmit-a-return.title")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
-                )(views.html.resubmit_a_return("resubmit-a-return", periods, periodForm)(msg, request))))
+                Ok(views.html.main_template(
+                    title =
+                      s"${msg("resubmit-a-return.title")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+                )(views.html.resubmit_a_return("resubmit-a-return", periods, periodForm)(msg, request)))
              }
             }
           }
@@ -146,7 +145,7 @@ class ReturnsController @Inject()(
 
   }
 
-  def returnAction(periodKeyString: String, targetId: String): Action[AnyContent] = authorisedAction.async {
+  def returnAction(periodKeyString: String, targetId: String = ""): Action[AnyContent] = authorisedAction.async {
     implicit request: AuthorisedRequest[AnyContent] =>
       implicit val msg: UniformMessages[Html] = interpreter.messages(request)
     import interpreter.{appConfig => _, _}

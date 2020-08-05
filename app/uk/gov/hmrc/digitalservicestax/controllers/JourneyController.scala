@@ -67,18 +67,16 @@ class JourneyController @Inject()(
         )
 
       case Some(reg) if reg.registrationNumber.isDefined =>
-        backend.lookupOutstandingReturns().flatMap { outstandingPeriods =>
-          backend.lookupAmendableReturns().flatMap { amendedPeriods =>
-            backend.lookupFinancialDetails().flatMap { lineItems =>
-              Future.successful(
-                Ok(views.html.main_template(
-                    title = s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
-                    )(views.html.landing(
-                    reg, outstandingPeriods.toList.sortBy(_.start), amendedPeriods.toList.sortBy(_.start), lineItems)))
-              )
-            }
+        for {
+          outstandingPeriods <- backend.lookupOutstandingReturns()
+          amendedPeriods <- backend.lookupAmendableReturns()
+          lineItems <- backend.lookupFinancialDetails()
+        } yield {
+          Ok(views.html.main_template(
+            title = s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+          )(views.html.landing(
+            reg, outstandingPeriods.toList.sortBy(_.start), amendedPeriods.toList.sortBy(_.start), lineItems)))
           }
-        }
 
       case Some(reg) =>
         Future.successful(
