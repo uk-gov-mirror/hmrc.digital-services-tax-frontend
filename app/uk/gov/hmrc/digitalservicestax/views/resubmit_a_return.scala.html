@@ -1,0 +1,81 @@
+@*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.digitalservicestax.views.html.helpers._
+@import uk.gov.hmrc.digitalservicestax.frontend.formatDate
+
+@(key: String, periods: List[Period], form: Form[Period.Key])(implicit messages: UniformMessages[Html], request: Request[AnyContent])
+
+<div class="govuk-grid-column-two-thirds">
+
+    <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index" class="govuk link-back">
+    @messages("common.back")
+    </a>
+
+    @helper.form(action = play.api.mvc.Call("post", "resubmit-a-return")) {
+        @helper.CSRF.formField
+        @if(form.errors.nonEmpty) {
+            <div class="error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="error-summary" id="error-summary-heading">
+                <h2 class="heading-medium error-summary-heading" id="error-summary-title">
+                @messages("there.is.a.problem")
+                </h2>
+
+                <ul class="error-summary-list">
+                    <li>
+                        <a href="@key-@periods.head.key" data-focuses="@key-@periods.head.key">@messages(s"$key.required")</a>
+                    </li>
+                </ul>
+            </div>
+        }
+        <div class="form-group@if(form.errors.nonEmpty){ form-group-error}">
+            <fieldset class="fieldset" id=@key-input">
+                <legend class="fieldset__legend fieldset__legend--xl">
+                    <h1 class="fieldset__heading">
+                        @messages(s"$key.title")
+                    </h1>
+                </legend>
+                <p class="govuk-body">@messages(s"$key.amend-a-return")</p>
+                @if(form.errors.nonEmpty){
+                    @error_message(s"$key", messages(s"$key.required"), messages)
+                }
+
+                <div class="radios">
+
+                    @for(period <- periods) {
+                        <div class="radios__item multiple-choice">
+                            <input
+                                class="radios__input"
+                                id="@key-@period.key"
+                                name="key"
+                                type="radio"
+                                value="@period.key"
+                            >
+                            <label
+                                class="label radios__label form-label"
+                                for="@key-@period.key">
+                                @messages(s"$key.radio-label", formatDate(period.start), formatDate(period.end))
+                            </label>
+                        </div>
+                    }
+
+
+                </div>
+            </fieldset>
+        </div>
+        <button type="submit" class="button">@messages("common.save-continue")</button>
+    }
+
+</div>

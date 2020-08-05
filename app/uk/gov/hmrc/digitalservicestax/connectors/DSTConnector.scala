@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.digitalservicestax.connectors
 
-import uk.gov.hmrc.digitalservicestax.data.BackendAndFrontendJson._
 import uk.gov.hmrc.digitalservicestax.data._
 import uk.gov.hmrc.http._
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
@@ -37,7 +36,7 @@ class DSTConnector (
 
   def submitReturn(period: Period, ret: Return): Future[Unit] = {
     val encodedKey = java.net.URLEncoder.encode(period.key, "UTF-8")
-    http.POST[Return, Unit](s"$backendURL/returns/${encodedKey}", ret)
+    http.POST[Return, Unit](s"$backendURL/returns/$encodedKey", ret)
   }
 
   def lookupCompany(): Future[Option[CompanyRegWrapper]] =
@@ -50,12 +49,19 @@ class DSTConnector (
     http.GET[Option[Registration]](s"$backendURL/registration")
 
   def lookupOutstandingReturns(): Future[Set[Period]] =
-    http.GET[List[Period]](s"$backendURL/returns").map{_.toSet}
+    http.GET[List[Period]](s"$backendURL/returns/outstanding").map{_.toSet}
 
-  def lookupFinancialDetails(): Future[List[FinancialTransaction]] =
+  def lookupAmendableReturns(): Future[Set[Period]] =
+    http.GET[List[Period]](s"$backendURL/returns/amendable").map{_.toSet}
+
+  def lookupAllReturns(): Future[Set[Period]] =
+    http.GET[List[Period]](s"$backendURL/returns/all").map{_.toSet}
+
+  def lookupFinancialDetails(): Future[List[FinancialTransaction]] = {
     http.GET[List[FinancialTransaction]](s"$backendURL/financial-transactions").recoverWith {
       case _: NotFoundException => Future.successful(Nil)
       case _ => throw MicroServiceConnectionException("Invalid response from financial transactions microservice.")
+    }
   }
 
   case class MicroServiceConnectionException(msg: String) extends Exception(msg)
