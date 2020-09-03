@@ -430,9 +430,9 @@ trait Widgets {
     override def render(in: Company, key: String, messages: UniformMessages[Html]): Html =
       Html(
         s"<p class='govuk-body-l' id='${key}--sfer-content'>" +
-          s"${in.name.toString.escapeHtml}</br>" +
+          s"${in.name.toString.escapeHtml}<br>" +
           s"<span class='govuk-body-m'>" +
-          s"${in.address.lines.map{_.escapeHtml}.mkString("</br>")}" +
+          s"${in.address.lines.map{_.escapeHtml}.mkString("<br>")}" +
           s"</span>" +
           "</p>"
       )
