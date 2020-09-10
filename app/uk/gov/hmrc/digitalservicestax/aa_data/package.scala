@@ -28,7 +28,8 @@ package object data extends SimpleJson {
 
   type UTR = String @@ UTR.Tag
   object UTR extends RegexValidatedString(
-    "^[0-9]{10}$"
+    "^[0-9]{10}$",
+    _.replaceAll(" ", "")
   )
 
   type SafeId = String @@ SafeId.Tag
@@ -49,7 +50,7 @@ package object data extends SimpleJson {
   type Postcode = String @@ Postcode.Tag
   object Postcode extends RegexValidatedString(
     """^(GIR 0A{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z]))))[ ]?[0-9][A-Z]{2})$""",
-    _.toUpperCase
+    _.trim.replaceAll("[ \\t]+", " ").toUpperCase
   )
 
   type Money = BigDecimal @@ Money.Tag
