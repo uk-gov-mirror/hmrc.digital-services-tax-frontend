@@ -48,12 +48,12 @@
 
 
 @govuk_wrapper(appConfig = appConfig,
-               title = title,
-               mainClass = mainClass,
-               bodyClasses = bodyClasses,
-               sidebar = sidebar,
-               contentHeader = contentHeader,
-               mainContent = layouts.article(mainContent),
-               serviceInfoContent = serviceInfoContent,
-               scriptElem = Some(scriptElem)
+    title = title,
+    mainClass = mainClass,
+    bodyClasses = bodyClasses,
+    sidebar = sidebar,
+    contentHeader = contentHeader,
+    mainContent = Html(s"""<div class="content__body">${mainContent}</div>"""),
+    serviceInfoContent = serviceInfoContent,
+    scriptElem = Some(scriptElem)
 )

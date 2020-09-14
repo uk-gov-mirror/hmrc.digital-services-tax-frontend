@@ -28,7 +28,7 @@
     } else if (errors.values.map(_.toList).nonEmpty &&
             !errors.values.flatMap(_.toList).map(_.msg.toLowerCase.split('.')(0)).toList.intersect(fields)) {
         "govuk-input--error"
-    }}"
+    }}
 }
 
 @errorMessageList = {
@@ -68,7 +68,7 @@
                 @messages(List((key :+ field).mkString("."),field))
                 </label>
                 <input
-                class="form-control govuk-input govuk-date-input__input govuk-input--width-@{if(field=="year"){4}else{2}} @{fieldError(field)}"
+                class="form-control govuk-input govuk-date-input__input govuk-input--width-@{if(field=="year"){4}else{2}}@if(errors){ @{fieldError(field)}}"
                 id="@key-@field"
                 name="@{(key :+ field).mkString(".") }"
                 type="tel"
@@ -97,7 +97,7 @@
                     @messages(List((key :+ field).mkString("."),field))
                     </label>
                     <input
-                    class="form-control govuk-input govuk-date-input__input govuk-input--width-@{if(field=="year"){4}else{2}} @{fieldError(field)}"
+                    class="form-control govuk-input govuk-date-input__input govuk-input--width-@{if(field=="year"){4}else{2}}@if(errors){ @{fieldError(field)}  }"
                     id="@key-@field"
                     name="@{(key :+ field).mkString(".") }"
                     type="tel"

@@ -61,13 +61,20 @@
         @*
         * Todo - refactor this describedby error/hint string value to be a helper
         *@
-        @defining((messages.get(s"${key.mkString(".")}.hint").isDefined, errors.definedAtRoot) match {
-        case (true,true) => s"${key.mkString(".")}-hint ${key.mkString(".")}-error"
-        case (true,false) => s"${key.mkString(".")}-hint"
-        case (false,true) => s"${key.mkString(".")}-error"
-        case _ => ""
-        }){ describedBy =>
+        @defining(
+            (messages.get(s"${key.mkString(".")}.hint").isDefined, errors.definedAtRoot) match {
+                case (true,true) => s"${key.mkString(".")}-hint ${key.mkString(".")}-error"
+                case (true,false) => s"${key.mkString(".")}-hint"
+                case (false,true) => s"${key.mkString(".")}-error"
+                case _ => ""
+            },
+            key match {
+                case k if k.contains("email") => "email"
+                case _ => "text"
+            }
+        ) { case (describedBy, inputType) =>
             <input 
+                type="@inputType"
                 class="@{inputClass}@if(errors){ form-control-error}"
                 id="@{key.mkString("_")}-input"
                 @if(telInput){ inputmode="numeric" pattern="[0-9]*" }
@@ -76,7 +83,7 @@
                 @autoFields.map { f => autocomplete=@f }
                 @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
                 @if(autoComplete){autocomplete="@{autoComplete}"}
-            />  
+            />
         }
 
         @if(percentageInput || currencyInput){
