@@ -1350,3 +1350,5 @@ company-liabilities-97.length.exceeded=The liability for {0} must be 15 numbers 
 company-liabilities-98.length.exceeded=The liability for {0} must be 15 numbers or fewer
 company-liabilities-99.length.exceeded=The liability for {0} must be 15 numbers or fewer
 company-liabilities-100.length.exceeded=The liability for {0} must be 15 numbers or fewer
+
+footer.links.accessibility.text=Accessibility statement
