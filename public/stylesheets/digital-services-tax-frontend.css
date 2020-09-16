@@ -585,6 +585,10 @@ fieldset__legend--s {
     margin: 0;
 }
 
+.summary-list__key.strong {
+    font-weight: 700
+}
+
 .summary-list__actions {
     margin-bottom: 15px;
 }

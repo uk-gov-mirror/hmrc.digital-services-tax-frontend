@@ -416,9 +416,9 @@ accounting-period-end-date.month-and-year.empty=The end date of the {0}’s firs
 
 #service page
 landing.heading=Digital Services Tax details
-landing.ultimate-parent-name=Group’s ultimate parent company: {0}
-landing.dst-no=DST Registation Number: {0}
-landing.company-name=Responsible member: {0}
+landing.ultimate-parent-name=Group’s ultimate parent company
+landing.dst-no=DST Registation Number
+landing.company-name=Responsible member
 landing.payment-due=Next payment due
 landing.pay-tax=Pay your Digital Services Tax
 landing.return-due=Next return due
