@@ -20,9 +20,6 @@ object AppDependencies {
     "commons-validator"       % "commons-validator"         % "1.6",
     "uk.gov.hmrc"             %% "bootstrap-play-26"        % "1.7.0",
     "fr.marcwrobel"           % "jbanking"                  % "2.0.0"
-//    ,
-//    "uk.gov.hmrc"             %% "play-frontend-hmrc"       % "0.17.0-play-26",
-//    "uk.gov.hmrc"             %% "play-frontend-govuk"      % "0.50.0-play-26"
   )
 
   val test = Seq(
