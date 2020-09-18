@@ -48,6 +48,7 @@
         case "line3" => "address-level2"
         case "line4" => "address-level1"
         case "postcode" => "postal-code"
+        case "postalCode" => "postal-code"
         case _ => ""
       },
       errors.valueAtPath(List(field))
@@ -61,7 +62,7 @@
             <label class="form-label" for="@{(key :+field).mkString("_")}-input">
                 @messages((key :+ field :+ "heading").mkString("."))
             </label>
-
+            
             @for(err <- errorOpt.fold(List.empty[ErrorMsg])(_.toList)) {
               @error_message({(key :+field).mkString("-")}, err.prefixWith(key :+ field).render(messages), messages)
             }

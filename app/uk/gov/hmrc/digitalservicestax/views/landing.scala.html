@@ -25,68 +25,98 @@
 
     <h1 class="heading-xlarge">
         @messages("landing.heading")
-        <span class="hint">
-          @reg.registrationNumber.map { regNo =>
-            @messages("landing.dst-no", regNo)<br />
-          }	  
-          @reg.ultimateParent.map { parent =>
-            @messages("landing.ultimate-parent-name", parent.name)<br />
-          }
-          @messages("landing.company-name", company.name)<br />
-        </span>
     </h1>
+
     <div class="grid-row">
-        @outstanding.headOption.map { period =>
-                <div class="column-one-third">
-                    <div class="card">
-                        <h2 class="heading-medium flush--top">@messages("landing.payment-due")</h2>
-                        <p>@formatDate(period.paymentDue)</p>
-                        <p>
-                            <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.PaymentsController.payYourDST()">
-                                @messages("landing.pay-tax")
-                            </a>
-                        </p>
-                    </div>
+        <div class="column-two-thirds">
+            <dl class="summary-list">
+                <div class="summary-list__row">
+                    <dt class="summary-list__key strong">
+                        @messages("landing.dst-no")
+                    </dt>
+                    <dd class="summary-list__value">
+                        @reg.registrationNumber.map { regNo =>
+                            @regNo
+                        }
+                    </dd>
                 </div>
-
-                <div class="column-one-third">
-                    <div class="card">
-                           <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
-                           <p>@{formatDate(period.returnDue)}</p>
-                           <p>
-                               <a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.returnAction(period.key, "")/'>
-                                   @messages("landing.submit-return")
-                               </a>
-                           </p>
-                    </div>
+                <div class="summary-list__row">
+                    <dt class="summary-list__key strong">
+                        @messages("landing.ultimate-parent-name")
+                    </dt>
+                    <dd class="summary-list__value">
+                        @reg.ultimateParent.map { parent =>
+                            @parent.name
+                        }
+                    </dd>
                 </div>
-        }
-
-        @if(financialDetailsPeriods.nonEmpty || amended.nonEmpty) {
-            <div class="column-one-third">
-                <div class="card" id="cardAmount">
-                    <div class="card-body" style="border-bottom: 0px;">
-                        <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
-                        <ul class="govuk-list">
-                            @if(financialDetailsPeriods.nonEmpty) {
-                                <li>
-                                    <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">
-                                        @messages("landing.balance")
-                                    </a>
-                                </li>
-                            }
-                            @if(amended.nonEmpty) {
-                                <li>
-                                    <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.showAmendments" class="govuk-link">
-                                        @messages("landing.amendments")
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                <div class="summary-list__row">
+                    <dt class="summary-list__key strong">
+                        @messages("landing.company-name")
+                    </dt>
+                    <dd class="summary-list__value">
+                        @reg.ultimateParent.map { parent =>
+                            @company.name
+                        }
+                    </dd>
                 </div>
-            </div>
-        }
+            </dl>  
+        </div>
     </div>
 
+    <div class="subsection">
+        <div class="grid-row">
+            @outstanding.headOption.map { period =>
+                    <div class="column-one-third">
+                        <div class="card">
+                            <h2 class="heading-medium flush--top">@messages("landing.payment-due")</h2>
+                            <p>@formatDate(period.paymentDue)</p>
+                            <p>
+                                <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.PaymentsController.payYourDST()">
+                                    @messages("landing.pay-tax")
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="column-one-third">
+                        <div class="card">
+                            <h2 class="heading-medium flush--top">@messages("landing.return-due")</h2>
+                            <p>@{formatDate(period.returnDue)}</p>
+                            <p>
+                                <a href='@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.returnAction(period.key, "")/'>
+                                    @messages("landing.submit-return")
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+            }
+
+            @if(financialDetailsPeriods.nonEmpty || amended.nonEmpty) {
+                <div class="column-one-third">
+                    <div class="card" id="cardAmount">
+                        <div class="card-body" style="border-bottom: 0px;">
+                            <h2 class="govuk-heading-m" style="margin-top: 0px">@messages("landing.account-history")</h2>
+                            <ul class="govuk-list">
+                                @if(financialDetailsPeriods.nonEmpty) {
+                                    <li>
+                                        <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.financialDetails" class="govuk-link">
+                                            @messages("landing.balance")
+                                        </a>
+                                    </li>
+                                }
+                                @if(amended.nonEmpty) {
+                                    <li>
+                                        <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.ReturnsController.showAmendments" class="govuk-link">
+                                            @messages("landing.amendments")
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

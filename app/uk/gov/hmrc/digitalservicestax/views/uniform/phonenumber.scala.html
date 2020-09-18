@@ -70,7 +70,7 @@
             <input 
                 class="form-control form-control-2-3 @if(errors.definedAtRoot) {form-control-error}"
                 id="@{key.mkString("_")}-input"
-                @if(telInput){ inputmode="numeric" pattern="[0-9]*" }
+                @if(telInput){ inputmode="numeric" pattern="[0-9]*" type="text" }
                 name="@{key.mkString(".")}"
                 value="@{values}"
                 @autoFields.map { f => autocomplete=@f }

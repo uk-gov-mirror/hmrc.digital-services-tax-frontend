@@ -73,7 +73,8 @@ class JourneyController @Inject()(
           lineItems <- backend.lookupFinancialDetails()
         } yield {
           Ok(views.html.main_template(
-            title = s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+            title = s"${msg("landing.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}",
+            mainClass = Some("full-width")
           )(views.html.landing(
             reg, outstandingPeriods.toList.sortBy(_.start), amendedPeriods.toList.sortBy(_.start), lineItems)))
           }

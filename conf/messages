@@ -416,9 +416,9 @@ accounting-period-end-date.month-and-year.empty=The end date of the {0}’s firs
 
 #service page
 landing.heading=Digital Services Tax details
-landing.ultimate-parent-name=Group’s ultimate parent company: {0}
-landing.dst-no=DST Registation Number: {0}
-landing.company-name=Responsible member: {0}
+landing.ultimate-parent-name=Group’s ultimate parent company
+landing.dst-no=DST Registation Number
+landing.company-name=Responsible member
 landing.payment-due=Next payment due
 landing.pay-tax=Pay your Digital Services Tax
 landing.return-due=Next return due
@@ -830,9 +830,9 @@ financial-details.balance=Your balance is <strong>£{0}</strong>.
 financial-details.delay=Your account balance may not reflect payments made in the last {0} days.
 financial-details.table.date=Date
 financial-details.table.transaction=Transaction
-financial-details.table.credits=£Credits
-financial-details.table.debits=£Debits
-financial-details.table.balance=£Balance
+financial-details.table.credits=£ Credits
+financial-details.table.debits=£ Debits
+financial-details.table.balance=£ Balance
 financial-details.back-bottom=Back to details
 financial-details.paynow=You need to pay now. Find <a href="https://www.gov.uk/guidance/pay-your-digital-services-tax" target="_blank">how to pay</a> (opens in a new window or tab).
 
@@ -1350,3 +1350,5 @@ company-liabilities-97.length.exceeded=The liability for {0} must be 15 numbers 
 company-liabilities-98.length.exceeded=The liability for {0} must be 15 numbers or fewer
 company-liabilities-99.length.exceeded=The liability for {0} must be 15 numbers or fewer
 company-liabilities-100.length.exceeded=The liability for {0} must be 15 numbers or fewer
+
+footer.links.accessibility.text=Accessibility statement
