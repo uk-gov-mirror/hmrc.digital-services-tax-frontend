@@ -212,7 +212,7 @@ registration-sent.detail=We received your registration for {0} for the Digital S
 registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
 registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in \
-  the next 5 days.
+  the next 24 hours.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.print-save=Print or save this page
 registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="{0}">check the Digital Services Tax guidance</a>.
@@ -564,15 +564,15 @@ relief-deducted.required=Enter the amount of cross-border transactions relief yo
 relief-deducted.not-a-number=The amount of cross-border transactions relief you deducted from revenues must be an amount of \
   money, like 1,234.56 or 1,560.00
 relief-deducted.length.exceeded=The amount of cross-border transactions relief you deducted from revenues must be 15 numbers or fewer
-relief-deducted.invalid=The amount of cross-border transactions relief you deducted from revenues must include pence \
-  like 1,234.56 or 1,560.00
+relief-deducted.invalid=The amount of cross-border transactions relief you deducted from revenues must be an amount of \
+  money, like 1,234.56 or 1,560.00
 
 #company liabilities - duplicated messages are EOF
 company-liabilities-0.heading=What are your UK Digital Services Tax liabilities for {0} from {1} to {2}?
 company-liabilities-0.required=Enter the Digital Services Tax liability for {0}
 company-liabilities-0.not-a-number=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
 company-liabilities-0.length.exceeded=The liability for {0} must be 15 numbers or fewer
-company-liabilities-0.invalid=The liability for {0} must include pence like 1,234.56 or 1,560.00
+company-liabilities-0.invalid=The liability for {0} must be an amount of money, like 1,234.56 or 1,560.00
 
 #Allowance deducted
 allowance-deducted.heading=How much of the £25m annual allowance have you deducted from revenues in this return?
@@ -593,7 +593,7 @@ group-liability.hint=This is the total amount of liability after applying any de
 group-liability.required=Enter the {0}’s total Digital Services Tax liability for {1} to {2}
 group-liability.not-a-number=The {0}’s total liability must be an amount of money, like 1,234.56 or 1,560.00
 group-liability.length.exceeded=The {0}’s total liability must be 15 numbers or fewer
-group-liability.invalid=The {0}’s total liability must include pence like 1,234.56 or 1,560.00
+group-liability.invalid=The {0}’s total liability must be 15 numbers or fewer
 
 #repayment
 repayment.heading=Do you need to be repaid any Digital Services Tax for {0} to {1}?

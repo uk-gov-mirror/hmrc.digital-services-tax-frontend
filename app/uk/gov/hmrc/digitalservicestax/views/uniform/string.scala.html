@@ -56,38 +56,42 @@
             <span class="dst-label__currency">%
         }
         @if(currencyInput){
-            <span class="dst-label__currency">£
-            }
-        @*
-        * Todo - refactor this describedby error/hint string value to be a helper
-        *@
-        @defining(
-            (messages.get(s"${key.mkString(".")}.hint").isDefined, errors.definedAtRoot) match {
-                case (true,true) => s"${key.mkString(".")}-hint ${key.mkString(".")}-error"
-                case (true,false) => s"${key.mkString(".")}-hint"
-                case (false,true) => s"${key.mkString(".")}-error"
-                case _ => ""
-            },
-            key match {
-                case k if k.contains("email") => "email"
-                case _ => "text"
-            }
-        ) { case (describedBy, inputType) =>
-            <input 
-                type="@inputType"
-                class="@{inputClass}@if(errors){ form-control-error}"
-                id="@{key.mkString("_")}-input"
-                @if(telInput){ inputmode="numeric" pattern="[0-9]*" }
-                name="@{key.mkString(".")}"
-                value="@{values}"
-                @autoFields.map { f => autocomplete=@f }
-                @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
-                @if(autoComplete){autocomplete="@{autoComplete}"}
-            />
+            <div class="hmrc-currency-input__wrapper">
         }
+            @*
+            * Todo - refactor this describedby error/hint string value to be a helper
+            *@
+            @defining((messages.get(s"${key.mkString(".")}.hint").isDefined, errors.definedAtRoot) match {
+            case (true,true) => s"${key.mkString(".")}-hint ${key.mkString(".")}-error"
+            case (true,false) => s"${key.mkString(".")}-hint"
+            case (false,true) => s"${key.mkString(".")}-error"
+            case _ => ""
+            }){ describedBy =>
 
-        @if(percentageInput || currencyInput){
+                <input 
+                    class="@{inputClass}@if(errors){ form-control-error}"
+                    id="@{key.mkString("_")}-input"
+                    @if(telInput){ inputmode="numeric" pattern="[0-9]*" }
+                    name="@{key.mkString(".")}"
+                    value="@{values}"
+                    @autoFields.map { f => autocomplete=@f }
+                    @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
+                    @if(autoComplete){autocomplete="@{autoComplete}"}
+                    @if(currencyInput){inputMode="decimal"}
+                />  
+            }
+
+            @if(currencyInput){
+                <span class="hmrc-currency-input__unit" aria-hidden="true">
+                    £
+                </span>
+            }
+
+        @if(percentageInput){
             </span>
+        }
+        @if(currencyInput) {
+            </div>
         }
     }
 </div>

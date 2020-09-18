@@ -159,14 +159,15 @@ trait Widgets {
       }.toEither
     )(_.toString)
 
-  implicit val bigdecimalField: FormField[BigDecimal,Html] =
-    twirlStringFields().simap(x => 
-      {
-        Rule.nonEmpty[String].apply(x.replace(",", "")) andThen
+  implicit val bigdecimalField: FormField[BigDecimal,Html] = {
+    twirlStringFields(
+      customRender = views.html.uniform.string(_,_,_,_,_,"govuk-input-money govuk-input--width-10")
+    ).simap(x => {
+      Rule.nonEmpty[String].apply(x.replace(",", "").replace("£", "")) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(BigDecimal.apply)
-      }.toEither
+    }.toEither
     )(_.toString)
-
+  }
 
   implicit val twirlBoolField = new FormField[Boolean, Html] {
     val True = true.toString.toUpperCase
