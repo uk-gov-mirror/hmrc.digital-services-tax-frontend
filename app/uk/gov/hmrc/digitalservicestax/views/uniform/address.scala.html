@@ -55,7 +55,7 @@
 
     ) { case (formControlClass, autoComplete, errorOpt) =>
         @if(field == "countryCode") {
-            @country_select(key.mkString(".") ++ ".countryCode", values.values.flatten.headOption, errors.nonEmpty, messages)
+            @country_select(key.mkString(".") ++ ".countryCode", values.valueAt("countryCode").flatMap{_.headOption}, errors.nonEmpty, messages)
         } else {
           <div class="form-group@if(errorOpt.nonEmpty) { form-group-error}">
 
