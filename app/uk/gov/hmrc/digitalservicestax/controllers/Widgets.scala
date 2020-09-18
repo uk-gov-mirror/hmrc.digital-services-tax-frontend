@@ -161,7 +161,7 @@ trait Widgets {
 
   implicit val bigdecimalField: FormField[BigDecimal,Html] = {
     twirlStringFields(
-      customRender = views.html.uniform.string(_,_,_,_,_,"govuk-input govuk-input--width-10")
+      customRender = views.html.uniform.string(_,_,_,_,_,"govuk-input-2 govuk-input--width-10")
     ).simap(x => {
       Rule.nonEmpty[String].apply(x.replace(",", "")) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(BigDecimal.apply)
