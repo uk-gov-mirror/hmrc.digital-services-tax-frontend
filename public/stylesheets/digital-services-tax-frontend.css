@@ -1136,22 +1136,17 @@ strong, b {
     -moz-osx-font-smoothing: grayscale;
     font-weight: 400;
     font-size: 16px;
-    line-height: 1.25;
+    line-height: 40px;
     box-sizing: border-box;
     width: 100%;
     height: 40px;
     margin-top: 0;
-    padding: 5px 5px 5px 10rem;
+    padding: 5px 32px;
     border: 2px solid #0b0c0c;
     border-radius: 0;
     -webkit-appearance: none;
 
 }
-
-.govuk-input--width-10 {
-    max-width: 23ex;
-}
-
 
 .hmrc-currency-input__wrapper {
     position: relative;
@@ -1162,7 +1157,8 @@ strong, b {
     top: 2px;
     bottom: 2px;
     left: 2px;
-    width: 1.5rem;
+    /* width: 1.5rem; */
+    width: 24px;
     border-right: 2px solid;
     background: #f3f2f1;
     text-align: center;
@@ -1171,5 +1167,40 @@ strong, b {
     -moz-osx-font-smoothing: grayscale;
     font-weight: 700;
     font-size: 16px;
+    /* font-size: 1rem; */
     line-height: 1.25;
+}
+
+@media (min-width: 40.0625em) {
+    .hmrc-currency-input__pence, .hmrc-currency-input__unit, .hmrc-currency-input__unit--pence {
+        font-size: 19px;
+        /* font-size: 1.1875rem; */
+        /* line-height: 1.31579; */
+        line-height: 32px;
+    }
+}
+
+.hmrc-currency-input__unit~.govuk-input, .hmrc-currency-input__unit~.govuk-input-2 {
+    padding-left: 2rem;
+}
+
+.govuk-input--width-10 {
+    max-width: 23ex;
+}
+
+.govuk-input-2:focus {
+    outline: 3px solid #fd0;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 2px;
+}
+
+.hmrc-currency-input__wrapper .govuk-input-2.form-control-error {
+    border-width: 4px;
+}
+
+.hmrc-currency-input__wrapper:focus-within .hmrc-currency-input__unit, .hmrc-currency-input__wrapper .form-control-error~.hmrc-currency-input__unit {
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    line-height: 30px
 }
