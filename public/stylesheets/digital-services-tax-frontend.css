@@ -1134,7 +1134,7 @@ strong, b {
     /* border: 2px solid #0b0c0c; */
 }
 
-.govuk-input-2 {
+.govuk-input-money {
     font-family: GDS Transport,Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -1184,7 +1184,7 @@ strong, b {
     }
 }
 
-.hmrc-currency-input__unit~.govuk-input, .hmrc-currency-input__unit~.govuk-input-2 {
+.hmrc-currency-input__unit~.govuk-input, .hmrc-currency-input__unit~.govuk-input-money {
     padding-left: 2rem;
 }
 
@@ -1192,13 +1192,13 @@ strong, b {
     max-width: 23ex;
 }
 
-.govuk-input-2:focus {
+.govuk-input-money:focus {
     outline: 3px solid #fd0;
     outline-offset: 0;
     box-shadow: inset 0 0 0 2px;
 }
 
-.hmrc-currency-input__wrapper .govuk-input-2.form-control-error {
+.hmrc-currency-input__wrapper .govuk-input-money.form-control-error {
     border-width: 4px;
 }
 
