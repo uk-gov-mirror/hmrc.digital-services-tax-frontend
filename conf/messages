@@ -212,7 +212,7 @@ registration-sent.detail=We received your registration for {0} for the Digital S
 registration-sent.email= We have sent a confirmation email to {0}.
 registration-sent.what-happens-next.title=What happens next
 registration-sent.what-happens-next.p1=We will send your Digital Services Tax registration number to {0} in \
-  the next 5 days.
+  the next 24 hours.
 registration-sent.help-using-this-service.title=Help using this service
 registration-sent.print-save=Print or save this page
 registration-sent.help-using-this-service.p1=For help with payments and returns, <a href="{0}">check the Digital Services Tax guidance</a>.

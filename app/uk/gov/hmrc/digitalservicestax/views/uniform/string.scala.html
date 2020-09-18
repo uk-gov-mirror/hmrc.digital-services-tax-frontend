@@ -56,7 +56,10 @@
             <span class="dst-label__currency">%
         }
         @if(currencyInput){
-            <span class="dst-label__currency">£
+            <div class="hmrc-currency-input__wrapper">
+            <span class="hmrc-currency-input__unit" aria-hidden="true">
+                £
+            </span>
             }
         @*
         * Todo - refactor this describedby error/hint string value to be a helper
@@ -67,6 +70,7 @@
         case (false,true) => s"${key.mkString(".")}-error"
         case _ => ""
         }){ describedBy =>
+
             <input 
                 class="@{inputClass}@if(errors){ form-control-error}"
                 id="@{key.mkString("_")}-input"
@@ -76,11 +80,15 @@
                 @autoFields.map { f => autocomplete=@f }
                 @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
                 @if(autoComplete){autocomplete="@{autoComplete}"}
+                @if(currencyInput){inputMode="decimal"}
             />  
         }
 
-        @if(percentageInput || currencyInput){
+        @if(percentageInput){
             </span>
+        }
+        @if(currencyInput) {
+            </div>
         }
     }
 </div>

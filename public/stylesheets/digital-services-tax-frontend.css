@@ -1027,32 +1027,32 @@ strong, b {
     max-width: 43px;
 }
 
-.govuk-input {
-    font-family: "nta",Arial,sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 1.25;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 100%;
-    height: 40px;
-    margin-top: 0;
-    padding: 5px;
-    border: 2px solid #0b0c0c;
-    border-radius: 0;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
+/*.govuk-input {*/
+    /*font-family: "nta",Arial,sans-serif;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*font-weight: 400;*/
+    /*font-size: 16px;*/
+    /*line-height: 1.25;*/
+    /*-webkit-box-sizing: border-box;*/
+    /*box-sizing: border-box;*/
+    /*width: 100%;*/
+    /*height: 40px;*/
+    /*margin-top: 0;*/
+    /*padding: 5px;*/
+    /*border: 2px solid #0b0c0c;*/
+    /*border-radius: 0;*/
+    /*-webkit-appearance: none;*/
+    /*-moz-appearance: none;*/
+    /*appearance: none;*/
+/*}*/
 
-@media (min-width: 641px) {
-    .govuk-input {
-        font-size: 19px;
-        line-height: 1.31579;
-    }
-}
+/*@media (min-width: 641px) {*/
+    /*.govuk-input {*/
+        /*font-size: 19px;*/
+        /*line-height: 1.31579;*/
+    /*}*/
+/*}*/
 
 .govuk-input--width-4 {
     max-width: 72px;
@@ -1129,3 +1129,47 @@ strong, b {
     padding: 7px 0px 7px 7px;
     /* border: 2px solid #0b0c0c; */
 }
+
+/*.govuk-input-2 {*/
+    /*font-family: GDS Transport,Arial,sans-serif;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*font-weight: 400;*/
+    /*font-size: 16px;*/
+    /*line-height: 1.25;*/
+    /*box-sizing: border-box;*/
+    /*width: 100%;*/
+    /*height: 40px;*/
+    /*margin-top: 0;*/
+    /*padding: 5px 5px 5px 10rem;*/
+    /*border: 2px solid #0b0c0c;*/
+    /*border-radius: 0;*/
+    /*-webkit-appearance: none;*/
+    /**/
+/*}*/
+
+/*.govuk-input--width-10 {*/
+    /*max-width: 23ex;*/
+/*}*/
+
+
+/*.hmrc-currency-input__wrapper {*/
+    /*position: relative;*/
+/*}*/
+
+/*.hmrc-currency-input__unit {*/
+    /*position: absolute;*/
+    /*top: 2px;*/
+    /*bottom: 2px;*/
+    /*left: 2px;*/
+    /*width: 1.5rem;*/
+    /*border-right: 2px solid;*/
+    /*background: #f3f2f1;*/
+    /*text-align: center;*/
+    /*font-family: GDS Transport,Arial,sans-serif;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*font-weight: 700;*/
+    /*font-size: 16px;*/
+    /*line-height: 1.25;*/
+/*}*/
