@@ -509,6 +509,7 @@ report-social-media-loss.FALSE=No
 report-social-media-loss.required=Select yes if the {0} made a loss on its social media activity
 
 report-social-media-operating-margin.heading=What was the {0}’s operating margin on its social media activity?
+report-social-media-operating-margin.hint=For example, 25 or 100%.
 report-social-media-operating-margin.required=Enter the {0}’s operating margin on its social media activity
 report-social-media-operating-margin.not-a-number=Enter the {0}’s operating margin on its social media activity \
   in the correct format, like 25 or 100%
