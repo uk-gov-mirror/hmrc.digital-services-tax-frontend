@@ -144,7 +144,9 @@ trait Widgets {
     )(_.toString)
 
   implicit val byteField: FormField[Byte,Html] =
-    twirlStringFields().simap(x => 
+    twirlStringFields(
+      customRender = views.html.uniform.string(_,_,_,_,_,"form-control govuk-input--width-4")
+    ).simap(x =>
       {
         Rule.nonEmpty[String].apply(x) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toByte)
@@ -154,7 +156,7 @@ trait Widgets {
   implicit val longField: FormField[Long,Html] =
     twirlStringFields().simap(x => 
       {
-        Rule.nonEmpty[String].apply(x) andThen
+        Rule.nonEmpty[String].apply(x.replace("%", "")) andThen
         Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toLong)
       }.toEither
     )(_.toString)
