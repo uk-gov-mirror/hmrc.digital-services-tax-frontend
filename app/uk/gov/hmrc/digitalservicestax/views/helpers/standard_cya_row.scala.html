@@ -20,7 +20,8 @@
     <dt class="cya-question">@messages(s"$key.$subKey.question")</dt>
     <dd class="cya-answer">@currency @field</dd>
     <dd class="app-check-your-answers__change">
-        <a href="@changeLink">@messages("common.change")
+        <a href="@changeLink">
+            <span aria-hidden="true">@messages("common.change")</span>
             <span class="govuk-visually-hidden">@messages(s"$key.$subKey.change")</span>
         </a>
     </dd>
