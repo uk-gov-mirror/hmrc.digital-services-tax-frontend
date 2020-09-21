@@ -51,10 +51,7 @@
 
 <div class="form-group@if(errors.definedAtRoot){ form-group-error}">
     @standard_field(key, errors, "string", messages) {
-    
-        @if(percentageInput){
-            <span class="dst-label__currency">%
-        }
+
         @if(currencyInput){
             <div class="hmrc-currency-input__wrapper">
         }
@@ -78,7 +75,8 @@
                     @if(describedBy.nonEmpty){aria-describedby="@describedBy"}
                     @if(autoComplete){autocomplete="@{autoComplete}"}
                     @if(currencyInput){inputMode="decimal"}
-                />  
+                    @if(percentageInput){inputMode="numeric" pattern="[0-9]*"}
+                />
             }
 
             @if(currencyInput){
@@ -87,9 +85,6 @@
                 </span>
             }
 
-        @if(percentageInput){
-            </span>
-        }
         @if(currencyInput) {
             </div>
         }
