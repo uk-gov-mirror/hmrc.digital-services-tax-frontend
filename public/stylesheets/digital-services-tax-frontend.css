@@ -1027,7 +1027,8 @@ strong, b {
     margin-bottom: 0;
 }
 
-.govuk-input--width-2 {
+.govuk-input--width-2, .govuk-input--width-2[type="text"] {
+    width: 100%;
     max-width: 43px;
 }
 
@@ -1058,7 +1059,8 @@ strong, b {
     }
 }
 
-.govuk-input--width-4 {
+.govuk-input--width-4, .govuk-input--width-4[type="text"] {
+    width: 100%;
     max-width: 72px;
 }
 
