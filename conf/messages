@@ -330,7 +330,7 @@ ultimate-parent-company-name.length.exceeded=Name of group’s ultimate global p
 ultimate-parent-company-name.invalid=Name of group’s ultimate global parent company must only include letters a to z, numbers,hyphens, apostrophes, ampersands (&), and spaces
 
 #check ultimate parent company address
-check-ultimate-parent-company-address.required=Select yes if the registered office address of {0} is in the UK?
+check-ultimate-parent-company-address.required=Select yes if the registered office address of {0} is in the UK
 
 ultimate-parent-company-uk-address.line1.required=Enter the building and street of your contact address
 ultimate-parent-company-uk-address.line1.invalid=Building and street must only include letters a to z, numbers, apostrophes, full stops, ampersands, hyphens and spaces
