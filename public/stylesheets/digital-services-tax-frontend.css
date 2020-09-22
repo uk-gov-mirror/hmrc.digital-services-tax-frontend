@@ -23,8 +23,15 @@ input[type="text"].autocomplete__input {
 
 .check-your-answers .change-answer,
 .app-check-your-answers__change {
-    text-align: right;
-    padding-right: 0;
+    margin-bottom: 15px;
+}
+
+@media (min-width: 769px) {
+    .check-your-answers .change-answer,
+    .app-check-your-answers__change {
+        text-align: right;
+        padding-right: 0;
+    }
 }
 
 .change-link-title {
