@@ -509,7 +509,7 @@ report-social-media-loss.FALSE=No
 report-social-media-loss.required=Select yes if the {0} made a loss on its social media activity
 
 report-social-media-operating-margin.heading=What was the {0}’s operating margin on its social media activity?
-report-social-media-operating-margin.hint=For example, 25 or 100%.
+report-social-media-operating-margin.hint=Enter a percentage value without decimals, like 1%
 report-social-media-operating-margin.required=Enter the {0}’s operating margin on its social media activity
 report-social-media-operating-margin.not-a-number=Enter the {0}’s operating margin on its social media activity \
   in the correct format, like 25 or 100%
@@ -528,7 +528,7 @@ report-search-engine-loss.FALSE=No
 report-search-engine-loss.required=Select yes if the {0} made a loss on its search engine activity
 
 report-search-engine-operating-margin.heading=What was the {0}’s operating margin on its search engine activity?
-report-search-engine-operating-margin.hint=For example, 25 or 100%.
+report-search-engine-operating-margin.hint=Enter a percentage value without decimals, like 1%
 report-search-engine-operating-margin.required=Enter the {0}’s operating margin on its search engine activity
 report-search-engine-operating-margin.not-a-number=Enter the {0}’s operating margin on its search engine activity in the correct \
   format, like 25 or 100%
@@ -547,7 +547,7 @@ report-online-marketplace-loss.FALSE=No
 report-online-marketplace-loss.required=Select yes if the {0} made a loss on its online marketplace activity
 
 report-online-marketplace-operating-margin.heading=What was the {0}’s operating margin on its online marketplace activity?
-report-online-marketplace-operating-margin.hint=For example, 25 or 100%.
+report-online-marketplace-operating-margin.hint=Enter a percentage value without decimals, like 1%
 report-online-marketplace-operating-margin.not-a-number=Enter the {0}’s operating margin on its online marketplace activity \
   in the correct format, like 25 or 100%
 report-online-marketplace-operating-margin.required=Enter the {0}’s operating margin on its online marketplace activity
