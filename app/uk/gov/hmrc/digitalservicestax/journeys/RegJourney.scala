@@ -30,6 +30,8 @@ import uk.gov.hmrc.digitalservicestax.frontend._
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
+import play.twirl.api.{Html}
+
 object RegJourney {
 
   type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
@@ -156,15 +158,15 @@ object RegJourney {
                     Rule.min(LocalDate.of(2020, 4, 1), "minimum-date") followedBy
                     Rule.max(LocalDate.now.plusYears(1), "maximum-date"),
                   customContent =
-                    message("liability-start-date.maximum-date", groupMessage, formatDate(LocalDate.now.plusYears(1))) ++
-                    message("liability-start-date.minimum-date", groupMessage) ++
-                    message("liability-start-date.day-and-month-and-year.empty", groupMessage) ++
-                    message("liability-start-date.day.empty", groupMessage) ++
-                    message("liability-start-date.month.empty", groupMessage) ++
-                    message("liability-start-date.year.empty", groupMessage) ++
-                    message("liability-start-date.day-and-month.empty", groupMessage) ++
-                    message("liability-start-date.day-and-year.empty", groupMessage) ++
-                    message("liability-start-date.month-and-year.empty", groupMessage)
+                    Html(message("liability-start-date.maximum-date", groupMessage, formatDate(LocalDate.now.plusYears(1)))) ++
+                    Html(message("liability-start-date.minimum-date", groupMessage)) ++
+                    Html(message("liability-start-date.day-and-month-and-year.empty", groupMessage)) ++
+                    Html(message("liability-start-date.day.empty", groupMessage)) ++
+                    Html(message("liability-start-date.month.empty", groupMessage)) ++
+                    Html(message("liability-start-date.year.empty", groupMessage)) ++
+                    Html(message("liability-start-date.day-and-month.empty", groupMessage)) ++
+                    Html(message("liability-start-date.day-and-year.empty", groupMessage)) ++
+                    Html(message("liability-start-date.month-and-year.empty", groupMessage))
                 )
           }
           periodEndDate <- ask[LocalDate] (
@@ -179,16 +181,16 @@ object RegJourney {
                   Rule.max(liabilityDate.plusYears(1), "maximum-date")
               },
             customContent =
-              message("accounting-period-end-date.maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).plusDays(1))) ++
-              message("accounting-period-end-date.fixed-maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).minusDays(1))) ++
-              message("accounting-period-end-date.minimum-date", groupMessage) ++
-              message("accounting-period-end-date.day-and-month-and-year.empty", groupMessage) ++
-              message("accounting-period-end-date.day.empty", groupMessage) ++
-              message("accounting-period-end-date.month.empty", groupMessage) ++
-              message("accounting-period-end-date.year.empty", groupMessage) ++
-              message("accounting-period-end-date.day-and-month.empty", groupMessage) ++
-              message("accounting-period-end-date.day-and-year.empty", groupMessage) ++
-              message("accounting-period-end-date.month-and-year.empty", groupMessage)
+              Html(message("accounting-period-end-date.maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).plusDays(1)))) ++
+              Html(message("accounting-period-end-date.fixed-maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).minusDays(1)))) ++
+              Html(message("accounting-period-end-date.minimum-date", groupMessage)) ++
+              Html(message("accounting-period-end-date.day-and-month-and-year.empty", groupMessage)) ++
+              Html(message("accounting-period-end-date.day.empty", groupMessage)) ++
+              Html(message("accounting-period-end-date.month.empty", groupMessage)) ++
+              Html(message("accounting-period-end-date.year.empty", groupMessage)) ++
+              Html(message("accounting-period-end-date.day-and-month.empty", groupMessage)) ++
+              Html(message("accounting-period-end-date.day-and-year.empty", groupMessage)) ++
+              Html(message("accounting-period-end-date.month-and-year.empty", groupMessage))
           )
           emptyRegNo <- None.pure[F]
         } yield Registration(companyRegWrapper, contactAddress , ultimateParent, contactDetails, liabilityDate, periodEndDate, emptyRegNo)

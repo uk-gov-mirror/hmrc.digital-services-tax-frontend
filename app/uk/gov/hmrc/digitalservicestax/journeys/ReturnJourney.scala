@@ -27,6 +27,8 @@ import cats.implicits._
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
 
+import play.twirl.api.{Html}
+
 object ReturnJourney {
 
   type ReturnTellTypes = Confirmation[Return] :: CYA[(Return, Period)] :: GroupCompany :: NilTypes
@@ -104,11 +106,11 @@ object ReturnJourney {
           s"company-liabilities-$i",
           co,
           customContent =
-            message(s"company-liabilities-$i.heading", co.name, formatDate(period.start), formatDate(period.end)) ++
-            message(s"company-liabilities-$i.required", co.name) ++
-            message(s"company-liabilities-$i.not-a-number", co.name) ++
-            message(s"company-liabilities-$i.length.exceeded", co.name) ++
-            message(s"company-liabilities-$i.invalid", co.name)
+            Html(message(s"company-liabilities-$i.heading", co.name, formatDate(period.start), formatDate(period.end))) ++
+            Html(message(s"company-liabilities-$i.required", co.name)) ++
+            Html(message(s"company-liabilities-$i.not-a-number", co.name)) ++
+            Html(message(s"company-liabilities-$i.length.exceeded", co.name)) ++
+            Html(message(s"company-liabilities-$i.invalid", co.name))
         ).map{(co, _)}
       }.sequence.map{_.toMap}}
     }
@@ -127,17 +129,17 @@ object ReturnJourney {
         ask[Money]("allowance-deducted"),
         ask[Money]("group-liability",
           customContent =
-            message("group-liability.heading", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
-            message("group-liability.required", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
-            message("group-liability.not-a-number", isGroupMessage) ++
-            message("group-liability.length.exceeded", isGroupMessage) ++
-            message("group-liability.invalid", isGroupMessage)
+            Html(message("group-liability.heading", isGroupMessage, formatDate(period.start), formatDate(period.end))) ++
+            Html(message("group-liability.required", isGroupMessage, formatDate(period.start), formatDate(period.end))) ++
+            Html(message("group-liability.not-a-number", isGroupMessage)) ++
+            Html(message("group-liability.length.exceeded", isGroupMessage)) ++
+            Html(message("group-liability.invalid", isGroupMessage))
         ),
         ask[RepaymentDetails]("bank-details") when ask[Boolean](
             "repayment",
             customContent =
-            message("repayment.heading", formatDate(period.start), formatDate(period.end)) ++
-            message("repayment.required", formatDate(period.start), formatDate(period.end))
+            Html(message("repayment.heading", formatDate(period.start), formatDate(period.end))) ++
+            Html(message("repayment.required", formatDate(period.start), formatDate(period.end)))
         )
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA((dstReturn, period)))
