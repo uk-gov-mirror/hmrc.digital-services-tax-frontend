@@ -21,13 +21,12 @@ import scala.language.higherKinds
 
 import data._
 import frontend.formatDate
+import frontend.formatDateNoWrap
 
 import cats.Monad
 import cats.implicits._
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
-
-import play.twirl.api.{Html}
 
 object ReturnJourney {
 
@@ -38,6 +37,9 @@ object ReturnJourney {
     import play.twirl.api.HtmlFormat.escape
     Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
   }
+
+  private def messageNonEscaped(key: String, args: String*) = 
+    Map(key -> (key, args.toList.map (_.toString) ))
 
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes],
@@ -106,11 +108,11 @@ object ReturnJourney {
           s"company-liabilities-$i",
           co,
           customContent =
-            Html(message(s"company-liabilities-$i.heading", co.name, formatDate(period.start), formatDate(period.end))) ++
-            Html(message(s"company-liabilities-$i.required", co.name)) ++
-            Html(message(s"company-liabilities-$i.not-a-number", co.name)) ++
-            Html(message(s"company-liabilities-$i.length.exceeded", co.name)) ++
-            Html(message(s"company-liabilities-$i.invalid", co.name))
+            messageNonEscaped(s"company-liabilities-$i.heading", co.name, formatDateNoWrap(period.start), formatDateNoWrap(period.end)) ++
+            message(s"company-liabilities-$i.required", co.name) ++
+            message(s"company-liabilities-$i.not-a-number", co.name) ++
+            message(s"company-liabilities-$i.length.exceeded", co.name) ++
+            message(s"company-liabilities-$i.invalid", co.name)
         ).map{(co, _)}
       }.sequence.map{_.toMap}}
     }
@@ -129,17 +131,17 @@ object ReturnJourney {
         ask[Money]("allowance-deducted"),
         ask[Money]("group-liability",
           customContent =
-            Html(message("group-liability.heading", isGroupMessage, formatDate(period.start), formatDate(period.end))) ++
-            Html(message("group-liability.required", isGroupMessage, formatDate(period.start), formatDate(period.end))) ++
-            Html(message("group-liability.not-a-number", isGroupMessage)) ++
-            Html(message("group-liability.length.exceeded", isGroupMessage)) ++
-            Html(message("group-liability.invalid", isGroupMessage))
+            messageNonEscaped("group-liability.heading", isGroupMessage, formatDateNoWrap(period.start), formatDateNoWrap(period.end)) ++
+            messageNonEscaped("group-liability.required", isGroupMessage, formatDateNoWrap(period.start), formatDateNoWrap(period.end)) ++
+            message("group-liability.not-a-number", isGroupMessage) ++
+            message("group-liability.length.exceeded", isGroupMessage) ++
+            message("group-liability.invalid", isGroupMessage)
         ),
         ask[RepaymentDetails]("bank-details") when ask[Boolean](
             "repayment",
             customContent =
-            Html(message("repayment.heading", formatDate(period.start), formatDate(period.end))) ++
-            Html(message("repayment.required", formatDate(period.start), formatDate(period.end)))
+            messageNonEscaped("repayment.heading", formatDateNoWrap(period.start), formatDateNoWrap(period.end)) ++
+            messageNonEscaped("repayment.required", formatDateNoWrap(period.start), formatDateNoWrap(period.end))
         )
       ).mapN(Return.apply)
       _ <- tell("check-your-answers", CYA((dstReturn, period)))

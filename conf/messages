@@ -403,7 +403,7 @@ liability-start-date.day-and-year.empty=The date the {0} became liable for Digit
 liability-start-date.month-and-year.empty=The date the {0} became liable for Digital Services Tax must include a month and year
 
 #accounting period end date
-accounting-period-end-date.maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must before {1}
+accounting-period-end-date.maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be before {1}
 accounting-period-end-date.fixed-maximum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be on or before {1}
 accounting-period-end-date.minimum-date=The end date of the {0}’s first accounting period for Digital Services Tax must be after 1 April 2020
 accounting-period-end-date.day-and-month-and-year.empty=Enter the end date of the {0}’s first accounting period for Digital Services Tax

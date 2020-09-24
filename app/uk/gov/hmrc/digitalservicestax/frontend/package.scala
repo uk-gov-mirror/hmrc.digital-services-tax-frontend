@@ -30,6 +30,11 @@ package object frontend {
 
   def formatDate(localDate: LocalDate, dateFormatPattern: String = "d MMMM yyyy"): String = {
     val date = java.util.Date.from(localDate.atStartOfDay(zoneId).toInstant)
+    createDateFormatForPattern(dateFormatPattern).format(date)
+  }
+  
+  def formatDateNoWrap(localDate: LocalDate, dateFormatPattern: String = "d MMMM yyyy"): String = {
+    val date = java.util.Date.from(localDate.atStartOfDay(zoneId).toInstant)
     createDateFormatForPattern(dateFormatPattern).format(date).replaceAll(" ", "&nbsp;")
   }
 
