@@ -20,7 +20,6 @@ package journeys
 import scala.language.higherKinds
 
 import data._
-import frontend.formatDate
 import frontend.formatDateNoWrap
 
 import cats.Monad
@@ -39,7 +38,7 @@ object ReturnJourney {
   }
 
   private def messageNonEscaped(key: String, args: String*) = 
-    Map(key -> (key, args.toList.map (_.toString) ))
+    Map(key -> Tuple2(key, args.toList.map (_.toString) ))
 
   def returnJourney[F[_] : Monad](
     interpreter: Language[F, ReturnTellTypes, ReturnAskTypes],
