@@ -170,6 +170,9 @@ check-your-answers.reg.check-if-group.change=Change if the company you are regis
 check-your-answers.reg.company-name-and-reg-address.question=Company name Registered Office address
 check-your-answers.reg.company-name-and-reg-address.change=Change Company name and Registered Office address
 
+check-your-answers.reg.company-contact-address.question=Contact Address
+check-your-answers.reg.company-contact-address.change=Change Contact Address
+
 check-your-answers.reg.ultimate-parent-company.title=Ultimate global parent company details
 check-your-answers.reg.ultimate-parent-company-name.question=Company name
 check-your-answers.reg.ultimate-parent-company-name.change=Change Company name

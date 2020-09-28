@@ -48,12 +48,45 @@
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@serviceUrl/company-contact-address">
+                    <a href="@serviceUrl/confirm-company-details">
                         <span aria-hidden="true">@messages("common.change")</span>
                         <span class="govuk-visually-hidden">@messages(s"$key.company-name-and-reg-address.change")</span>
                     </a>
                 </dd>
             </div>
+            @if(in.alternativeContact.isDefined){
+                @in.alternativeContact.map{ ac =>
+                    <div>
+                        <dt class="cya-question">@messages(s"$key.company-contact-address.question")</dt>
+                        <dd class="cya-answer">
+                            @for(line <- ac.lines) {
+                                <span>@line</span><br/>
+                            }
+                        </dd>
+                        <dd class="app-check-your-answers__change">
+                            <a href="@serviceUrl/company-contact-address">
+                                <span aria-hidden="true">@messages("common.change")</span>
+                                <span class="govuk-visually-hidden">@messages(s"$key.company-contact-address.change")</span>
+                            </a>
+                        </dd>
+                    </div>
+                }
+            } else {
+                <div>
+                    <dt class="cya-question">@messages(s"$key.company-contact-address.question")</dt>
+                    <dd class="cya-answer">
+                    @for(line <- company.address.lines) {
+                        <span>@line</span><br/>
+                    }
+                    </dd>
+                    <dd class="app-check-your-answers__change">
+                        <a href="@serviceUrl/company-contact-address">
+                            <span aria-hidden="true">@messages("common.change")</span>
+                            <span class="govuk-visually-hidden">@messages(s"$key.company-contact-address.change")</span>
+                        </a>
+                    </dd>
+                </div>
+            }
         </dl>
     </div>
 
@@ -79,7 +112,7 @@
                     }
                 </dd>
                 <dd class="app-check-your-answers__change">
-                    <a href="@serviceUrl/ultimate-parent-company-address">
+                    <a href="@serviceUrl/check-ultimate-parent-company-address">
                         <span aria-hidden="true">@messages("common.change")</span>
                         <span class="govuk-visually-hidden">@messages(s"$key.ultimate-parent-company-address.change")</span>
                     </a>
