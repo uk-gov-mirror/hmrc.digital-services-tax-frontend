@@ -32,13 +32,6 @@
         <h2 class="govuk-heading-m">@messages(s"$key.company.title")</h2>
 
         <dl class="govuk-check-your-answers cya-questions-short">
-            @standard_cya_row(
-                s"$key",
-                "check-if-group",
-                Html(s"${messages(s"common.${in.ultimateParent.fold("no")(_ => "yes")}")}"),
-                s"$serviceUrl/check-if-group"
-            )
-
             <div>
                 <dt class="cya-question">@messages(s"$key.company-name-and-reg-address.question")</dt>
                 <dd class="cya-answer">
@@ -87,6 +80,12 @@
                     </dd>
                 </div>
             }
+            @standard_cya_row(
+                s"$key",
+                "check-if-group",
+                Html(s"${messages(s"common.${in.ultimateParent.fold("no")(_ => "yes")}")}"),
+                s"$serviceUrl/check-if-group"
+            )
         </dl>
     </div>
 
