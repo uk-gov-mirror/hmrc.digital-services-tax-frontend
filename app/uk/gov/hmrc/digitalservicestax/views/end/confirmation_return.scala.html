@@ -14,21 +14,31 @@
  * limitations under the License.
  *@
 
-@(key: String)(implicit messages: UniformMessages[Html])
+@import uk.gov.hmrc.digitalservicestax.frontend.formatDate
+@(key: String, companyName: CompanyName, submittedPeriod: Period, nextPeriod: Period)(implicit messages: UniformMessages[Html])
 
 <div class="govuk-box-highlight">
     <h1 class="heading-xlarge">@messages(s"$key.heading")</h1>
-    <span class="heading-large">@messages(s"$key.detail")</span>
+    <span class="heading-large">@messages(s"$key.detail", companyName, formatDate(submittedPeriod.start), formatDate(submittedPeriod.end))</span>
 </div>
 
-<p class="govuk-body">@messages(s"$key.email")</p>
+<p class="govuk-body">
+    <a href="javascript:window.print()" class="govuk-link">@messages(s"$key.print-save")</a>
+</p>
 
-<div class="subsection">
-    <a href="javascript:window.print()" class="govuk-body">@messages(s"$key.print-save")</a>
-</div>
+<h2 class="govuk-heading-m">@messages("confirmation.what-you-do-next.title")</h2>
+<p class="govuk-body">@messages("confirmation.what-you-do-next.p1", formatDate(nextPeriod.start), formatDate(nextPeriod.end))</p>
+<p class="govuk-body">@messages("confirmation.what-you-do-next.p2", formatDate(nextPeriod.paymentDue), formatDate(nextPeriod.returnDue))</p>
 
 <p>
     <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index()">
         @messages("confirmation.index")
     </a>
+</p>
+
+<p class="govuk-body">
+    <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signOut()">
+    @messages("common.feedback")
+    </a>
+    @messages("common.thirty-seconds")
 </p>

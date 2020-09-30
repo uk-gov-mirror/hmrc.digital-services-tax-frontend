@@ -29,7 +29,7 @@ import ltbs.uniform.validation._
 
 object ReturnJourney {
 
-  type ReturnTellTypes = Confirmation[Return] :: CYA[(Return, Period)] :: GroupCompany :: NilTypes
+  type ReturnTellTypes = Confirmation[(Return, CompanyName, Period, Period)] :: CYA[(Return, Period)] :: GroupCompany :: NilTypes
   type ReturnAskTypes = Set[Activity] :: Money :: RepaymentDetails :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   private def message(key: String, args: String*) = {
