@@ -184,15 +184,7 @@ class ReturnsController @Inject()(
 
   def returnComplete(submittedPeriodKeyString: String): Action[AnyContent] = authorisedAction.async { implicit request =>
     implicit val msg: UniformMessages[Html] = interpreter.messages(request)
-    implicit val persistence: PersistenceEngine[AuthorisedRequest[AnyContent]] =
-      MongoPersistence[AuthorisedRequest[AnyContent]](
-        mongo,
-        collectionName = "uf-returns",
-        appConfig.mongoJourneyStoreExpireAfter
-      )(_.internalId)
     val submittedPeriodKey = Period.Key(submittedPeriodKeyString)
-
-    Redirect(routes.JourneyController.index())
 
     for {
       reg <- backend.lookupRegistration()
@@ -207,8 +199,8 @@ class ReturnsController @Inject()(
               s"${msg("confirmation.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
           )(views.html.end.confirmation_return("confirmation", reg.get.companyReg.company.name, period, outstandingPeriods.head)(msg))
           )
-        }
       }
     }
+  }
 
 }
