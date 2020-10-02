@@ -40,27 +40,25 @@
                         }
                     </dd>
                 </div>
-                <div class="summary-list__row">
-                    <dt class="summary-list__key strong">
-                        @messages("landing.ultimate-parent-name")
-                    </dt>
-                    <dd class="summary-list__value">
-                        @reg.ultimateParent.map { parent =>
+                @reg.ultimateParent.map { parent =>
+                    <div class="summary-list__row">
+                        <dt class="summary-list__key strong">
+                            @messages("landing.ultimate-parent-name")
+                        </dt>
+                        <dd class="summary-list__value">
                             @parent.name
-                        }
-                    </dd>
-                </div>
-                <div class="summary-list__row">
-                    <dt class="summary-list__key strong">
-                        @messages("landing.company-name")
-                    </dt>
-                    <dd class="summary-list__value">
-                        @reg.ultimateParent.map { parent =>
-                            @company.name
-                        }
-                    </dd>
-                </div>
-            </dl>  
+                        </dd>
+                    </div>
+                    <div class="summary-list__row">
+                        <dt class="summary-list__key strong">
+                            @messages("landing.company-name")
+                        </dt>
+                        <dd class="summary-list__value">
+                                @company.name
+                        </dd>
+                    </div>
+                }
+            </dl>
         </div>
     </div>
 
