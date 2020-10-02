@@ -1127,6 +1127,13 @@ strong, b {
     margin-bottom: 20px;
 }
 
+.govuk-link {
+    font-family: "GDS Transport",arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #1d70b8;
+}
+
 .card {
     background: #f8f8f8;
     padding: 20px;

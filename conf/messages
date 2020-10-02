@@ -182,11 +182,11 @@ check-your-answers.reg.ultimate-parent-company-address.change=Change Registered 
 
 check-your-answers.reg.contact-details.title=Contact person’s details
 check-your-answers.reg.contact-details-name.question=Full name
-check-your-answers.reg.contact-details.change.name=full name
+check-your-answers.reg.contact-details.change.name=Change full name
 check-your-answers.reg.contact-details-phone-number.question=Phone number
-check-your-answers.reg.contact-details.change.phone-number=phone number
+check-your-answers.reg.contact-details.change.phone-number=Change phone number
 check-your-answers.reg.contact-details-email.question=Email address
-check-your-answers.reg.contact-details.change.email=email
+check-your-answers.reg.contact-details.change.email=Change email address
 
 check-your-answers.reg.liability-date.title=Accounting period details
 check-your-answers.reg.liability-start-date.question=Liability start date
@@ -695,12 +695,12 @@ check-your-answers.ret.submission.notice=By submitting this notification you are
 
 #ret complete
 confirmation.heading=Return complete
-confirmation.detail=We received your Digital Services Tax return for Social Group Inc for 1 April 2020 to 30 July 2020
-confirmation.email=We have sent a confirmation email to example@company.com.
+confirmation.detail=We received your Digital Services Tax return for {0} for {1} to {2}
+confirmation.print-save=Print or save your return
 
 confirmation.what-you-do-next.title=What you must do next
-confirmation.what-you-do-next.p1=Your next return will be for 1 August 2020 to 31 July 2021.
-confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by 1 April 2022 and submit a return by 31 July 2022.
+confirmation.what-you-do-next.p1=Your next return will be for {0} to {1}.
+confirmation.what-you-do-next.p2=You must pay any Digital Services Tax you owe for your next return period by {0} and submit a return by {1}.
 confirmation.index=Go to your Digital Services Tax details
 
 #error pages

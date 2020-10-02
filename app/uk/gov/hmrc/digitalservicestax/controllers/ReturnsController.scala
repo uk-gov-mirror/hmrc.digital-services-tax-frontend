@@ -74,9 +74,9 @@ class ReturnsController @Inject()(
       views.html.cya.check_your_return_answers(s"$key.ret", in.value._1, in.value._2)(messages)
   }
 
-  private implicit val confirmRetTell = new GenericWebTell[Confirmation[Return], Html] {
-    override def render(in: Confirmation[Return], key: String, messages: UniformMessages[Html]): Html =
-      views.html.end.confirmation_return(key: String)(messages)
+  private implicit val confirmRetTell = new GenericWebTell[Confirmation[(Return, CompanyName, Period, Period)], Html] {
+    override def render(in: Confirmation[(Return, CompanyName, Period, Period)], key: String, messages: UniformMessages[Html]): Html =
+      views.html.end.confirmation_return(key: String, in.value._2: CompanyName, in.value._3: Period, in.value._4: Period)(messages)
   }
 
   private def applyKey(key: Key): Period.Key = key
@@ -174,17 +174,33 @@ class ReturnsController @Inject()(
               )
               playProgram.run(targetId, purgeStateUponCompletion = true, config = JourneyConfig(askFirstListItem = true)) { ret =>
                 backend.submitReturn(period, ret).map{ _ =>
-
-                  Redirect(routes.JourneyController.index)
-                  Ok(views.html.main_template(
-                    title =
-                      s"${msg("confirmation.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
-                  )(views.html.end.confirmation_return("confirmation")(msg)))
+                  Redirect(routes.ReturnsController.returnComplete(periodKeyString))
                 }
               }
           }
         }
     } 
+  }
+
+  def returnComplete(submittedPeriodKeyString: String): Action[AnyContent] = authorisedAction.async { implicit request =>
+    implicit val msg: UniformMessages[Html] = interpreter.messages(request)
+    val submittedPeriodKey = Period.Key(submittedPeriodKeyString)
+
+    for {
+      reg <- backend.lookupRegistration()
+      outstandingPeriods <- backend.lookupOutstandingReturns()
+      allReturns <- backend.lookupAllReturns()
+    } yield {
+      allReturns.find(_.key == submittedPeriodKey) match {
+        case None => NotFound
+        case Some(period) =>
+          Ok(views.html.main_template(
+            title =
+              s"${msg("confirmation.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+          )(views.html.end.confirmation_return("confirmation", reg.get.companyReg.company.name, period, outstandingPeriods.head)(msg))
+          )
+      }
+    }
   }
 
 }
