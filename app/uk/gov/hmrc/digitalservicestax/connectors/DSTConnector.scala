@@ -66,4 +66,5 @@ class DSTConnector (
 
   case class MicroServiceConnectionException(msg: String) extends Exception(msg)
 
+  def doDebug(): Future[Unit] = http.GET[Unit](s"$backendURL/do-debug")
 }

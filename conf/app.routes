@@ -31,3 +31,5 @@ GET        /time-out                           uk.gov.hmrc.digitalservicestax.co
 GET        /accessibility-statement            uk.gov.hmrc.digitalservicestax.controllers.JourneyController.accessibilityStatement()
 GET        /financial-details                  uk.gov.hmrc.digitalservicestax.controllers.JourneyController.financialDetails()
 GET        /pay-your-digital-services-tax      uk.gov.hmrc.digitalservicestax.controllers.PaymentsController.payYourDST()
+
+GET        /do-debug                           uk.gov.hmrc.digitalservicestax.controllers.ReturnsController.doDebug

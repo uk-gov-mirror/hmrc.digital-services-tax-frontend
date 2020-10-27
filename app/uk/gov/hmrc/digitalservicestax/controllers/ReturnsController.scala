@@ -203,4 +203,8 @@ class ReturnsController @Inject()(
     }
   }
 
+  def doDebug(): Action[AnyContent] = Action.async { implicit request => 
+    backend.doDebug().map {_ => Ok("Done")}
+  }
+
 }
