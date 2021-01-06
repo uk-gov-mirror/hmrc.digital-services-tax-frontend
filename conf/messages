@@ -37,6 +37,49 @@ time-out.title=For your security, we signed you out
 time-out.save=Your progress will be saved for 30 days
 
 #Registration
+global-revenues.heading=Do you have annual global revenues of more than £500 million from search engines, \
+  social media platforms or online marketplaces?
+global-revenues.TRUE=Yes
+global-revenues.FALSE=No
+global-revenues.required=Select yes if you have annual global revenues of more than £500 million from search engines, \
+  social media platforms or online marketplaces
+
+global-revenues-not-eligible.kickout.heading=You do not need to register
+global-revenues-not-eligible.kickout.update-details.p1=This is because your annual global revenues from search engines, \
+  social media platforms or online marketplaces are not more than £500 million.
+global-revenues-not-eligible.kickout.change-answers=If this is not correct, \
+  <a href="{0}">\
+  go back and change your answers\
+  </a>.
+global-revenues-not-eligible.kickout.when-to-register=Find out about <a href="{0}">when to register for Digital Services Tax</a>.
+global-revenues-not-eligible.kickout.tax-return.heading=If you need to file a Self Assessment tax return
+global-revenues-not-eligible.kickout.tax-return.p1=You need to use a different service.
+global-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
+  <a href="{0}">\
+  file your Self Assessment tax return online\
+  </a>.
+
+uk-revenues.heading=Do you have annual revenues of more than £25 million from search engine, social media \
+  or online marketplace activities linked to UK users?
+uk-revenues.TRUE=Yes
+uk-revenues.FALSE=No
+uk-revenues.required=Select yes if you have annual revenues of more than £25 million from search engine, social media \
+  or online marketplace activities linked to UK users
+
+uk-revenues-not-eligible.kickout.heading=You do not need to register
+uk-revenues-not-eligible.kickout.update-details.p1=This is because your annual revenues from search engine, \
+  social media or online marketplace activities linked to UK users are not more than £25 million.
+uk-revenues-not-eligible.kickout.change-answers=If this is not correct, \
+  <a href="{0}">\
+  go back and change your answers\
+  </a>.
+uk-revenues-not-eligible.kickout.when-to-register=Find out about <a href="{0}">when to register for Digital Services Tax</a>.
+uk-revenues-not-eligible.kickout.tax-return.heading=If you need to file a Self Assessment tax return
+uk-revenues-not-eligible.kickout.tax-return.p1=You need to use a different service.
+uk-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
+  <a href="{0}">\
+  file your Self Assessment tax return online\
+  </a>.
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
   Tax Unique Taxpayer Reference?
 check-unique-taxpayer-reference.TRUE=Yes
