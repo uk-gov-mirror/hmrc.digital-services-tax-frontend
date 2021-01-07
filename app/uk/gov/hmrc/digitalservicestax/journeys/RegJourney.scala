@@ -32,7 +32,7 @@ import ltbs.uniform.validation._
 
 object RegJourney {
 
-  type RegTellTypes = Confirmation[Registration] :: CYA[Registration] :: Address :: Kickout :: Company :: Boolean :: NilTypes
+  type RegTellTypes = Confirmation[Registration] :: CYA[(Registration, Boolean, Boolean)] :: Address :: Kickout :: Company :: Boolean :: NilTypes
   type RegAskTypes = UTR :: Postcode :: LocalDate :: ContactDetails :: UkAddress :: ForeignAddress :: Boolean :: CompanyName :: NilTypes
 
 
@@ -198,7 +198,7 @@ object RegJourney {
         } yield Registration(companyRegWrapper, contactAddress , ultimateParent, contactDetails, liabilityDate, periodEndDate, emptyRegNo)
       }
 
-      _ <- tell("check-your-answers", CYA(registration))
+      _ <- tell("check-your-answers", CYA((registration, globalRevenues, ukRevenues)))
     } yield (registration)
   }
 

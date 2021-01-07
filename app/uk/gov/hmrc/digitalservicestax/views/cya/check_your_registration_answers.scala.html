@@ -20,7 +20,7 @@
 @import uk.gov.hmrc.digitalservicestax.views.html.helpers._
 
 
-@(key: String, in: Registration)(implicit messages: UniformMessages[Html])
+@(key: String, in: Registration, aboveGlobalRevenues: Boolean, aboveUkRevenues: Boolean)(implicit messages: UniformMessages[Html])
 
 @company = @{in.companyReg.company}
 
@@ -28,6 +28,25 @@
 
 <div class="govuk-grid-column-two-thirds">
     <h1 class="heading-xlarge">@messages(s"$key.title")</h1>
+
+    <div class="subsection--wide">
+        <h2 class="govuk-heading-m">@messages(s"$key.revenues.title")</h2>
+        <dl class="govuk-check-your-answers cya-questions-short">
+            @standard_cya_row(
+                s"$key",
+                "global-revenues",
+                Html(s"${messages(s"common.${if(aboveGlobalRevenues){"yes"}else{"no"}}")}"),
+                s"$serviceUrl/global-revenues"
+            )
+            @standard_cya_row(
+                s"$key",
+                "uk-revenues",
+                Html(s"${messages(s"common.${if(aboveUkRevenues){"yes"}else{"no"}}")}"),
+                s"$serviceUrl/uk-revenues"
+            )
+        </dl>
+    </div>
+
     <div class="subsection--wide">
         <h2 class="govuk-heading-m">@messages(s"$key.company.title")</h2>
 
