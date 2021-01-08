@@ -30,7 +30,7 @@
     @*<p>@messages.get(s"$key.kickout.update-details.p3")</p>*@
 
     @if(key === "details-not-correct") {
-        <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signOut()" class="button">
+        <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signOut()" class="button" role="button">
             @messages("common.sign-out")
         </a>
     } else {

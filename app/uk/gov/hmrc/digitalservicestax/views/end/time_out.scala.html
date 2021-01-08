@@ -23,7 +23,7 @@
     <p>@messages("time-out.save")</p>
 
     <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.timeIn(
-        request.headers.get("Referer").getOrElse(appConfig.dstIndexPage))" class="button">
+        request.headers.get("Referer").getOrElse(appConfig.dstIndexPage))" class="button" role="button">
         @messages("common.sign-in")
     </a>
 }
