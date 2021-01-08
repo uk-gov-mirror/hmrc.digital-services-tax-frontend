@@ -4,6 +4,7 @@
     showHideContent.init()
     
     GOVUK.shimLinksWithButtonRole.init()
+    GOVUK.initAll()
 
     // Error summary focus
     function setUpErrorSummary() {
