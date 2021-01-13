@@ -39,6 +39,7 @@ time-out.save=Your progress will be saved for 30 days
 #Registration
 global-revenues.heading=Do you or the group have annual global revenues from search engines, social media platforms or \
   online marketplaces of more than £500 million?
+global-revenues.heading.hint=Check if you must register
 global-revenues.TRUE=Yes
 global-revenues.FALSE=No
 global-revenues.required=Select yes if you or the group have annual global revenues from search engines, \
@@ -61,6 +62,7 @@ global-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
 
 uk-revenues.heading=Do you or the group have annual revenues from search engine, social media or online marketplace \
   activities linked to UK users of more than £25 million?
+uk-revenues.heading.hint=Check if you must register
 uk-revenues.TRUE=Yes
 uk-revenues.FALSE=No
 uk-revenues.required=Select yes if you or the group have annual revenues from search engine, social \
@@ -82,27 +84,34 @@ uk-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
   </a>.
 check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
   Tax Unique Taxpayer Reference?
+check-unique-taxpayer-reference.heading.hint=Your company details
 check-unique-taxpayer-reference.TRUE=Yes
 check-unique-taxpayer-reference.FALSE=No
 check-unique-taxpayer-reference.required=Select yes if the company you are registering has a UK Corporation Tax Unique Taxpayer Reference
 
 enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
+enter-utr.heading.hint=Your company details
 enter-utr.hint=This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. \
   It may be called ‘reference’, ‘UTR’ or ‘official use’. \
   You can <a target=_blank href="https://www.gov.uk/find-lost-utr-number">find a lost UTR (opens in a new window or tab)</a>.
 
 company-registered-office-postcode.heading=What is the postcode of the company’s Registered Office address?
+company-registered-office-postcode.heading.hint=Your company details
 
 enter-postcode.heading=What is the postcode of the company’s registered office address?
+enter-postcode.heading.hint=Your company details
 
 company-name.heading=What is the name of the company you want to register?
+company-name.heading.hint=Your company details
 company-name.hint=This is the name registered with an official company register, such as Companies House.
 
 check-company-registered-office-address.heading=Is the registered office address of {0} in the UK?
+check-company-registered-office-address.heading.hint=Your company details
 check-company-registered-office-address.TRUE=Yes
 check-company-registered-office-address.FALSE=No
 
 company-registered-office-uk-address.heading=Where is the registered office address of {0}?
+company-registered-office-uk-address.heading.hint=Your company details
 company-registered-office-uk-address.line1.heading=Building or street
 company-registered-office-uk-address.line2.heading=Building or street line 2 (optional)
 company-registered-office-uk-address.line3.heading=Town or city (optional)
@@ -110,6 +119,7 @@ company-registered-office-uk-address.line4.heading=County (optional)
 company-registered-office-uk-address.postalCode.heading=Postcode
 
 company-registered-office-international-address.heading=Where is the registered office address of {0}?
+company-registered-office-international-address.heading.hint=Your company details
 company-registered-office-international-address.line1.heading=Address line 1
 company-registered-office-international-address.line2.heading=Address line 2 (optional)
 company-registered-office-international-address.line3.heading=Address line 3 (optional)
@@ -117,19 +127,23 @@ company-registered-office-international-address.line4.heading=Address line 4 (op
 company-registered-office-international-address.countryCode.heading=Country
 
 confirm-company-details.heading=Is this the company you want to register as the responsible member?
+confirm-company-details.heading.hint=Your company details
 confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
 confirm-company-details.TRUE=Yes
 confirm-company-details.FALSE=No
 
 company-contact-address.heading=Can we use this address to contact you about your Digital Services Tax?
+company-contact-address.heading.hint=Your company details
 company-contact-address.TRUE=Yes
 company-contact-address.FALSE=No - I want to enter a different address
 
 check-contact-address.heading=Is your contact address in the UK?
+check-contact-address.heading.hint=Your company details
 check-contact-address.TRUE=Yes
 check-contact-address.FALSE=No
 
 contact-uk-address.heading=What is your contact address?
+contact-uk-address.heading.hint=Contact person’s details
 contact-uk-address.line1.heading=Building or street
 contact-uk-address.line2.heading=Building or street line 2 (optional)
 contact-uk-address.line3.heading=Town or city (optional)
@@ -137,6 +151,7 @@ contact-uk-address.line4.heading=County (optional)
 contact-uk-address.postalCode.heading=Postcode
 
 contact-international-address.heading=What is your contact address?
+contact-international-address.heading.hint=Contact person’s details
 contact-international-address.line1.heading=Address line 1
 contact-international-address.line2.heading=Address line 2 (optional)
 contact-international-address.line3.heading=Address line 3 (optional)
@@ -144,6 +159,7 @@ contact-international-address.line4.heading=Address line 4 (optional)
 contact-international-address.countryCode.heading=Country
 
 check-if-group.heading=Is the company you want to register part of a group?
+check-if-group.heading.hint=Your company details
 check-if-group.details=What we mean by a ‘group’
 check-if-group.details.text=<p>For the Digital Services Tax, a group is a parent company and all its consolidated subsidiaries.</p>\
   <p>A parent company is an entity that is (one of the following):</p>\
@@ -158,13 +174,16 @@ check-if-group.TRUE=Yes
 check-if-group.FALSE=No
 
 ultimate-parent-company-name.heading=What is the name of the group’s ultimate global parent company?
+ultimate-parent-company-name.heading.hint=Ultimate parent company details
 ultimate-parent-company-name.hint=This is the name registered with an official company register, such as Companies House.
 
 check-ultimate-parent-company-address.heading=Is the registered office address of {0} in the UK?
+check-ultimate-parent-company-address.heading.hint=Ultimate parent company details
 check-ultimate-parent-company-address.TRUE=Yes
 check-ultimate-parent-company-address.FALSE=No
 
 ultimate-parent-company-uk-address.heading=What is the registered office address of {0}?
+ultimate-parent-company-uk-address.heading.hint=Ultimate parent company details
 ultimate-parent-company-uk-address.line1.heading=Building or street
 ultimate-parent-company-uk-address.line2.heading=Building or street line 2 (optional)
 ultimate-parent-company-uk-address.line3.heading=Town or city (optional)
@@ -172,14 +191,15 @@ ultimate-parent-company-uk-address.line4.heading=County (optional)
 ultimate-parent-company-uk-address.postalCode.heading=Postcode
 
 ultimate-parent-company-international-address.heading=What is the registered office address of {0}?
+ultimate-parent-company-international-address.heading.hint=Ultimate parent company details
 ultimate-parent-company-international-address.line1.heading=Address line 1
 ultimate-parent-company-international-address.line2.heading=Address line 2 (optional)
 ultimate-parent-company-international-address.line3.heading=Address line 3 (optional)
 ultimate-parent-company-international-address.line4.heading=Address line 4 (optional)
 ultimate-parent-company-international-address.countryCode.heading=Country
 
-contact-details.heading=Contact person’s details
-contact-details.intro=We will use these details if we need to discuss your Digital Services Tax.
+contact-details.heading=Who can we contact if we need to discuss your registration?
+contact-details.heading.hint=Contact person’s details
 contact-details.forename.heading=First name
 contact-details.surname.heading=Last name
 contact-details.phoneNumber.heading= Phone number
@@ -188,16 +208,19 @@ contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
 
 check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
+check-liability-date.heading.hint=Accounting period details
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
 
+liability-start-date.heading.hint=Accounting period details
 liability-start-date.heading=When did the company become liable for Digital Services Tax?
 liability-start-date.hint=For example, 31 7 2020.
 liability-start-date.Date.day.heading=Day
 liability-start-date.Date.month.heading=Month
 liability-start-date.Date.year.heading=Year
 
-accounting-period-end-date.heading= What is the end date of the company’s first accounting period for Digital Services Tax?
+accounting-period-end-date.heading=What is the end date of the company’s first accounting period for Digital Services Tax?
+accounting-period-end-date.heading.hint=Accounting period details
 accounting-period-end-date.hint=For example, 31 7 2020.
 accounting-period-end-date.Date.day.heading=Day
 accounting-period-end-date.Date.month.heading=Month
