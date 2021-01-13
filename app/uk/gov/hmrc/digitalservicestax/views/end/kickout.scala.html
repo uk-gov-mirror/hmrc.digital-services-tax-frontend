@@ -19,19 +19,40 @@
 
 @(key: String)(implicit messages: UniformMessages[Html], appConfig: AppConfig)
 
+@signOutKey = @{key === "details-not-correct" || key === "global-revenues-not-eligible" || key === "uk-revenues-not-eligible"}
+
 <div class="kickout govuk-grid-column-two-thirds">
 
     <h1 class="heading-xlarge">@messages.get(s"$key.kickout.heading")</h1>
 
     <p>@messages.get(s"$key.kickout.update-details.p1")</p>
     <p>@messages.get(s"$key.kickout.update-details.p2")</p>
+    <p>
+        @messages.get(
+            s"$key.kickout.change-answers",
+            key match {
+                case "uk-revenues-not-eligible" => s"/${appConfig.serviceName}/register/uk-revenues"
+                case "global-revenues-not-eligible" => s"/${appConfig.serviceName}/register/global-revenues"
+                case _ => s"/${appConfig.serviceName}"
+            }
+        )
+    </p>
+    <p>
+        @messages.get(
+            s"$key.kickout.when-to-register",
+            "https://www.gov.uk/guidance/register-for-digital-services-tax-and-change-your-details"
+        )
+    </p>
+    <h2 class="govuk-heading-m">@messages.get(s"$key.kickout.tax-return.heading")</h2>
+    <p>@messages.get(s"$key.kickout.tax-return.p1")</p>
+    <p>@messages.get(s"$key.kickout.tax-return.p2", "https://www.gov.uk/log-in-file-self-assessment-tax-return")</p>
 
     @*TODO sign user out and provide a sign in link*@
     @*<p>@messages.get(s"$key.kickout.update-details.p3")</p>*@
 
-    @if(key === "details-not-correct") {
+    @if(signOutKey) {
         <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signOut()" class="button" role="button">
-            @messages("common.sign-out")
+            @messages("common.finish-and-sign-out")
         </a>
     } else {
         <a href="/@appConfig.serviceName/" class="button" role="button">

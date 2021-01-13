@@ -42,6 +42,28 @@ class RegJourneySpec extends FlatSpec with Matchers {
 
   val defaultInterpreter: TestRegInterpreter = new TestRegInterpreter
 
+  "when the global revenue is under £500m we" should "kick the user out" in {
+    implicit val sampleBooleanAsk = instances(false)
+
+    val caught = intercept[IllegalStateException] {
+      RegJourney.registrationJourney(new TestRegInterpreter, testService).value.run
+    }
+
+    assert(caught.getMessage.contains("Journey end at global-revenues-not-eligible"))
+  }
+
+  "when the UK revenue is under £25m we" should "kick the user out" in {
+    implicit val sampleBooleanAsk = instancesF {
+      case "uk-revenues" => List(false)
+      case _ => List(true)
+    }
+    val caught = intercept[IllegalStateException] {
+      RegJourney.registrationJourney(new TestRegInterpreter, testService).value.run
+    }
+
+    assert(caught.getMessage.contains("Journey end at uk-revenues-not-eligible"))
+  }
+
   "when there is a Company from sign in accepting this" should "give you a Registration for that Company " in {
     val reg: Registration = RegJourney.registrationJourney(
       defaultInterpreter,
@@ -51,7 +73,10 @@ class RegJourneySpec extends FlatSpec with Matchers {
   }
 
   "when there is no Company from sign in and the user does not supply a UTR we" should "get a Registration with the supplied Company name" in {
-    implicit val sampleBooleanAsk = instances(false)
+    implicit val sampleBooleanAsk = instancesF {
+      case "check-unique-taxpayer-reference" => List(false)
+      case _ => List(true)
+    }
 
     val reg = RegJourney.registrationJourney(
       new TestRegInterpreter,
@@ -64,8 +89,11 @@ class RegJourneySpec extends FlatSpec with Matchers {
   }
 
   "when there is no Company from sign in & no supplied UTR & an InternationalAddress is specified we" should "get a Registration with an InternatinalAddress" in {
-    implicit val sampleBooleanAsk = instances(false)
-
+    implicit val sampleBooleanAsk = instancesF {
+      case "check-unique-taxpayer-reference" => List(false)
+      case "check-company-registered-office-address" => List(false)
+      case _ => List(true)
+    }
     val reg = RegJourney.registrationJourney(
       new TestRegInterpreter,
       new TestDstService {
@@ -104,7 +132,10 @@ class RegJourneySpec extends FlatSpec with Matchers {
   }
 
   "when there is a Company from sign in, saying this is the wrong company" should "kick you out of the journey " in {
-    implicit val sampleBooleanAsk = instances(false)
+    implicit val sampleBooleanAsk = instancesF {
+      case "confirm-company-details" => List(false)
+      case _ => List(true)
+    }
 
     val caught = intercept[IllegalStateException] {
       RegJourney.registrationJourney(new TestRegInterpreter, testService).value.run
