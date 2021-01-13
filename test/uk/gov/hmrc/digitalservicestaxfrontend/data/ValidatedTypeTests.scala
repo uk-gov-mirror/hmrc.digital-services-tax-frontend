@@ -68,9 +68,9 @@ class ValidatedTypeTests extends FlatSpec with Matchers with ScalaCheckDrivenPro
     }
   }
 
-  it should "correctly substract 3 months from a period" in {
+  it should "correctly add 9 months and one day to a period" in {
     forAll { period: Period =>
-      period.paymentDue shouldEqual period.end.minusMonths(3)
+      period.paymentDue shouldEqual period.end.plusMonths(9).plusDays(1)
     }
   }
 
