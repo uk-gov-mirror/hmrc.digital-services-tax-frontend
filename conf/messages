@@ -206,12 +206,6 @@ accounting-period-end-date.Date.year.heading=Year
 #Reg cya
 check-your-answers.reg.title=Check your answers before sending your application
 
-check-your-answers.reg.revenues.title=Global and UK Revenues
-check-your-answers.reg.global-revenues.question=Do you have annual global revenues of more than £500 million from search engines, \
-  social media platforms or online marketplaces?
-check-your-answers.reg.uk-revenues.question=Do you have annual revenues of more than £25 million from search engine, social media \
-  or online marketplace activities linked to UK users?
-
 check-your-answers.reg.company.title=Responsible member details
 
 check-your-answers.reg.check-if-group.question=Is the company you are registering part of a group?

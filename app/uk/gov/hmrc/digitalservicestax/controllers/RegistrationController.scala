@@ -59,9 +59,9 @@ class RegistrationController @Inject()(
   private def hod(id: InternalId)(implicit hc: HeaderCarrier) =
     connectors.CachedDstService(backend)(id)
 
-  private implicit val cyaRegTell = new GenericWebTell[CYA[(Registration, Boolean, Boolean)], Html] {
-    override def render(in: CYA[(Registration, Boolean, Boolean)], key: String, messages: UniformMessages[Html]): Html =
-      views.html.cya.check_your_registration_answers(s"$key.reg", in.value._1, in.value._2, in.value._3)(messages)
+  private implicit val cyaRegTell = new GenericWebTell[CYA[Registration], Html] {
+    override def render(in: CYA[Registration], key: String, messages: UniformMessages[Html]): Html =
+      views.html.cya.check_your_registration_answers(s"$key.reg", in.value)(messages)
   }
 
   private implicit val confirmRegTell = new GenericWebTell[Confirmation[Registration], Html] {
