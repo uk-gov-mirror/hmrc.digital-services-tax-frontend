@@ -37,12 +37,12 @@ time-out.title=For your security, we signed you out
 time-out.save=Your progress will be saved for 30 days
 
 #Registration
-global-revenues.heading=Do you have annual global revenues of more than £500 million from search engines, \
-  social media platforms or online marketplaces?
+global-revenues.heading=Do you or the group have annual global revenues from search engines, social media platforms or \
+  online marketplaces of more than £500 million?
 global-revenues.TRUE=Yes
 global-revenues.FALSE=No
-global-revenues.required=Select yes if you have annual global revenues of more than £500 million from search engines, \
-  social media platforms or online marketplaces
+global-revenues.required=Select yes if you or the group have annual global revenues from search engines, \
+  social media platforms or online marketplaces of more than £500 million
 
 global-revenues-not-eligible.kickout.heading=You do not need to register
 global-revenues-not-eligible.kickout.update-details.p1=This is because your annual global revenues from search engines, \
@@ -59,12 +59,12 @@ global-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
   file your Self Assessment tax return online\
   </a>.
 
-uk-revenues.heading=Do you have annual revenues of more than £25 million from search engine, social media \
-  or online marketplace activities linked to UK users?
+uk-revenues.heading=Do you or the group have annual revenues from search engine, social media or online marketplace \
+  activities linked to UK users of more than £25 million?
 uk-revenues.TRUE=Yes
 uk-revenues.FALSE=No
-uk-revenues.required=Select yes if you have annual revenues of more than £25 million from search engine, social media \
-  or online marketplace activities linked to UK users
+uk-revenues.required=Select yes if you or the group have annual revenues from search engine, social \
+  media or online marketplace activities linked to UK users of more than £25 million
 
 uk-revenues-not-eligible.kickout.heading=You do not need to register
 uk-revenues-not-eligible.kickout.update-details.p1=This is because your annual revenues from search engine, \
