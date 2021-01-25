@@ -38,17 +38,16 @@ time-out.title=For your security, we signed you out
 time-out.save=Your progress will be saved for 30 days
 
 #Registration
-global-revenues.heading=Do you or the group have annual global revenues from search engines, social media platforms or \
-  online marketplaces of more than £500 million?
+global-revenues.heading=Does the group you are registering have annual global revenues from search engines, \
+  social media platforms or online marketplaces of more than £500 million?
 global-revenues.heading.hint=Check if you must register
 global-revenues.TRUE=Yes
 global-revenues.FALSE=No
-global-revenues.required=Select yes if you or the group have annual global revenues from search engines, \
-  social media platforms or online marketplaces of more than £500 million
+global-revenues.required=Select yes if the group you are registering have annual global revenues \
+  from search engines, social media platforms or online marketplaces of more than £500 million
 
 global-revenues-not-eligible.kickout.heading=You do not need to register
-global-revenues-not-eligible.kickout.update-details.p1=This is because your annual global revenues from search engines, \
-  social media platforms or online marketplaces are not more than £500 million.
+global-revenues-not-eligible.kickout.update-details.p1=Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
 global-revenues-not-eligible.kickout.change-answers=If this is not correct, \
   <a href="{0}">\
   go back and change your answers\
@@ -61,13 +60,13 @@ global-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
   file your Self Assessment tax return online\
   </a>.
 
-uk-revenues.heading=Do you or the group have annual revenues from search engine, social media or online marketplace \
-  activities linked to UK users of more than £25 million?
+uk-revenues.heading=Does the group you are registering have annual revenues from search engine,\
+   social media or online marketplace activities linked to UK users of more than £25 million?
 uk-revenues.heading.hint=Check if you must register
 uk-revenues.TRUE=Yes
 uk-revenues.FALSE=No
-uk-revenues.required=Select yes if you or the group have annual revenues from search engine, social \
-  media or online marketplace activities linked to UK users of more than £25 million
+uk-revenues.required=Select yes if the group you are registering have annual revenues from search engine, \
+  social media or online marketplace activities linked to UK users of more than £25 million
 
 uk-revenues-not-eligible.kickout.heading=You do not need to register
 uk-revenues-not-eligible.kickout.update-details.p1=This is because your annual revenues from search engine, \
