@@ -106,7 +106,7 @@ company-name.heading=What is the name of the company you want to register?
 company-name.heading.hint=Your company details
 company-name.hint=This is the name registered with an official company register, such as Companies House.
 
-check-company-registered-office-address.heading=Is the registered office address of {0} in the UK?
+check-company-registered-office-address.heading=Is the company’s registered office address in the UK?
 check-company-registered-office-address.heading.hint=Your company details
 check-company-registered-office-address.TRUE=Yes
 check-company-registered-office-address.FALSE=No
