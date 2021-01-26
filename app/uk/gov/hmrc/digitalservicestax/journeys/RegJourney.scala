@@ -47,6 +47,16 @@ object RegJourney {
   ): F[Registration] = {
     import interpreter._
 
+    val internationalAddressJourney = {
+      for {
+        companyName <- ask[CompanyName]("company-name")
+        companyAddress <- ask[ForeignAddress](
+          "company-registered-office-international-address",
+          customContent = message("company-registered-office-international-address.heading", companyName)
+        ).map(identity)
+      } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
+    }
+
     for {
       globalRevenues <- ask[Boolean]("global-revenues")
       _ <- if (!globalRevenues) { end("global-revenues-not-eligible", Kickout("global-revenues-not-eligible")) } else { (()).pure[F] }
@@ -64,45 +74,29 @@ object RegJourney {
           } yield companyRW // useSafeId is false, no utr or safeId sent
 
         // no matching company found
-        case None => ask[Boolean]("check-unique-taxpayer-reference") >>= {
-          case false =>
-            for {
-              companyName <- ask[CompanyName]("company-name")
-              companyAddress <- ask[Boolean](
-                "check-company-registered-office-address",
-                customContent = (
-                    message("check-company-registered-office-address.heading", companyName) ++
-                    message("check-company-registered-office-address.required", companyName)
-                  )
-              ) >>=[Address] {
-                case true =>
-                  ask[UkAddress](
-                    "company-registered-office-uk-address",
-                      customContent = message("company-registered-office-uk-address.heading", companyName)
-                    ).map(identity)
-                case false =>
-                  ask[ForeignAddress](
-                    "company-registered-office-international-address",
-                    customContent = message("company-registered-office-international-address.heading", companyName)
-                  ).map(identity)
-              }
-            } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
+        case None => ask[Boolean]("check-company-registered-office-address") >>= {
+          case false => internationalAddressJourney
           case true =>
             for {
-              utr <- ask[UTR]("enter-utr")
               postcode <- ask[Postcode]("company-registered-office-postcode")
-              companyOpt <- backendService.lookupCompany(utr, postcode)
-              //The user shouln't be signed out here
-              _ <- if (companyOpt.isEmpty) end("cannot-find-company", Kickout("details-not-correct")) else { (()).pure[F] }
-              company = companyOpt.get.company
-              safeId = companyOpt.get.safeId
-              confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
-              //TODO Check if we should be signing the user out
-              _ <- if (!confirmCompany) { end("details-not-correct", Kickout("details-not-correct")) } else { (()).pure[F] }
-            } yield CompanyRegWrapper(company, utr.some, safeId)
+              companyWrapper <- ask[Boolean]("check-unique-taxpayer-reference") >>= {
+                case false => internationalAddressJourney
+                case true =>
+                  for {
+                    utr <- ask[UTR]("enter-utr")
+                    companyOpt <- backendService.lookupCompany(utr, postcode)
+                    //The user shouln't be signed out here
+                    _ <- if (companyOpt.isEmpty) end("cannot-find-company", Kickout("details-not-correct")) else {(()).pure[F]}
+                    company = companyOpt.get.company
+                    safeId = companyOpt.get.safeId
+                    confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
+                    //TODO Check if we should be signing the user out
+                    _ <- if (!confirmCompany) {end("details-not-correct", Kickout("details-not-correct"))} else {(()).pure[F]}
+                  } yield CompanyRegWrapper(company, utr.some, safeId)
+              }
+            } yield companyWrapper
         }
       }
-
 
       registration <- {
         for {

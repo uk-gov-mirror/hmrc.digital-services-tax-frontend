@@ -106,7 +106,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
 
   "when there is no Company from sign in & no supplied UTR & a UkAddress is specified we" should "get a Registration with a UkAddress" in {
     implicit val sampleBooleanAsk = instancesF {
-      case "check-unique-taxpayer-reference" => List(false)
+      case "check-unique-taxpayer-reference" => List(true)
       case _ => List(true)
     }
 
