@@ -47,16 +47,6 @@ object RegJourney {
   ): F[Registration] = {
     import interpreter._
 
-    val internationalAddressJourney = {
-      for {
-        companyName <- ask[CompanyName]("company-name")
-        companyAddress <- ask[ForeignAddress](
-          "company-registered-office-international-address",
-          customContent = message("company-registered-office-international-address.heading", companyName)
-        ).map(identity)
-      } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
-    }
-
     for {
       globalRevenues <- ask[Boolean]("global-revenues")
       _ <- if (!globalRevenues) { end("global-revenues-not-eligible", Kickout("global-revenues-not-eligible")) } else { (()).pure[F] }
@@ -75,12 +65,28 @@ object RegJourney {
 
         // no matching company found
         case None => ask[Boolean]("check-company-registered-office-address") >>= {
-          case false => internationalAddressJourney
+          case false =>
+            for {
+              companyName <- ask[CompanyName]("company-name")
+              companyAddress <- ask[ForeignAddress](
+                "company-registered-office-international-address",
+                customContent = message("company-registered-office-international-address.heading", companyName)
+              ).map(identity)
+            } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
+
           case true =>
             for {
               postcode <- ask[Postcode]("company-registered-office-postcode")
               companyWrapper <- ask[Boolean]("check-unique-taxpayer-reference") >>= {
-                case false => internationalAddressJourney
+                case false =>
+                  for {
+                    companyName <- ask[CompanyName]("company-name")
+                    companyAddress <- ask[UkAddress](
+                      "company-registered-office-uk-address",
+                      customContent = message("company-registered-office-uk-address.heading", companyName)
+                    ).map(identity)
+                  } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
+
                 case true =>
                   for {
                     utr <- ask[UTR]("enter-utr")
