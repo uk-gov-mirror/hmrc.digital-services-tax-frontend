@@ -47,7 +47,8 @@ global-revenues.required=Select yes if the group you are registering have annual
   from search engines, social media platforms or online marketplaces of more than £500 million
 
 global-revenues-not-eligible.kickout.heading=You do not need to register
-global-revenues-not-eligible.kickout.update-details.p1=Does the group you are registering have annual revenues from search engine, social media or online marketplace activities linked to UK users of more than £25 million?
+global-revenues-not-eligible.kickout.update-details.p1=This is because your annual global revenues from search engines, \
+  social media platforms or online marketplaces are not more than £500 million.
 global-revenues-not-eligible.kickout.change-answers=If this is not correct, \
   <a href="{0}">\
   go back and change your answers\
