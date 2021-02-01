@@ -50,6 +50,35 @@
     @*TODO sign user out and provide a sign in link*@
     @*<p>@messages.get(s"$key.kickout.update-details.p3")</p>*@
 
+    @messages.get(s"$key.kickout.other-services-links.heading").map{ h =>
+        <h2 class="govuk-heading-m">@h</h2>
+        <p>
+            <a href="https://www.gov.uk/register-for-self-assessment">
+            @messages.get(s"$key.kickout.other-services-links.link.1")
+            </a>
+        </p>
+        <p>
+            <a href="https://www.gov.uk/log-in-file-self-assessment-tax-return">
+            @messages.get(s"$key.kickout.other-services-links.link.2")
+            </a>
+        </p>
+        <p>
+            <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/change-your-personal-details">
+            @messages.get(s"$key.kickout.other-services-links.link.3")
+            </a>
+        </p>
+        <p>
+            <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/vat-enquiries">
+            @messages.get(s"$key.kickout.other-services-links.link.4")
+            </a>
+        </p>
+        <p>
+            <a href="https://www.gov.uk/government/organisations/hm-revenue-customs/contact/income-tax-enquiries-for-individuals-pensioners-and-employees">
+            @messages.get(s"$key.kickout.other-services-links.link.5")
+            </a>
+        </p>
+    }
+
     @if(signOutKey) {
         <a href="@uk.gov.hmrc.digitalservicestax.controllers.routes.AuthenticationController.signOut()" class="button" role="button">
             @messages("common.finish-and-sign-out")
@@ -59,5 +88,6 @@
             @messages("common.try-again")
         </a>
     }
+
 
 </div>
