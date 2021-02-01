@@ -61,6 +61,13 @@ global-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
   file your Self Assessment tax return online\
   </a>.
 
+global-revenues-not-eligible.kickout.other-services-links.heading=Other services
+global-revenues-not-eligible.kickout.other-services-links.link.1=Register for Self Assessment
+global-revenues-not-eligible.kickout.other-services-links.link.2=File your Self Assessment tax return online
+global-revenues-not-eligible.kickout.other-services-links.link.3=Update your personal details
+global-revenues-not-eligible.kickout.other-services-links.link.4=Contact us about VAT
+global-revenues-not-eligible.kickout.other-services-links.link.5=Contact us about Income Tax
+
 uk-revenues.heading=Does the group you are registering have annual revenues from search engine,\
    social media or online marketplace activities linked to UK users of more than £25 million?
 uk-revenues.heading.hint=Check if you must register
@@ -76,19 +83,26 @@ uk-revenues-not-eligible.kickout.change-answers=If this is not correct, \
   <a href="{0}">\
   go back and change your answers\
   </a>.
-uk-revenues-not-eligible.kickout.when-to-register=Find out about <a href="{0}">when to register for Digital Services Tax</a>.
+
 uk-revenues-not-eligible.kickout.tax-return.heading=If you need to file a Self Assessment tax return
 uk-revenues-not-eligible.kickout.tax-return.p1=You need to use a different service.
 uk-revenues-not-eligible.kickout.tax-return.p2=Find out how to \
   <a href="{0}">\
   file your Self Assessment tax return online\
   </a>.
-check-unique-taxpayer-reference.heading=Does the company you are registering have a UK Corporation \
-  Tax Unique Taxpayer Reference?
+
+uk-revenues-not-eligible.kickout.other-services-links.heading=Other services
+uk-revenues-not-eligible.kickout.other-services-links.link.1=Register for Self Assessment
+uk-revenues-not-eligible.kickout.other-services-links.link.2=File your Self Assessment tax return online
+uk-revenues-not-eligible.kickout.other-services-links.link.3=Update your personal details
+uk-revenues-not-eligible.kickout.other-services-links.link.4=Contact us about VAT
+uk-revenues-not-eligible.kickout.other-services-links.link.5=Contact us about Income Tax
+
+check-unique-taxpayer-reference.heading=Does the company you are registering have a Corporation Tax Unique Taxpayer Reference?
 check-unique-taxpayer-reference.heading.hint=Your company details
 check-unique-taxpayer-reference.TRUE=Yes
 check-unique-taxpayer-reference.FALSE=No
-check-unique-taxpayer-reference.required=Select yes if the company you are registering has a UK Corporation Tax Unique Taxpayer Reference
+check-unique-taxpayer-reference.required=Select yes if the company you are registering has a Corporation Tax Unique Taxpayer Reference
 
 enter-utr.heading=What is the company’s UK Corporation Tax Unique Taxpayer Reference (UTR)?
 enter-utr.heading.hint=Your company details
