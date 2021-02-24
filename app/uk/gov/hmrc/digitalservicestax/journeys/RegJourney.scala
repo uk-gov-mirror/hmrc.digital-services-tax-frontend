@@ -180,10 +180,10 @@ object RegJourney {
                   Rule.max(liabilityDate.plusYears(1).minusDays(1), "fixed-maximum-date")
                 case _ =>
                   Rule.min(LocalDate.of(2020, 4, 2), "minimum-date") followedBy
-                  Rule.max(liabilityDate.plusYears(1), "maximum-date")
+                  Rule.max(liabilityDate.plusYears(1).minusDays(1), "maximum-date")
               },
             customContent =
-              message("accounting-period-end-date.maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).plusDays(1))) ++
+              message("accounting-period-end-date.maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1))) ++
               message("accounting-period-end-date.fixed-maximum-date", groupMessage, formatDate(liabilityDate.plusYears(1).minusDays(1))) ++
               message("accounting-period-end-date.minimum-date", groupMessage) ++
               message("accounting-period-end-date.day-and-month-and-year.empty", groupMessage) ++
