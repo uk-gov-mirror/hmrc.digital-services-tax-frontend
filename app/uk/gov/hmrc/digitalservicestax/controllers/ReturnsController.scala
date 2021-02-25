@@ -20,6 +20,7 @@ package controllers
 import data._
 import config.AppConfig
 import connectors.{DSTConnector, MongoPersistence}
+import cats.implicits.catsKernelOrderingForOrder
 import javax.inject.Inject
 import ltbs.uniform.UniformMessages
 import ltbs.uniform.common.web.{GenericWebTell, JourneyConfig}
@@ -194,10 +195,17 @@ class ReturnsController @Inject()(
       allReturns.find(_.key == submittedPeriodKey) match {
         case None => NotFound
         case Some(period) =>
-          Ok(views.html.main_template(
-            title =
-              s"${msg("confirmation.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
-          )(views.html.end.confirmation_return("confirmation", reg.get.companyReg.company.name, period, outstandingPeriods.head)(msg))
+          Ok(
+            views.html.main_template(
+            title = s"${msg("confirmation.heading")} - ${msg("common.title")} - ${msg("common.title.suffix")}"
+            )(
+              views.html.end.confirmation_return(
+                "confirmation",
+                reg.get.companyReg.company.name,
+                period,
+                outstandingPeriods.toList.minBy(_.start)
+              )(msg)
+            )
           )
       }
     }
