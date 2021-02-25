@@ -29,7 +29,7 @@ import ltbs.uniform.validation._
 
 object ReturnJourney {
 
-  type ReturnTellTypes = Confirmation[(Return, CompanyName, Period, Period)] :: CYA[(Return, Period)] :: GroupCompany :: NilTypes
+  type ReturnTellTypes = Confirmation[(Return, CompanyName, Period, Period)] :: CYA[(Return, Period, CompanyName)] :: GroupCompany :: NilTypes
   type ReturnAskTypes = Set[Activity] :: Money :: RepaymentDetails :: Percent :: Boolean :: List[GroupCompany] :: NilTypes
 
   private def message(key: String, args: String*) = {
@@ -124,7 +124,15 @@ object ReturnJourney {
           case false => Money(BigDecimal(0).setScale(2)).pure[F]
         },
         askAmountForCompanies(groupCos) emptyUnless isGroup,
-        ask[Money]("allowance-deducted"),
+        ask[Money](
+          "allowance-deducted",
+          validation =
+            Rule.nonEmpty[Money]("minimum-money") followedBy
+              Rule.cond[Money]({
+                case money: Money if money <= 25000000 => true
+                case _ => false
+              }, "max-money")
+        ),
         ask[Money]("group-liability",
           customContent =
             message("group-liability.heading", isGroupMessage, formatDate(period.start), formatDate(period.end)) ++
@@ -140,7 +148,8 @@ object ReturnJourney {
             message("repayment.required", formatDate(period.start), formatDate(period.end))
         )
       ).mapN(Return.apply)
-      _ <- tell("check-your-answers", CYA((dstReturn, period)))
+      displayName = registration.ultimateParent.fold(registration.companyReg.company.name)(_.name)
+      _ <- tell("check-your-answers", CYA((dstReturn, period, displayName)))
     } yield dstReturn
   }
 

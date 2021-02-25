@@ -674,6 +674,8 @@ allowance-deducted.not-a-number=The amount of the £25m annual allowance you hav
 allowance-deducted.length.exceeded=The amount of the £25m annual allowance you have deducted from revenues must be 15 numbers or fewer
 allowance-deducted.invalid=The amount of the £25m annual allowance you have deducted from revenues must be an amount \
   of money, like 1,234.56 or 1,560.00
+allowance-deducted.minimum-money=The amount of the £25m annual allowance you have deducted from revenues must be £1 or more
+allowance-deducted.max-money=The amount of the £25m annual allowance you have deducted from revenues must be £25m or less
 
 #Group Liability
 group-liability.heading=What is the {0}’s total UK Digital Services Tax liability for {1} to {2}?
@@ -721,7 +723,7 @@ bank-details.bankAccount.ForeignBankAccount.iban.length.exceeded=International B
 
 #Returns cya
 check-your-answers.ret.title=Check your answers before sending your return for 1 April 2020 to July 2020
-check-your-answers.ret.company.title=Digital Services Tax return details
+check-your-answers.ret.company.title=Digital Services Tax return details for {0}
 check-your-answers.ret.group-liability.question=Group’s total Digital Services Tax liability
 check-your-answers.ret.group-liability.change=Change the group’s total Digital Services Tax liability
 check-your-answers.ret.allowance-deducted.question=Amount of £25m annual allowance claimed
