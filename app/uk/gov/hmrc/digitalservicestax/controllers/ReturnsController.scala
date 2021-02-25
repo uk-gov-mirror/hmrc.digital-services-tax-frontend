@@ -69,9 +69,9 @@ class ReturnsController @Inject()(
       }, messages)
   }
 
-  private implicit val cyaRetTell = new GenericWebTell[CYA[(Return, Period)], Html] {
-    override def render(in: CYA[(Return, Period)], key: String, messages: UniformMessages[Html]): Html =
-      views.html.cya.check_your_return_answers(s"$key.ret", in.value._1, in.value._2)(messages)
+  private implicit val cyaRetTell = new GenericWebTell[CYA[(Return, Period, CompanyName)], Html] {
+    override def render(in: CYA[(Return, Period, CompanyName)], key: String, messages: UniformMessages[Html]): Html =
+      views.html.cya.check_your_return_answers(s"$key.ret", in.value._1, in.value._2, in.value._3)(messages)
   }
 
   private implicit val confirmRetTell = new GenericWebTell[Confirmation[(Return, CompanyName, Period, Period)], Html] {
