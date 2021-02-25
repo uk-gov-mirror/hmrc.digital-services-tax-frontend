@@ -65,7 +65,7 @@ class PaymentsController @Inject()(
           Ok(views.html.main_template(
             title =
               s"${msg("common.title.short")} - ${msg("common.title")}"
-          )(views.html.pay_your_dst(reg.registrationNumber, periods)(msg)))
+          )(views.html.pay_your_dst(reg.registrationNumber, periods.toList.sortBy(_.start))(msg)))
         }
       case Some(reg) =>
         Future.successful(
