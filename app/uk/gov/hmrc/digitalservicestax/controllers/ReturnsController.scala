@@ -20,6 +20,7 @@ package controllers
 import data._
 import config.AppConfig
 import connectors.{DSTConnector, MongoPersistence}
+import cats.implicits.catsKernelOrderingForOrder
 import javax.inject.Inject
 import ltbs.uniform.UniformMessages
 import ltbs.uniform.common.web.{GenericWebTell, JourneyConfig}

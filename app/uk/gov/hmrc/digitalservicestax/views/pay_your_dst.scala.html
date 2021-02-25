@@ -16,7 +16,7 @@
 
 @import uk.gov.hmrc.digitalservicestax.frontend.formatDate
 
-@(regNo: Option[DSTRegNumber], outstanding: Set[Period])(implicit message: UniformMessages[Html])
+@(regNo: Option[DSTRegNumber], outstanding: List[Period])(implicit message: UniformMessages[Html])
 
 
 <a href="@{uk.gov.hmrc.digitalservicestax.controllers.routes.JourneyController.index()}" class="govuk link-back">
