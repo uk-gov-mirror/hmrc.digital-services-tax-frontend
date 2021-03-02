@@ -722,7 +722,7 @@ bank-details.bankAccount.ForeignBankAccount.iban.required=Enter the Internationa
 bank-details.bankAccount.ForeignBankAccount.iban.length.exceeded=International Bank Account Number (IBAN) must be 34 characters or fewer
 
 #Returns cya
-check-your-answers.ret.title=Check your answers before sending your return for 1 April 2020 to July 2020
+check-your-answers.ret.title=Check your answers before sending your return for {0} to {1}
 check-your-answers.ret.company.title=Digital Services Tax return details for {0}
 check-your-answers.ret.group-liability.question=Group’s total Digital Services Tax liability
 check-your-answers.ret.group-liability.change=Change the group’s total Digital Services Tax liability

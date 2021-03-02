@@ -15,13 +15,14 @@
  *@
 
 @import uk.gov.hmrc.digitalservicestax.views.html.helpers._
+@import uk.gov.hmrc.digitalservicestax.frontend.formatDate
 
 @(key: String, ret: Return, per: Period, displayName: CompanyName)(implicit messages: UniformMessages[Html])
 
 @serviceUrl = @{"/digital-services-tax/submit-return"}
 
 <div class="govuk-grid-column-two-thirds">
-    <h1 class="heading-xlarge">@messages(s"$key.title")</h1>
+    <h1 class="heading-xlarge">@messages(s"$key.title", formatDate(per.start), formatDate(per.end))</h1>
     <div class="subsection--wide">
         <h2 class="govuk-heading-m">@messages(s"$key.company.title", displayName)</h2>
 
