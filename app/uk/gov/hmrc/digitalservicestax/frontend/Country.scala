@@ -27,7 +27,12 @@ object Country {
       quotedString.slice(1,quotedString.length-1)
 
     def apply(name: String, code: String): Country = {
-      new Country(unQuote(name), unQuote(code).replace("country:","")){}
+      new Country(
+        unQuote(name),
+        unQuote(code)
+          .replace("country:","")
+          .replace("territory:","")
+      ){}
     }
   }
 
@@ -45,7 +50,7 @@ object Country {
   val countries: List[Country] =
     countriesJson
       .as[JsArray].value
-      .filter(x => x(1).toString().matches("^\"country:.{2}\"$"))
+      .filter(x => x(1).toString().matches("^\"(country|territory):.{2}\"$"))
       .map(y => Country(y(0).toString,y(1).toString)).toList
 
 
