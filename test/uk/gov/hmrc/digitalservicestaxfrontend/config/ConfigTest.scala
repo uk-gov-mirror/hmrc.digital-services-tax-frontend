@@ -25,14 +25,6 @@ class ConfigTest extends FakeApplicationSpec {
     appConfig.assetsPrefix.nonEmpty mustEqual true
   }
 
-  "should load an analytics token from the configuration" in {
-    appConfig.analyticsToken.nonEmpty mustEqual true
-  }
-
-  "should load an analytics host from the configuration" in {
-    appConfig.analyticsHost.nonEmpty mustEqual true
-  }
-
   "should load an app name from the configuration" in {
     appConfig.appName.nonEmpty mustEqual true
   }
