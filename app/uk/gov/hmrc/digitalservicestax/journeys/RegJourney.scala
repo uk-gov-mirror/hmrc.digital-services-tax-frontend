@@ -90,15 +90,26 @@ object RegJourney {
                 case true =>
                   for {
                     utr <- ask[UTR]("enter-utr")
-                    companyOpt <- backendService.lookupCompany(utr, postcode)
-                    //The user shouln't be signed out here
-                    _ <- if (companyOpt.isEmpty) end("cannot-find-company", Kickout("details-not-correct")) else {(()).pure[F]}
-                    company = companyOpt.get.company
-                    safeId = companyOpt.get.safeId
-                    confirmCompany <- interact[Company, Boolean]("confirm-company-details", company)
-                    //TODO Check if we should be signing the user out
-                    _ <- if (!confirmCompany) {end("details-not-correct", Kickout("details-not-correct"))} else {(()).pure[F]}
-                  } yield CompanyRegWrapper(company, utr.some, safeId)
+                    companyOpt <- backendService.lookupCompany(utr, postcode) >>= {
+                      case None =>
+                        for {
+                          companyName <- ask[CompanyName]("not-found-company-name")
+                          companyAddress <- ask[UkAddress](
+                            "not-found-company-registered-office-uk-address",
+                            customContent = message("not-found-company-registered-office-uk-address.heading", companyName)
+                          ).map(identity)
+                        } yield CompanyRegWrapper(Company(companyName, companyAddress), useSafeId = true)
+                      case Some(crw) =>
+                        for {
+                          confirmCompany <- interact[Company, Boolean]("confirm-company-details", crw.company)
+                          _ <- if (!confirmCompany) {
+                            end("details-not-correct", Kickout("details-not-correct"))
+                          } else {
+                            (()).pure[F]
+                          }
+                        } yield CompanyRegWrapper(crw.company, utr.some, crw.safeId)
+                    }
+                  } yield companyOpt
               }
             } yield companyWrapper
         }

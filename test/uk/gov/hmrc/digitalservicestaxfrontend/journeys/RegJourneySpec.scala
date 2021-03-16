@@ -144,18 +144,17 @@ class RegJourneySpec extends FlatSpec with Matchers {
     assert(caught.getMessage.contains("Journey end at details-not-correct"))
   }
 
-  "when there is no Company from sign in, and none found for a supplied UTR we" should "be kicked out" in {
-    val caught = intercept[IllegalStateException] {
-      RegJourney.registrationJourney(
+  "when there is no Company from sign in, and none found for a supplied UTR we" should "ask the user for a companyName and Address" in {
+    val reg = RegJourney.registrationJourney(
         defaultInterpreter,
         new TestDstService {
           override def lookupCompany(): Option[CompanyRegWrapper] = None
           override def lookupCompany(utr: UTR, postcode: Postcode): Option[CompanyRegWrapper] = None
         }.get
       ).value.run.asOutcome()
-    }
-
-    assert(caught.getMessage.contains("Journey end at cannot-find-company"))
+    
+    reg.companyReg.company.name shouldBe utrLookupCompanyName
+    reg.companyReg.company.address shouldBe a[UkAddress]
   }
 
   "when there is no Company from sign in, and the one found by UTR is rejected by the user we" should "be kicked out" in {

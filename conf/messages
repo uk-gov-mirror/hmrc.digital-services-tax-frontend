@@ -141,6 +141,18 @@ company-registered-office-international-address.line3.heading=Address line 3 (op
 company-registered-office-international-address.line4.heading=Address line 4 (optional)
 company-registered-office-international-address.countryCode.heading=Country
 
+not-found-company-name.heading=What is the name of the company you want to register?
+not-found-company-name.heading.hint=Your company details
+not-found-company-name.hint=This is the name registered with an official company register, such as Companies House.
+
+not-found-company-registered-office-uk-address.heading=Where is the registered office address of {0}?
+not-found-company-registered-office-uk-address.heading.hint=Your company details
+not-found-company-registered-office-uk-address.line1.heading=Building or street
+not-found-company-registered-office-uk-address.line2.heading=Building or street line 2 (optional)
+not-found-company-registered-office-uk-address.line3.heading=Town or city (optional)
+not-found-company-registered-office-uk-address.line4.heading=County (optional)
+not-found-company-registered-office-uk-address.postalCode.heading=Postcode
+
 confirm-company-details.heading=Is this the company you want to register as the responsible member?
 confirm-company-details.heading.hint=Your company details
 confirm-company-details.intro=If you are registering a group, this company must be the responsible member who will represent the group to HMRC.
@@ -222,7 +234,7 @@ contact-details.phoneNumber.hint=For international numbers include the country c
 contact-details.email.heading=Email address
 contact-details.email.hint=We will use this email address to send confirmation of your registration.
 
-check-liability-date.heading=Was the group liable for Digital Services Tax on 1 April 2020?
+check-liability-date.heading=Was the group liable for Digital Services Tax from 1 April 2020?
 check-liability-date.heading.hint=Accounting period details
 check-liability-date.TRUE=Yes
 check-liability-date.FALSE=No
