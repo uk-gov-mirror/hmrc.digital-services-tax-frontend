@@ -153,7 +153,6 @@ class RegJourneySpec extends FlatSpec with Matchers {
         }.get
       ).value.run.asOutcome()
     
-    reg.companyReg.company.name shouldBe utrLookupCompanyName
     reg.companyReg.company.address shouldBe a[UkAddress]
   }
 
