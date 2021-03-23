@@ -54,8 +54,6 @@ class ValidatedTypeTests extends FlatSpec with Matchers with ScalaCheckDrivenPro
     }
   }
 
-
-
   it should "concatenate lines in a ForeignAddress value" in {
     forAll { foreignAddress: ForeignAddress =>
       foreignAddress.lines shouldEqual List(
@@ -78,24 +76,28 @@ class ValidatedTypeTests extends FlatSpec with Matchers with ScalaCheckDrivenPro
     AccountNumber.className shouldEqual "AccountNumber$"
   }
 
-  it should "store percentages as bytes and initialise percent monoids with byte monoids" in {
-    Monoid[Percent].empty shouldEqual Monoid[Byte].empty
+  it should "store percentages as floats and initialise percent monoids with float monoids" in {
+    Monoid[Percent].empty shouldEqual Monoid[Float].empty
   }
 
   it should "add up percentages using monoidal syntax" in {
 
     val generator = for {
-      p1 <- Gen.chooseNum(0, 100)
-      p2 = 100 - p1
-    } yield p1.toByte -> p2.toByte
+      p1 <- Gen.chooseNum[Float](0F, 100F)
+      p2 = 100F - p1
+    } yield p1 -> p2
 
     forAll(generator) { case (p1, p2) =>
-      whenever(p1 >= 0 && p2 >= 0) {
+      whenever(p1 >= 0F && p2 >= 0F && BigDecimal(p1.toString).scale <= 3 && BigDecimal(p2.toString).scale <= 3) {
         val addedPercent = Monoid.combineAll(Seq(Percent(p1), Percent(p2)))
         val addedBytes = Monoid.combineAll(Seq(p1, p2))
         addedPercent shouldEqual Percent(addedBytes)
       }
     }
+  }
+
+  it should "fail to construct a type with a scale of more than 3" in {
+    an[IllegalArgumentException] should be thrownBy Percent.apply(1.1234F)
   }
 
   it should "allow comparing local dates with cats syntax" in {

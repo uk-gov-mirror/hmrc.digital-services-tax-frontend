@@ -89,7 +89,7 @@ trait SimpleJson {
     override def reads(json: JsValue): JsResult[Percent] = {
       json match {
         case JsNumber(value) =>
-          Percent.validateAndTransform(value.toByte) match {
+          Percent.validateAndTransform(value.toFloat) match {
             case Some(validCode) => JsSuccess(Percent(validCode))
             case None => JsError(s"Expected a valid percentage, got $value instead.")
           }

@@ -55,6 +55,10 @@
         @if(currencyInput){
             <div class="hmrc-currency-input__wrapper">
         }
+
+        @if(percentageInput){
+            <div class="govuk-input__wrapper">
+        }
             @*
             * Todo - refactor this describedby error/hint string value to be a helper
             *@
@@ -78,14 +82,16 @@
                     @if(percentageInput){inputMode="numeric" pattern="[0-9]*"}
                 />
             }
-
+            @if(percentageInput) {
+                <div class="govuk-input__suffix" aria-hidden="true">%</div>
+            }
             @if(currencyInput){
                 <span class="hmrc-currency-input__unit" aria-hidden="true">
                     £
                 </span>
             }
 
-        @if(currencyInput) {
+        @if(currencyInput || percentageInput) {
             </div>
         }
     }
