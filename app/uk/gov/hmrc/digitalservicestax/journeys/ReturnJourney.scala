@@ -18,14 +18,13 @@ package uk.gov.hmrc.digitalservicestax
 package journeys
 
 import scala.language.higherKinds
-
 import data._
 import frontend.formatDate
-
 import cats.Monad
 import cats.implicits._
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
+import uk.gov.hmrc.digitalservicestax.data.Activity.OnlineMarketplace
 
 object ReturnJourney {
 
@@ -119,9 +118,9 @@ object ReturnJourney {
 
       dstReturn <- (
         askAlternativeCharge(activities),
-        ask[Boolean]("report-cross-border-transaction-relief") >>= {
-          case true => ask[Money]("relief-deducted")
-          case false => Money(BigDecimal(0).setScale(2)).pure[F]
+        ask[Boolean]("report-cross-border-transaction-relief") when activities.contains(OnlineMarketplace) >>= {
+          case Some(true) => ask[Money]("relief-deducted")
+          case _ => Money(BigDecimal(0).setScale(2)).pure[F]
         },
         askAmountForCompanies(groupCos) emptyUnless isGroup,
         ask[Money](
