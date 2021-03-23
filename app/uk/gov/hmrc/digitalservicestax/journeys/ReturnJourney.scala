@@ -55,7 +55,8 @@ object ReturnJourney {
           customContent =
             message(s"report-${Activity.toUrl(actType)}-operating-margin.heading", isGroupMessage) ++
             message(s"report-${Activity.toUrl(actType)}-operating-margin.required", isGroupMessage) ++
-            message(s"report-${Activity.toUrl(actType)}-operating-margin.not-a-number", isGroupMessage)
+            message(s"report-${Activity.toUrl(actType)}-operating-margin.not-a-number", isGroupMessage) ++
+            message(s"report-${Activity.toUrl(actType)}-operating-margin.invalid", isGroupMessage)
         ) emptyUnless ask[Boolean](
             s"report-${Activity.toUrl(actType)}-loss",
             customContent =
@@ -69,7 +70,8 @@ object ReturnJourney {
             customContent =
               message(s"report-${Activity.toUrl(actType)}-operating-margin.heading", isGroupMessage) ++
               message(s"report-${Activity.toUrl(actType)}-operating-margin.required", isGroupMessage) ++
-              message(s"report-${Activity.toUrl(actType)}-operating-margin.not-a-number", isGroupMessage)
+              message(s"report-${Activity.toUrl(actType)}-operating-margin.not-a-number", isGroupMessage) ++
+              message(s"report-${Activity.toUrl(actType)}-operating-margin.invalid", isGroupMessage)
         ) emptyUnless ask[Boolean](
             s"report-${Activity.toUrl(actType)}-loss",
             customContent =

@@ -153,7 +153,7 @@ object TestInstances {
 
 
   implicit val arbPercent: Arbitrary[Percent] = Arbitrary {
-    Gen.chooseNum(0, 100).map(b => Percent(b.toByte))
+    Gen.chooseNum(0, 100).map(b => Percent(b.toFloat))
   }
 
   def nonEmptyString: Gen[NonEmptyString] =
@@ -162,7 +162,7 @@ object TestInstances {
   def genActivityPercentMap: Gen[Map[Activity, Percent]] = Gen.mapOf(
     (
       arbitrary[Activity],
-      Gen.choose(0,100).map{x => Percent.apply(x.asInstanceOf[Byte])}
+      Gen.choose(0,100).map{x => Percent.apply(x.asInstanceOf[Float])}
       ).tupled
   )
 

@@ -143,13 +143,13 @@ trait Widgets {
       }.toEither
     )(_.toString)
 
-  implicit val byteField: FormField[Byte,Html] =
+  implicit val floatField: FormField[Float, Html] =
     twirlStringFields(
-      customRender = views.html.uniform.string(_,_,_,_,_,"form-control govuk-input--width-4")
+      customRender = views.html.uniform.string(_,_,_,_,_,"form-control govuk-input--width-4 govuk-input-z-index")
     ).simap(x =>
       {
         Rule.nonEmpty[String].apply(x) andThen
-        Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toByte)
+        Transformation.catchOnly[NumberFormatException]("not-a-number")(_.toFloat)
       }.toEither
     )(_.toString)
 

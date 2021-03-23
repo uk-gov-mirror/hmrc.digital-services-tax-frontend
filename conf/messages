@@ -606,10 +606,13 @@ report-social-media-loss.FALSE=No
 report-social-media-loss.required=Select yes if the {0} made a loss on its social media activity
 
 report-social-media-operating-margin.heading=What was the {0}’s operating margin on its social media activity?
-report-social-media-operating-margin.hint=Enter a percentage value without decimals, like 1%
+report-social-media-operating-margin.hint=Enter a percentage value with decimals, like 27.55%
 report-social-media-operating-margin.required=Enter the {0}’s operating margin on its social media activity
 report-social-media-operating-margin.not-a-number=Enter the {0}’s operating margin on its social media activity \
-  in the correct format, like 25 or 100%
+  in the correct format, like 27.55%, 46.00%, 1.234% or 100%.
+
+report-social-media-operating-margin.invalid=Enter the {0}’s operating margin on its social media activity \
+  in the correct format, like 27.55%, 46.00%, 1.234% or 100%.
 
 #Report search engine
 report-search-engine-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
@@ -625,10 +628,12 @@ report-search-engine-loss.FALSE=No
 report-search-engine-loss.required=Select yes if the {0} made a loss on its search engine activity
 
 report-search-engine-operating-margin.heading=What was the {0}’s operating margin on its search engine activity?
-report-search-engine-operating-margin.hint=Enter a percentage value without decimals, like 1%
+report-search-engine-operating-margin.hint=Enter a percentage value with decimals, like 27.55%
 report-search-engine-operating-margin.required=Enter the {0}’s operating margin on its search engine activity
-report-search-engine-operating-margin.not-a-number=Enter the {0}’s operating margin on its search engine activity in the correct \
-  format, like 25 or 100%
+report-search-engine-operating-margin.not-a-number=Enter the {0}’s operating margin on its search engine activity \
+  in the correct format, like 27.55%, 46.00%, 1.234% or 100%.
+report-search-engine-operating-margin.invalid=Enter the {0}’s operating margin on its search engine activity \
+  in the correct format, like 27.55%, 46.00%, 1.234% or 100%.
 
 #Report online marketplace
 report-online-marketplace-alternative-charge.heading=Are you applying the alternative charge for low or negative UK profit margins \
@@ -644,10 +649,12 @@ report-online-marketplace-loss.FALSE=No
 report-online-marketplace-loss.required=Select yes if the {0} made a loss on its online marketplace activity
 
 report-online-marketplace-operating-margin.heading=What was the {0}’s operating margin on its online marketplace activity?
-report-online-marketplace-operating-margin.hint=Enter a percentage value without decimals, like 1%
-report-online-marketplace-operating-margin.not-a-number=Enter the {0}’s operating margin on its online marketplace activity \
-  in the correct format, like 25 or 100%
+report-online-marketplace-operating-margin.hint=Enter a percentage value with decimals, like 27.55%
 report-online-marketplace-operating-margin.required=Enter the {0}’s operating margin on its online marketplace activity
+report-online-marketplace-operating-margin.not-a-number=Enter the {0}’s operating margin on its online marketplace activity \
+  in the correct format, like 27.55%, 46.00%, 1.234% or 100%.
+report-online-marketplace-operating-margin.invalid=Enter the {0}’s operating margin on its online marketplace activity \
+  in the correct format, like 27.55%, 46.00%, 1.234% or 100%.
 
 #Report cross border transactions
 report-cross-border-transaction-relief.heading=Are you claiming any relief on cross-border transactions for this return period?
