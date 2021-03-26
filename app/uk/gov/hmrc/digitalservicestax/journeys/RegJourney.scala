@@ -26,9 +26,9 @@ import cats.implicits._
 import java.time.LocalDate
 
 import uk.gov.hmrc.digitalservicestax.frontend._
-
 import ltbs.uniform.{NonEmptyString => _, _}
 import ltbs.uniform.validation._
+import ltbs.uniform.validation.Rule._
 
 object RegJourney {
 
@@ -40,6 +40,8 @@ object RegJourney {
     import play.twirl.api.HtmlFormat.escape
     Map(key -> Tuple2(key, args.toList.map { escape(_).toString } ))
   }
+
+  def nameCheck(name: CompanyName): Boolean = name.toString.matches("""^[a-zA-Z0-9 '&-]{1,105}$""")
 
   def registrationJourney[F[_] : Monad](
     interpreter: Language[F, RegTellTypes, RegAskTypes],
@@ -67,7 +69,10 @@ object RegJourney {
         case None => ask[Boolean]("check-company-registered-office-address") >>= {
           case false =>
             for {
-              companyName <- ask[CompanyName]("company-name")
+              companyName <- ask[CompanyName](
+                "company-name",
+                validation = cond[CompanyName](nameCheck(_), "invalid")
+              )
               companyAddress <- ask[ForeignAddress](
                 "company-registered-office-international-address",
                 customContent = message("company-registered-office-international-address.heading", companyName)
@@ -80,7 +85,10 @@ object RegJourney {
               companyWrapper <- ask[Boolean]("check-unique-taxpayer-reference") >>= {
                 case false =>
                   for {
-                    companyName <- ask[CompanyName]("company-name")
+                    companyName <- ask[CompanyName](
+                      "company-name",
+                      validation = cond[CompanyName](nameCheck(_), "invalid")
+                    )
                     companyAddress <- ask[UkAddress](
                       "company-registered-office-uk-address",
                       customContent = message("company-registered-office-uk-address.heading", companyName)
@@ -93,7 +101,10 @@ object RegJourney {
                     companyOpt <- backendService.lookupCompany(utr, postcode) >>= {
                       case None =>
                         for {
-                          companyName <- ask[CompanyName]("not-found-company-name")
+                          companyName <- ask[CompanyName](
+                            "not-found-company-name",
+                            validation = cond[CompanyName](nameCheck(_), "invalid")
+                          )
                           companyAddress <- ask[UkAddress](
                             "not-found-company-registered-office-uk-address",
                             customContent = message("not-found-company-registered-office-uk-address.heading", companyName)
