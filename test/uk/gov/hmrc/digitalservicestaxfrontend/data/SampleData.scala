@@ -46,7 +46,7 @@ object SampleData {
     sampleAddress
   )
 
-  val utrLookupCompanyName = "UTR Lookup Ltd."
+  val utrLookupCompanyName = "UTR Lookup Ltd"
   val utrLookupCompanyRegWrapper =
     CompanyRegWrapper(sampleCompany.copy(name = CompanyName(utrLookupCompanyName)))
 
