@@ -359,6 +359,7 @@ enter-postcode.invalid=Enter a real postcode
 company-name.required=Enter the name of the company you want to register
 company-name.length.exceeded=The name of the company must be 105 characters or fewer
 company-name.invalid=The name of the company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
+not-found-company-name.invalid=The name of the company must only include letters a to z, numbers, hyphens, apostrophes, ampersands (&), and spaces
 
 #Check company registered office address
 check-company-registered-office-address.required=Select yes if the registered office address of {0} is in the UK
