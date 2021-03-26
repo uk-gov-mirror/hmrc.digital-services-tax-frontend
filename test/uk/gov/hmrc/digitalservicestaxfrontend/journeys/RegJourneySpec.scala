@@ -37,7 +37,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
 
   implicit val sampleCompanyName = instancesF {
     case "company-name" => List(CompanyName("Supplied company name"))
-    case _ => List(CompanyName("Foo Ltd."))
+    case _ => List(CompanyName("Foo Ltd"))
   }
 
   val defaultInterpreter: TestRegInterpreter = new TestRegInterpreter
