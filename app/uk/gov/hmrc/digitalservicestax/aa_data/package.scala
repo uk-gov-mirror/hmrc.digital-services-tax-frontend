@@ -49,7 +49,7 @@ package object data extends SimpleJson {
 
   type Postcode = String @@ Postcode.Tag
   object Postcode extends RegexValidatedString(
-    """^(GIR 0A{2})|((([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z]))))[ ]?[0-9][A-Z]{2})$""",
+    """^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}|BFPO\s?[0-9]{1,10}$""",
     _.trim.replaceAll("[ \\t]+", " ").toUpperCase
   )
 
