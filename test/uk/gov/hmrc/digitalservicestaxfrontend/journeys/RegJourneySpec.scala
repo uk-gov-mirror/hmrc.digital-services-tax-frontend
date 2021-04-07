@@ -29,7 +29,7 @@ class RegJourneySpec extends FlatSpec with Matchers {
 
   implicit val sampleUtrAsk = instances(UTR("1234567891"))
   implicit val samplePostcodeAsk = instances(Postcode("BN1 1NB"))
-  implicit val sampleDateAsk = instances(LocalDate.now)
+  implicit val sampleDateAsk = instances(LocalDate.of(2021, 3, 31))
   implicit val sampleContactDetailsAsk = instances(sampleContact)
   implicit val sampleInternationalAddressAsk = instances(internationalAddress)
   implicit val sampleUkAddressAsk = instances(sampleAddress)
