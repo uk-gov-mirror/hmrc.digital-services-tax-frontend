@@ -128,11 +128,10 @@ object ReturnJourney {
         ask[Money](
           "allowance-deducted",
           validation =
-            Rule.nonEmpty[Money]("minimum-money") followedBy
-              Rule.cond[Money]({
-                case money: Money if money <= 25000000 => true
-                case _ => false
-              }, "max-money")
+            Rule.cond[Money]({
+              case money: Money if money <= 25000000 => true
+              case _ => false
+            }, "max-money")
         ),
         ask[Money]("group-liability",
           customContent =
